@@ -52,13 +52,16 @@ public class ProjectEntity implements Serializable{
     private ProjectCategoryEntity category;
      
     @OneToMany(mappedBy = "project" )
-    private List<DonationEntity> donations = new ArrayList<>();
+    private List<UserContributeProjectEntity> contributions = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
     private List<ProjectImageEntity> images = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
     private List<UserVolunteerProjectEntity> volunteers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project")
+    private List<UserRatingProjectEntity> ratings = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -136,12 +139,12 @@ public class ProjectEntity implements Serializable{
         this.category = category;
     }
 
-    public List<DonationEntity> getDonations() {
-        return donations;
+    public List<UserContributeProjectEntity> getContributions() {
+        return contributions;
     }
 
-    public void setDonations(List<DonationEntity> donations) {
-        this.donations = donations;
+    public void setContributions(List<UserContributeProjectEntity> donations) {
+        this.contributions = donations;
     }
 
     public List<ProjectImageEntity> getImages() {

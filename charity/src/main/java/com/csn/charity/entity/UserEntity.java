@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +26,7 @@ public class UserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
@@ -44,7 +43,7 @@ public class UserEntity implements Serializable {
     private ProfileEntity profile;
 
     @OneToMany(mappedBy = "user" )
-    private List<DonationEntity> donations = new ArrayList<>();
+    private List<UserContributeProjectEntity> contributions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<UserCommentNewEntity> comments = new ArrayList<>();
@@ -118,12 +117,12 @@ public class UserEntity implements Serializable {
         this.profile = profile;
     }
 
-    public List<DonationEntity> getDonations() {
-        return donations;
+    public List<UserContributeProjectEntity> getContributions() {
+        return contributions;
     }
 
-    public void setDonations(List<DonationEntity> donations) {
-        this.donations = donations;
+    public void setContributions(List<UserContributeProjectEntity> contributions) {
+        this.contributions = contributions;
     }
 
     public List<EventEntity> getEvents() {

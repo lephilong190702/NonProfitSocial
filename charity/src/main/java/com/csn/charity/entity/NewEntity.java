@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.annotations.ManyToAny;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

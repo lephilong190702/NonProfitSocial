@@ -55,9 +55,6 @@ public class PostEntity implements Serializable {
     @OneToMany(mappedBy = "post")
     private List<UserReportPostEntity> reports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
-    private List<UserRatingProjectEntity> ratings = new ArrayList<>();
-
     public Long getId() {
         return id;
     }
@@ -133,15 +130,6 @@ public class PostEntity implements Serializable {
     public void setReports(List<UserReportPostEntity> reports) {
         this.reports = reports;
     }
-
-    public List<UserRatingProjectEntity> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<UserRatingProjectEntity> ratings) {
-        this.ratings = ratings;
-    }
-
     
     
 }

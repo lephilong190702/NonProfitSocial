@@ -19,10 +19,10 @@ public class UserReactPostEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "reaction")
+    @Column(name = "reaction", nullable = false)
     private String reaction;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
     @ManyToOne

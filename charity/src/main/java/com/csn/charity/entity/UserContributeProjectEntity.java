@@ -20,10 +20,10 @@ public class UserContributeProjectEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "donate_amount")
+    @Column(name = "donate_amount", nullable = false)
     private BigDecimal donateAmount;
 
-    @Column(name = "donate_date")
+    @Column(name = "donate_date", nullable = false)
     private Date donateDate;
 
     @Column(name = "note")

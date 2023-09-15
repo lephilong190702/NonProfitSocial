@@ -23,16 +23,16 @@ public class NewEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "image", nullable = false)
+    private String image;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @OneToMany(mappedBy = "news")
@@ -62,12 +62,12 @@ public class NewEntity implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getAddress() {
-        return address;
+    public String getImage() {
+        return image;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setImage(String address) {
+        this.image = address;
     }
 
     public String getContent() {

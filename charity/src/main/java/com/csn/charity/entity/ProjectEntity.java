@@ -23,19 +23,19 @@ public class ProjectEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "contributed_amount")
+    @Column(name = "contributed_amount", nullable = false)
     private BigDecimal contributedAmount;
 
-    @Column(name = "total_amount")
+    @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount;
 
     @Column(name = "start_date")
@@ -44,7 +44,7 @@ public class ProjectEntity implements Serializable{
     @Column(name = "end_date")
     private Date endDate;
 
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Boolean status;
 
     @ManyToOne

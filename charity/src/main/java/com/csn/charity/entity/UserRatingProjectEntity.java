@@ -23,7 +23,7 @@ public class UserRatingProjectEntity implements Serializable{
     @Column(name = "content")
     private String content;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
     @ManyToOne

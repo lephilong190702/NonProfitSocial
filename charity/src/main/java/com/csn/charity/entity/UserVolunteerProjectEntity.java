@@ -19,7 +19,7 @@ public class UserVolunteerProjectEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "register_date")
+    @Column(name = "register_date", nullable = false)
     private Date registerDate;
 
     @ManyToOne

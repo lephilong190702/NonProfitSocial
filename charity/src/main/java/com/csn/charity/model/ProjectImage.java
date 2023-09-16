@@ -1,4 +1,4 @@
-package com.csn.charity.entity;
+package com.csn.charity.model;
 
 import java.io.Serializable;
 
@@ -10,10 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "project_image")
-public class ProjectImageEntity implements Serializable{
+public class ProjectImage implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,27 +31,5 @@ public class ProjectImageEntity implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "project_id")
-    private ProjectEntity project;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public ProjectEntity getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectEntity project) {
-        this.project = project;
-    }
-
-    
+    private Project project;
 }

@@ -1,4 +1,4 @@
-package com.csn.charity.entity;
+package com.csn.charity.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,10 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "project_category")
-public class ProjectCategoryEntity implements Serializable{
+public class ProjectCategory implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,27 +31,5 @@ public class ProjectCategoryEntity implements Serializable{
     private String name;
 
     @OneToMany(mappedBy = "category" )
-    private List<ProjectEntity> projects = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<ProjectEntity> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<ProjectEntity> projects) {
-        this.projects = projects;
-    }
-
-    
+    private List<Project> projects = new ArrayList<>();
 }

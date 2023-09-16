@@ -1,4 +1,4 @@
-package com.csn.charity.entity;
+package com.csn.charity.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,10 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_role")
-public class UserRoleEntity implements Serializable{
+public class UserRole implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,25 +31,6 @@ public class UserRoleEntity implements Serializable{
     private String name;
 
     @OneToMany(mappedBy = "role")
-    private List<UserEntity> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<UserEntity> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
 }

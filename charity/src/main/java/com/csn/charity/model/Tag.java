@@ -1,4 +1,4 @@
-package com.csn.charity.entity;
+package com.csn.charity.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,10 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tag")
-public class TagEntity implements Serializable{
+public class Tag implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,28 +31,6 @@ public class TagEntity implements Serializable{
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private List<PostEntity> posts = new ArrayList<>();
-    
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<PostEntity> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<PostEntity> posts) {
-        this.posts = posts;
-    }
-    
-    
+    private List<Post> posts = new ArrayList<>();
     
 }

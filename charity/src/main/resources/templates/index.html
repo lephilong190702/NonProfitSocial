@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+</head>
+
+<body>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên dự án</th>
+                    <th>Số tiền đã góp được</th>
+                    <th>Tổng tiền cần góp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p:${projects}">
+                    <td th:text="${p.id}"></td>
+                    <td th:text="${p.title}"></td>
+                    <td th:text="${p.contributedAmount}"></td>
+                    <td th:text="${p.totalAmount}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

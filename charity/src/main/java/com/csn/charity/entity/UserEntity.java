@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -26,7 +27,7 @@ public class UserEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false, length = 50)
     private String username;
 
     @Column(name = "password", nullable = false)
@@ -35,8 +36,8 @@ public class UserEntity implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "status", nullable = false)
+    private Boolean status;
 
     @OneToOne(mappedBy = "user")
     @PrimaryKeyJoinColumn
@@ -65,6 +66,10 @@ public class UserEntity implements Serializable {
     
     @OneToMany(mappedBy = "user")
     private List<UserRatingProjectEntity> ratings = new ArrayList<>();
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private UserRoleEntity role;
 
     @ManyToMany
     @JoinTable(name = "user_event", 
@@ -101,12 +106,12 @@ public class UserEntity implements Serializable {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public ProfileEntity getProfile() {
@@ -187,6 +192,14 @@ public class UserEntity implements Serializable {
 
     public void setRatings(List<UserRatingProjectEntity> ratings) {
         this.ratings = ratings;
+    }
+
+    public UserRoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoleEntity role) {
+        this.role = role;
     }
 
     

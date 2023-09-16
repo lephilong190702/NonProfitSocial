@@ -19,7 +19,7 @@ public class ProjectCategoryEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 30)
     private String name;
 
     @OneToMany(mappedBy = "category" )

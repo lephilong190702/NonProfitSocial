@@ -20,13 +20,13 @@ public class EventEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "address")
+    @Column(name = "address", length = 255)
     private String address;
 
     @Column(name = "content", nullable = false)

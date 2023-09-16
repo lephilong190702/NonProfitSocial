@@ -29,7 +29,7 @@ public class ProjectEntity implements Serializable{
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 500)
     private String content;
 
     @Column(name = "contributed_amount", nullable = false)

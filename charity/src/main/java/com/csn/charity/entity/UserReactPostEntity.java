@@ -20,7 +20,7 @@ public class UserReactPostEntity implements Serializable {
     private Long id;
     
     @Column(name = "reaction", nullable = false)
-    private String reaction;
+    private Integer reaction;
 
     @Column(name = "create_date", nullable = false)
     private Date createDate;
@@ -37,13 +37,15 @@ public class UserReactPostEntity implements Serializable {
         return id;
     }
 
-    public String getReaction() {
-        return reaction;
-    }
+    // public String getReaction() {
+    //     return reaction;
+    // }
 
-    public void setReaction(String reaction) {
-        this.reaction = reaction;
-    }
+    // public void setReaction(String reaction) {
+    //     this.reaction = reaction;
+    // }
+
+    
 
     public Date getCreateDate() {
         return createDate;
@@ -69,5 +71,14 @@ public class UserReactPostEntity implements Serializable {
         this.user = user;
     }
 
+    public Integer getReaction() {
+        return reaction;
+    }
+
+    public void setReaction(Integer reaction) {
+        this.reaction = reaction;
+    }
+
+    
     
 }

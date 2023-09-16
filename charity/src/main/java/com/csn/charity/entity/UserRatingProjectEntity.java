@@ -20,7 +20,7 @@ public class UserRatingProjectEntity implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 500)
     private String content;
 
     @Column(name = "create_date", nullable = false)

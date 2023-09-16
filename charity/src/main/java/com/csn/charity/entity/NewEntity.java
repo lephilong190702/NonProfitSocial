@@ -32,7 +32,7 @@ public class NewEntity implements Serializable {
     @Column(name = "image", nullable = false)
     private String image;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 500)
     private String content;
 
     @OneToMany(mappedBy = "news")

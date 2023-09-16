@@ -9,22 +9,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tag")
-public class TagEntity implements Serializable{
+@Table(name = "user_role")
+public class UserRoleEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 20)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<PostEntity> posts = new ArrayList<>();
-    
+    @OneToMany(mappedBy = "role")
+    private List<UserEntity> users = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -37,14 +37,11 @@ public class TagEntity implements Serializable{
         this.name = name;
     }
 
-    public List<PostEntity> getPosts() {
-        return posts;
+    public List<UserEntity> getUsers() {
+        return users;
     }
 
-    public void setPosts(List<PostEntity> posts) {
-        this.posts = posts;
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
-    
-    
-    
 }

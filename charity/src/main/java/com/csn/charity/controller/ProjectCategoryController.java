@@ -18,14 +18,14 @@ public class ProjectCategoryController {
     @GetMapping("/projectCategories")
     public String listProjectCategories(Model model) {
         model.addAttribute("projectCategories", projectCategoryService.getAllProjectCategories());
-        return "pcategories";
+        return "/pages/pcategories";
     }
     
     @GetMapping("/admin/projectCategory")
     public String addPage(Model model) {
         ProjectCategory projectCategory = new ProjectCategory();
         model.addAttribute("projectCategory", projectCategory);
-        return "pcategory";
+        return "/pages/pcategory";
     }
 
     @PostMapping("/admin/projectCategory")

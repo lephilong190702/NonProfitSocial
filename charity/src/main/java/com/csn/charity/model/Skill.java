@@ -1,6 +1,8 @@
 package com.csn.charity.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,27 +23,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "profile")
-public class Profile implements Serializable {
+@Table(name = "skill")
+public class Skill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name", nullable = false, length = 20)
-    private String firstName;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "last_name", nullable = false, length = 10)
-    private String lastName;
-
-    @Column(name = "phone", length = 10)
-    private String phone;
-
-    @Column(name = "avatar")
-    private String avatar;
-    
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @ManyToMany(mappedBy = "skills")
+    private List<UserVolunteerProject> volunteers = new ArrayList<>();
 }

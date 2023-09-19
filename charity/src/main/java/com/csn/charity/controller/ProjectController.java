@@ -23,10 +23,10 @@ public class ProjectController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String index(Model model) {
         model.addAttribute("projects", projectService.getAllProjects());
-        return "index";
+        return "/pages/index";
     }
 
     @GetMapping("/admin/project")
@@ -35,7 +35,7 @@ public class ProjectController {
         model.addAttribute("project", project);
         List<ProjectCategory> projectCategories = projectCategoryService.getAllProjectCategories();
         model.addAttribute("projectCategories", projectCategories);
-        return "project";
+        return "/pages/project";
     }
 
     @PostMapping("/admin/project")

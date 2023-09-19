@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project Category</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>QUẢN LÝ THỂ LOẠI DỰ ÁN TỪ THIỆN</h1>
+            <a th:href="@{/admin/projectCategory}" class="btn btn-info" mt-2>Thêm thể loại</a>
+
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>THỂ LOẠI</th>
+                            <th>SỐ LƯỢNG DỰ ÁN</th>
+                            <th>CHỨC NĂNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c:${projectCategories}">
+                            <td th:text="${c.id}"></td>
+                            <td th:text="${c.name}"></td>
+                            <td></td>
+                            <td>
+                                <a class="btn btn-primary">Update</a>
+                                <a class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project </title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">THÊM PROJECT</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <form th:action="@{/admin/project}" method="post" th:object="${project}">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Thể Loại</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="categoryId" name="categoryId" class="form-control"
+                                        style="background-color: #ffffff; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%;">
+                                        <option th:each="c : ${projectCategories}" th:value="${c.id}"
+                                            th:text="${c.name}">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Dự Án</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="title" name="title" th:field="*{title}" class="form-control"
+                                        placeholder="Nhập tên dự án"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Địa chỉ</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="title" name="title" th:field="*{address}"
+                                        class="form-control" placeholder="Nhập địa chỉ dự án" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Nội Dung</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <textarea id="content" name="content" th:field="*{content}" class="form-control"
+                                        placeholder="Nhập nội dung"></textarea>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Số Tiền Đã Góp</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="contributedAmount" name="contributedAmount"
+                                        th:field="*{contributedAmount}" class="form-control" placeholder="..." />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Số Tiền Cần Góp</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="totalAmount" name="totalAmount" th:field="*{totalAmount}"
+                                        class="form-control" placeholder="Nhập số tiền cần quyên góp" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Trạng Thái</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="status" name="status" th:field="*{status}"
+                                        class="form-control" />
+                                </div>
+                                <div class="col-sm-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

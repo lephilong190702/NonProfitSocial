@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+</head>
+
+<body>
+
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>QUẢN LÝ DỰ ÁN TỪ THIỆN</h1>
+            <a th:href="@{/admin/project}" class="btn btn-info" mt-2>THÊM DỰ ÁN</a>
+
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>DỰ ÁN</th>
+                            <th>TIỀN ĐÃ GÓP</th>
+                            <th>TIỀN CẦN GÓP</th>
+                            <th>CHỨC NĂNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p:${projects}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.title}"></td>
+                            <td th:text="${p.contributedAmount}"></td>
+                            <td th:text="${p.totalAmount}"></td>
+                            <td>
+                                <a class="btn btn-primary">Update</a>
+                                <a class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

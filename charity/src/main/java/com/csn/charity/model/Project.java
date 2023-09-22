@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,17 +62,22 @@ public class Project implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private ProjectCategory category;
      
     @OneToMany(mappedBy = "project" )
+    @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<ProjectImage> images = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<UserVolunteerProject> volunteers = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<UserRatingProject> ratings = new ArrayList<>();
 }

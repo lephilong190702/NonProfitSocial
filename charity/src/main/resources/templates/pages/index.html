@@ -32,8 +32,8 @@
                             <td th:text="${p.contributedAmount}"></td>
                             <td th:text="${p.totalAmount}"></td>
                             <td>
-                                <a class="btn btn-primary">Update</a>
-                                <a class="btn btn-danger">Delete</a>
+                                <a class="btn btn-primary" th:href="@{/admin/project/{id}(id=${p.id})}">Update</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/project/{id}(id=${p.id})}"  onclick="deleteProject(this.getAttribute('path'))">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -46,3 +46,17 @@
 </body>
 
 </html>
+<script>
+    function deleteProject(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Lỗi!!!");
+        });
+    }
+}
+</script>

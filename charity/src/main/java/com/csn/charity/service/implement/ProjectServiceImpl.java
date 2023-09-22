@@ -23,5 +23,33 @@ public class ProjectServiceImpl implements ProjectService {
     public Project addProject(Project project) {
         return this.projectRepository.save(project);
     }
-    
+
+    @Override
+    public Project updateProject(Long id, Project project) {
+        Project p = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        p.setCategory(project.getCategory());
+        p.setTitle(project.getTitle());
+        p.setAddress(project.getAddress());
+        p.setContent(project.getContent());
+        p.setStartDate(project.getStartDate());
+        p.setEndDate(project.getEndDate());
+        p.setTotalAmount(project.getTotalAmount());
+
+        return this.projectRepository.save(p);
+    }
+
+    @Override
+    public void deleteProject(Long id) {
+        Project p = projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        projectRepository.delete(p);
+    }
+
+    @Override
+    public Project getProjectById(Long id) {
+        return this.projectRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+    }
+
 }

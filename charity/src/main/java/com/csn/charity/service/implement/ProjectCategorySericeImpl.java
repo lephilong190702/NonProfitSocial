@@ -1,7 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class ProjectCategorySericeImpl implements ProjectCategoryService {
 
     @Override
     public ProjectCategory getProjectCategoryById(Long id) {
-        Optional<ProjectCategory> projectCategoryOptional = this.projectCategoryRepository.findById(id);
-        return projectCategoryOptional.get();
+        return this.projectCategoryRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));
     }
     
 }

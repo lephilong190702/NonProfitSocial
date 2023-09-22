@@ -12,11 +12,12 @@
     <div class="main-content container-fluid" layout:fragment="content">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">THÊM PROJECT</h4>
+                <h4 class="card-title" >THÊM PROJECT</h4>
             </div>
             <div class="card-content">
                 <div class="card-body">
                     <form th:action="@{/admin/project}" method="post" th:object="${project}">
+                        <input type="hidden" id="projectId" name="projectId"  th:field="*{id}"/>
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-4">
@@ -26,7 +27,7 @@
                                     <select id="categoryId" name="categoryId" class="form-control"
                                         style="background-color: #ffffff; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%;">
                                         <option th:each="c : ${projectCategories}" th:value="${c.id}"
-                                            th:text="${c.name}">
+                                            th:text="${c.name}" th:field="*{category}">
                                         </option>
                                     </select>
                                 </div>

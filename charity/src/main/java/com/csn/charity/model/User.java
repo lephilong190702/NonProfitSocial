@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails.Address;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

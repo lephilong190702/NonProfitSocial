@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.csn.charity.service.interfaces.NewsService;
 import com.csn.charity.service.interfaces.ProjectService;
 
 @RestController
@@ -14,9 +15,18 @@ public class AdminRestController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private NewsService newsService;
+
     @DeleteMapping("/admin/project/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNew(@PathVariable(value = "id") Long id) {
+    public void deleteProject(@PathVariable(value = "id") Long id) {
         this.projectService.deleteProject(id);
+    }
+
+    @DeleteMapping("/admin/new/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNew(@PathVariable(value = "id") Long id) {
+        this.newsService.deleteNew(id);
     }
 }

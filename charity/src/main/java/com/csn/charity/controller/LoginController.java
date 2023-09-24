@@ -13,6 +13,6 @@ public class LoginController {
 
     @RequestMapping("/")
     public String loginSubmit(){
-        return "/pages/landing_page";
+        return "pages/landing_page";
     }
 }

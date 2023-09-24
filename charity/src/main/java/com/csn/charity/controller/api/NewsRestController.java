@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csn.charity.model.Project;
-import com.csn.charity.service.interfaces.ProjectService;
+import com.csn.charity.model.New;
+import com.csn.charity.service.interfaces.NewsService;
 
 @RestController
 @RequestMapping("/api")
-public class ProjectRestController {
+public class NewsRestController {
     @Autowired
-    private ProjectService projectService;
+    private NewsService newsService;
 
-    @GetMapping("/projects/")
-    public List<Project> getAllProjects() {
-        return projectService.getAllProjects();
+    @GetMapping("/news/")
+    public List<New> getAllNews() {
+        return this.newsService.getAllNews();
     }
 }

@@ -5,14 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Project Category</title>
+    <title>Add New Category</title>
 </head>
 
 <body>
     <div class="main-content container-fluid" layout:fragment="content">
         <div class="container my-2" align="center">
-            <h1>QUẢN LÝ DANH MỤC DỰ ÁN TỪ THIỆN</h1>
-            <a th:href="@{/admin/projectCategory}" class="btn btn-info" mt-2>Thêm danh mục</a>
+            <h1>QUẢN LÝ DANH MỤC TIN TỨC TỪ THIỆN</h1>
+            <a th:href="@{/admin/ncategory}" class="btn btn-info" mt-2>Thêm danh mục</a>
 
             <div class="table-responsive">
                 <table class="table table-bordered mb-0">
@@ -20,12 +20,12 @@
                         <tr>
                             <th>STT</th>
                             <th>DANH MỤC</th>
-                            <th>SỐ LƯỢNG DỰ ÁN</th>
+                            <th>SỐ LƯỢNG TIN TỨC</th>
                             <th>CHỨC NĂNG</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="c:${projectCategories}">
+                        <tr th:each="c:${ncategories}">
                             <td th:text="${c.id}"></td>
                             <td th:text="${c.name}"></td>
                             <td></td>

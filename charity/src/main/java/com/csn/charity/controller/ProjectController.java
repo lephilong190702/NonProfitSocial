@@ -29,7 +29,7 @@ public class ProjectController {
     @GetMapping("/home")
     public String index(Model model) {
         model.addAttribute("projects", projectService.getAllProjects());
-        return "/pages/index";
+        return "pages/index";
     }
 
     @GetMapping("/admin/project")
@@ -38,7 +38,7 @@ public class ProjectController {
         model.addAttribute("project", project);
         List<ProjectCategory> projectCategories = projectCategoryService.getAllProjectCategories();
         model.addAttribute("projectCategories", projectCategories);
-        return "/pages/project";
+        return "pages/project";
     }
 
     @GetMapping("/admin/project/{id}")
@@ -59,9 +59,9 @@ public class ProjectController {
 
         if (project.getId() == null)
             projectService.addProject(project);
-        else {
+        else
             projectService.updateProject(project.getId(), project);
-        }
+
         return "redirect:/home";
     }
 }

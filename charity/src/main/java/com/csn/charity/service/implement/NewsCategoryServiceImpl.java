@@ -28,5 +28,22 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
         return this.newsCategoryRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));
     }
+
+    @Override
+    public NewCategory update(Long id, NewCategory category) {
+        NewCategory c = this.newsCategoryRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+
+        c.setName(category.getName());
+        return this.newsCategoryRepository.save(c);
+    }
+
+    @Override
+    public void delete(Long id) {
+        NewCategory category = this.newsCategoryRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+
+        this.newsCategoryRepository.delete(category);
+    }
     
 }

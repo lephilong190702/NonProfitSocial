@@ -18,6 +18,6 @@ public class ProjectRestController {
 
     @GetMapping("/projects/")
     public List<Project> getAllProjects() {
-        return projectService.getAllProjects();
+        return projectService.getAll();
     }
 }

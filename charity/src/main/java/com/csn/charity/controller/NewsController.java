@@ -26,7 +26,7 @@ public class NewsController {
 
     @GetMapping("/news")
     public String index(Model model) {
-        model.addAttribute("news", this.newsService.getAllNews());
+        model.addAttribute("news", this.newsService.getAll());
         return "pages/news";
     }
 
@@ -41,7 +41,7 @@ public class NewsController {
 
     @GetMapping("/admin/new/{id}")
     public String update(Model model, @PathVariable(value = "id") Long id) {
-        model.addAttribute("anew", this.newsService.getNewById(id));
+        model.addAttribute("anew", this.newsService.get(id));
         List<NewCategory> nCategories = newsCategoryService.getAll();
         model.addAttribute("ncategories", nCategories);
         return "pages/new";
@@ -56,9 +56,9 @@ public class NewsController {
         anew.setCategory(newCategory);
 
         if(anew.getId() == null)
-            newsService.addNew(anew);
+            newsService.add(anew);
         else 
-            newsService.updateNew(anew.getId(), anew);
+            newsService.update(anew.getId(), anew);
         
         return "redirect:/news";
     }

@@ -16,7 +16,7 @@
             </div>
             <div class="card-content">
                 <div class="card-body">
-                    <form th:action="@{/admin/new}" method="post" th:object="${anew}">
+                    <form th:action="@{/admin/new}" method="post" th:object="${anew}" enctype="multipart/form-data">
                         <input type="hidden" id="projectId" name="projectId"  th:field="*{id}"/>
                         <div class="form-body">
                             <div class="row">
@@ -31,12 +31,13 @@
                                         </option>
                                     </select>
                                 </div>
+                                
                                 <div class="col-md-4">
                                     <label>Tin Tức</label>
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="title" name="title" th:field="*{name}" class="form-control"
-                                        placeholder="Nhập tên dự án"/>
+                                        placeholder="Nhập tiêu đề tin tức"/>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Ngày Tạo</label>
@@ -50,6 +51,13 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <textarea id="content" name="content" th:field="*{content}" class="form-control"
+                                        placeholder="Nhập nội dung"></textarea>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Hình Ảnh</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="file" id="content" name="content" th:field="*{file}" class="form-control"
                                         placeholder="Nhập nội dung"></textarea>
                                 </div>
                                 <div class="col-sm-12 d-flex justify-content-end">

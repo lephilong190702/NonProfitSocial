@@ -6,9 +6,9 @@ import com.csn.charity.model.Project;
 
 
 public interface ProjectService {
-    List<Project> getAllProjects();
-    Project getProjectById(Long id);
-    Project addProject(Project project);
-    Project updateProject(Long id, Project project);
-    void deleteProject(Long id);
+    List<Project> getAll();
+    Project get(Long id);
+    Project add(Project project);
+    Project update(Long id, Project project);
+    void delete(Long id);
 }

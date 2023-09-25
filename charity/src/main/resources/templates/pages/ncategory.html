@@ -17,6 +17,7 @@
             <div class="card-content">
                 <div class="card-body">
                     <form th:action="@{/admin/ncategory}" method="post" th:object="${ncategory}">
+                        <input type="hidden" id="categoryId" name="categoryId"  th:field="*{id}"/>
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-4">

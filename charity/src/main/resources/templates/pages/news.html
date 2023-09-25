@@ -19,6 +19,7 @@
                     <thead>
                         <tr>
                             <th>STT</th>
+                            <td>HÌNH ẢNH</td>
                             <th>TIN TỨC</th>
                             <th>NGÀY TẠO</th>
                             <th>CHỨC NĂNG</th>
@@ -27,6 +28,9 @@
                     <tbody>
                         <tr th:each="n:${news}">
                             <td th:text="${n.id}"></td>
+                            <td>
+                                <img th:src="${n.image}" alt="${n.name}" width="150" height="150" />
+                            </td>
                             <td th:text="${n.name}"></td>
                             <td th:text="${n.createDate}"></td>
                             <td>

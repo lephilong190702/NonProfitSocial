@@ -5,9 +5,9 @@ import java.util.List;
 import com.csn.charity.model.New;
 
 public interface NewsService {
-    List<New> getAllNews();
-    New getNewById(Long id);
-    New addNew(New n);
-    New updateNew(Long id, New n);
-    void deleteNew(Long id);
+    List<New> getAll();
+    New get(Long id);
+    New add(New n);
+    New update(Long id, New n);
+    void delete(Long id);
 }

@@ -18,6 +18,6 @@ public class NewsRestController {
 
     @GetMapping("/news/")
     public List<New> getAllNews() {
-        return this.newsService.getAllNews();
+        return this.newsService.getAll();
     }
 }

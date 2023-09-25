@@ -1,16 +1,15 @@
 package com.csn.charity.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.csn.charity.model.Project;
@@ -28,7 +27,7 @@ public class ProjectController {
 
     @GetMapping("/home")
     public String index(Model model) {
-        model.addAttribute("projects", projectService.getAllProjects());
+        model.addAttribute("projects", projectService.getAll());
         return "pages/index";
     }
 
@@ -36,32 +35,33 @@ public class ProjectController {
     public String addPage(Model model) {
         Project project = new Project();
         model.addAttribute("project", project);
-        List<ProjectCategory> projectCategories = projectCategoryService.getAllProjectCategories();
+        List<ProjectCategory> projectCategories = projectCategoryService.getAll();
         model.addAttribute("projectCategories", projectCategories);
         return "pages/project";
     }
 
     @GetMapping("/admin/project/{id}")
     public String update(Model model, @PathVariable(value = "id") Long id) {
-        model.addAttribute("project", this.projectService.getProjectById(id));
-        List<ProjectCategory> projectCategories = projectCategoryService.getAllProjectCategories();
+        model.addAttribute("project", this.projectService.get(id));
+        List<ProjectCategory> projectCategories = projectCategoryService.getAll();
         model.addAttribute("projectCategories", projectCategories);
         return "pages/project";
     }
 
     @PostMapping("/admin/project")
-    public String addProject(@ModelAttribute(value = "project") Project project,
+    public String addOrUpdateProject(@ModelAttribute(value = "project") Project project,
             @RequestParam(value = "categoryId", required = false) Long categoryId) {
         System.out.println("category: " + categoryId);
 
-        ProjectCategory projectCategory = projectCategoryService.getProjectCategoryById(categoryId);
+        ProjectCategory projectCategory = projectCategoryService.get(categoryId);
         project.setCategory(projectCategory);
 
         if (project.getId() == null)
-            projectService.addProject(project);
+            projectService.add(project);
         else
-            projectService.updateProject(project.getId(), project);
+            projectService.update(project.getId(), project);
 
         return "redirect:/home";
+
     }
 }

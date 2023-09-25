@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.model.New;
+import com.csn.charity.model.NewCategory;
+import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 
 @RestController
@@ -15,9 +17,16 @@ import com.csn.charity.service.interfaces.NewsService;
 public class NewsRestController {
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private NewsCategoryService newsCategoryService;
 
     @GetMapping("/news/")
     public List<New> getAllNews() {
         return this.newsService.getAll();
+    }
+
+    @GetMapping("/ncategories/")
+    public List<NewCategory> getAllCategory() {
+        return this.newsCategoryService.getAll();
     }
 }

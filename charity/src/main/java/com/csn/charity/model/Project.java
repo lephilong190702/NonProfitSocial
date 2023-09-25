@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -74,7 +75,7 @@ public class Project implements Serializable{
     @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
     
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ProjectImage> images = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")

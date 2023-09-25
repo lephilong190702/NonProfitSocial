@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +31,6 @@ public class ProjectCategory implements Serializable{
     @Column(name = "name", nullable = false, length = 30)
     private String name;
 
-    @OneToMany(mappedBy = "category" )
+    @OneToMany(mappedBy = "category",  cascade = CascadeType.ALL)
     private List<Project> projects = new ArrayList<>();
 }

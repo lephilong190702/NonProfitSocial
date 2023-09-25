@@ -12,6 +12,14 @@
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <div class="col-md-6 mb-1 mt-10" style="margin-top: 20px;">
+        <form th:action="${currentPage == 'news' ? '/news/search' : '/projects/search'}" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Tìm kiếm ..." aria-describedby="button-addon2" th:name="kw">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i data-feather="search"></i></button>
+            </div>
+        </form>
+    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
             <li class="dropdown nav-icon">
@@ -71,6 +79,7 @@
             </li>
         </ul>
     </div>
+    
 </nav>
 </body>
 </html>

@@ -10,4 +10,5 @@ public interface NewsService {
     New add(New n);
     New update(Long id, New n);
     void delete(Long id);
+    List<New> findByName(String name);
 }

@@ -11,4 +11,5 @@ public interface ProjectService {
     Project add(Project project);
     Project update(Long id, Project project);
     void delete(Long id);
+    List<Project> findByName(String name);
 }

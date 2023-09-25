@@ -119,4 +119,9 @@ public class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
     }
 
+    @Override
+    public List<Project> findByName(String name) {
+        return this.projectRepository.findByName(name);
+    }
+
 }

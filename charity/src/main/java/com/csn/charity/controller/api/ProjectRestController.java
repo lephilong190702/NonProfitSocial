@@ -3,6 +3,7 @@ package com.csn.charity.controller.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,12 @@ public class ProjectRestController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
     @GetMapping("/projects/")
+    @CrossOrigin
     public List<Project> getAllProjects() {
         return this.projectService.getAll();
     }
     @GetMapping("/pcategories/")
+    @CrossOrigin
     public List<ProjectCategory> getAllCategories() {
         return this.projectCategoryService.getAll();
     }

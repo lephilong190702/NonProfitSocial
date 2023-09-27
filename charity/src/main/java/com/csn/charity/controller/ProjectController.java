@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.csn.charity.model.New;
 import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
@@ -40,7 +39,6 @@ public class ProjectController {
         }
         return "pages/index";
     }
-    
 
     @GetMapping("/admin/project")
     public String addPage(Model model) {

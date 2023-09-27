@@ -1,14 +1,13 @@
 package com.csn.charity.controller.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csn.charity.model.New;
-import com.csn.charity.model.NewCategory;
 import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 
@@ -21,12 +20,23 @@ public class NewsRestController {
     private NewsCategoryService newsCategoryService;
 
     @GetMapping("/news/")
-    public List<New> getAllNews() {
-        return this.newsService.getAll();
+    @CrossOrigin
+    public ResponseEntity<?> getAllNews() {
+        try {
+            return new ResponseEntity<>(this.newsService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/ncategories/")
-    public List<NewCategory> getAllCategory() {
-        return this.newsCategoryService.getAll();
+    @CrossOrigin
+    public ResponseEntity<?> getAllCategory() {
+        try {
+            return new ResponseEntity<>(this.newsCategoryService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

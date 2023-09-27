@@ -21,7 +21,7 @@ public class ProjectCategoryController {
         model.addAttribute("projectCategories", projectCategoryService.getAll());
         return "pages/pcategories";
     }
-    
+
     @GetMapping("/admin/pcategory")
     public String addPage(Model model) {
         ProjectCategory projectCategory = new ProjectCategory();
@@ -29,21 +29,19 @@ public class ProjectCategoryController {
         return "pages/pcategory";
     }
 
-    
     @GetMapping("/admin/pcategory/{id}")
     public String update(Model model, @PathVariable(value = "id") Long id) {
         model.addAttribute("projectCategory", this.projectCategoryService.get(id));
         return "pages/pcategory";
     }
 
-
     @PostMapping("/admin/pcategory")
     public String addProjectCategory(@ModelAttribute(value = "projectCategory") ProjectCategory projectCategory) {
-        if(projectCategory.getId() == null)
+        if (projectCategory.getId() == null)
             projectCategoryService.add(projectCategory);
         else
             projectCategoryService.update(projectCategory.getId(), projectCategory);
-            
+
         return "redirect:/pcategories";
     }
 }

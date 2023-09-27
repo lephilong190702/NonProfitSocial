@@ -1,14 +1,13 @@
 package com.csn.charity.controller.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csn.charity.model.Project;
-import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
 
@@ -19,12 +18,24 @@ public class ProjectRestController {
     private ProjectService projectService;
     @Autowired
     private ProjectCategoryService projectCategoryService;
+
     @GetMapping("/projects/")
-    public List<Project> getAllProjects() {
-        return this.projectService.getAll();
+    @CrossOrigin
+    public ResponseEntity<?> getAllProjects() {
+        try {
+            return new ResponseEntity<>(this.projectService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
     @GetMapping("/pcategories/")
-    public List<ProjectCategory> getAllCategories() {
-        return this.projectCategoryService.getAll();
+    @CrossOrigin
+    public ResponseEntity<?> getAllCategories() {
+        try {
+            return new ResponseEntity<>(this.projectCategoryService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

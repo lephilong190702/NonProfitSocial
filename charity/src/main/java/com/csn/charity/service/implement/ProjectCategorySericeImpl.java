@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.csn.charity.model.New;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.service.interfaces.ProjectCategoryService;

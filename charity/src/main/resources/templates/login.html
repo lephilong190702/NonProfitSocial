@@ -12,8 +12,15 @@
 </head>
 
 <body>
+    
     <div id="auth">
         <div class="container">
+            <div th:if="${param.accessDenied != null}" class="alert alert-danger">
+                Bạn không có quyền truy cập!
+            </div>
+            <div th:if="${param.error != null}" class="alert alert-danger">
+                Vui lòng quay lại sau!
+            </div>
             <div class="row">
                 <div class="col-md-5 col-sm-12 mx-auto">
                     <div class="card pt-4">
@@ -23,11 +30,11 @@
                                 <h3>Sign In</h3>
                                 <p>Please sign in to continue to Voler.</p>
                             </div>
-                            <form th:action="@{/home}" method="post">
+                            <form th:action="@{/login}" method="post">
                                 <div class="form-group position-relative has-icon-left">
                                     <label for="username">Username</label>
                                     <div class="position-relative">
-                                        <input type="text" class="form-control" id="username">
+                                        <input type="text" class="form-control" id="username" name="username">
                                         <div class="form-control-icon">
                                             <i data-feather="user"></i>
                                         </div>
@@ -41,7 +48,7 @@
                                         </a>
                                     </div>
                                     <div class="position-relative">
-                                        <input type="password" class="form-control" id="password">
+                                        <input type="password" class="form-control" id="password" name="password">
                                         <div class="form-control-icon">
                                             <i data-feather="lock"></i>
                                         </div>
@@ -54,7 +61,7 @@
                                         <label for="checkbox1">Remember me</label>
                                     </div>
                                     <div class="float-end">
-                                        <a href="auth-register.html">Don't have an account?</a>
+                                        <a th:href="@{/register}">Don't have an account?</a>
                                     </div>
                                 </div>
                                 <div class="clearfix">

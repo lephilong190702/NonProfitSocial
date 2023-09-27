@@ -1,7 +1,5 @@
 package com.csn.charity.controller;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,6 +30,19 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/users")
+    public String getUser(Model model) {
+        model.addAttribute("users", this.userService.findAllUsers());
+        return "pages/users";
+    }
+
+    @GetMapping("/admin/user/{id}")
+    public String details(@PathVariable(value = "id") Long id) {
+        this.userService.get(id);
+        return "pages/users";
+    }
+
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         UserDTO user = new UserDTO();
@@ -42,13 +54,12 @@ public class UserController {
     public String registration(@Validated @ModelAttribute("user") UserDTO userDto,
             BindingResult result,
             Model model) {
-        Optional<User> existingUser = userService.findUserByUsername(userDto.getUsername());
+        User existingUser = userService.findUserByUsername(userDto.getUsername());
 
-        if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+        if (existingUser != null) {
+            if (existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
                 result.rejectValue("username", null,
-                        "There is already an account registered with the same username");
+                        "Tên tài khoản đã tồn tại");
             }
         }
 
@@ -59,6 +70,18 @@ public class UserController {
 
         userService.addUser(userDto);
         return "redirect:/login";
+    }
+
+    @PostMapping("/admin/active/{id}")
+    public String activateAccount(@PathVariable(value = "id") Long id) {
+        this.userService.activateAccount(id);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/admin/disable/{id}")
+    public String disableAccount(@PathVariable(value = "id") Long id) {
+        this.userService.disableAccount(id);
+        return "redirect:/users";
     }
 
 }

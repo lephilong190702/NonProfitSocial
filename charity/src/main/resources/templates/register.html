@@ -14,6 +14,9 @@
 <body>
     <div id="auth">
         <div class="container">
+            <div th:if="${param.error != null}" class="alert alert-danger">
+                Vui lòng quay lại sau!
+            </div>
             <div class="row">
                 <div class="col-md-7 col-sm-12 mx-auto">
                     <div class="card pt-4">
@@ -28,8 +31,10 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="username-column">Username</label>
-                                            <input type="text" id="username" class="form-control"
-                                                name="username-column" th:field="*{username}">
+                                            <input type="text" id="username" class="form-control" name="username-column"
+                                                th:field="*{username}">
+                                            <p th:errors="*{username}" class="text-danger"
+                                                th:if="${#fields.hasErrors('username')}"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
@@ -42,8 +47,8 @@
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
                                             <label for="email-id-column">Email</label>
-                                            <input type="email" id="email" class="form-control"
-                                                name="email-id-column" th:field="*{email}">
+                                            <input type="email" id="email" class="form-control" name="email-id-column"
+                                                th:field="*{email}">
                                         </div>
                                     </div>
                                 </diV>

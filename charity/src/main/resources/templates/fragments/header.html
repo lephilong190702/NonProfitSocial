@@ -12,6 +12,14 @@
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <div class="col-md-6 mb-1 mt-10" style="margin-top: 20px;">
+        <form th:action="${currentPage == 'news' ? '/news/search' : '/projects/search'}" method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Tìm kiếm ..." aria-describedby="button-addon2" th:name="kw">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i data-feather="search"></i></button>
+            </div>
+        </form>
+    </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
             <li class="dropdown nav-icon">
@@ -45,32 +53,28 @@
                         <i data-feather="mail"></i>
                     </div>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
-                    <a class="dropdown-item active" href="#"><i data-feather="mail"></i> Messages</a>
-                    <a class="dropdown-item" href="#"><i data-feather="settings"></i> Settings</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i data-feather="log-out"></i> Logout</a>
-                </div>
             </li>
             <li class="dropdown">
                 <a href="#" data-bs-toggle="dropdown"
                    class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                     <div class="avatar me-1">
-                        <img src="assets/images/avatar/avatar-s-1.png" alt="" srcset="">
+                        <img th:src="@{/images/avatar/avatar-s-1.png}" alt="" srcset="">
                     </div>
-                    <div class="d-none d-md-block d-lg-inline-block">Hi, Saugi</div>
+                    <div class="d-none d-md-block d-lg-inline-block">
+                        
+                    </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
                     <a class="dropdown-item active" href="#"><i data-feather="mail"></i> Messages</a>
                     <a class="dropdown-item" href="#"><i data-feather="settings"></i> Settings</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i data-feather="log-out"></i> Logout</a>
+                    <a class="dropdown-item" th:href="@{/logout}"><i data-feather="log-out"></i> Logout</a>
                 </div>
             </li>
         </ul>
     </div>
+    
 </nav>
 </body>
 </html>

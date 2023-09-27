@@ -1,15 +1,13 @@
 package com.csn.charity.controller.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.csn.charity.model.New;
-import com.csn.charity.model.NewCategory;
 import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 
@@ -23,13 +21,22 @@ public class NewsRestController {
 
     @GetMapping("/news/")
     @CrossOrigin
-    public List<New> getAllNews() {
-        return this.newsService.getAll();
+    public ResponseEntity<?> getAllNews() {
+        try {
+            return new ResponseEntity<>(this.newsService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/ncategories/")
     @CrossOrigin
-    public List<NewCategory> getAllCategory() {
-        return this.newsCategoryService.getAll();
+    public ResponseEntity<?> getAllCategory() {
+        try {
+            return new ResponseEntity<>(this.newsCategoryService.getAll(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

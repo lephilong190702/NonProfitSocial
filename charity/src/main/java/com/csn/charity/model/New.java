@@ -58,5 +58,6 @@ public class New implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private NewCategory category;
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.csn.charity.model.New;
 import com.csn.charity.model.NewCategory;
@@ -17,6 +18,7 @@ import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 
 @Controller
+@SessionAttributes("currentPage")
 public class NewsController {
     @Autowired
     private NewsService newsService;
@@ -26,7 +28,17 @@ public class NewsController {
 
     @GetMapping("/news")
     public String index(Model model) {
+        model.addAttribute("currentPage", "news");
         model.addAttribute("news", this.newsService.getAll());
+        return "pages/news";
+    }
+
+    @GetMapping("/news/search")
+    public String search(@RequestParam("kw") String kw, Model model) {
+        if (kw != null && !kw.isEmpty()) {
+            List<New> news = newsService.findByName(kw);
+            model.addAttribute("news", news);
+        }
         return "pages/news";
     }
 
@@ -55,11 +67,11 @@ public class NewsController {
         NewCategory newCategory = this.newsCategoryService.get(categoryId);
         anew.setCategory(newCategory);
 
-        if(anew.getId() == null)
+        if (anew.getId() == null)
             newsService.add(anew);
-        else 
+        else
             newsService.update(anew.getId(), anew);
-        
+
         return "redirect:/news";
     }
 }

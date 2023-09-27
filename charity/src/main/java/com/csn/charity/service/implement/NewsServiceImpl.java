@@ -79,5 +79,10 @@ public class NewsServiceImpl implements NewsService {
 
         this.newsRepository.delete(n);
     }
+
+    @Override
+    public List<New> findByName(String name) {
+        return this.newsRepository.findByName(name);
+    }
     
 }

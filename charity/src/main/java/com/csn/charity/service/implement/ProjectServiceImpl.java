@@ -69,6 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project update(Long id, Project project) {
         Project p = projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        
         p.setCategory(project.getCategory());
         p.setTitle(project.getTitle());
         p.setAddress(project.getAddress());
@@ -89,7 +90,7 @@ public class ProjectServiceImpl implements ProjectService {
                             System.out.println("Image URL: " + imageUrl);
                             ProjectImage img = new ProjectImage();
                             img.setImage(imageUrl);
-                            img.setProject(project);
+                            img.setProject(p);
                             projectRepository.save(project);
                             images.add(img);
                             projectImageRepository.save(img);
@@ -117,6 +118,11 @@ public class ProjectServiceImpl implements ProjectService {
     public Project get(Long id) {
         return this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+    }
+
+    @Override
+    public List<Project> findByName(String name) {
+        return this.projectRepository.findByName(name);
     }
 
 }

@@ -24,9 +24,19 @@ public class ProjectController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
 
-    @GetMapping("/home")
+    @GetMapping("/projects")
     public String index(Model model) {
+        model.addAttribute("currentPage", "projects");
         model.addAttribute("projects", projectService.getAll());
+        return "pages/index";
+    }
+
+    @GetMapping("/projects/search")
+    public String search(@RequestParam("kw") String kw, Model model) {
+        if (kw != null && !kw.isEmpty()) {
+            List<Project> projects = projectService.findByName(kw);
+            model.addAttribute("projects", projects);
+        }
         return "pages/index";
     }
 
@@ -60,7 +70,7 @@ public class ProjectController {
         else
             projectService.update(project.getId(), project);
 
-        return "redirect:/home";
+        return "redirect:/projects";
 
     }
 }

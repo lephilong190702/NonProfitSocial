@@ -11,6 +11,7 @@ import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
+import com.csn.charity.service.interfaces.UserService;
 
 @RestController
 public class AdminRestController {
@@ -25,6 +26,9 @@ public class AdminRestController {
 
     @Autowired
     private ProjectCategoryService projectCategoryService;
+
+    @Autowired
+    private UserService userService;
 
     @DeleteMapping("/admin/pcategory/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -48,5 +52,11 @@ public class AdminRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteNew(@PathVariable(value = "id") Long id) {
         this.newsService.delete(id);
+    }
+
+    @DeleteMapping("/admin/user/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable(value = "id") Long id) {
+        this.userService.delete(id);
     }
 }

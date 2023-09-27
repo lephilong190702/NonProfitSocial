@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+</head>
+
+<body>
+
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>QUẢN LÝ NGƯỜI DÙNG</h1>
+
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <td>TÀI KHOẢN</td>
+                            <th>EMAIL</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>TÍNH NĂNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u:${users}">
+                            <td th:text="${u.id}"></td>
+                            <td th:text="${u.username}"></td>
+                            <td th:text="${u.email}"></td>
+                            <td th:text="${u.status != null ? (u.status ? 'Active' : 'Disabled') : 'N/A'}"></td>
+                            <td>
+                                <form th:action="@{/admin/active/{id}(id=${u.id})}" method="post">
+                                    <button class="btn btn-primary" type="submit" th:if="${u.status == null || !u.status}">Active</button>
+                                </form>
+                                <form th:action="@{/admin/disable/{id}(id=${u.id})}" method="post">
+                                    <button class="btn btn-primary" type="submit" th:if="${u.status != null && u.status}">Disable</button>
+                                </form>
+                            </td>
+                            <td>
+                                <!-- <a class="btn btn-primary" th:href="@{/admin/new/{id}(id=${n.id})}">Update</a> -->
+                                <a class="btn btn-danger" th:attr="path=@{/admin/user/{id}(id=${u.id})}"  onclick="deleteUser(this.getAttribute('path'))">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script>
+    function deleteUser(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Lỗi!!!");
+        });
+    }
+}
+</script>

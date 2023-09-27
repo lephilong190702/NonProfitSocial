@@ -44,7 +44,7 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean status;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

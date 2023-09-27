@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
-import Component1 from './components/Component1'
-import Component2 from './components/Component2'
-import Header from './layout/header'
-import Footer from './layout/footer'
-import { Route, Routes } from 'react-router-dom'
-import Home from './components/Home'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HomePage, LoginPage } from './pages'
 
 const App = () => {
   return (
-    <div>
-      <Component1 />
-      <Component2 />
+    <BrowserRouter>
+      {/* <h1 className='text-red-500'>Hello</h1>
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
       </Routes>
-      <Footer />
-    </div>
+      <Footer /> */}
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/login' element={<LoginPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

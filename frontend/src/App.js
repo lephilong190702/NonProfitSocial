@@ -7,15 +7,17 @@ import { Container } from "react-bootstrap";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Header />
-      <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Container>
-      <Footer />
-    </BrowserRouter>
+        <BrowserRouter>
+          <Header />
+          
+          <Container>
+            <Routes>
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </Container>
+          <Footer />
+        </BrowserRouter>
+    
   )
 }
 

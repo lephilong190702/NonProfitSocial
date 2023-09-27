@@ -41,21 +41,21 @@ const Header = () => {
                         <Nav.Link href="#home">Trang chủ</Nav.Link>
 
                         <NavDropdown title="Dự án" id="basic-nav-dropdown">
-                        {newsCategory.map(c => <NavDropdown.Item href="#action/3.1" key={c.id}>{c.name}</NavDropdown.Item>)}
+                        {newsCategory.map(c => <NavDropdown.Item href="#projects" key={c.id}>{c.name}</NavDropdown.Item>)}
                         
                         </NavDropdown>
 
                         <NavDropdown title="Đóng góp" id="basic-nav-dropdown">
-                        {newsCategory.map(c => <NavDropdown.Item href="#action/3.1" key={c.id}>{c.name}</NavDropdown.Item>)}
+                        {newsCategory.map(c => <NavDropdown.Item href="#contribution" key={c.id}>{c.name}</NavDropdown.Item>)}
                         
                         </NavDropdown>
 
-                        <Nav.Link href="#">Báo cáo tài chính</Nav.Link>
+                        <Nav.Link href="#financial_report">Báo cáo tài chính</Nav.Link>
 
-                        <Nav.Link href="#">Mạng xã hội</Nav.Link>
+                        <Nav.Link href="#social">Mạng xã hội</Nav.Link>
 
                         <NavDropdown title="Tin tức" id="basic-nav-dropdown">
-                        {newsCategory.map(c => <NavDropdown.Item href="#action/3.1" key={c.id}>{c.name}</NavDropdown.Item>)}
+                        {newsCategory.map(c => <NavDropdown.Item href="#news" key={c.id}>{c.name}</NavDropdown.Item>)}
                         
                         </NavDropdown>
                     </Nav>

@@ -4,8 +4,9 @@ import MySpinner from "../layout/MySpinner";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
 import { useSearchParams } from "react-router-dom";
 import reactIcon from "../assets/react.svg";
+import { Header, Post, Slider } from "../components";
 
-const Home = () => {
+const HomePage = () => {
   const [news, setNews] = useState(null);
   const [q] = useSearchParams();
 
@@ -31,8 +32,9 @@ const Home = () => {
 
   return (
     <>
-      <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
-      <Row>
+      <Header />
+      {/* <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1> */}
+      {/* <Row>
         {news.map((n) => {
           return (
             <>
@@ -49,10 +51,12 @@ const Home = () => {
             </>
           );
         })}
-      </Row>
+      </Row> */}
+      <Slider />
+      <Post />
       
     </>
   );
 };
 
-export default Home;
+export default HomePage;

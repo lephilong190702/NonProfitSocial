@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setStatus(true);
         System.out.println("STATUS"+ user.getStatus());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        UserRole role = roleRepository.findByName("ROLE_ADMIN");
+        UserRole role = roleRepository.findByName("ROLE_USER");
         user.setRoles(Arrays.asList(role));
         userRepository.save(user);
         return "User Added Successfully";

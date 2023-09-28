@@ -11,6 +11,7 @@ import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
+import com.csn.charity.service.interfaces.SkillService;
 import com.csn.charity.service.interfaces.UserService;
 
 @RestController
@@ -29,6 +30,9 @@ public class AdminRestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SkillService skillService;
 
     @DeleteMapping("/admin/pcategory/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -58,5 +62,11 @@ public class AdminRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "id") Long id) {
         this.userService.delete(id);
+    }
+
+    @DeleteMapping("/admin/skill/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSkill(@PathVariable(value = "id") Long id) {
+        this.skillService.delete(id);
     }
 }

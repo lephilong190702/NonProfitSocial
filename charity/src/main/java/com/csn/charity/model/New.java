@@ -40,7 +40,6 @@ public class New implements Serializable {
     private String name;
 
     @Column(name = "create_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
 
     @Column(name = "image")

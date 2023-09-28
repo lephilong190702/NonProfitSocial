@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,6 +46,7 @@ public class NewsServiceImpl implements NewsService {
                 Logger.getLogger(NewsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        n.setCreateDate(new Date());
         return this.newsRepository.save(n);
     }
 

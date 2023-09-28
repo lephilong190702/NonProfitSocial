@@ -30,13 +30,13 @@ export const endpoints = {
 }
 
 export const authApi = () => {
-    return axios.create({
-        baseURL: SERVER,
-        headers: {
-            "Authorization": cookie.load("token"),
-        }
-    })
-}
+  return axios.create({
+    baseURL: SERVER_CONTEXT,
+    headers: {
+      Authorization: cookie.load("token"),
+    },
+  });
+};
 
 export default axios.create({
     baseURL: SERVER

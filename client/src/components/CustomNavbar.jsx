@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Form, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import MySpinner from "../layout/MySpinner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
 
 const CustomNavbar = () => {
@@ -38,7 +38,7 @@ const CustomNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Trang chủ</Nav.Link>
+            <Link to="/" className="nav-link">Trang chủ</Link>
 
             <NavDropdown title="Dự án" id="basic-nav-dropdown">
               {newsCategory.length > 0 && newsCategory.map((c) => (
@@ -67,6 +67,7 @@ const CustomNavbar = () => {
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
+            <Link to="/login" className="text-danger nav-link">Đăng nhập</Link>
           </Nav>
         </Navbar.Collapse>
 

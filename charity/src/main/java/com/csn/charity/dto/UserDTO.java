@@ -1,12 +1,10 @@
 package com.csn.charity.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
@@ -15,4 +13,8 @@ public class UserDTO {
     private String password;
     private String email;
     private Boolean status;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String avatar;
 }

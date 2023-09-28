@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project Category</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>QUẢN LÝ KỸ NĂNG TỪ THIỆN</h1>
+            <a th:href="@{/admin/skill}" class="btn btn-info" mt-2>Thêm kỹ năng</a>
+
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>KỸ NĂNG</th>
+                            <th>CHỨC NĂNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="s:${skills}">
+                            <td th:text="${s.id}"></td>
+                            <td th:text="${s.name}"></td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/admin/skill/{id}(id=${s.id})}">Update</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/skill/{id}(id=${s.id})}"  onclick="deleteSkill(this.getAttribute('path'))">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    function deleteSkill(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Lỗi!!!");
+        });
+    }
+}
+</script>

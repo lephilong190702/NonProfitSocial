@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Category</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>QUẢN LÝ HOẠT ĐỘNG TÌNH NGUYỆN</h1>
+
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>DỰ ÁN</th>
+                            <th>NGƯỜI DÙNG</th>
+                            <th>KỸ NĂNG</th>
+                            <th>NGÀY ĐĂNG KÝ</th>
+                            <th>NGÀY BẮT ĐẦU</th>
+                            <th>NGÀY KẾT THÚC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="v:${volunteers}">
+                            <td th:text="${v.id}"></td>
+                            <td th:if="${v.project != null}" th:text="${v.project.title}"></td>
+                            <td th:if="${v.user != null}" th:text="${v.user.username}"></td>
+                            <td>
+                                <span th:each="skill : ${v.skills}">
+                                    <span th:text="${skill.name}"></span>
+                                    <span>, </span>
+                                </span>
+                            </td>
+                            <td th:text="${v.registerDate}"></td>
+                            <td th:text="${v.startDate}"></td>
+                            <td th:text="${v.endDate}"></td>
+                            <!-- <td></td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/admin/ncategory/{id}(id=${c.id})}">Update</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/ncategory/{id}(id=${c.id})}"  onclick="deleteNewsCategory(this.getAttribute('path'))">Delete</a>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    function deleteNewsCategory(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Lỗi!!!");
+        });
+    }
+}
+</script>

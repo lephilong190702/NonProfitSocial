@@ -79,7 +79,6 @@ public class Project implements Serializable{
     private List<ProjectImage> images = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
-    @JsonIgnore
     private List<UserVolunteerProject> volunteers = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")

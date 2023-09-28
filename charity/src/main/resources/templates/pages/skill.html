@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project Category</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">THÊM THỂ LOẠI</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <form th:action="@{/admin/skill}" method="post" th:object="${skill}">
+                        <input type="hidden" id="skillId" name="skillId"  th:field="*{id}"/>
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="name" style="font-size: 16px;">KỸ NĂNG</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="name" name="name" th:field="*{name}"
+                                        style="font-size: 16px; width: 80%;" />
+                                </div>
+                                <div class="col-sm-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-1 mb-1"
+                                        style="font-size: 16px;">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

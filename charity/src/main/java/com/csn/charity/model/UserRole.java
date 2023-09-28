@@ -3,6 +3,8 @@ package com.csn.charity.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class UserRole implements Serializable{
     private String name;
 
     @ManyToMany(mappedBy="roles")
+    @JsonIgnore
     private List<User> users;
 
 }

@@ -1,5 +1,7 @@
 package com.csn.charity.controller.api;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.UserDTO;
+import com.csn.charity.model.User;
 import com.csn.charity.service.interfaces.UserService;
 
 @RestController
 @RequestMapping("/api")
 public class AuthRestController {
     @Autowired
-    private UserService service;
+    private UserService userService;
 
     @Autowired
     private JwtService jwtService;
@@ -33,7 +36,7 @@ public class AuthRestController {
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
-        String result = this.service.addUser(userDto);
+        String result = this.userService.addUser(userDto);
         if (result != null)
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         else
@@ -51,6 +54,12 @@ public class AuthRestController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/current-user/")
+    @CrossOrigin
+    public ResponseEntity<User> getUser(Principal user) {
+        User u = this.userService.findUserByUsername(user.getName());
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
     @GetMapping("/user/userProfile")

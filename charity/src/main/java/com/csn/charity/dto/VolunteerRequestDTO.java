@@ -3,8 +3,6 @@ package com.csn.charity.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.csn.charity.model.Skill;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

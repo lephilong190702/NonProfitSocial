@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.UserDTO;
+import com.csn.charity.model.Profile;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserRole;
 import com.csn.charity.repository.RoleRepository;
@@ -53,10 +54,17 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setStatus(true);
-        System.out.println("STATUS"+ user.getStatus());
+        System.out.println("STATUS" + user.getStatus());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         UserRole role = roleRepository.findByName("ROLE_USER");
         user.setRoles(Arrays.asList(role));
+
+        Profile profile = new Profile();
+        profile.setFirstName(userDto.getFirstName());
+        profile.setLastName(userDto.getLastName());
+        profile.setUser(user);
+        
+        user.setProfile(profile);
         userRepository.save(user);
         return "User Added Successfully";
     }

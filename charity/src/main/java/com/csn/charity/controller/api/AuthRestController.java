@@ -10,15 +10,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.UserDTO;
+import com.csn.charity.model.Profile;
 import com.csn.charity.model.User;
+import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
 
 @RestController
@@ -32,6 +38,9 @@ public class AuthRestController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private ProfileService profileService;
 
     @PostMapping("/register/")
     @CrossOrigin
@@ -60,6 +69,13 @@ public class AuthRestController {
     public ResponseEntity<User> getUser(Principal user) {
         User u = this.userService.findUserByUsername(user.getName());
         return new ResponseEntity<>(u, HttpStatus.OK);
+    }
+
+    @PostMapping("/profile/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> updateProfile(@PathVariable(value = "id") Long id, @RequestBody Profile profile) {
+        this.profileService.update(id, profile);
+        return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 
     @GetMapping("/user/userProfile")

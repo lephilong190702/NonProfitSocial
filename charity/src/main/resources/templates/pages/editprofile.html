@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project </title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title" >PROFILE</h4>
+            </div>
+            <div class="card-content">
+                <div class="card-body">
+                    <form th:action="@{/admin/edit-profile/{username}(username=${#authentication.principal.username})}" method="post" th:object="${profile}" enctype="multipart/form-data">
+                        <input type="hidden" id="profiletId" name="profiletId"  th:field="*{id}"/>
+                        <input type="hidden" id="userId" name="userId" th:field="*{user.id}" />
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Họ</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="title" name="title" th:field="*{firstName}" class="form-control"
+                                        placeholder="Nhập họ"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Tên</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="title" name="title" th:field="*{lastName}"
+                                        class="form-control" placeholder="Nhập tên" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Số điện thoại</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="title" name="title" th:field="*{phone}"
+                                        class="form-control" placeholder="Nhập số điện thoại" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Avatar</label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="file" id="status" name="status" th:field="*{file}"
+                                        class="form-control"/>
+                                </div>
+                                <div class="col-sm-12 d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

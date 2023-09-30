@@ -1,6 +1,8 @@
 package com.csn.charity.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +23,12 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("/")
-    public String loginSubmit() {
+    public String loginSubmit(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null)
+            System.out.println("KHÔNG TÌM THẤY!!!!");
+        else
+            System.out.println("TÌM THẤY!!!!");
         return "pages/landing_page";
     }
 

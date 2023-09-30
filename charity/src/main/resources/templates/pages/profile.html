@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+</head>
+
+<body>
+
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="container my-2" align="center">
+            <h1>HỒ SƠ CÁ NHÂN</h1>
+            <a th:href="@{/admin/edit-profile/{username}(username=${#authentication.principal.username})}" class="btn btn-info" mt-2>CẬP NHẬT HỒ SƠ</a>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>HỌ</th>
+                            <td>TÊN</td>
+                            <th>SỐ ĐIỆN THOẠI</th>
+                            <th>AVATAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p:${profiles}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.firstName}"></td>
+                            <td th:text="${p.lastName}"></td>
+                            <td th:text="${p.phone}"></td>
+                            <td>
+                                <img th:src="${p.avatar}" width="150" height="150" />
+                            </td>
+                           
+                            <!-- <td>
+                                <a class="btn btn-primary" th:href="@{/admin/new/{id}(id=${n.id})}">Update</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/new/{id}(id=${n.id})}"  onclick="deleteProject(this.getAttribute('path'))">Delete</a>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script>
+    function deleteProject(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Lỗi!!!");
+        });
+    }
+}
+</script>

@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -11,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.CommentNewsDTO;
 import com.csn.charity.model.New;
-import com.csn.charity.model.Post;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserCommentNew;
-import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentNewsRepository;
 import com.csn.charity.repository.NewsRepository;
 import com.csn.charity.repository.UserRepository;
@@ -54,6 +53,16 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         userCommentNew.setContent(commentNewsDTO.getContent());
 
         return commentNewsRepository.save(userCommentNew);
+    }
+    @Override
+    public List<UserCommentNew> getCommentByNews(Long id) {
+        this.newsRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+
+        List<UserCommentNew> commentNews = this.commentNewsRepository.findByNewsId(id);
+
+        return commentNews;
+        
     }
     
 }

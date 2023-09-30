@@ -1,10 +1,13 @@
 package com.csn.charity.controller.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,5 +55,11 @@ public class NewsRestController {
     public ResponseEntity<UserCommentNew> comment(@RequestBody CommentNewsDTO commentNewsDTO) {
         UserCommentNew userCommentNew = this.commentNewsService.createComment(commentNewsDTO);
         return new ResponseEntity<>(userCommentNew, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/news/{newsId}/comments/")
+    @CrossOrigin
+    public ResponseEntity<List<UserCommentNew>> listComment(@PathVariable(value = "newsId") Long id) {
+        return new ResponseEntity<>(this.commentNewsService.getCommentByNews(id), HttpStatus.OK);
     }
 }

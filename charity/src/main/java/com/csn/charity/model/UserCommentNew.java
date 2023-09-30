@@ -53,6 +53,4 @@ public class UserCommentNew implements Serializable {
     @JoinColumn(name = "new_id")
     @JsonIgnore
     private New news;
-
- 
 }

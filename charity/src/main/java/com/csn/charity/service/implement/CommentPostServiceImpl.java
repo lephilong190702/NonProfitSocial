@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.User;
+import com.csn.charity.model.UserCommentNew;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentPostRepository;
 import com.csn.charity.repository.PostRepository;
@@ -54,6 +56,16 @@ public class CommentPostServiceImpl implements CommentPostService {
         userCommentPost.setContent(commentPostDTO.getContent());
 
         return commentPostRepository.save(userCommentPost);
+    }
+
+    @Override
+    public List<UserCommentPost> getCommentByPost(Long id) {
+        this.postRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+
+        List<UserCommentPost> commentPosts = this.commentPostRepository.findByPostId(id);
+
+        return commentPosts;
     }
 
 }

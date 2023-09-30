@@ -64,5 +64,12 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         return commentNews;
         
     }
+    @Override
+    public void deleteCommentNews(Long id) {
+        UserCommentNew userCommentNew = this.commentNewsRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        this.commentNewsRepository.delete(userCommentNew);
+    }
     
 }

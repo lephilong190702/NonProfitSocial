@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.dto.PostRequest;
 import com.csn.charity.model.Post;
-import com.csn.charity.model.UserCommentNew;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.service.interfaces.CommentPostService;
 import com.csn.charity.service.interfaces.PostService;
@@ -71,5 +71,11 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<List<UserCommentPost>> listComment(@PathVariable(value = "postId") Long id) {
         return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/post/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        commentPostService.deleteCommentPost(commentId);
+        return ResponseEntity.ok("Bình luận đã được xóa thành công.");
     }
 }

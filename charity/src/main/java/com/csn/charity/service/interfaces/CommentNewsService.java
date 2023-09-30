@@ -8,4 +8,5 @@ import com.csn.charity.model.UserCommentNew;
 public interface CommentNewsService {
     UserCommentNew createComment(CommentNewsDTO commentNewsDTO);
     List<UserCommentNew> getCommentByNews(Long id);
+    void deleteCommentNews(Long id);
 }

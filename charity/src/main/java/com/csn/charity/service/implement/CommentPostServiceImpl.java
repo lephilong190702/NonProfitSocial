@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.User;
-import com.csn.charity.model.UserCommentNew;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentPostRepository;
 import com.csn.charity.repository.PostRepository;
@@ -67,5 +66,15 @@ public class CommentPostServiceImpl implements CommentPostService {
 
         return commentPosts;
     }
+
+    @Override
+    public void deleteCommentPost(Long id) {
+        UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+        
+        this.commentPostRepository.delete(userCommentPost);
+    }
+
+    
 
 }

@@ -2,8 +2,6 @@ package com.csn.charity.service.implement;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +41,6 @@ public class ProfileServiceImpl implements ProfileService {
                 p.setAvatar(imageUrl);
 
             } catch (IOException ex) {
-                // Xử lý lỗi tại đây nếu cần thiết
                 ex.printStackTrace();
             }
         }

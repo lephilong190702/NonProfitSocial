@@ -53,7 +53,7 @@ const HomePage = () => {
         })}
       </Row> */}
       <Slider />
-      <Post />
+      {/* <Post /> */}
       
     </>
   );

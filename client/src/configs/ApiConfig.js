@@ -26,14 +26,15 @@ export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
-    "current-user": `${SERVER_CONTEXT}/api/current-user/`
+    "current-user": `${SERVER_CONTEXT}/api/current-user/`,
+    
 }
 
 export const authApi = () => {
   return axios.create({
-    baseURL: SERVER_CONTEXT,
+    baseURL: SERVER,
     headers: {
-      Authorization: cookie.load("token"),
+      "Authorization": cookie.load("token"),
     },
   });
 };

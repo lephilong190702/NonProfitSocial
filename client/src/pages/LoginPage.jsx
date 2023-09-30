@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import cookie from "react-cookies";
+import { Header } from "../components";
+import { Navigate } from "react-router";
+import { UserContext } from "../App";
 
 const LoginPage = () => {
+  const [user, dispatch] = useContext(UserContext);
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
 
@@ -20,7 +24,11 @@ const LoginPage = () => {
 
         let {data} = await authApi().get(endpoints['current-user']);
         cookie.save("user", data);
-        console.info(data);
+        
+        dispatch({
+          "type": "login",
+          "payload": data
+        })
       } catch (ex) {
         console.error(ex);
       }
@@ -28,10 +36,14 @@ const LoginPage = () => {
     
     process();
   }
+
+  if (user !== null)
+  return <Navigate to="/" />
     
 
   return (
     <>
+    <Header />
       <h1 className="text-center text-info">Đăng nhập</h1>
       <Form onSubmit={login}>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

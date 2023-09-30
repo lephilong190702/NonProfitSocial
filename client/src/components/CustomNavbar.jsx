@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Button, Container, Form, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  Form,
+  Nav,
+  NavDropdown,
+  Navbar,
+} from "react-bootstrap";
 import MySpinner from "../layout/MySpinner";
 import { Link, useNavigate } from "react-router-dom";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
+import { UserContext } from "../App";
 
 const CustomNavbar = () => {
+  const [user, dispatch] = useContext(UserContext);
   const [newsCategory, setNewsCategory] = useState([]);
   const [kw, setKw] = useState("");
   const nav = useNavigate();
@@ -30,6 +39,12 @@ const CustomNavbar = () => {
     nav(`/?kw=${kw}`);
   };
 
+  const logout = () => {
+    dispatch({
+      type: "logout",
+    });
+  };
+
   if (newsCategory.length === 0) return <MySpinner />;
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -38,14 +53,18 @@ const CustomNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Link to="/" className="nav-link">Trang chủ</Link>
+            <Link to="/" className="nav-link">
+              Trang chủ
+            </Link>
 
             <NavDropdown title="Dự án" id="basic-nav-dropdown">
-              {newsCategory.length > 0 && newsCategory.map((c) => (
-                <NavDropdown.Item href="#projects" key={c.id}>
-                  {c.name}
-                </NavDropdown.Item>
-              ))}
+              {newsCategory.length > 0 &&
+                newsCategory.map((c) => {
+                  let h = `/?cateId=${c.id}`;
+                  return <Link to={h} className="dropdown-item" key={c.id}>
+                    {c.name}
+                  </Link>;
+                })}
             </NavDropdown>
 
             <NavDropdown title="Đóng góp" id="basic-nav-dropdown">
@@ -67,7 +86,20 @@ const CustomNavbar = () => {
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
-            <Link to="/login" className="text-danger nav-link">Đăng nhập</Link>
+            {user === null ? (
+              <Link to="/login" className="text-danger nav-link">
+                Đăng nhập
+              </Link>
+            ) : (
+              <>
+                <Link to="/userProfile" className="text-danger nav-link">
+                  Chào {user.username}!
+                </Link>
+                <Button variant="secondary" onClick={logout}>
+                  Đăng xuất
+                </Button>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
 

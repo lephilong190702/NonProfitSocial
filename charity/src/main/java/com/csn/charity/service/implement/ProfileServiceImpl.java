@@ -7,9 +7,11 @@ import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.model.Profile;
 import com.csn.charity.repository.ProfileRepository;
 import com.csn.charity.service.interfaces.ProfileService;
@@ -21,24 +23,31 @@ public class ProfileServiceImpl implements ProfileService {
     @Autowired
     private Cloudinary cloudinary;
     @Override
-    public Profile update(Long id, Profile profile) {
-        Profile p = this.profileRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy profile với ID: " + id));
+    public Profile update(ProfileDTO profileDTO) {
+        Long id = profileDTO.getId();
+        Profile p = profileRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy profile với ID: " + id));
 
-        p.setFirstName(profile.getFirstName());
-        p.setLastName(profile.getLastName());
-        p.setPhone(profile.getPhone());
-        if (profile.getFile() != null && !profile.getFile().isEmpty()) {
+        p.setFirstName(profileDTO.getFirstName());
+        p.setLastName(profileDTO.getLastName());
+        p.setPhone(profileDTO.getPhone());
+
+        MultipartFile file = profileDTO.getFile();
+        if (file != null && !file.isEmpty()) {
             try {
-                Map res = this.cloudinary.uploader().upload(profile.getFile().getBytes(),
+                Map res = this.cloudinary.uploader().upload(file.getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
 
-                p.setAvatar(res.get("secure_url").toString());
+                String imageUrl = res.get("secure_url").toString();
+                System.out.println("Image URL: " + imageUrl);
+                p.setAvatar(imageUrl);
 
             } catch (IOException ex) {
-                Logger.getLogger(NewsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                // Xử lý lỗi tại đây nếu cần thiết
+                ex.printStackTrace();
             }
         }
+
         return this.profileRepository.save(p);
     }
     @Override

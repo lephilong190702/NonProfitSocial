@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,8 +35,7 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content", nullable = false)
-    @Lob
+    @Column(name = "content", nullable = false, length = 1000)
     private String content;
 
     @Column(name = "status", nullable = false)
@@ -47,6 +48,7 @@ public class Post implements Serializable {
     @JoinTable(name = "post_tag", 
                 joinColumns = @JoinColumn(name = "post_id"), 
                 inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonIgnore
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToOne

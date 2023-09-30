@@ -58,10 +58,11 @@ public class User implements Serializable {
     private List<UserContributeProject> contributions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserCommentNew> comments = new ArrayList<>();
+    private List<UserCommentNew> commentNews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserCommentPost> commentss = new ArrayList<>();
+    @JsonIgnore
+    private List<UserCommentPost> commentPost = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<UserReactPost> reacts = new ArrayList<>();
@@ -69,7 +70,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<UserVolunteerProject> volunteers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

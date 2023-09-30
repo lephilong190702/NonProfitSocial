@@ -57,7 +57,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<UserContributeProject> contributions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserCommentNew> commentNews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

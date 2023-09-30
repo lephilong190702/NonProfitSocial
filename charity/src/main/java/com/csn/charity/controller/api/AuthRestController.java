@@ -16,15 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.dto.UserDTO;
-import com.csn.charity.model.Profile;
 import com.csn.charity.model.User;
 import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
@@ -78,7 +75,7 @@ public class AuthRestController {
     @CrossOrigin
     public ResponseEntity<String> updateProfile(@PathVariable(value = "id") Long id,
             @ModelAttribute ProfileDTO profileDTO) {
-        this.profileService.update(profileDTO);
+        this.profileService.update(profileDTO); 
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 

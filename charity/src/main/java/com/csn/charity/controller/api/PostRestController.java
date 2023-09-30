@@ -1,13 +1,11 @@
 package com.csn.charity.controller.api;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.dto.PostRequest;
 import com.csn.charity.model.Post;
-import com.csn.charity.model.Tag;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.service.interfaces.CommentPostService;
 import com.csn.charity.service.interfaces.PostService;
@@ -59,7 +56,7 @@ public class PostRestController {
         }
     }
 
-    @PostMapping("/comment/")
+    @PostMapping("/post-comment/")
     @CrossOrigin
     public ResponseEntity<UserCommentPost> comment(@RequestBody CommentPostDTO commentPostDTO) {
         UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);

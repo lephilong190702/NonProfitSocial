@@ -51,9 +51,6 @@ public class NewsRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-<<<<<<< HEAD
-}
-=======
 
     @PostMapping("/news-comment/")
     @CrossOrigin
@@ -65,7 +62,7 @@ public class NewsRestController {
     @PutMapping("/news-comment/{id}")
     @CrossOrigin
     public ResponseEntity<String> updateNewsComment(@PathVariable(value = "id") Long id,
-            @RequestBody CommentNewsDTO commentNewsDTO) {
+                                                    @RequestBody CommentNewsDTO commentNewsDTO) {
         this.commentNewsService.updateComment(id, commentNewsDTO);
         return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
     }
@@ -96,4 +93,3 @@ public class NewsRestController {
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 }
->>>>>>> main

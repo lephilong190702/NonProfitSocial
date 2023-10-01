@@ -16,6 +16,7 @@ const UserProfile = () => {
   const [first_name, setFirst_name] = useState();
   const [last_name, setLast_name] = useState();
   const [phone, setPhone] = useState();
+  
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -128,6 +129,10 @@ const UserProfile = () => {
               Please provide a valid Password.
             </Form.Control.Feedback>
           </Form.Group>
+          <Form.Group className="mb-3">
+          <Form.Label>Ảnh đại diện</Form.Label>
+          <Form.Control type="file" ref={avatar} />
+        </Form.Group>
         </Row>
         <Form.Group className="mb-3">
           <Form.Check

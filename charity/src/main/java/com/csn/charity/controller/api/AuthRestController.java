@@ -78,7 +78,7 @@ public class AuthRestController {
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 
-    @GetMapping("/user/userProfile")
+    @GetMapping("/user/userProfile/")
     public String userProfile() {
         return "Welcome to User Profile";
     }

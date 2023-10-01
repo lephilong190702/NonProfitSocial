@@ -71,10 +71,9 @@ public class AuthRestController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-    @PutMapping("/profile/{id}")
+    @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@PathVariable(value = "id") Long id,
-            @ModelAttribute ProfileDTO profileDTO) {
+    public ResponseEntity<String> updateProfile(@ModelAttribute ProfileDTO profileDTO) {
         this.profileService.update(profileDTO); 
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }

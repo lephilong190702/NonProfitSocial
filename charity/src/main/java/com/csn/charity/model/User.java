@@ -55,6 +55,7 @@ public class User implements Serializable {
     private Profile profile;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

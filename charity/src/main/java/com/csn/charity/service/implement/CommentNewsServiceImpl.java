@@ -14,7 +14,6 @@ import com.csn.charity.dto.CommentNewsDTO;
 import com.csn.charity.model.New;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserCommentNew;
-import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentNewsRepository;
 import com.csn.charity.repository.NewsRepository;
 import com.csn.charity.repository.UserRepository;

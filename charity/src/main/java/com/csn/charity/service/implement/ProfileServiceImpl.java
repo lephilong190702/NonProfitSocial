@@ -2,8 +2,11 @@ package com.csn.charity.service.implement;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +14,9 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.model.Profile;
+import com.csn.charity.model.User;
 import com.csn.charity.repository.ProfileRepository;
+import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.ProfileService;
 
 @Service
@@ -20,9 +25,22 @@ public class ProfileServiceImpl implements ProfileService {
     private ProfileRepository profileRepository;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public Profile update(ProfileDTO profileDTO) {
-        Long id = profileDTO.getId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
+        Long id = user.getId();
         Profile p = profileRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy profile với ID: " + id));
 

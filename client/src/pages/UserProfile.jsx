@@ -32,14 +32,15 @@ const UserProfile = () => {
         let res = await ApiConfig.post(endpoints["login"], {
           username: username,
           password: password,
+          email: email,
         });
         cookie.save("token", res.data);
 
         let profile = await ApiConfig.put(endpoints["profile-by-id"], {
-          username: username, 
-          password: password,
-          email: email,
-          avatar: avatar,
+          // username: username, 
+          // password: password,
+          // email: email,
+          // avatar: avatar,
           first_name: first_name,
           last_name: last_name,
           phone: phone,
@@ -86,7 +87,7 @@ const UserProfile = () => {
             onChange={(e) => setLast_name(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="4" controlId="validationCustomUsername">
+          {/* <Form.Group as={Col} md="4" controlId="validationCustomUsername">
             <Form.Label>Username</Form.Label>
             <InputGroup hasValidation>
               <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
@@ -102,10 +103,10 @@ const UserProfile = () => {
                 Please choose a username.
               </Form.Control.Feedback>
             </InputGroup>
-          </Form.Group>
+          </Form.Group> */}
         </Row>
         <Row className="mb-3">
-          <Form.Group as={Col} md="6" controlId="validationCustom03">
+          {/* <Form.Group as={Col} md="6" controlId="validationCustom03">
             <Form.Label>Email</Form.Label>
             <Form.Control 
             type="email" 
@@ -114,25 +115,25 @@ const UserProfile = () => {
             <Form.Control.Feedback type="invalid">
               Please provide a valid Email.
             </Form.Control.Feedback>
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group as={Col} md="3" controlId="validationCustom04">
             <Form.Label>Phone</Form.Label>
-            <Form.Control type="number" placeholder="Phone" required />
+            <Form.Control type="tel" placeholder="Phone" required />
             <Form.Control.Feedback type="invalid">
               Please provide a valid Phone.
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="3" controlId="validationCustom05">
+          {/* <Form.Group as={Col} md="3" controlId="validationCustom05">
             <Form.Label>Password</Form.Label>
             <Form.Control type="text" placeholder="Password" required />
             <Form.Control.Feedback type="invalid">
               Please provide a valid Password.
             </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
+          </Form.Group> */}
+          {/* <Form.Group className="mb-3">
           <Form.Label>Ảnh đại diện</Form.Label>
           <Form.Control type="file" ref={avatar} />
-        </Form.Group>
+        </Form.Group> */}
         </Row>
         <Form.Group className="mb-3">
           <Form.Check

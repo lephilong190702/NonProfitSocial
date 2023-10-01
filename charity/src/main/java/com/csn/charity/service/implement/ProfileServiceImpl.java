@@ -35,6 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         String username = authentication.getName();
+        System.out.println(username);
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new NoSuchElementException("Không tìm thấy người dùng");
@@ -48,20 +49,20 @@ public class ProfileServiceImpl implements ProfileService {
         p.setLastName(profileDTO.getLastName());
         p.setPhone(profileDTO.getPhone());
 
-        MultipartFile file = profileDTO.getFile();
-        if (file != null && !file.isEmpty()) {
-            try {
-                Map res = this.cloudinary.uploader().upload(file.getBytes(),
-                        ObjectUtils.asMap("resource_type", "auto"));
+        // MultipartFile file = profileDTO.getFile();
+        // if (file != null && !file.isEmpty()) {
+        //     try {
+        //         Map res = this.cloudinary.uploader().upload(file.getBytes(),
+        //                 ObjectUtils.asMap("resource_type", "auto"));
 
-                String imageUrl = res.get("secure_url").toString();
-                System.out.println("Image URL: " + imageUrl);
-                p.setAvatar(imageUrl);
+        //         String imageUrl = res.get("secure_url").toString();
+        //         System.out.println("Image URL: " + imageUrl);
+        //         p.setAvatar(imageUrl);
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+        //     } catch (IOException ex) {
+        //         ex.printStackTrace();
+        //     }
+        // }
 
         return this.profileRepository.save(p);
     }

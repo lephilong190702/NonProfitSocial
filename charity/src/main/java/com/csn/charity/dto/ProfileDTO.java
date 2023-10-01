@@ -14,5 +14,5 @@ public class ProfileDTO {
     private String firstName;
     private String lastName;
     private String phone;
-    private MultipartFile file;
+//    private MultipartFile file;
 }

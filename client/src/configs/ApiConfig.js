@@ -27,6 +27,7 @@ export const endpoints = {
     "news": `${SERVER_CONTEXT}/api/news/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
+    "profile-by-id": `${SERVER_CONTEXT}/api/profile/?profile=`,
     
 }
 

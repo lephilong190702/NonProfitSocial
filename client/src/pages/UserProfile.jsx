@@ -4,12 +4,18 @@ import Col from "react-bootstrap/Col";
 import { Header } from "../components";
 import cookie from "react-cookies";
 import { UserContext } from "../App";
+import ApiConfig, { endpoints } from "../configs/ApiConfig";
 
 const UserProfile = () => {
   const [validated, setValidated] = useState(false);
   const [user, dispatch] = useContext(UserContext);
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  const [avatar, setAvatar] = useState();
+  const [first_name, setFirst_name] = useState();
+  const [last_name, setLast_name] = useState();
+  const [phone, setPhone] = useState();
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -27,6 +33,17 @@ const UserProfile = () => {
           password: password,
         });
         cookie.save("token", res.data);
+
+        let profile = await ApiConfig.put(endpoints["profile-by-id"], {
+          username: username,
+          password: password,
+          email: email,
+          avatar: avatar,
+          first_name: first_name,
+          last_name: last_name,
+          phone: phone,
+        });
+        cookie.save("token", profile.data);
 
         let { data } = await authApi().get(endpoints["current-user"]);
         cookie.save("user", data);
@@ -53,12 +70,13 @@ const UserProfile = () => {
               required
               type="text"
               placeholder="First name"
+              defaultValue={user.profile.first_name}
             ></Form.Control>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
             <Form.Label>Last name</Form.Label>
-            <Form.Control required type="text" placeholder="Last name" />
+            <Form.Control required type="text" placeholder="Last name" defaultValue={user.profile.last_name}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustomUsername">
@@ -71,9 +89,7 @@ const UserProfile = () => {
                 aria-describedby="inputGroupPrepend"
                 required
                 defaultValue={user.username}
-              >
-                
-              </Form.Control>
+              ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Please choose a username.
               </Form.Control.Feedback>
@@ -82,24 +98,24 @@ const UserProfile = () => {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="6" controlId="validationCustom03">
-            <Form.Label>City</Form.Label>
-            <Form.Control type="text" placeholder="City" required />
+            <Form.Label>Email</Form.Label>
+            <Form.Control type="email" placeholder="Email" required />
             <Form.Control.Feedback type="invalid">
-              Please provide a valid city.
+              Please provide a valid Email.
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="3" controlId="validationCustom04">
-            <Form.Label>State</Form.Label>
-            <Form.Control type="text" placeholder="State" required />
+            <Form.Label>Phone</Form.Label>
+            <Form.Control type="number" placeholder="Phone" required />
             <Form.Control.Feedback type="invalid">
-              Please provide a valid state.
+              Please provide a valid Phone.
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="3" controlId="validationCustom05">
-            <Form.Label>Zip</Form.Label>
-            <Form.Control type="text" placeholder="Zip" required />
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="text" placeholder="Password" required />
             <Form.Control.Feedback type="invalid">
-              Please provide a valid zip.
+              Please provide a valid Password.
             </Form.Control.Feedback>
           </Form.Group>
         </Row>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Carousel, Col, Row } from "react-bootstrap";
+import { Alert, Button, Card, Carousel, Col, Row } from "react-bootstrap";
 import MySpinner from "../layout/MySpinner";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
 import { useSearchParams } from "react-router-dom";
@@ -15,8 +15,13 @@ const HomePage = () => {
       try {
         let e = endpoints["news"];
 
-        let kw = q.get("kw");
-        if (kw !== null) e = `${e}?kw=${kw}`;
+        let cateId = q.get("cateId");
+        if (cateId !== null) 
+          e = `${e}?cateId=${cateId}`;
+        else {
+          let kw = q.get("kw");
+          if (kw !== null) e = `${e}?kw=${kw}`;
+        }
 
         let res = await ApiConfig.get(e);
         setNews(res.data);
@@ -29,12 +34,14 @@ const HomePage = () => {
   }, [q]);
 
   if (news === null) return <MySpinner />;
+  if (news.length === 0) return <Alert variant="info" className="mt-5">Không có tin tức nào</Alert> 
+    
 
   return (
     <>
       <Header />
-      {/* <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1> */}
-      {/* <Row>
+      <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
+      <Row>
         {news.map((n) => {
           return (
             <>
@@ -51,10 +58,9 @@ const HomePage = () => {
             </>
           );
         })}
-      </Row> */}
+      </Row>
       <Slider />
       {/* <Post /> */}
-      
     </>
   );
 };

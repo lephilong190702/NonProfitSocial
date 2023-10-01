@@ -61,9 +61,11 @@ const CustomNavbar = () => {
               {newsCategory.length > 0 &&
                 newsCategory.map((c) => {
                   let h = `/?cateId=${c.id}`;
-                  return <Link to={h} className="dropdown-item" key={c.id}>
-                    {c.name}
-                  </Link>;
+                  return (
+                    <Link to={h} className="dropdown-item" key={c.id}>
+                      {c.name}
+                    </Link>
+                  );
                 })}
             </NavDropdown>
 
@@ -87,9 +89,14 @@ const CustomNavbar = () => {
               ))}
             </NavDropdown>
             {user === null ? (
-              <Link to="/login" className="text-danger nav-link">
-                Đăng nhập
-              </Link>
+              <>
+                <Link to="/login" className="text-danger nav-link">
+                  Đăng nhập
+                </Link>
+                <Link to="/register" className="text-danger nav-link">
+                  Đăng ký
+                </Link>
+              </>
             ) : (
               <>
                 <Link to="/userProfile" className="text-danger nav-link">

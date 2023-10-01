@@ -28,6 +28,8 @@ export const endpoints = {
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
     "profile-by-id": `${SERVER_CONTEXT}/api/profile/?profile=`,
+    "register": `${SERVER_CONTEXT}/api/register/`,
+
     
 }
 

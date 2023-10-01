@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { HomePage, LoginPage, UserProfile } from './pages'
 import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
+import RegisterPage from './pages/RegisterPage';
 
 export const UserContext = createContext();
 
@@ -22,6 +23,7 @@ const App = () => {
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/userProfile' element={<UserProfile />} />
+          <Route path='/register' element={<RegisterPage />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

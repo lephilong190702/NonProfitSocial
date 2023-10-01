@@ -35,7 +35,7 @@ const UserProfile = () => {
         cookie.save("token", res.data);
 
         let profile = await ApiConfig.put(endpoints["profile-by-id"], {
-          username: username,
+          username: username, 
           password: password,
           email: email,
           avatar: avatar,
@@ -49,7 +49,7 @@ const UserProfile = () => {
         cookie.save("user", data);
 
         dispatch({
-          type: "login",
+          type: "profile-by-id",
           payload: data,
         });
       } catch (ex) {
@@ -70,13 +70,19 @@ const UserProfile = () => {
               required
               type="text"
               placeholder="First name"
-              defaultValue={user.profile.first_name}
+              defaultValue={first_name}
+              onChange={(e) => setFirst_name(e.target.value)}
             ></Form.Control>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
             <Form.Label>Last name</Form.Label>
-            <Form.Control required type="text" placeholder="Last name" defaultValue={user.profile.last_name}/>
+            <Form.Control 
+            required 
+            type="text" 
+            placeholder="Last name" 
+            defaultValue={last_name}
+            onChange={(e) => setLast_name(e.target.value)}/>
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustomUsername">
@@ -89,6 +95,7 @@ const UserProfile = () => {
                 aria-describedby="inputGroupPrepend"
                 required
                 defaultValue={user.username}
+                onChange={(e) => setUsername(e.target.value)}
               ></Form.Control>
               <Form.Control.Feedback type="invalid">
                 Please choose a username.
@@ -99,7 +106,10 @@ const UserProfile = () => {
         <Row className="mb-3">
           <Form.Group as={Col} md="6" controlId="validationCustom03">
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Email" required />
+            <Form.Control 
+            type="email" 
+            placeholder="Email" 
+            required />
             <Form.Control.Feedback type="invalid">
               Please provide a valid Email.
             </Form.Control.Feedback>

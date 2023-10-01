@@ -14,6 +14,7 @@ import com.csn.charity.dto.CommentNewsDTO;
 import com.csn.charity.model.New;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserCommentNew;
+import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentNewsRepository;
 import com.csn.charity.repository.NewsRepository;
 import com.csn.charity.repository.UserRepository;
@@ -54,6 +55,31 @@ public class CommentNewsServiceImpl implements CommentNewsService {
 
         return commentNewsRepository.save(userCommentNew);
     }
+
+    @Override
+    public UserCommentNew updateComment(Long id, CommentNewsDTO commentNewsDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
+        UserCommentNew userCommentNew = this.commentNewsRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        if (!userCommentNew.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền cập nhật bình luận này");
+        }
+
+        userCommentNew.setContent(commentNewsDTO.getContent());
+        return commentNewsRepository.save(userCommentNew);
+    }
+
     @Override
     public List<UserCommentNew> getCommentByNews(Long id) {
         this.newsRepository.findById(id)
@@ -125,5 +151,6 @@ public class CommentNewsServiceImpl implements CommentNewsService {
             throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
         }
     }
+    
     
 }

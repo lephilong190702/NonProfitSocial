@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostRequest {
+public class PostDTO {
     private String content;
     private List<String> hashtags;
 }

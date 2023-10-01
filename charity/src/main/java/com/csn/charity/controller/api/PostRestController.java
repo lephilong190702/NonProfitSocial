@@ -1,6 +1,5 @@
 package com.csn.charity.controller.api;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.CommentPostDTO;
-import com.csn.charity.dto.PostRequest;
+import com.csn.charity.dto.PostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.service.interfaces.CommentPostService;
@@ -33,13 +33,6 @@ public class PostRestController {
     @Autowired
     private CommentPostService commentPostService;
 
-    @PostMapping("/create-post/")
-    @CrossOrigin
-    public ResponseEntity<Post> createPost(@RequestBody PostRequest postRequest) {
-        Post createdPost = postService.createPost(postRequest);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-    }
-
     @GetMapping("/posts/")
     @CrossOrigin
     public ResponseEntity<?> getAllPost() {
@@ -48,6 +41,28 @@ public class PostRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/create-post/")
+    @CrossOrigin
+    public ResponseEntity<Post> createPost(@RequestBody PostDTO postRequest) {
+        Post createdPost = postService.createPost(postRequest);
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/posts/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> updatePost(@PathVariable(value = "id") Long id,
+            @RequestBody PostDTO postDTO) {
+        this.postService.updatePost(id, postDTO);
+        return ResponseEntity.ok("Bài viết đã được cập nhật thành công.");
+    }
+
+    @DeleteMapping("/posts/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.ok("Bài viết đã được xóa thành công.");
     }
 
     @GetMapping("/tags/")
@@ -62,9 +77,24 @@ public class PostRestController {
 
     @PostMapping("/post-comment/")
     @CrossOrigin
-    public ResponseEntity<UserCommentPost> comment(@RequestBody CommentPostDTO commentPostDTO) {
+    public ResponseEntity<UserCommentPost> createComment(@RequestBody CommentPostDTO commentPostDTO) {
         UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);
         return new ResponseEntity<>(uCommentPost, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/post-comment/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> updatePostComment(@PathVariable(value = "id") Long id,
+            @RequestBody CommentPostDTO commentPostDTO) {
+        this.commentPostService.updateComment(id, commentPostDTO);
+        return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
+    }
+
+    @DeleteMapping("/post-comment/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
+        commentPostService.deleteCommentPost(id);
+        return ResponseEntity.ok("Bình luận đã được xóa thành công.");
     }
 
     @GetMapping("/post/{postId}/comments/")
@@ -73,16 +103,10 @@ public class PostRestController {
         return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/post-comment/{commentId}")
-    @CrossOrigin
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
-        commentPostService.deleteCommentPost(commentId);
-        return ResponseEntity.ok("Bình luận đã được xóa thành công.");
-    }
-
     @PostMapping("/post-comment/{parentId}/replies/")
     @CrossOrigin
-    public ResponseEntity<UserCommentPost> addReplyToComment(@PathVariable Long parentId, @RequestBody UserCommentPost reply) {
+    public ResponseEntity<UserCommentPost> addReplyToComment(@PathVariable Long parentId,
+            @RequestBody UserCommentPost reply) {
         UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
         return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
     }

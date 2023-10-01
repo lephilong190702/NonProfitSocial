@@ -59,6 +59,30 @@ public class CommentPostServiceImpl implements CommentPostService {
     }
 
     @Override
+    public UserCommentPost updateComment(Long id, CommentPostDTO commentPostDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
+        UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        if (!userCommentPost.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền cập nhật bình luận này");
+        }
+
+        userCommentPost.setContent(commentPostDTO.getContent());
+        return commentPostRepository.save(userCommentPost);
+    }
+
+    @Override
     public List<UserCommentPost> getCommentByPost(Long id) {
         this.postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));

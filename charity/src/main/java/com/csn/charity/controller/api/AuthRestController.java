@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +72,7 @@ public class AuthRestController {
 
     @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(ProfileDTO profileDTO) {
+    public ResponseEntity<String> updateProfile(@RequestBody ProfileDTO profileDTO) {
         this.profileService.update(profileDTO); 
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,8 +39,9 @@ public class UserCommentNew implements Serializable {
     @Column(name = "create_date", nullable = false)
     private Date createDate;
 
-    @OneToMany(mappedBy = "comment")
-    private List<UserCommentNew> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<UserCommentNew> replies = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "reply_news")
@@ -49,7 +53,6 @@ public class UserCommentNew implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "new_id")
+    @JsonIgnore
     private New news;
-
- 
 }

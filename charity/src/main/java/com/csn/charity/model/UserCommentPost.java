@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,11 +44,13 @@ public class UserCommentPost implements Serializable{
      private User user;
 
      @ManyToOne
+     @JsonIgnore
      @JoinColumn(name = "post_id")
      private Post post;
 
-     @OneToMany(mappedBy = "comment")
-     private List<UserCommentPost> comments = new ArrayList<>();
+     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+     @JsonIgnore
+     private List<UserCommentPost> replies = new ArrayList<>();
 
      @ManyToOne
      @JoinColumn(name = "reply_comment")

@@ -66,10 +66,64 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     }
     @Override
     public void deleteCommentNews(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+        
         UserCommentNew userCommentNew = this.commentNewsRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
 
+        if (!userCommentNew.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền xóa bình luận này");
+        }
+
         this.commentNewsRepository.delete(userCommentNew);
+    }
+    @Override
+    public UserCommentNew addReplyCommentNew(Long parentId, UserCommentNew reply) {
+        Optional<UserCommentNew> parentCommentOptional = commentNewsRepository.findById(parentId);
+        if (parentCommentOptional.isPresent()) {
+            UserCommentNew parentComment = parentCommentOptional.get();
+
+            reply.setComment(parentComment);
+            reply.setCreateDate(new Date());
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new SecurityException("Unauthorized access");
+            }
+
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new NoSuchElementException("Không tìm thấy người dùng");
+            }
+            reply.setUser(user);
+
+            parentComment.getReplies().add(reply);
+
+            return commentNewsRepository.save(reply);
+        } else {
+            throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
+        }
+    }
+    @Override
+    public List<UserCommentNew> getAllReplyComments(Long parentId) {
+        Optional<UserCommentNew> parentCommentOptional = commentNewsRepository.findById(parentId);
+
+        if (parentCommentOptional.isPresent()) {
+            UserCommentNew parentComment = parentCommentOptional.get();
+            return parentComment.getReplies();
+        } else {
+            throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
+        }
     }
     
 }

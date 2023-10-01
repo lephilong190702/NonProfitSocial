@@ -64,9 +64,23 @@ public class NewsRestController {
         return new ResponseEntity<>(this.commentNewsService.getCommentByNews(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/news/{commentId}")
+    @DeleteMapping("/news-comment/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
         commentNewsService.deleteCommentNews(commentId);
         return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+    }
+
+    @PostMapping("/news-comment/{parentId}/replies/")
+    @CrossOrigin
+    public ResponseEntity<UserCommentNew> addReplyToComment(@PathVariable Long parentId, @RequestBody UserCommentNew reply) {
+        UserCommentNew addedReply = commentNewsService.addReplyCommentNew(parentId, reply);
+        return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/news-comment/{parentId}/replies/")
+    @CrossOrigin
+    public ResponseEntity<List<UserCommentNew>> getAllRepliesComment(@PathVariable Long parentId) {
+        List<UserCommentNew> replies =commentNewsService.getAllReplyComments(parentId);
+        return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 }

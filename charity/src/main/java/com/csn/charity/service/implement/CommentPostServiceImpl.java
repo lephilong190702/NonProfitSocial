@@ -19,6 +19,7 @@ import com.csn.charity.repository.PostRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.CommentPostService;
 
+
 @Service
 public class CommentPostServiceImpl implements CommentPostService {
     @Autowired
@@ -60,7 +61,7 @@ public class CommentPostServiceImpl implements CommentPostService {
     @Override
     public List<UserCommentPost> getCommentByPost(Long id) {
         this.postRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
 
         List<UserCommentPost> commentPosts = this.commentPostRepository.findByPostId(id);
 
@@ -69,12 +70,65 @@ public class CommentPostServiceImpl implements CommentPostService {
 
     @Override
     public void deleteCommentPost(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
         UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
-        
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        if (!userCommentPost.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền xóa bình luận này");
+        }
+
         this.commentPostRepository.delete(userCommentPost);
     }
 
-    
+    @Override
+    public UserCommentPost addReplyCommentPost(Long parentId, UserCommentPost reply) {
+        Optional<UserCommentPost> parentCommentOptional = commentPostRepository.findById(parentId);
+        if (parentCommentOptional.isPresent()) {
+            UserCommentPost parentComment = parentCommentOptional.get();
 
+            reply.setComment(parentComment);
+            reply.setCreateDate(new Date());
+
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new SecurityException("Unauthorized access");
+            }
+
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new NoSuchElementException("Không tìm thấy người dùng");
+            }
+            reply.setUser(user);
+
+            parentComment.getReplies().add(reply);
+
+            return commentPostRepository.save(reply);
+        } else {
+            throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
+        }
+    }
+
+    @Override
+    public List<UserCommentPost> getAllReplyComments(Long parentId) {
+        Optional<UserCommentPost> parentCommentOptional = commentPostRepository.findById(parentId);
+
+        if (parentCommentOptional.isPresent()) {
+            UserCommentPost parentComment = parentCommentOptional.get();
+            return parentComment.getReplies();
+        } else {
+            throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
+        }
+    }
 }

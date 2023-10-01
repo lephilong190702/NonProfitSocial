@@ -73,9 +73,24 @@ public class PostRestController {
         return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
     }
 
-    @DeleteMapping("/post/{commentId}")
+    @DeleteMapping("/post-comment/{commentId}")
+    @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
         commentPostService.deleteCommentPost(commentId);
         return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+    }
+
+    @PostMapping("/post-comment/{parentId}/replies/")
+    @CrossOrigin
+    public ResponseEntity<UserCommentPost> addReplyToComment(@PathVariable Long parentId, @RequestBody UserCommentPost reply) {
+        UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
+        return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/post-comment/{parentId}/replies/")
+    @CrossOrigin
+    public ResponseEntity<List<UserCommentPost>> getAllRepliesComment(@PathVariable Long parentId) {
+        List<UserCommentPost> replies = commentPostService.getAllReplyComments(parentId);
+        return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 }

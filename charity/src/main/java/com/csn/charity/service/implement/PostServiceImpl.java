@@ -170,4 +170,10 @@ public class PostServiceImpl implements PostService {
 
         this.postRepository.delete(post);
     }
+
+    @Override
+    public Post getPostById(Long id) {
+        return this.postRepository.findById(id)        
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+    }
 }

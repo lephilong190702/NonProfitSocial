@@ -82,7 +82,8 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/pcategories/",
                                 "/api/posts/",
                                 "/api/post-comment/{parentId}/replies/",
-                                "/api/news-comment/{parentId}/replies/")
+                                "/api/news-comment/{parentId}/replies/",
+                                "/api/news/{newsId}", "/api/skills/")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")

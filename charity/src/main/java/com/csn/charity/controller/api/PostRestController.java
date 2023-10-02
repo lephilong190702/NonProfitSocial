@@ -43,6 +43,16 @@ public class PostRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    
+    @GetMapping("/posts/{postId}")
+    @CrossOrigin
+    public ResponseEntity<?> getPostById(@PathVariable(value = "postId") Long postId) {
+        try {
+            return new ResponseEntity<>(this.postService.getPostById(postId), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping(path = "/create-post/")
     @CrossOrigin

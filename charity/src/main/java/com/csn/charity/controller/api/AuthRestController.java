@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
@@ -43,12 +45,13 @@ public class AuthRestController {
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
-        String result = this.userService.addUser(userDto);
-        if (result != null)
+        try {
+            String result = this.userService.addUser(userDto);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
-        else
-            return new ResponseEntity<>("Failed to add new user", HttpStatus.BAD_REQUEST);
-
+        } catch (Exception e) {
+            String errorMessage = "Failed to add new user: " + e.getMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login/")

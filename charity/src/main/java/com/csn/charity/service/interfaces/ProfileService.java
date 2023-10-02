@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 public interface ProfileService {
-    Profile update(Map<String, String> params, MultipartFile avatar);
+    Profile update(ProfileDTO profileDTO);
     Profile get(Long id);
 }

@@ -43,7 +43,7 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
+      {/* <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
       <Row>
         {news.map((n) => {
           return (
@@ -61,7 +61,7 @@ const HomePage = () => {
             </>
           );
         })}
-      </Row>
+      </Row> */}
       <Slider />
       {/* <Post /> */}
     </>

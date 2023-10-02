@@ -4,6 +4,7 @@ import { HomePage, LoginPage, UserProfile } from './pages'
 import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
 import RegisterPage from './pages/RegisterPage';
+import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 
 export const UserContext = createContext();
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/userProfile' element={<UserProfile />} />
           <Route path='/register' element={<RegisterPage />} />
+          <Route path='/registerVol' element={<RegisterVolunteerPage />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

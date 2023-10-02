@@ -55,13 +55,14 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setStatus(true);
         System.out.println("STATUS" + user.getStatus());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if(userDto.getPassword() != null)
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        else    
+            System.out.println("LỖI!!!!!!!!");
         UserRole role = roleRepository.findByName("ROLE_USER");
         user.setRoles(Arrays.asList(role));
 
         Profile profile = new Profile();
-        profile.setFirstName(userDto.getFirstName());
-        profile.setLastName(userDto.getLastName());
         profile.setUser(user);
         
         user.setProfile(profile);

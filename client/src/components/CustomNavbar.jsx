@@ -88,6 +88,9 @@ const CustomNavbar = () => {
                 </NavDropdown.Item>
               ))}
             </NavDropdown>
+
+            <Link to="/registerVol" className="nav-link">Liên hệ</Link>
+            
             {user === null ? (
               <>
                 <Link to="/login" className="text-danger nav-link">

@@ -1,16 +1,15 @@
 package com.csn.charity.controller.api;
 
 import java.security.Principal;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
@@ -19,7 +18,6 @@ import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.User;
 import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -39,12 +37,13 @@ public class AuthRestController {
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
-        String result = this.userService.addUser(userDto);
-        if (result != null)
+        try {
+            String result = this.userService.addUser(userDto);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
-        else
-            return new ResponseEntity<>("Failed to add new user", HttpStatus.BAD_REQUEST);
-
+        } catch (Exception e) {
+            String errorMessage = "Failed to add new user: " + e.getMessage();
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login/")
@@ -66,16 +65,24 @@ public class AuthRestController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/profile/",
-            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+
+    @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
-        this.profileService.update(params, avatar);
+    public ResponseEntity<String> updateProfile(@RequestPart("avatar") MultipartFile avatar,
+                                                @RequestPart("firstName") String firstName,
+                                                @RequestPart("lastName") String lastName,
+                                                @RequestPart("phone") String phone) {
+
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setFirstName(firstName);
+        profileDTO.setLastName(lastName);
+        profileDTO.setPhone(phone);
+        profileDTO.setFile(avatar);
+        this.profileService.update(profileDTO);
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 
-    @GetMapping("/user/userProfile/")
+    @GetMapping("/user/userProfile")
     public String userProfile() {
         return "Welcome to User Profile";
     }

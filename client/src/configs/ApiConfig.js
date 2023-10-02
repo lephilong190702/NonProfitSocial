@@ -27,9 +27,10 @@ export const endpoints = {
     "news": `${SERVER_CONTEXT}/api/news/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
-    "profile-by-id": `${SERVER_CONTEXT}/api/profile/`,
+    "profile": `${SERVER_CONTEXT}/api/profile/`,
     "register": `${SERVER_CONTEXT}/api/register/`,
-
+    "volunteer": `${SERVER_CONTEXT}/api/volunteer/`,
+    "project": `${SERVER_CONTEXT}/api/projects/`
     
 }
 
@@ -37,8 +38,7 @@ export const authApi = () => {
   return axios.create({
     baseURL: SERVER,
     headers: {
-      'Authorization': cookie.load("token"),
-      'Content-Type': 'application/json'
+      'Authorization': cookie.load("token")
     },
   });
 };

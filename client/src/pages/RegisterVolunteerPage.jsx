@@ -64,12 +64,12 @@ const RegisterVolunteerPage = () => {
         <Row className="mb-3">
           <Form.Group as={Col} controlId="startDate">
             <Form.Label>Ngày tham gia</Form.Label>
-            <Form.Control type="date" onChange={(e) => change(e, "startDate")}/>
+            <Form.Control type="date" max={volunteer.endDate} onChange={(e) => change(e, "startDate")}/>
           </Form.Group>
 
           <Form.Group as={Col} controlId="endDate">
             <Form.Label>Ngày kết thúc</Form.Label>
-            <Form.Control type="date" onChange={(e) => change(e, "endDate")}/>
+            <Form.Control type="date" min={volunteer.startDate} onChange={(e) => change(e, "endDate")}/>
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">

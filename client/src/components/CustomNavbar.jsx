@@ -82,11 +82,15 @@ const CustomNavbar = () => {
             <Nav.Link href="#social">Mạng xã hội</Nav.Link>
 
             <NavDropdown title="Tin tức" id="basic-nav-dropdown">
-              {newsCategory.map((c) => (
-                <NavDropdown.Item href="#news" key={c.id}>
-                  {c.name}
-                </NavDropdown.Item>
-              ))}
+              {newsCategory.length > 0 &&
+                newsCategory.map((c) => {
+                  let h = `/news/?cateId=${c.id}`;
+                  return (
+                    <Link to={h} className="dropdown-item" key={c.id}>
+                      {c.name}
+                    </Link>
+                  );
+                })}
             </NavDropdown>
 
             <Link to="/registerVol" className="nav-link">Liên hệ</Link>

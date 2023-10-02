@@ -5,40 +5,9 @@ import ApiConfig, { endpoints } from "../configs/ApiConfig";
 import { useSearchParams } from "react-router-dom";
 import reactIcon from "../assets/react.svg";
 import { Header, Post, Slider } from "../components";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
-  const [news, setNews] = useState(null);
-  const [q] = useSearchParams();
-
-  useEffect(() => {
-    let loadNews = async () => {
-      try {
-        let e = endpoints["news"];
-
-        let cateId = q.get("cateId");
-        if (cateId !== null) e = `${e}?cateId=${cateId}`;
-        else {
-          let kw = q.get("kw");
-          if (kw !== null) e = `${e}?kw=${kw}`;
-        }
-
-        let res = await ApiConfig.get(e);
-        setNews(res.data);
-      } catch (ex) {
-        console.error(ex);
-      }
-    };
-
-    loadNews();
-  }, [q]);
-
-  if (news === null) return <MySpinner />;
-  if (news.length === 0)
-    return (
-      <Alert variant="info" className="mt-5">
-        Không có tin tức nào
-      </Alert>
-    );
 
   return (
     <>
@@ -64,6 +33,7 @@ const HomePage = () => {
       </Row> */}
       <Slider />
       {/* <Post /> */}
+      <Footer />
     </>
   );
 };

@@ -1,7 +1,11 @@
-const Footer = () => {
-    return (
-        <h1>MY FOOTER</h1>
-    )
-}
+// import { Alert } from "react-bootstrap";
 
-export default Footer;
+// const Footer = () => {
+//   return (
+//     <Alert variant="success" className="mt-8 p-8">
+//       Charity Website &copy; 2023
+//     </Alert>
+//   );
+// };
+
+// export default Footer;

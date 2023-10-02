@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,8 +76,17 @@ public class AuthRestController {
 
     @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestBody ProfileDTO profileDTO) {
-        this.profileService.update(profileDTO); 
+    public ResponseEntity<String> updateProfile(@RequestPart("avatar") MultipartFile avatar,
+            @RequestPart("firstName") String firstName,
+            @RequestPart("lastName") String lastName,
+            @RequestPart("phone") String phone) {
+        
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setFirstName(firstName);
+        profileDTO.setLastName(lastName);
+        profileDTO.setPhone(phone);
+        profileDTO.setFile(avatar);
+        this.profileService.update(profileDTO);
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 

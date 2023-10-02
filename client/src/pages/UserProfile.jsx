@@ -1,59 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Form, InputGroup, Row } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import { Header } from "../components";
 import cookie from "react-cookies";
 import { UserContext } from "../App";
-import ApiConfig, { endpoints } from "../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 
 const UserProfile = () => {
   const [validated, setValidated] = useState(false);
-  const [user, dispatch] = useContext(UserContext);
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const [email, setEmail] = useState();
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState(null);
   const [first_name, setFirst_name] = useState();
   const [last_name, setLast_name] = useState();
   const [phone, setPhone] = useState();
+
+  const fileInputRef = useRef();
+  const handleChooseAvatar = (e) => {
+    setAvatar(e.target.files[0]);
+  }
   
 
   const handleSubmit = (event) => {
+    event.preventDefault();
+    // console.log(first_name, last_name, phone);
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
+      
       event.stopPropagation();
     }
 
     setValidated(true);
 
     const process = async () => {
+      const userForm = new FormData();
+      userForm.append("firstName", first_name);
+      userForm.append("lastName", last_name);
+      userForm.append("phone", phone);
+      userForm.append("file", avatar, avatar.name);
       try {
-        let res = await ApiConfig.post(endpoints["login"], {
-          username: username,
-          password: password,
-          email: email,
-        });
-        cookie.save("token", res.data);
 
-        let profile = await ApiConfig.put(endpoints["profile-by-id"], {
-          // username: username, 
-          // password: password,
-          // email: email,
-          // avatar: avatar,
-          first_name: first_name,
-          last_name: last_name,
-          phone: phone,
-        });
-        cookie.save("token", profile.data);
+        let profile = await authApi().patch(endpoints["profile-by-id"], userForm);
+        // cookie.save("user", profile.data);
 
-        let { data } = await authApi().get(endpoints["current-user"]);
-        cookie.save("user", data);
-
-        dispatch({
-          type: "profile-by-id",
-          payload: data,
-        });
       } catch (ex) {
         console.error(ex);
       }
@@ -72,9 +59,8 @@ const UserProfile = () => {
               required
               type="text"
               placeholder="First name"
-              defaultValue={first_name}
-              onChange={(e) => setFirst_name(e.target.value)}
-            ></Form.Control>
+              value={first_name}
+              onChange={(e) => setFirst_name(e.target.value)} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
@@ -83,8 +69,8 @@ const UserProfile = () => {
             required 
             type="text" 
             placeholder="Last name" 
-            defaultValue={last_name}
-            onChange={(e) => setLast_name(e.target.value)}/>
+            value={last_name}
+            onChange={(e) => setLast_name(e.target.value)} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           {/* <Form.Group as={Col} md="4" controlId="validationCustomUsername">
@@ -118,7 +104,12 @@ const UserProfile = () => {
           </Form.Group> */}
           <Form.Group as={Col} md="3" controlId="validationCustom04">
             <Form.Label>Phone</Form.Label>
-            <Form.Control type="tel" placeholder="Phone" required />
+            <Form.Control 
+            type="tel" 
+            placeholder="Phone" 
+            required 
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}/>
             <Form.Control.Feedback type="invalid">
               Please provide a valid Phone.
             </Form.Control.Feedback>
@@ -135,10 +126,20 @@ const UserProfile = () => {
           <Form.Control type="file" ref={avatar} />
         </Form.Group> */}
         </Row>
+        <Form.Group>
+          <input
+            ref={fileInputRef}
+            id="fileInput"
+            type="file"
+            multiple={false}
+            accept=".png, .jpg"
+            onChange={handleChooseAvatar}
+          />
+        </Form.Group>
         <Form.Group className="mb-3">
           <Form.Check
             required
-            label="Agree to terms and conditions"
+            label="Xác nhận muốn thay dổi"
             feedback="You must agree before submitting."
             feedbackType="invalid"
           />

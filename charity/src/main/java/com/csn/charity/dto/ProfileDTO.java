@@ -1,5 +1,7 @@
 package com.csn.charity.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Transient;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -14,5 +16,8 @@ public class ProfileDTO {
     private String firstName;
     private String lastName;
     private String phone;
-//    private MultipartFile file;
+    @Transient
+    @JsonIgnore
+    private MultipartFile file;
+    private String avatar;
 }

@@ -16,8 +16,7 @@ const HomePage = () => {
         let e = endpoints["news"];
 
         let cateId = q.get("cateId");
-        if (cateId !== null) 
-          e = `${e}?cateId=${cateId}`;
+        if (cateId !== null) e = `${e}?cateId=${cateId}`;
         else {
           let kw = q.get("kw");
           if (kw !== null) e = `${e}?kw=${kw}`;
@@ -34,8 +33,12 @@ const HomePage = () => {
   }, [q]);
 
   if (news === null) return <MySpinner />;
-  if (news.length === 0) return <Alert variant="info" className="mt-5">Không có tin tức nào</Alert> 
-    
+  if (news.length === 0)
+    return (
+      <Alert variant="info" className="mt-5">
+        Không có tin tức nào
+      </Alert>
+    );
 
   return (
     <>

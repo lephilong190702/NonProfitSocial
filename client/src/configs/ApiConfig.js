@@ -37,7 +37,8 @@ export const authApi = () => {
   return axios.create({
     baseURL: SERVER,
     headers: {
-      "Authorization": cookie.load("token"),
+      'Authorization': cookie.load("token"),
+      'Content-Type': 'application/json'
     },
   });
 };

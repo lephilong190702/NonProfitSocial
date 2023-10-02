@@ -1,21 +1,16 @@
 package com.csn.charity.controller.api;
 
 import java.security.Principal;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
@@ -24,6 +19,7 @@ import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.User;
 import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -70,10 +66,12 @@ public class AuthRestController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-    @PutMapping("/profile/")
+    @PostMapping(path = "/profile/",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestBody ProfileDTO profileDTO) {
-        this.profileService.update(profileDTO); 
+    public ResponseEntity<String> updateProfile(@RequestParam Map<String, String> params, @RequestPart MultipartFile avatar) {
+        this.profileService.update(params, avatar);
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }
 

@@ -67,6 +67,7 @@ public class User implements Serializable {
     private List<UserCommentPost> commentPost = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserReactPost> reacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

@@ -60,7 +60,7 @@ public class Project implements Serializable{
     @Column(name = "end_date")
     private Date endDate;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private Boolean status;
 
     @Transient

@@ -19,7 +19,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.PostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.PostImage;
-import com.csn.charity.model.ProjectImage;
 import com.csn.charity.model.Tag;
 import com.csn.charity.model.User;
 import com.csn.charity.repository.PostImageRepository;

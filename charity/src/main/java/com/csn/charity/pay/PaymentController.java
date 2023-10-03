@@ -33,7 +33,7 @@ public class PaymentController {
     @Autowired
     private DonateService donateService;
 
-    @PostMapping("/{projectId}/donate")
+    @PostMapping("/projects/{projectId}/donate/")
     @CrossOrigin
     public ResponseEntity<String> donate(@RequestParam("donateAmount") BigDecimal donateAmount,
             @PathVariable(value = "projectId") Long projectId, @RequestParam("note") String note,
@@ -71,7 +71,7 @@ public class PaymentController {
         if (paymentStatus == 1) {
             BigDecimal donatedAmount = new BigDecimal(totalPrice);
             UserContributeProject userContributeProject = new UserContributeProject();
-            userContributeProject.setDonateAmount(donatedAmount);
+            userContributeProject.setDonateAmount(donatedAmount.divide(new BigDecimal(100)));
             donateService.donate(projectId, userContributeProject);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {

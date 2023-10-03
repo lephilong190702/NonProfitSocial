@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.model.Project;
-import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
-import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
 import com.csn.charity.service.interfaces.ProjectService;
@@ -61,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
                 });
                 project.setImages(images);
                 project.setContributedAmount(new BigDecimal(0));
+                project.setStatus(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

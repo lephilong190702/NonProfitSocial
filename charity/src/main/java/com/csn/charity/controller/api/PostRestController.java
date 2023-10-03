@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.dto.PostDTO;
+import com.csn.charity.dto.UserReactPostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.UserCommentPost;
+import com.csn.charity.model.UserReactPost;
 import com.csn.charity.service.interfaces.CommentPostService;
 import com.csn.charity.service.interfaces.PostService;
+import com.csn.charity.service.interfaces.ReactionService;
 import com.csn.charity.service.interfaces.TagService;
 
 @RestController
@@ -33,6 +36,8 @@ public class PostRestController {
     private TagService tagService;
     @Autowired
     private CommentPostService commentPostService;
+    @Autowired
+    private ReactionService reactionService;
 
     @GetMapping("/posts/")
     @CrossOrigin
@@ -56,7 +61,7 @@ public class PostRestController {
 
     @PostMapping(path = "/create-post/")
     @CrossOrigin
-    public ResponseEntity<Post> createPost(@ModelAttribute PostDTO postRequest) {
+    public ResponseEntity<Post> createPost(@RequestBody PostDTO postRequest) {
         Post createdPost = postService.createPost(postRequest);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
@@ -128,4 +133,16 @@ public class PostRestController {
         List<UserCommentPost> replies = commentPostService.getAllReplyComments(parentId);
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
+
+    @PostMapping("/reaction/")
+    @CrossOrigin
+    public ResponseEntity<String> reactPost(@RequestBody UserReactPostDTO userReactPostDTO) {
+        UserReactPost userReactPost = reactionService.addReactPost(userReactPostDTO);
+        if (userReactPost != null) {
+            return ResponseEntity.ok("Thêm reaction thành công");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thêm reaction thất bại.");
+        }
+    }
+
 }

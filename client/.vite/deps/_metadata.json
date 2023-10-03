@@ -1,59 +1,59 @@
 {
   "hash": "ea3d5115",
-  "browserHash": "5e327c2c",
+  "browserHash": "f367c90e",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "1d0a1ff9",
+      "fileHash": "39e803f2",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "23264d33",
+      "fileHash": "0bbd5240",
       "needsInterop": true
     },
     "react-redux": {
       "src": "../../node_modules/react-redux/es/index.js",
       "file": "react-redux.js",
-      "fileHash": "bba6032c",
+      "fileHash": "20aba569",
       "needsInterop": false
     },
     "@reduxjs/toolkit": {
       "src": "../../node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js",
       "file": "@reduxjs_toolkit.js",
-      "fileHash": "fc730bbf",
+      "fileHash": "8f85cdf1",
       "needsInterop": false
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "11ce5d05",
+      "fileHash": "91cd1ae7",
       "needsInterop": false
     },
     "react-cookies": {
       "src": "../../node_modules/react-cookies/build/cookie.js",
       "file": "react-cookies.js",
-      "fileHash": "0b6ab84b",
+      "fileHash": "a8bbdcf2",
       "needsInterop": true
-    },
-    "react-bootstrap": {
-      "src": "../../node_modules/react-bootstrap/esm/index.js",
-      "file": "react-bootstrap.js",
-      "fileHash": "6af97606",
-      "needsInterop": false
     },
     "axios": {
       "src": "../../node_modules/axios/index.js",
       "file": "axios.js",
-      "fileHash": "11216786",
+      "fileHash": "0f4569d5",
+      "needsInterop": false
+    },
+    "react-bootstrap": {
+      "src": "../../node_modules/react-bootstrap/esm/index.js",
+      "file": "react-bootstrap.js",
+      "fileHash": "5e5bbdb0",
       "needsInterop": false
     },
     "react-router": {
       "src": "../../node_modules/react-router/dist/index.js",
       "file": "react-router.js",
-      "fileHash": "0ce275cf",
+      "fileHash": "e6a81ec0",
       "needsInterop": false
     }
   },

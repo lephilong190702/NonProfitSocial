@@ -45,7 +45,7 @@ const NewsPage = () => {
       <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
       <Row>
         {news.map((n) => {
-          let url = `/news/${n.cateId}/${n.id}`;
+          let url = `/news/${n.id}`;
           return (
             <>
               <Col xs={12} md={3} className="2">

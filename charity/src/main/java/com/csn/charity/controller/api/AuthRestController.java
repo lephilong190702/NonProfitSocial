@@ -74,10 +74,10 @@ public class AuthRestController {
 
     @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestPart("avatar") MultipartFile avatar,
-            @RequestPart("firstName") String firstName,
-            @RequestPart("lastName") String lastName,
-            @RequestPart("phone") String phone) {
+    public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
+            @RequestPart(value = "firstName") String firstName,
+            @RequestPart(value = "lastName") String lastName,
+            @RequestPart(value = "phone") String phone) {
         
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);

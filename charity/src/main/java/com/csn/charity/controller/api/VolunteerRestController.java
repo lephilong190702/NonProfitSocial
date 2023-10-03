@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.VolunteerRequestDTO;
-import com.csn.charity.service.interfaces.DonateService;
 import com.csn.charity.service.interfaces.SkillService;
 import com.csn.charity.service.interfaces.VolunteerService;
 
@@ -20,8 +19,6 @@ import com.csn.charity.service.interfaces.VolunteerService;
 public class VolunteerRestController {
     @Autowired
     private VolunteerService volunteerService;
-    @Autowired
-    private DonateService donateService;
     @Autowired
     private SkillService skillService;
 

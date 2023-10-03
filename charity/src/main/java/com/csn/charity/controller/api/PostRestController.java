@@ -1,5 +1,6 @@
 package com.csn.charity.controller.api;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,18 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.dto.PostDTO;
 import com.csn.charity.dto.UserReactPostDTO;
 import com.csn.charity.model.Post;
+import com.csn.charity.model.Tag;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.model.UserReactPost;
 import com.csn.charity.service.interfaces.CommentPostService;
@@ -48,7 +52,7 @@ public class PostRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
     @GetMapping("/posts/{postId}")
     @CrossOrigin
     public ResponseEntity<?> getPostById(@PathVariable(value = "postId") Long postId) {
@@ -61,8 +65,17 @@ public class PostRestController {
 
     @PostMapping(path = "/create-post/")
     @CrossOrigin
-    public ResponseEntity<Post> createPost(@RequestBody PostDTO postRequest) {
-        Post createdPost = postService.createPost(postRequest);
+    public ResponseEntity<Post> createPost(@RequestParam(value = "content") String content,
+            @RequestPart(value = "files") List<MultipartFile> files,
+            @RequestParam(value = "tags", required = false) List<String> tags) {
+
+    
+        PostDTO postDTO = new PostDTO();
+        postDTO.setContent(content);
+        postDTO.setFiles(files);
+        postDTO.setHashtags(tags);
+
+        Post createdPost = postService.createPost(postDTO);
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 

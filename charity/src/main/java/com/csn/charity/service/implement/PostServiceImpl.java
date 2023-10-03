@@ -69,6 +69,7 @@ public class PostServiceImpl implements PostService {
                 });
             }
             post.setTags(postHashtags);
+            System.out.println("TAG" + postHashtags);
 
             if (postDTO.getFiles() != null && !postDTO.getFiles().isEmpty()) {
                 List<PostImage> images = new ArrayList<>();

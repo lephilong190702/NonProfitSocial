@@ -71,6 +71,7 @@ public class User implements Serializable {
     private List<UserReactPost> reacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserVolunteerProject> volunteers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -87,6 +88,7 @@ public class User implements Serializable {
     @JoinTable(name = "users_roles", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "role_id", referencedColumnName = "id") })
+    @JsonIgnore
     private List<UserRole> roles = new ArrayList<>();
 
     @ManyToMany

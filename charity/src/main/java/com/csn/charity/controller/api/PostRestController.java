@@ -21,14 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.dto.CommentPostDTO;
 import com.csn.charity.dto.PostDTO;
+import com.csn.charity.dto.ReportDTO;
 import com.csn.charity.dto.UserReactPostDTO;
 import com.csn.charity.model.Post;
-import com.csn.charity.model.Tag;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.model.UserReactPost;
+import com.csn.charity.model.UserReportPost;
 import com.csn.charity.service.interfaces.CommentPostService;
 import com.csn.charity.service.interfaces.PostService;
 import com.csn.charity.service.interfaces.ReactionService;
+import com.csn.charity.service.interfaces.ReportService;
 import com.csn.charity.service.interfaces.TagService;
 
 @RestController
@@ -42,6 +44,8 @@ public class PostRestController {
     private CommentPostService commentPostService;
     @Autowired
     private ReactionService reactionService;
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping("/posts/")
     @CrossOrigin
@@ -66,7 +70,7 @@ public class PostRestController {
     @PostMapping(path = "/create-post/")
     @CrossOrigin
     public ResponseEntity<Post> createPost(@RequestParam(value = "content") String content,
-            @RequestPart(value = "files") List<MultipartFile> files,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "tags", required = false) List<String> tags) {
 
     
@@ -155,6 +159,17 @@ public class PostRestController {
             return ResponseEntity.ok("Thêm reaction thành công");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thêm reaction thất bại.");
+        }
+    }
+
+    @PostMapping("/report/")
+    @CrossOrigin
+    public ResponseEntity<?> reportPost(@RequestBody ReportDTO reportDTO) {
+        UserReportPost userReportPost = reportService.report(reportDTO);
+        if (userReportPost != null) {
+            return new ResponseEntity<>(userReportPost, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Báo cáo thất bại.");
         }
     }
 

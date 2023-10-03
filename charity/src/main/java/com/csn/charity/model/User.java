@@ -79,6 +79,7 @@ public class User implements Serializable {
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserReportPost> reports = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")

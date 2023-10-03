@@ -69,5 +69,6 @@ public class Post implements Serializable {
     private List<UserReactPost> reacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
+    @JsonIgnore
     private List<UserReportPost> reports = new ArrayList<>();
 }

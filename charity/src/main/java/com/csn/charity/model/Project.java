@@ -48,7 +48,7 @@ public class Project implements Serializable{
     @Lob
     private String content;
 
-    @Column(name = "contributed_amount", nullable = false)
+    @Column(name = "contributed_amount")
     private BigDecimal contributedAmount;
 
     @Column(name = "total_amount", nullable = false)

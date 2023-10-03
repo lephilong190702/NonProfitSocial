@@ -69,14 +69,10 @@ public class PaymentController {
 
         System.out.println("STATUS" + paymentStatus);
         if (paymentStatus == 1) {
-
-            System.out.println("DEBUG:" + projectId);
             BigDecimal donatedAmount = new BigDecimal(totalPrice);
-            System.out.println("TOTAL" + totalPrice);
             UserContributeProject userContributeProject = new UserContributeProject();
             userContributeProject.setDonateAmount(donatedAmount);
             donateService.donate(projectId, userContributeProject);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.model.Project;
+import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
+import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
 import com.csn.charity.service.interfaces.ProjectService;
@@ -57,6 +60,7 @@ public class ProjectServiceImpl implements ProjectService {
                     }
                 });
                 project.setImages(images);
+                project.setContributedAmount(new BigDecimal(0));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -123,6 +127,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> findByName(String name) {
         return this.projectRepository.findByName(name);
+    }
+
+    @Override
+    public Long countProjectByCategory(Long categoryId) {
+        return this.projectRepository.countProjectsByCategoryId(categoryId);
     }
 
 }

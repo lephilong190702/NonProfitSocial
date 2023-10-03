@@ -10,10 +10,9 @@
 <body>
 
     <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-center text-info">QUẢN LÝ TIN TỨC TỪ THIỆN</h1>
+        <a th:href="@{/admin/new}" class="btn btn-info mt-5" >THÊM TIN TỨC</a>
         <div class="container my-2" align="center">
-            <h1>QUẢN LÝ TIN TỨC TỪ THIỆN</h1>
-            <a th:href="@{/admin/new}" class="btn btn-info" mt-2>THÊM TIN TỨC</a>
-
             <div class="table-responsive">
                 <table class="table table-striped mb-0">
                     <thead>
@@ -35,7 +34,8 @@
                             <td th:text="${n.createDate}"></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/new/{id}(id=${n.id})}">Update</a>
-                                <a class="btn btn-danger" th:attr="path=@{/admin/new/{id}(id=${n.id})}"  onclick="deleteProject(this.getAttribute('path'))">Delete</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/new/{id}(id=${n.id})}"
+                                    onclick="deleteProject(this.getAttribute('path'))">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -51,14 +51,14 @@
 <script>
     function deleteProject(path) {
         if (confirm("Bạn chắc chắn xóa không?") === true) {
-        fetch(path, {
-            method: "delete"
-        }).then(res => {
-            if (res.status === 204)
-                location.reload();
-            else
-                alert("Lỗi!!!");
-        });
+            fetch(path, {
+                method: "delete"
+            }).then(res => {
+                if (res.status === 204)
+                    location.reload();
+                else
+                    alert("Lỗi!!!");
+            });
+        }
     }
-}
 </script>

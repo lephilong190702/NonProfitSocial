@@ -1,5 +1,9 @@
 package com.csn.charity.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,16 +13,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.csn.charity.model.NewCategory;
+import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.service.interfaces.NewsCategoryService;
+import com.csn.charity.service.interfaces.NewsService;
 
 @Controller
 public class NewsCategoryController {
     @Autowired
     private NewsCategoryService newsCategoryService;
+    @Autowired
+    private NewsService newsService;
 
     @GetMapping("/ncategories")
     public String listProjectCategories(Model model) {
-        model.addAttribute("ncategories", newsCategoryService.getAll());
+        List<NewCategory> newCategories = this.newsCategoryService.getAll();
+        Map<Long, Long> count = newCategories.stream()
+                .collect(Collectors.toMap(NewCategory::getId,
+                        category -> newsService.countNewsByCategory(category.getId())));
+        System.out.println("COUNT" + count);
+        model.addAttribute("count", count);
+        model.addAttribute("ncategories", newCategories);
         return "pages/ncategories";
     }
 

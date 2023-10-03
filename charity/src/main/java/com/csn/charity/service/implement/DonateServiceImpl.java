@@ -42,15 +42,21 @@ public class DonateServiceImpl implements DonateService {
         Project project = this.projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
 
-        BigDecimal newContributedAmount = project.getContributedAmount().add(userContributeProject.getDonateAmount());
-        project.setContributedAmount(newContributedAmount);
-        this.projectRepository.save(project);
-        
-        userContributeProject.setProject(project);
-        userContributeProject.setUser(user);
-        userContributeProject.setDonateDate(new Date());
+        if (project.getContributedAmount().compareTo(project.getTotalAmount()) <= 0) {
+            BigDecimal newContributedAmount = project.getContributedAmount()
+                    .add(userContributeProject.getDonateAmount());
+            project.setContributedAmount(newContributedAmount);
+            this.projectRepository.save(project);
 
-        return this.donateRepository.save(userContributeProject);
+            userContributeProject.setProject(project);
+            userContributeProject.setUser(user);
+            userContributeProject.setDonateDate(new Date());
+            return this.donateRepository.save(userContributeProject);
+        }else {
+            throw new IllegalArgumentException("Số tiền quyên góp đã đủ, xin cảm ơn.");
+        }
+
+        
     }
 
 }

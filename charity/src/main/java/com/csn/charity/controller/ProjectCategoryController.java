@@ -1,5 +1,10 @@
 package com.csn.charity.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +15,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
+import com.csn.charity.service.interfaces.ProjectService;
 
 @Controller
 public class ProjectCategoryController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @GetMapping("/pcategories")
     public String listProjectCategories(Model model) {
-        model.addAttribute("projectCategories", projectCategoryService.getAll());
+        List<ProjectCategory> projectCategories = projectCategoryService.getAll();
+
+        Map<Long, Long> count = projectCategories.stream()
+                .collect(Collectors.toMap(ProjectCategory::getId,
+                        category -> projectService.countProjectByCategory(category.getId())));
+
+        model.addAttribute("count", count);
+        model.addAttribute("projectCategories", projectCategories);
         return "pages/pcategories";
     }
 

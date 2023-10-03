@@ -12,4 +12,5 @@ public interface ProjectService {
     Project update(Long id, Project project);
     void delete(Long id);
     List<Project> findByName(String name);
+    Long countProjectByCategory(Long categoryId);
 }

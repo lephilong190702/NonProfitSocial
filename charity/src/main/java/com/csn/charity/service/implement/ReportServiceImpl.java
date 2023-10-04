@@ -20,13 +20,14 @@ import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.ReportService;
 
 @Service
-public class ReportServiceImpl implements ReportService{
+public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PostRepository postRepository;
+
     @Override
     public List<UserReportPost> getReportPost() {
         return this.reportRepository.findByResolved(false);
@@ -36,6 +37,13 @@ public class ReportServiceImpl implements ReportService{
     public void resolvedReport(Long reportId) {
         Optional<UserReportPost> reportOptional = reportRepository.findById(reportId);
         reportOptional.ifPresent(report -> {
+            Optional<Post> postOptional = postRepository.findById(report.getPost().getId());
+            postOptional.ifPresent(post -> {
+                if (post.getStatus()) {
+                    post.setStatus(false);
+                    postRepository.save(post);
+                }
+            });
             report.setResolved(true);
             reportRepository.save(report);
         });
@@ -55,7 +63,8 @@ public class ReportServiceImpl implements ReportService{
         }
 
         Post post = this.postRepository.findById(reportDTO.getPostId())
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + reportDTO.getPostId()));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + reportDTO.getPostId()));
 
         UserReportPost userReportPost = new UserReportPost();
         userReportPost.setUser(user);
@@ -70,7 +79,7 @@ public class ReportServiceImpl implements ReportService{
     @Override
     public UserReportPost getById(Long id) {
         return this.reportRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy báo cáo với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy báo cáo với ID: " + id));
     }
-    
+
 }

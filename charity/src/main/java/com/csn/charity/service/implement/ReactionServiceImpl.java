@@ -1,13 +1,10 @@
 package com.csn.charity.service.implement;
 
-
 import java.util.Date;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +41,8 @@ public class ReactionServiceImpl implements ReactionService {
         }
 
         Post post = this.postRepository.findById(userReactPostDTO.getPostId())
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + userReactPostDTO.getPostId()));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Không tìm thấy bài viết với ID: " + userReactPostDTO.getPostId()));
 
         ReactionType reactionType = ReactionType.valueOf(userReactPostDTO.getReaction().toUpperCase());
 
@@ -56,6 +54,5 @@ public class ReactionServiceImpl implements ReactionService {
 
         return this.reactionRepository.save(userReactPost);
     }
-    
-    
+
 }

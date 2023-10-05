@@ -33,7 +33,9 @@ export const endpoints = {
     "project": `${SERVER_CONTEXT}/api/projects/`,
     "details": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}`,
     "comments": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}/comments/`,
-    "add-comment": `${SERVER_CONTEXT}/api/news-comment/`
+    "replies": (parentId) => `${SERVER_CONTEXT}/api/news-comment/${parentId}/replies/`,
+    "add-comment": `${SERVER_CONTEXT}/api/news-comment/`,
+    "skill": `${SERVER_CONTEXT}/api/skills/`
     
 }
 

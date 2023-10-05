@@ -79,7 +79,9 @@ const CustomNavbar = () => {
 
             <Nav.Link href="#financial_report">Báo cáo tài chính</Nav.Link>
 
-            <Nav.Link href="#social">Mạng xã hội</Nav.Link>
+            <Link to="/social" className="nav-link">
+              Mạng xã hội
+            </Link>
 
             <NavDropdown title="Tin tức" id="basic-nav-dropdown">
               {newsCategory.length > 0 &&

@@ -5,8 +5,10 @@ import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
 import RegisterPage from './pages/RegisterPage';
 import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
-import ProjectPage from './pages/NewsPage';
 import NewsDetails from './components/NewsDetails';
+import Home from './pages/home/Home';
+// import Profile from './pages/profile/Profile';
+// import Profile from './pages/profile/Profile';
 
 export const UserContext = createContext();
 
@@ -30,6 +32,9 @@ const App = () => {
           <Route path='/registerVol' element={<RegisterVolunteerPage />} />
           <Route path='/news' element={<NewsPage />} />
           <Route path="/news/:newsId" element={<NewsDetails />} />
+          <Route path="/social/" element={<Home />} />
+          {/* <Route path="/social/profile/" element={<Profile />} /> */}
+
 
         </Routes>
       </BrowserRouter>

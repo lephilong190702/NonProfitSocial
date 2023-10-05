@@ -11,13 +11,25 @@ const RegisterVolunteerPage = () => {
     startDate: "",
     endDate: "",
     description: "",
-    skill: "",
+    skills: [], // Mảng để lưu trữ các kỹ năng đã chọn
   });
-  const [projectList, setProjectList] = useState([]); // State để lưu danh sách dự án
+  const [projectList, setProjectList] = useState([]);
+  const [skillList, setSkillList] = useState([]);
 
   const change = (evt, field) => {
     setVolunteer((current) => {
       return { ...current, [field]: evt.target.value };
+    });
+  };
+
+  const toggleSkill = (skillId) => {
+    // Kiểm tra xem skillId đã có trong danh sách skills chưa
+    const updatedSkills = volunteer.skills.includes(skillId)
+      ? volunteer.skills.filter((id) => id !== skillId)
+      : [...volunteer.skills, skillId];
+
+    setVolunteer((current) => {
+      return { ...current, skills: updatedSkills };
     });
   };
 
@@ -32,11 +44,23 @@ const RegisterVolunteerPage = () => {
       }
     }
 
+    async function fetchSkills() {
+      try {
+        const res = await ApiConfig.get(endpoints["skill"]);
+        const skills = res.data;
+        setSkillList(skills);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchSkills();
     fetchProjects();
   }, []);
 
   const registerVol = async (evt) => {
     evt.preventDefault();
+    console.log(volunteer.skills);
 
     try {
       const res = await authApi().post(endpoints["volunteer"], {
@@ -44,14 +68,14 @@ const RegisterVolunteerPage = () => {
         startDate: volunteer.startDate,
         endDate: volunteer.endDate,
         description: volunteer.description,
-        skill: volunteer.skill,
+        skills: volunteer.skills,
       });
 
       if (res.status === 201) {
         console.log("Đăng ký thành công");
       }
     } catch (error) {
-      // console.error(error);
+      console.error(error);
     }
   };
 
@@ -64,20 +88,34 @@ const RegisterVolunteerPage = () => {
         <Row className="mb-3">
           <Form.Group as={Col} controlId="startDate">
             <Form.Label>Ngày tham gia</Form.Label>
-            <Form.Control type="date" max={volunteer.endDate} onChange={(e) => change(e, "startDate")}/>
+            <Form.Control
+              type="date"
+              max={volunteer.endDate}
+              onChange={(e) => change(e, "startDate")}
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="endDate">
             <Form.Label>Ngày kết thúc</Form.Label>
-            <Form.Control type="date" min={volunteer.startDate} onChange={(e) => change(e, "endDate")}/>
+            <Form.Control
+              type="date"
+              min={volunteer.startDate}
+              onChange={(e) => change(e, "endDate")}
+            />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>Kỹ năng</Form.Label>
-            <Form.Select defaultValue="Choose..." onChange={(e) => change(e, "skill")}>
-              <option>Choose...</option>
-              <option>...</option>
-            </Form.Select>
+            {skillList.map((skill) => (
+              <Form.Check
+                key={skill.id}
+                type="checkbox"
+                id={`skill-${skill.id}`}
+                label={skill.name}
+                checked={volunteer.skills.includes(skill.id)}
+                onChange={() => toggleSkill(skill.id)}
+              />
+            ))}
           </Form.Group>
         </Row>
 

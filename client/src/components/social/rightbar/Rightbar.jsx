@@ -1,9 +1,9 @@
 import React from 'react'
 import "./rightbar.css";
-import Online from '../Online/Online';
+import Online from '../online/Online';
 
 
-const Rightbar = () => {
+const Rightbar = ({profile}) => {
   const HomeRightbar = () => {
     return (
       <>

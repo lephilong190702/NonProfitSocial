@@ -19,7 +19,6 @@ import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.PostDTO;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.PostImage;
-import com.csn.charity.model.ProjectImage;
 import com.csn.charity.model.Tag;
 import com.csn.charity.model.User;
 import com.csn.charity.repository.PostImageRepository;
@@ -70,6 +69,7 @@ public class PostServiceImpl implements PostService {
                 });
             }
             post.setTags(postHashtags);
+            System.out.println("TAG" + postHashtags);
 
             if (postDTO.getFiles() != null && !postDTO.getFiles().isEmpty()) {
                 List<PostImage> images = new ArrayList<>();

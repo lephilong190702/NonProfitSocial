@@ -10,10 +10,9 @@
 
 <body>
     <div class="main-content container-fluid" layout:fragment="content">
-        <div class="container my-2" align="center">
-            <h1>QUẢN LÝ DANH MỤC DỰ ÁN TỪ THIỆN</h1>
-            <a th:href="@{/admin/pcategory}" class="btn btn-info" mt-2>Thêm danh mục</a>
-
+        <h1 class="text-info text-center">QUẢN LÝ DANH MỤC DỰ ÁN TỪ THIỆN</h1>
+        <a th:href="@{/admin/pcategory}" class="btn btn-info mt-5" >THÊM DANH MỤC</a>
+        <div class="container my-2">
             <div class="table-responsive">
                 <table class="table table-bordered mb-0">
                     <thead>
@@ -28,10 +27,11 @@
                         <tr th:each="c:${projectCategories}">
                             <td th:text="${c.id}"></td>
                             <td th:text="${c.name}"></td>
-                            <td></td>
+                            <td th:text="${count[c.id]}"></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/pcategory/{id}(id=${c.id})}">Update</a>
-                                <a class="btn btn-danger" th:attr="path=@{/admin/pcategory/{id}(id=${c.id})}"  onclick="deleteProjectCategory(this.getAttribute('path'))">Delete</a>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/pcategory/{id}(id=${c.id})}"
+                                    onclick="deleteProjectCategory(this.getAttribute('path'))">Delete</a>
                             </td>
                         </tr>
                     </tbody>
@@ -48,14 +48,14 @@
 <script>
     function deleteProjectCategory(path) {
         if (confirm("Bạn chắc chắn xóa không?") === true) {
-        fetch(path, {
-            method: "delete"
-        }).then(res => {
-            if (res.status === 204)
-                location.reload();
-            else
-                alert("Lỗi!!!");
-        });
+            fetch(path, {
+                method: "delete"
+            }).then(res => {
+                if (res.status === 204)
+                    location.reload();
+                else
+                    alert("Lỗi!!!");
+            });
+        }
     }
-}
 </script>

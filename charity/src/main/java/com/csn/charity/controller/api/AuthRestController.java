@@ -10,12 +10,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,11 +74,10 @@ public class AuthRestController {
 
     @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestPart("avatar") MultipartFile avatar,
-                                                @RequestPart("firstName") String firstName,
-                                                @RequestPart("lastName") String lastName,
-                                                @RequestPart("phone") String phone) {
-
+    public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
+            @RequestPart(value = "firstName") String firstName,
+            @RequestPart(value = "lastName") String lastName,
+            @RequestPart(value = "phone") String phone) {
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);
         profileDTO.setLastName(lastName);

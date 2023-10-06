@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+    <style>
+        .main-content container-fluid {
+            text-align: center;
+        }
+
+        .card label,
+        .card span {
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">XỬ LÝ BÀI VIẾT</h1>
+        <div class="container ">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form class="form form-horizontal">
+                            <div class="form-body">
+                                <span th:each="r:${report}">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Lí do:</label>
+                                                </div>
+                                                <div class="col-md-4 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+
+                                                                <span th:text="${r.content}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Được đăng bởi:</label>
+                                                </div>
+                                                <div class="col-md-4 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <span th:text="${r.user.username}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label>Ngày đăng:</label>
+                                                </div>
+                                                <div class="col-md-4 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <span th:text="${r.post.createDate}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div>
+                                                <h2>BÀI VIẾT</h2>
+                                            </div>
+                                            <div class="col-12 mt-2" style="text-align: left;">
+                                                <div>
+                                                    <span th:text="${r.post.content}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end ">
+                                        <a th:href="@{/resolve/{id}(id=${r.id})}" class="btn btn-primary me-1 mb-1 mt-5"
+                                            mt-2>XỬ LÝ</a>
+                                    </div>
+                            </div>
+                            </span>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+</body>
+
+</html>

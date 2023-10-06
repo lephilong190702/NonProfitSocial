@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,8 @@ public class ProjectServiceImpl implements ProjectService {
                     }
                 });
                 project.setImages(images);
+                project.setContributedAmount(new BigDecimal(0));
+                project.setStatus(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -123,6 +126,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> findByName(String name) {
         return this.projectRepository.findByName(name);
+    }
+
+    @Override
+    public Long countProjectByCategory(Long categoryId) {
+        return this.projectRepository.countProjectsByCategoryId(categoryId);
     }
 
 }

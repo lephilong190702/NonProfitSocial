@@ -33,6 +33,9 @@ public class UserReportPost implements Serializable {
     @Column(name = "create_date", nullable = false)
     private Date createDate;
 
+    @Column(name = "resolved")
+    private boolean resolved;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

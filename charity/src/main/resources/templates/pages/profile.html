@@ -5,42 +5,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Charity Website</title>
+    <style>
+        .main-content container-fluid {
+            text-align: center;
+        }
+        .card label,
+        .card span {
+            margin-bottom: 25px;
+        }
+
+       
+    </style>
 </head>
 
 <body>
-
     <div class="main-content container-fluid" layout:fragment="content">
-        <div class="container my-2" align="center">
-            <h1>HỒ SƠ CÁ NHÂN</h1>
-            <a th:href="@{/admin/edit-profile/{username}(username=${#authentication.principal.username})}" class="btn btn-info" mt-2>CẬP NHẬT HỒ SƠ</a>
-            <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>STT</th>
-                            <th>HỌ</th>
-                            <td>TÊN</td>
-                            <th>SỐ ĐIỆN THOẠI</th>
-                            <th>AVATAR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="p:${profiles}">
-                            <td th:text="${p.id}"></td>
-                            <td th:text="${p.firstName}"></td>
-                            <td th:text="${p.lastName}"></td>
-                            <td th:text="${p.phone}"></td>
-                            <td>
-                                <img th:src="${p.avatar}" width="150" height="150" />
-                            </td>
-                           
-                            <!-- <td>
-                                <a class="btn btn-primary" th:href="@{/admin/new/{id}(id=${n.id})}">Update</a>
-                                <a class="btn btn-danger" th:attr="path=@{/admin/new/{id}(id=${n.id})}"  onclick="deleteProject(this.getAttribute('path'))">Delete</a>
-                            </td> -->
-                        </tr>
-                    </tbody>
-                </table>
+        <h1 class="text-info text-center">HỒ SƠ CÁ NHÂN</h1>
+        <div class="container ">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form class="form form-horizontal">
+                            <div class="form-body">
+                                <span th:each="p:${profiles}">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <span style="display: inline-block; overflow: hidden; border-radius: 50%; border: 2px solid black; width: 250px; height: 250px;">
+                                                <img th:src="${p.avatar}" width="250" height="250" style="object-fit: cover; width: 100%; height: 100%;" />
+                                            </span>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row mt-2">
+                                                <div class="col-md-6">
+                                                    <label>Tài khoản</label>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <i data-feather="user"></i>
+                                                                <span th:text="${#authentication.principal.username}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Mật khẩu</label>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <i data-feather="user"></i>
+                                                                <span>*********</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Họ</label>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <i data-feather="user"></i>
+                                                                <span th:text="${p.firstName}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Tên</label>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <i data-feather="user"></i>
+                                                                <span th:text="${p.lastName}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Số điện thoại</label>
+                                                </div>
+                                                <div class="col-md-6 mt-2">
+                                                    <div class="form-group has-icon-left">
+                                                        <div class="position-relative">
+                                                            <div class="form-control-icon">
+                                                                <i data-feather="phone"></i>
+                                                                <span th:text="${p.phone}"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            
+                                        <div class="col-12 d-flex justify-content-end ">
+                                            <a th:href="@{/admin/edit-profile/{username}(username=${#authentication.principal.username})}"
+                                                class="btn btn-primary me-1 mb-1" mt-2>Cập nhật</a>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -49,17 +124,3 @@
 </body>
 
 </html>
-<script>
-    function deleteProject(path) {
-        if (confirm("Bạn chắc chắn xóa không?") === true) {
-        fetch(path, {
-            method: "delete"
-        }).then(res => {
-            if (res.status === 204)
-                location.reload();
-            else
-                alert("Lỗi!!!");
-        });
-    }
-}
-</script>

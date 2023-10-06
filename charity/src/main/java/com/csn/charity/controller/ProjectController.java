@@ -65,8 +65,9 @@ public class ProjectController {
         ProjectCategory projectCategory = projectCategoryService.get(categoryId);
         project.setCategory(projectCategory);
 
-        if (project.getId() == null)
+        if (project.getId() == null) {
             projectService.add(project);
+        }         
         else
             projectService.update(project.getId(), project);
 

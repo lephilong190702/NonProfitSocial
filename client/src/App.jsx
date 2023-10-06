@@ -7,8 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 import NewsDetails from './components/NewsDetails';
 import Home from './pages/home/Home';
-// import Profile from './pages/profile/Profile';
-// import Profile from './pages/profile/Profile';
+import Profile from './pages/profile/Profile';
 
 export const UserContext = createContext();
 
@@ -33,7 +32,7 @@ const App = () => {
           <Route path='/news' element={<NewsPage />} />
           <Route path="/news/:newsId" element={<NewsDetails />} />
           <Route path="/social/" element={<Home />} />
-          {/* <Route path="/social/profile/" element={<Profile />} /> */}
+          <Route path="/social/profile" element={<Profile />} />
 
 
         </Routes>

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +39,10 @@ public class UserServiceImpl implements UserService {
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
 
+        if (!user.getStatus()) {
+            throw new DisabledException("Tài khoản đã bị khóa");
+        }
+
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
@@ -55,16 +60,16 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setStatus(true);
         System.out.println("STATUS" + user.getStatus());
-        if(userDto.getPassword() != null)
+        if (userDto.getPassword() != null)
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        else    
+        else
             System.out.println("LỖI!!!!!!!!");
         UserRole role = roleRepository.findByName("ROLE_USER");
         user.setRoles(Arrays.asList(role));
 
         Profile profile = new Profile();
         profile.setUser(user);
-        
+
         user.setProfile(profile);
         userRepository.save(user);
         return "User Added Successfully";

@@ -4,15 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.csn.charity.model.UserContributeProject;
 import com.csn.charity.service.interfaces.DonateService;
@@ -33,7 +29,7 @@ public class PaymentController {
     @Autowired
     private DonateService donateService;
 
-    @PostMapping("/{projectId}/donate")
+    @PostMapping("/projects/{projectId}/donate/")
     @CrossOrigin
     public ResponseEntity<String> donate(@RequestParam("donateAmount") BigDecimal donateAmount,
             @PathVariable(value = "projectId") Long projectId, @RequestParam("note") String note,
@@ -69,14 +65,10 @@ public class PaymentController {
 
         System.out.println("STATUS" + paymentStatus);
         if (paymentStatus == 1) {
-
-            System.out.println("DEBUG:" + projectId);
             BigDecimal donatedAmount = new BigDecimal(totalPrice);
-            System.out.println("TOTAL" + totalPrice);
             UserContributeProject userContributeProject = new UserContributeProject();
-            userContributeProject.setDonateAmount(donatedAmount);
+            userContributeProject.setDonateAmount(donatedAmount.divide(new BigDecimal(100)));
             donateService.donate(projectId, userContributeProject);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -86,5 +86,10 @@ public class NewsServiceImpl implements NewsService {
     public List<New> findByName(String name) {
         return this.newsRepository.findByName(name);
     }
+
+    @Override
+    public Long countNewsByCategory(Long categoryId) {
+        return this.newsRepository.countNewsByCategoryId(categoryId);
+    }
     
 }

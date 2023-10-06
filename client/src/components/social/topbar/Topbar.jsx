@@ -21,8 +21,8 @@ const Topbar = () => {
 
       <div className="topbarRight">
         <div className="topbarLinks">
-          {/* <span className="topbarLink">HomePage</span> */}
-          <Nav.Link className="topbarLink">HomePage</Nav.Link>
+          <span className="topbarLink">HomePage</span>
+          {/* <Nav.Link className="topbarLink">HomePage</Nav.Link> */}
           <span className="topbarLink">Timeline</span>
         </div>
         <div className="topbarIcons">

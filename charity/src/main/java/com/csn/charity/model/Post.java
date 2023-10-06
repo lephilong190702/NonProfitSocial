@@ -53,7 +53,6 @@ public class Post implements Serializable {
     @JoinTable(name = "post_tag", 
                 joinColumns = @JoinColumn(name = "post_id"), 
                 inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @JsonIgnore
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToOne
@@ -70,5 +69,6 @@ public class Post implements Serializable {
     private List<UserReactPost> reacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
+    @JsonIgnore
     private List<UserReportPost> reports = new ArrayList<>();
 }

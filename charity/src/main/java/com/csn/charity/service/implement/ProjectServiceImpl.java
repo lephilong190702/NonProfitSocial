@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project update(Long id, Project project) {
         Project p = projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
-        
+
         p.setCategory(project.getCategory());
         p.setTitle(project.getTitle());
         p.setAddress(project.getAddress());

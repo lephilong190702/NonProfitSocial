@@ -7,7 +7,10 @@ import com.csn.charity.model.UserReportPost;
 
 public interface ReportService {
     List<UserReportPost> getReportPost();
+
     void resolvedReport(Long reportId);
+
     UserReportPost getById(Long id);
+
     UserReportPost report(ReportDTO reportDTO);
 }

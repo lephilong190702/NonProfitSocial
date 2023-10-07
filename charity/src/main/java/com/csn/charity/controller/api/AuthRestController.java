@@ -22,6 +22,7 @@ import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.dto.UserDTO;
+import com.csn.charity.firebase.UserFirebaseService;
 import com.csn.charity.model.User;
 import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
@@ -41,10 +42,14 @@ public class AuthRestController {
     @Autowired
     private ProfileService profileService;
 
+    @Autowired
+    private UserFirebaseService userFirebaseService;
+
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
         try {
+            this.userFirebaseService.saveUser(userDto);
             String result = this.userService.addUser(userDto);
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -78,7 +83,7 @@ public class AuthRestController {
             @RequestPart(value = "firstName") String firstName,
             @RequestPart(value = "lastName") String lastName,
             @RequestPart(value = "phone") String phone) {
-        
+
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);
         profileDTO.setLastName(lastName);

@@ -1,6 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,4 +56,11 @@ public class ReactionServiceImpl implements ReactionService {
         return this.reactionRepository.save(userReactPost);
     }
 
+    @Override
+    public List<UserReactPost> getReactionByPost(Long postId) {
+        Post post = this.postRepository.findById(postId)
+        .orElseThrow(() -> new IllegalArgumentException(
+                        "Không tìm thấy bài viết với ID: " + postId));
+        return this.reactionRepository.findByPost(post);
+    }
 }

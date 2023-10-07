@@ -37,6 +37,12 @@ public class SpringSecurityConfig {
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
+
+    @Autowired
+    private OAuthLoginSuccessHandler oauthLoginSuccessHandler;
+
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -49,7 +55,7 @@ public class SpringSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
-                                "/error", "/login")
+                                "/error", "/login", "/oauth2/**")
                         .permitAll()
                         .requestMatchers("/", "/admin/**").hasRole("ADMIN")
                         .anyRequest()
@@ -63,6 +69,14 @@ public class SpringSecurityConfig {
                                 .defaultSuccessUrl("/")
                                 .failureUrl("/login?error")
                                 .permitAll())
+                .oauth2Login(
+                        login -> login
+                                .loginPage("/login")
+                                .userInfoEndpoint(userInfo -> userInfo
+                                        .userService(oauth2UserService) 
+                                )
+                                .defaultSuccessUrl("/")
+                                .successHandler(oauthLoginSuccessHandler))
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .exceptionHandling(handling -> handling.accessDeniedPage("/login?accessDenied"))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -80,11 +94,12 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/register/", "/api/login/").permitAll()
                         .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/pcategories/",
-                                "/api/posts/",
+                                "/api/posts/","/api/posts/{postId}",
                                 "/api/post-comment/{parentId}/replies/",
                                 "/api/news-comment/{parentId}/replies/",
                                 "/api/news/{newsId}", "/api/skills/",
-                                "/api/news/{newsId}/comments/")
+                                "/api/news/{newsId}/comments/", "/api/firebase/",
+                                "/api/firebase/{username}")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")

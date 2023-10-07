@@ -27,6 +27,7 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     private UserRepository userRepository;
     @Autowired
     private NewsRepository newsRepository;
+
     @Override
     public UserCommentNew createComment(CommentNewsDTO commentNewsDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -69,7 +70,7 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         }
 
         UserCommentNew userCommentNew = this.commentNewsRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
 
         if (!userCommentNew.getUser().equals(user)) {
             throw new SecurityException("Bạn không có quyền cập nhật bình luận này");
@@ -82,13 +83,14 @@ public class CommentNewsServiceImpl implements CommentNewsService {
     @Override
     public List<UserCommentNew> getCommentByNews(Long id) {
         this.newsRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
 
         List<UserCommentNew> commentNews = this.commentNewsRepository.findByNewsId(id);
 
         return commentNews;
-        
+
     }
+
     @Override
     public void deleteCommentNews(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -101,9 +103,9 @@ public class CommentNewsServiceImpl implements CommentNewsService {
         if (user == null) {
             throw new NoSuchElementException("Không tìm thấy người dùng");
         }
-        
+
         UserCommentNew userCommentNew = this.commentNewsRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
 
         if (!userCommentNew.getUser().equals(user)) {
             throw new SecurityException("Bạn không có quyền xóa bình luận này");
@@ -111,6 +113,7 @@ public class CommentNewsServiceImpl implements CommentNewsService {
 
         this.commentNewsRepository.delete(userCommentNew);
     }
+
     @Override
     public UserCommentNew addReplyCommentNew(Long parentId, UserCommentNew reply) {
         Optional<UserCommentNew> parentCommentOptional = commentNewsRepository.findById(parentId);
@@ -139,6 +142,7 @@ public class CommentNewsServiceImpl implements CommentNewsService {
             throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
         }
     }
+
     @Override
     public List<UserCommentNew> getAllReplyComments(Long parentId) {
         Optional<UserCommentNew> parentCommentOptional = commentNewsRepository.findById(parentId);
@@ -150,6 +154,5 @@ public class CommentNewsServiceImpl implements CommentNewsService {
             throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
         }
     }
-    
-    
+
 }

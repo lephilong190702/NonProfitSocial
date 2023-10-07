@@ -19,7 +19,6 @@ import com.csn.charity.repository.PostRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.CommentPostService;
 
-
 @Service
 public class CommentPostServiceImpl implements CommentPostService {
     @Autowired
@@ -72,7 +71,7 @@ public class CommentPostServiceImpl implements CommentPostService {
         }
 
         UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
 
         if (!userCommentPost.getUser().equals(user)) {
             throw new SecurityException("Bạn không có quyền cập nhật bình luận này");

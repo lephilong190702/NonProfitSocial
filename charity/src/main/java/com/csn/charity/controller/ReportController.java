@@ -21,6 +21,7 @@ public class ReportController {
         model.addAttribute("reports", this.reportService.getReportPost());
         return "pages/reports";
     }
+
     @GetMapping("/reports/{id}")
     public String detail(Model model, @PathVariable(value = "id") Long id) {
         UserReportPost userReportPost = this.reportService.getById(id);
@@ -28,7 +29,7 @@ public class ReportController {
         return "pages/report";
     }
 
-    @RequestMapping(value = "/resolve/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/resolve/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String resolve(@PathVariable(value = "id") Long id) {
         this.reportService.resolvedReport(id);
         return "redirect:/reports";

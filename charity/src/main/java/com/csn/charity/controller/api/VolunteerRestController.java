@@ -45,13 +45,16 @@ public class VolunteerRestController {
     }
 
     // @PostMapping("{projectId}/donate/")
-    // public ResponseEntity<UserContributeProject> donate(@PathVariable(value = "projectId") Long projectId, @RequestParam("donateAmount") BigDecimal donateAmount) {
-    //     UserContributeProject userContributeProject = new UserContributeProject();
-    //     userContributeProject.setDonateAmount(donateAmount);
+    // public ResponseEntity<UserContributeProject> donate(@PathVariable(value =
+    // "projectId") Long projectId, @RequestParam("donateAmount") BigDecimal
+    // donateAmount) {
+    // UserContributeProject userContributeProject = new UserContributeProject();
+    // userContributeProject.setDonateAmount(donateAmount);
 
-    //     // Gọi service để xử lý đóng góp
-    //     UserContributeProject result = donateService.donate(projectId, userContributeProject);
+    // // Gọi service để xử lý đóng góp
+    // UserContributeProject result = donateService.donate(projectId,
+    // userContributeProject);
 
-    //     return new ResponseEntity<>(result, HttpStatus.CREATED);
+    // return new ResponseEntity<>(result, HttpStatus.CREATED);
     // }
 }

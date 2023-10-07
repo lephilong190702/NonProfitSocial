@@ -7,5 +7,6 @@ import com.csn.charity.model.UserVolunteerProject;
 
 public interface VolunteerService {
     void saveVolunteer(VolunteerRequestDTO requestDTO);
+
     List<UserVolunteerProject> getAll();
 }

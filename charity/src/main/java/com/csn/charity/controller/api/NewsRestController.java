@@ -92,7 +92,8 @@ public class NewsRestController {
 
     @PostMapping("/news-comment/{parentId}/replies/")
     @CrossOrigin
-    public ResponseEntity<UserCommentNew> addReplyToComment(@PathVariable Long parentId, @RequestBody UserCommentNew reply) {
+    public ResponseEntity<UserCommentNew> addReplyToComment(@PathVariable Long parentId,
+            @RequestBody UserCommentNew reply) {
         UserCommentNew addedReply = commentNewsService.addReplyCommentNew(parentId, reply);
         return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
     }
@@ -100,7 +101,7 @@ public class NewsRestController {
     @GetMapping("/news-comment/{parentId}/replies/")
     @CrossOrigin
     public ResponseEntity<List<UserCommentNew>> getAllRepliesComment(@PathVariable Long parentId) {
-        List<UserCommentNew> replies =commentNewsService.getAllReplyComments(parentId);
+        List<UserCommentNew> replies = commentNewsService.getAllReplyComments(parentId);
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 }

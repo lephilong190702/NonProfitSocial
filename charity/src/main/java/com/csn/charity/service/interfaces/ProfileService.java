@@ -5,5 +5,6 @@ import com.csn.charity.model.Profile;
 
 public interface ProfileService {
     Profile update(ProfileDTO profileDTO);
+
     Profile get(Long id);
 }

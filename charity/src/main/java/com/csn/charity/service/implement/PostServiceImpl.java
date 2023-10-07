@@ -173,7 +173,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostById(Long id) {
-        return this.postRepository.findById(id)        
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+        return this.postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+    }
+
+    @Override
+    public List<Post> getAvailablePosts() {
+        return this.postRepository.findByStatus(true);
     }
 }

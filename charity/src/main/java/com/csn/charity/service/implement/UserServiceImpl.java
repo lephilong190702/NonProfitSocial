@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.UserDTO;
+import com.csn.charity.model.AuthenticationType;
 import com.csn.charity.model.Profile;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserRole;
@@ -129,6 +131,27 @@ public class UserServiceImpl implements UserService {
     public User get(Long id) {
         return this.userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với ID: " + id));
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
+    @Override
+    public void registerOAuthUser(String email, AuthenticationType type) {
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
+            User nUser = new User();
+            nUser.setEmail(email);
+            nUser.setAuthType(type);
+            nUser.setStatus(true);
+
+            Profile profile = new Profile();
+            nUser.setProfile(profile);
+
+            this.userRepository.save(nUser);
+        }
     }
 
 }

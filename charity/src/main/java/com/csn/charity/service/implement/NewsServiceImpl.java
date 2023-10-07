@@ -22,6 +22,7 @@ public class NewsServiceImpl implements NewsService {
     private NewsRepository newsRepository;
     @Autowired
     private Cloudinary cloudinary;
+
     @Override
     public List<New> getAll() {
         return this.newsRepository.findAll();
@@ -30,7 +31,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public New get(Long id) {
         return this.newsRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
     }
 
     @Override
@@ -53,8 +54,8 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public New update(Long id, New n) {
         New news = this.newsRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
-        
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+
         news.setCategory(n.getCategory());
         news.setName(n.getName());
         news.setContent(n.getContent());
@@ -70,14 +71,14 @@ public class NewsServiceImpl implements NewsService {
                 Logger.getLogger(NewsServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return this.newsRepository.save(news);
     }
 
     @Override
     public void delete(Long id) {
         New n = this.newsRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
 
         this.newsRepository.delete(n);
     }
@@ -91,5 +92,5 @@ public class NewsServiceImpl implements NewsService {
     public Long countNewsByCategory(Long categoryId) {
         return this.newsRepository.countNewsByCategoryId(categoryId);
     }
-    
+
 }

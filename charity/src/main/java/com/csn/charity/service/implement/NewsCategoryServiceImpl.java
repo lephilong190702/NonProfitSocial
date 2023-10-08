@@ -13,6 +13,7 @@ import com.csn.charity.service.interfaces.NewsCategoryService;
 public class NewsCategoryServiceImpl implements NewsCategoryService {
     @Autowired
     private NewsCategoryRepository newsCategoryRepository;
+
     @Override
     public List<NewCategory> getAll() {
         return this.newsCategoryRepository.findAll();
@@ -26,13 +27,13 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
     @Override
     public NewCategory get(Long id) {
         return this.newsCategoryRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));
     }
 
     @Override
     public NewCategory update(Long id, NewCategory category) {
         NewCategory c = this.newsCategoryRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
 
         c.setName(category.getName());
         return this.newsCategoryRepository.save(c);
@@ -41,9 +42,9 @@ public class NewsCategoryServiceImpl implements NewsCategoryService {
     @Override
     public void delete(Long id) {
         NewCategory category = this.newsCategoryRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
 
         this.newsCategoryRepository.delete(category);
     }
-    
+
 }

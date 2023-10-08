@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.User;
+import com.csn.charity.service.interfaces.DonateService;
 import com.csn.charity.service.interfaces.UserService;
 
 @Controller
@@ -22,13 +23,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/")
-    public String loginSubmit(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null)
-            System.out.println("KHÔNG TÌM THẤY!!!!");
-        else
-            System.out.println("TÌM THẤY!!!!");
+    @Autowired
+    private DonateService donateService;
+
+    @GetMapping("/")
+    public String getContribute(Model model) {
+        model.addAttribute("contributions", this.donateService.getAllContribute());
         return "pages/landing_page";
     }
 
@@ -48,7 +48,6 @@ public class UserController {
         this.userService.get(id);
         return "pages/users";
     }
-
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {

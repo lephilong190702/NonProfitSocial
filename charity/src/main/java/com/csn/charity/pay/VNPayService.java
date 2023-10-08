@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 public class VNPayService {
 
-    public String createOrder(BigDecimal total, Long projectId,  String urlReturn) throws UnsupportedEncodingException{
+    public String createOrder(BigDecimal total, Long projectId, String urlReturn) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other-type";
@@ -78,7 +78,7 @@ public class VNPayService {
         return paymentUrl;
     }
 
-    public int orderReturn(HttpServletRequest request){
+    public int orderReturn(HttpServletRequest request) {
         Map fields = new HashMap();
         for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
             String fieldName = null;

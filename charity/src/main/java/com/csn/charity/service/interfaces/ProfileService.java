@@ -8,5 +8,6 @@ import java.util.Map;
 
 public interface ProfileService {
     Profile update(ProfileDTO profileDTO);
+
     Profile get(Long id);
 }

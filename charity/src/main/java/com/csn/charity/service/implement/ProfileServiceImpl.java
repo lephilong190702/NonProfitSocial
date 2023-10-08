@@ -27,6 +27,7 @@ public class ProfileServiceImpl implements ProfileService {
     private Cloudinary cloudinary;
     @Autowired
     private UserRepository userRepository;
+
     @Override
     public Profile update(ProfileDTO profileDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,6 +67,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         return this.profileRepository.save(p);
     }
+
     @Override
     public Profile get(Long id) {
         return this.profileRepository.findById(id)

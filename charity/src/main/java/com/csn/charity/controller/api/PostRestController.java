@@ -56,6 +56,16 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/public-posts/")
+    @CrossOrigin
+    public ResponseEntity<?> getAvailablePost() {
+        try {
+            return new ResponseEntity<>(this.postService.getAvailablePosts(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/posts/{postId}")
     @CrossOrigin
     public ResponseEntity<?> getPostById(@PathVariable(value = "postId") Long postId) {
@@ -72,7 +82,6 @@ public class PostRestController {
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "tags", required = false) List<String> tags) {
 
-    
         PostDTO postDTO = new PostDTO();
         postDTO.setContent(content);
         postDTO.setFiles(files);
@@ -159,6 +168,12 @@ public class PostRestController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thêm reaction thất bại.");
         }
+    }
+
+    @GetMapping("/reaction/{postId}")
+    public ResponseEntity<List<UserReactPost>> getReactionByPost(@PathVariable Long postId){
+        List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
+        return new ResponseEntity<>(reactPosts, HttpStatus.OK);
     }
 
     @PostMapping("/report/")

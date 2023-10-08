@@ -41,7 +41,7 @@ public class PaymentController {
         System.out.println("NOTE" + note);
 
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(donateAmount, projectId,  baseUrl);
+        String vnpayUrl = vnPayService.createOrder(donateAmount, projectId, baseUrl);
         return new ResponseEntity<>(vnpayUrl, HttpStatus.CREATED);
     }
 

@@ -88,195 +88,54 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class='card-heading p-1 pl-3'>Sales</h3>
+                            <h3 class='card-heading p-1 pl-3'>THỐNG KÊ QUỸ TỪ THIỆN</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4 col-12">
-                                    <div class="pl-3">
-                                        <h1 class='mt-5'>$21,102</h1>
-                                        <p class='text-xs'><span class="text-green"><i data-feather="bar-chart"
-                                                    width="15"></i> +19%</span> than last month</p>
-                                        <div class="legends">
-                                            <div class="legend d-flex flex-row align-items-center">
-                                                <div class='w-3 h-3 rounded-full bg-info me-2'></div><span
-                                                    class='text-xs'>Last Month</span>
-                                            </div>
-                                            <div class="legend d-flex flex-row align-items-center">
-                                                <div class='w-3 h-3 rounded-full bg-blue me-2'></div><span
-                                                    class='text-xs'>Current Month</span>
-                                            </div>
-                                        </div>
+                                <div class="col-md-12">
+                                    <div class="input-group mb-3">
+                                        <select id="year" class="form-select">
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023" selected>2023</option>
+                                            <option value="2024">2024</option>
+                                        </select>
+                                        <button id="monthlyButton" class="btn btn-primary ml-2">THỐNG KÊ THÁNG</button>
+                                        <button id="quarterlyButton" class="btn btn-primary ml-2">THỐNG KÊ QUÝ</button>
+                                        <button id="yearlyButton" class="btn btn-primary ml-2">THỐNG KÊ NĂM</button>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-12">
-                                    <canvas id="bar"></canvas>
-                                </div>
                             </div>
+                    
+                            <canvas id="myChart" width="400" height="200"></canvas>
+                        </div>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title">Orders Today</h4>
-                            <div class="d-flex ">
-                                <i data-feather="download"></i>
-                            </div>
+                            <h4 class="card-title">QUYÊN GÓP GẦN ĐÂY</h4>
                         </div>
                         <div class="card-body px-0 pb-0">
                             <div class="table-responsive">
                                 <table class='table mb-0' id="table1">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>City</th>
-                                            <th>Status</th>
+                                            <th>DỰ ÁN</th>
+                                            <th>TÀI KHOẢN QUYÊN GÓP</th>
+                                            <th>SỐ TIỀN QUYÊN GÓP</th>
+                                            <th>NGÀY QUYÊN GÓP</th>                    
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Graiden</td>
-                                            <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                            <td>076 4820 8838</td>
-                                            <td>Offenburg</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dale</td>
-                                            <td>fringilla.euismod.enim@quam.ca</td>
-                                            <td>0500 527693</td>
-                                            <td>New Quay</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nathaniel</td>
-                                            <td>mi.Duis@diam.edu</td>
-                                            <td>(012165) 76278</td>
-                                            <td>Grumo Appula</td>
-                                            <td>
-                                                <span class="badge bg-danger">Inactive</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Darius</td>
-                                            <td>velit@nec.com</td>
-                                            <td>0309 690 7871</td>
-                                            <td>Ways</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ganteng</td>
-                                            <td>velit@nec.com</td>
-                                            <td>0309 690 7871</td>
-                                            <td>Ways</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Oleg</td>
-                                            <td>rhoncus.id@Aliquamauctorvelit.net</td>
-                                            <td>0500 441046</td>
-                                            <td>Rossignol</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Kermit</td>
-                                            <td>diam.Sed.diam@anteVivamusnon.org</td>
-                                            <td>(01653) 27844</td>
-                                            <td>Patna</td>
-                                            <td>
-                                                <span class="badge bg-success">Active</span>
-                                            </td>
+                                        <tr th:each="c:${contributions}">
+                                            <td th:text="${c.project.title}"></td>
+                                            <td th:text="${c.user.username}"></td>
+                                            <td th:text="${c.donateAmount}"></td>
+                                            <td th:text="${c.donateDate}"></td>                                  
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card ">
-                        <div class="card-header">
-                            <h4>Your Earnings</h4>
-                        </div>
-                        <div class="card-body">
-                            <div id="radialBars"></div>
-                            <div class="text-center mb-5">
-                                <h6>From last month</h6>
-                                <h1 class='text-green'>+$2,134</h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card widget-todo">
-                        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-                            <h4 class="card-title d-flex">
-                                <i class='bx bx-check font-medium-5 pl-25 pr-75'></i>Progress
-                            </h4>
-
-                        </div>
-                        <div class="card-body px-0 py-1">
-                            <table class='table table-borderless'>
-                                <tr>
-                                    <td class='col-3'>UI Design</td>
-                                    <td class='col-6'>
-                                        <div class="progress progress-info">
-                                            <div class="progress-bar" role="progressbar" style="width: 60%"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class='col-3 text-center'>60%</td>
-                                </tr>
-                                <tr>
-                                    <td class='col-3'>VueJS</td>
-                                    <td class='col-6'>
-                                        <div class="progress progress-success">
-                                            <div class="progress-bar" role="progressbar" style="width: 35%"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class='col-3 text-center'>30%</td>
-                                </tr>
-                                <tr>
-                                    <td class='col-3'>Laravel</td>
-                                    <td class='col-6'>
-                                        <div class="progress progress-danger">
-                                            <div class="progress-bar" role="progressbar" style="width: 50%"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class='col-3 text-center'>50%</td>
-                                </tr>
-                                <tr>
-                                    <td class='col-3'>ReactJS</td>
-                                    <td class='col-6'>
-                                        <div class="progress progress-primary">
-                                            <div class="progress-bar" role="progressbar" style="width: 80%"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class='col-3 text-center'>80%</td>
-                                </tr>
-                                <tr>
-                                    <td class='col-3'>Go</td>
-                                    <td class='col-6'>
-                                        <div class="progress progress-secondary">
-                                            <div class="progress-bar" role="progressbar" style="width: 65%"
-                                                aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td class='col-3 text-center'>65%</td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -286,3 +145,82 @@
 </body>
 
 </html>
+<script>
+    window.addEventListener('load', (event) => {
+        fetchData();
+    });
+    let currentChart = 'month';
+    let chart;
+
+    document.getElementById('monthlyButton').addEventListener('click', function () {
+        currentChart = 'month';
+        fetchData();
+    });
+
+    document.getElementById('quarterlyButton').addEventListener('click', function () {
+        currentChart = 'quarter';
+        fetchData();
+    });
+
+    document.getElementById('yearlyButton').addEventListener('click', function () {
+        currentChart = 'year';
+        fetchData();
+    });
+
+    function fetchData() {
+        const year = document.getElementById('year').value;
+        let endpoint;
+        if (currentChart === 'month') {
+            endpoint = '/admin/month';
+        } else if (currentChart === 'quarter') {
+            endpoint = '/admin/quarter';
+        } else {
+            endpoint = '/admin/year';
+        }
+        fetch(`${endpoint}?year=${year}`)
+            .then(response => response.json())
+            .then(data => {
+                if (chart) {
+                    chart.destroy();
+                }
+                data.sort((a, b) => a.year - b.year);
+                drawBarChart(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function drawBarChart(data) {
+        console.log(data);
+        let labels;
+        if (currentChart === 'month') {
+            labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+        } else if (currentChart === 'quarter') {
+            labels = ['Quý 1', 'Quý 2', 'Quý 3', 'Quý 4'];
+        } else {
+            labels = data.map(entry => entry.year.toString());
+        }
+        const ctx = document.getElementById('myChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Donation',
+                    data: data.map(entry => entry.totalDonation),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+            }
+        });
+    }
+</script>

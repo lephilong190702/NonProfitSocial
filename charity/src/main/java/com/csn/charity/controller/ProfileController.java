@@ -37,9 +37,10 @@ public class ProfileController {
         return "pages/editprofile";
     }
 
-//    @PostMapping("/admin/edit-profile/{username}")
-//    public String updateProfile(@ModelAttribute(value = "profile") ProfileDTO profileDTO, @PathVariable(value = "username") String username) {
-//        profileService.update(profileDTO);
-//        return "redirect:/admin/profile/" + username;
-//    }
+    @PostMapping("/admin/edit-profile/{username}")
+    public String updateProfile(@ModelAttribute(value = "profile") ProfileDTO profileDTO,
+            @PathVariable(value = "username") String username) {
+        profileService.update(profileDTO);
+        return "redirect:/admin/profile/" + username;
+    }
 }

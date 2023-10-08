@@ -21,6 +21,7 @@ public class SkillController {
         model.addAttribute("skills", this.skillService.getAll());
         return "pages/skills";
     }
+
     @GetMapping("/admin/skill")
     public String addPage(Model model) {
         Skill skill = new Skill();
@@ -35,8 +36,8 @@ public class SkillController {
     }
 
     @PostMapping("/admin/skill")
-    public String addSkill(@ModelAttribute(value = "skill") Skill skill){
-        if(skill.getId() == null)
+    public String addSkill(@ModelAttribute(value = "skill") Skill skill) {
+        if (skill.getId() == null)
             this.skillService.add(skill);
         else
             this.skillService.update(skill.getId(), skill);

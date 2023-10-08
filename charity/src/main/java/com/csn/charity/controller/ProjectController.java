@@ -67,8 +67,7 @@ public class ProjectController {
 
         if (project.getId() == null) {
             projectService.add(project);
-        }         
-        else
+        } else
             projectService.update(project.getId(), project);
 
         return "redirect:/projects";

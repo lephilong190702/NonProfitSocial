@@ -2,6 +2,7 @@ package com.csn.charity.service.implement;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,15 @@ public class DonateServiceImpl implements DonateService {
             userContributeProject.setUser(user);
             userContributeProject.setDonateDate(new Date());
             return this.donateRepository.save(userContributeProject);
-        }else {
+        } else {
             throw new IllegalArgumentException("Số tiền quyên góp đã đủ, xin cảm ơn.");
         }
 
-        
+    }
+
+    @Override
+    public List<UserContributeProject> getAllContribute() {
+        return this.donateRepository.findAll();
     }
 
 }

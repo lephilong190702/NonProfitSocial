@@ -18,5 +18,5 @@ public class TagServiceImpl implements TagService {
     public List<Tag> getAll() {
         return this.tagRepository.findAll();
     }
-    
+
 }

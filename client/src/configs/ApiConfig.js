@@ -39,6 +39,7 @@ export const endpoints = {
     "post": `${SERVER_CONTEXT}/api/posts/`,
     "react": `${SERVER_CONTEXT}/api/reaction/`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
+    "report-post": `${SERVER_CONTEXT}/api/report/`
 
     
 }

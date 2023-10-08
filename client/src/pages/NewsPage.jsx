@@ -55,6 +55,7 @@ const NewsPage = () => {
                     <Card.Title>{n.name}</Card.Title>
                     <Card.Text>{n.content}</Card.Text>
                     <Link to={url} className="btn btn-info" style={{marginRight: "5px"}} variant="primary">Xem chi tiết</Link>
+                    <Link to={url} className="btn btn-info btn-danger" style={{marginRight: "5px"}} variant="primary">Đóng góp</Link>
                   </Card.Body>
                 </Card>
               </Col>

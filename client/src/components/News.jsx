@@ -43,6 +43,7 @@ const Home = () => {
                                     <Card.Title>{n.name}</Card.Title>
                                     <Card.Text>{n.content}</Card.Text>
                                     <Button variant="primary">Xem chi tiết</Button>
+                                    <Button variant="primary">Đóng góp</Button>
                                 </Card.Body>
                             </Card>
                         </Col>

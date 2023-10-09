@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.model.Project;
+import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
+import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
 import com.csn.charity.service.interfaces.ProjectService;
@@ -27,6 +29,8 @@ public class ProjectServiceImpl implements ProjectService {
     private Cloudinary cloudinary;
     @Autowired
     private ProjectImageRepository projectImageRepository;
+    @Autowired
+    private ProjectCategoryRepository projectCategoryRepository;
 
     @Override
     public List<Project> getAll() {
@@ -131,6 +135,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Long countProjectByCategory(Long categoryId) {
         return this.projectRepository.countProjectsByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<Project> getProjectsByCategory(Long categoryId) {
+        ProjectCategory projectCategory = this.projectCategoryRepository.findById(categoryId)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + categoryId));
+        return this.projectRepository.findByCategory(projectCategory);
     }
 
 }

@@ -2,6 +2,7 @@ package com.csn.charity.controller.api;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,12 @@ public class AuthRestController {
         return new ResponseEntity<>(this.userService.get(id), HttpStatus.OK);
     }
 
+    @GetMapping("/user-docs/{id}")
+    @CrossOrigin
+    public ResponseEntity<UserDoc> getUserDoc(@PathVariable Long id) throws InterruptedException, ExecutionException {
+        UserDoc userDoc = this.firebaseService.getUser(id.toString());
+        return new ResponseEntity<>(userDoc, HttpStatus.OK);
+    }
 
 
     @GetMapping("/facebook/")

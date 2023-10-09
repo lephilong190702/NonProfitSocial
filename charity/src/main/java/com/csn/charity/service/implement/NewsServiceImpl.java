@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.model.New;
+import com.csn.charity.model.NewCategory;
+import com.csn.charity.repository.NewsCategoryRepository;
 import com.csn.charity.repository.NewsRepository;
 import com.csn.charity.service.interfaces.NewsService;
 
@@ -22,6 +24,8 @@ public class NewsServiceImpl implements NewsService {
     private NewsRepository newsRepository;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private NewsCategoryRepository newsCategoryRepository;
 
     @Override
     public List<New> getAll() {
@@ -91,6 +95,14 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Long countNewsByCategory(Long categoryId) {
         return this.newsRepository.countNewsByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<New> getNewsByCategory(Long categoryId) {
+        NewCategory newCategory = this.newsCategoryRepository.findById(categoryId)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + categoryId));
+
+        return this.newsRepository.findByCategory(newCategory);
     }
 
 }

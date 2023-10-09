@@ -18,4 +18,6 @@ public interface ProjectService {
     List<Project> findByName(String name);
 
     Long countProjectByCategory(Long categoryId);
+
+    List<Project> getProjectsByCategory(Long categoryId);
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.CommentNewsDTO;
+import com.csn.charity.model.New;
 import com.csn.charity.model.UserCommentNew;
 import com.csn.charity.service.interfaces.CommentNewsService;
 import com.csn.charity.service.interfaces.NewsCategoryService;
@@ -61,6 +62,11 @@ public class NewsRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/ncategories/{id}/news/")
+    public ResponseEntity<List<New>> getNewsByCategory(@PathVariable Long id) {
+        return new ResponseEntity<>(this.newsService.getNewsByCategory(id), HttpStatus.OK);
     }
 
     @PostMapping("/news-comment/")

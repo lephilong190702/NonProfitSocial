@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.csn.charity.model.Project;
+import com.csn.charity.model.ProjectCategory;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE LOWER(p.title) LIKE %?1%")
@@ -14,4 +15,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query("SELECT COUNT(p) FROM Project p WHERE p.category.id = :categoryId")
     Long countProjectsByCategoryId(@Param("categoryId") Long categoryId);
+
+    List<Project> findByCategory(ProjectCategory category);
 }

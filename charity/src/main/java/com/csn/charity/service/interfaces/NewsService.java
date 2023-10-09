@@ -18,4 +18,6 @@ public interface NewsService {
     List<New> findByName(String name);
 
     Long countNewsByCategory(Long categoryId);
+
+    List<New> getNewsByCategory(Long categoryId);
 }

@@ -54,7 +54,6 @@ public class User implements Serializable {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @JsonIgnore
     private Profile profile;
 
     @Enumerated(EnumType.STRING)

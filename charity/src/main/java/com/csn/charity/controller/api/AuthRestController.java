@@ -48,14 +48,14 @@ public class AuthRestController {
 
     @PostMapping("/register/")
     @CrossOrigin
-    public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
+    public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDto) {
         try {
-            Long userId = this.userService.addUser(userDto);
-            UserDoc userDoc = new UserDoc();
-            userDoc.setId(userId);
-            userDoc.setDisplayName(userDto.getUsername());
-            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
-            return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
+            // Long userId = this.userService.addUser(userDto);
+            // UserDoc userDoc = new UserDoc();
+            // userDoc.setId(userId);
+            // userDoc.setDisplayName(userDto.getUsername());
+            // String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>(this.userService.addUser(userDto),
                     HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();

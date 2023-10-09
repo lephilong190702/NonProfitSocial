@@ -152,11 +152,11 @@ const Post = () => {
           <div className="postWrapper">
             <div className="postTop">
               <div className="postTopLeft">
-                <img
+                {/* <img
                   className="postProfileImg"
                   src={p.user.profile.avatar}
                   alt=""
-                />
+                /> */}
                 <span className="postUsername">{p.user.username}</span>
                 <span className="postDate">{p.createDate}</span>
               </div>

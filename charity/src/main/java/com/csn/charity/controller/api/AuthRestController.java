@@ -1,6 +1,7 @@
 package com.csn.charity.controller.api;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,12 +52,12 @@ public class AuthRestController {
     @CrossOrigin
     public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDto) {
         try {
-            // Long userId = this.userService.addUser(userDto);
-            // UserDoc userDoc = new UserDoc();
-            // userDoc.setId(userId);
-            // userDoc.setDisplayName(userDto.getUsername());
-            // String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
-            return new ResponseEntity<>(this.userService.addUser(userDto),
+            Long userId = this.userService.addUser(userDto);
+            UserDoc userDoc = new UserDoc();
+            userDoc.setId(userId);
+            userDoc.setDisplayName(userDto.getUsername());
+            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
                     HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();
@@ -74,6 +76,21 @@ public class AuthRestController {
         }
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/users/")
+    @CrossOrigin
+    public ResponseEntity<List<User>> getUser() {
+        List<User> list = this.userService.findAllUsers();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{id}")
+    @CrossOrigin
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return new ResponseEntity<>(this.userService.get(id), HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/facebook/")
     @CrossOrigin

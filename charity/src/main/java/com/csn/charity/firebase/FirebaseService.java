@@ -60,7 +60,7 @@ public class FirebaseService {
         messageDoc.setRoomName("ROOM_" + user.getId() + "_");
 
         DocumentReference documentReference = create(messageDoc);
-        return messageDoc.toString();
+        return documentReference.getId();
     }
 
     public UserDoc getUser(String id) throws InterruptedException, ExecutionException {

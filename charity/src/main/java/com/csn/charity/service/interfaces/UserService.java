@@ -19,7 +19,7 @@ public interface UserService extends UserDetailsService {
 
     User get(Long id);
 
-    List<UserDTO> findAllUsers();
+    List<User> findAllUsers();
 
     void activateAccount(Long id);
 

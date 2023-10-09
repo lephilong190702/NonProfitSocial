@@ -1,8 +1,6 @@
 package com.csn.charity.firebase;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;

@@ -8,10 +8,10 @@ const RegisterVolunteerPage = () => {
   const [user, setUser] = useState();
   const [volunteer, setVolunteer] = useState({
     projectId: "",
-    startDate: "",
-    endDate: "",
+    startDate,
+    endDate ,
     description: "",
-    skills: [], // Mảng để lưu trữ các kỹ năng đã chọn
+    skills: [],
   });
   const [projectList, setProjectList] = useState([]);
   const [skillList, setSkillList] = useState([]);
@@ -23,7 +23,6 @@ const RegisterVolunteerPage = () => {
   };
 
   const toggleSkill = (skillId) => {
-    // Kiểm tra xem skillId đã có trong danh sách skills chưa
     const updatedSkills = volunteer.skills.includes(skillId)
       ? volunteer.skills.filter((id) => id !== skillId)
       : [...volunteer.skills, skillId];
@@ -60,7 +59,7 @@ const RegisterVolunteerPage = () => {
 
   const registerVol = async (evt) => {
     evt.preventDefault();
-    console.log(volunteer.skills);
+    console.log(volunteer.skills, volunteer.startDate, volunteer.endDate);
 
     try {
       const res = await authApi().post(endpoints["volunteer"], {
@@ -91,6 +90,7 @@ const RegisterVolunteerPage = () => {
             <Form.Control
               type="date"
               max={volunteer.endDate}
+              value={volunteer.startDate}
               onChange={(e) => change(e, "startDate")}
             />
           </Form.Group>
@@ -100,6 +100,7 @@ const RegisterVolunteerPage = () => {
             <Form.Control
               type="date"
               min={volunteer.startDate}
+              value={volunteer.endDate}
               onChange={(e) => change(e, "endDate")}
             />
           </Form.Group>
@@ -140,6 +141,7 @@ const RegisterVolunteerPage = () => {
           <Form.Control
             type="text"
             placeholder="Apartment, studio, or floor"
+            value={volunteer.description}
             onChange={(e) => change(e, "description")}
           />
         </Form.Group>

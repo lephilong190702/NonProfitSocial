@@ -40,7 +40,10 @@ export const endpoints = {
     "react": `${SERVER_CONTEXT}/api/reaction/`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
     "report-post": `${SERVER_CONTEXT}/api/report/`,
-    "vn-pay": `${SERVER_CONTEXT}/api/report/`
+    "vn-pay": `${SERVER_CONTEXT}/api/report/`,
+    "user": `${SERVER_CONTEXT}/api/users/`,
+    "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`
+
 
     
 }

@@ -8,8 +8,8 @@ const RegisterVolunteerPage = () => {
   const [user, setUser] = useState();
   const [volunteer, setVolunteer] = useState({
     projectId: "",
-    startDate,
-    endDate ,
+    startDate: "",
+    endDate: "" ,
     description: "",
     skills: [],
   });

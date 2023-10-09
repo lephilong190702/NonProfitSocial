@@ -14,7 +14,7 @@ const Chatbox = ({userId}) => {
             aria-label="Tin nhắn"
             aria-describedby="basic-addon2"
           />
-            <Button variant="primary">Gửi</Button>
+            <Button variant="primary">Gửi {userId}</Button>
         </InputGroup>
       </div>
     </div>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Statistics</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <div class="card-body px-0 pb-0">
+            <h1 class="text-center text-info">SAO KÊ QUYÊN GÓP TỪ THIỆN</h1>
+            <div class="table-responsive mt-5">
+                <table class='table mb-0' id="table1">
+                    <thead>
+                        <tr>
+                            <th>DỰ ÁN</th>
+                            <th>TÀI KHOẢN QUYÊN GÓP</th>
+                            <th>SỐ TIỀN QUYÊN GÓP</th>
+                            <th>NGÀY QUYÊN GÓP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="c:${contributions}">
+                            <td th:text="${c.project.title}"></td>
+                            <td th:text="${c.user.username}"></td>
+                            <td th:text="${c.donateAmount}"></td>
+                            <td th:text="${c.donateDate}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a th:href="@{/api/export/}" class="btn btn-primary mt-5">Xuất Excel</a>
+    </div>
+</body>
+
+</html>

@@ -34,4 +34,10 @@ public class ReportController {
         this.reportService.resolvedReport(id);
         return "redirect:/reports";
     }
+
+    @RequestMapping(value = "/skip/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String skip(@PathVariable(value = "id") Long id) {
+        this.reportService.skipReport(id);
+        return "redirect:/reports";
+    }
 }

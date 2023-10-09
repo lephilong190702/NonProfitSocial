@@ -15,6 +15,7 @@ public class VolunteerController {
     @Autowired
     private DonateService donateService;
 
+
     @GetMapping("/volunteers")
     public String getVolunteer(Model model) {
         model.addAttribute("volunteers", this.volunteerService.getAll());
@@ -25,6 +26,12 @@ public class VolunteerController {
     public String getContribute(Model model) {
         model.addAttribute("contributions", this.donateService.getAllContribute());
         return "pages/landing_page";
+    }
+
+    @GetMapping("/export")
+    public String getContribution(Model model) {
+        model.addAttribute("contributions", this.donateService.getAllContribute());
+        return "pages/exportexcel";
     }
 
     @GetMapping("/stats")

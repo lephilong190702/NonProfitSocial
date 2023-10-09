@@ -10,6 +10,8 @@ public interface ReportService {
 
     void resolvedReport(Long reportId);
 
+    void skipReport(Long reportId);
+
     UserReportPost getById(Long id);
 
     UserReportPost report(ReportDTO reportDTO);

@@ -76,7 +76,7 @@ public class PostRestController {
         }
     }
 
-    @PostMapping(path = "/create-post/")
+    @PostMapping(path = "/posts/")
     @CrossOrigin
     public ResponseEntity<Post> createPost(@RequestParam(value = "content") String content,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,

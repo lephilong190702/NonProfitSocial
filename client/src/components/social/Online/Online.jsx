@@ -20,9 +20,7 @@ const Online = () => {
       }
     };
 
-    const loadUserId = async (evt) => {
-      evt.preventDefault();
-      console.log(userId.id, userId.username)
+    const loadUserId = async () => {
 
       try {
         const res = await authApi().get(endpoints["userId"]);
@@ -43,30 +41,23 @@ const Online = () => {
 
   return (
     <div>
-      <div className="user-list">
-        <ul>
-          {users.map((user) => (
-            <li
-              key={user.id}
-              className={`rightbarFriend ${
-                selectedUser === user.id ? "selected" : ""
-              }`}
-              onClick={() => handleUserClick(user.id)}
-            >
-              <div className="rightbarProfileImgContainer">
-                <img
-                  className="rightbarProfileImg"
-                  src={user.profile.avatar}
-                  alt=""
-                />
-                <span className="rightbarOnline"></span>
-              </div>
-              <span className="rightbarUsername">{user.username}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <Chatbox userId={userId} />
+      <ul>
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className={`rightbarFriend ${userId === user.id ? 'active' : ''}`}
+            onClick={() => handleUserClick(user.id)}
+          >
+            <div className="rightbarProfileImgContainer">
+              <img className="rightbarProfileImg" src={user.profile.avatar} alt="" />
+              <span className="rightbarOnline"></span>
+            </div>
+            <span className="rightbarUsername">{user.username}</span>
+          </li>
+        ))}
+      </ul>
+  
+      {userId && <Chatbox userId={userId} />} {/* Truyền userId vào Chatbox */}
     </div>
   );
 };

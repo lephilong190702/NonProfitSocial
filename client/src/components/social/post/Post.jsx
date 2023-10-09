@@ -8,10 +8,10 @@ import { UserContext } from "../../../App";
 const Post = () => {
   const [user] = useContext(UserContext);
   const [post, setPost] = useState([]);
-  const [like, setLike] = useState(0);
-  const [comments, setComments] = useState([]);
-  const [content, setContent] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false); // Trạng thái của menu mở hoặc đóng
+  const [like, setLike] = useState({});
+  const [comments, setComments] = useState({});
+  const [content, setContent] = useState({});
+  const [menuOpen, setMenuOpen] = useState({}); // Trạng thái của menu mở hoặc đóng
 
   const [reportModalOpen, setReportModalOpen] = useState(false); // Trạng thái của modal báo cáo
   const [reportReason, setReportReason] = useState("");
@@ -20,7 +20,6 @@ const Post = () => {
 
   const [editPostModalOpen, setEditPostModalOpen] = useState(false); // Trạng thái của modal chỉnh sửa bài viết
   const [editedPostId, setEditedPostId] = useState(null);
-  const [editedPostTitle, setEditedPostTitle] = useState("");
   const [editedPostContent, setEditedPostContent] = useState("");
 
   const likeHandler = async (postId) => {
@@ -29,7 +28,7 @@ const Post = () => {
         reaction: "LIKE",
         postId: postId, // Giả sử postId đã được xác định đúng cách
       });
-      setLike(data);
+      setLike({ ...like, [postId]: data });
     } catch (error) {
       console.error(error);
     }
@@ -38,23 +37,23 @@ const Post = () => {
   const addComment = async (postId) => {
     try {
       const { data } = await authApi().post(endpoints["post-comment"], {
-        content: content,
+        content: content[postId] || "", // Lấy nội dung bình luận dựa trên postId
         postId: postId,
       });
 
       // Cập nhật danh sách bình luận và xóa nội dung của ô nhập
-      setComments([...comments, data]);
-      setContent("");
+      setComments({ ...comments, [postId]: [...(comments[postId] || []), data] });
+      setContent({ ...content, [postId]: "" }); // Đặt nội dung thành chuỗi trống
 
       // Cập nhật Local Storage khi thêm bình luận mới
-      localStorage.setItem("post-comment", JSON.stringify([...comments, data]));
+      localStorage.setItem("post-comment", JSON.stringify([...(comments[postId] || []), data]));
     } catch (error) {
       console.error(error);
     }
   };
 
-   // Hàm xử lý khi nhấp vào tùy chọn báo cáo bài viết
-   const handleReportPost = (postId) => {
+  // Hàm xử lý khi nhấp vào tùy chọn báo cáo bài viết
+  const handleReportPost = (postId) => {
     setReportPostId(postId);
     setReportModalOpen(true);
   };
@@ -274,14 +273,6 @@ const Post = () => {
           <Modal.Title>Chỉnh sửa bài viết</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <Form.Group>
-            <Form.Label>Tiêu đề</Form.Label>
-            <Form.Control
-              type="text"
-              value={editedPostTitle}
-              onChange={(e) => setEditedPostTitle(e.target.value)}
-            />
-          </Form.Group> */}
           <Form.Group>
             <Form.Label>Nội dung</Form.Label>
             <Form.Control

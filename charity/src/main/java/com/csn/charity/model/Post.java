@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -59,7 +60,7 @@ public class Post implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")

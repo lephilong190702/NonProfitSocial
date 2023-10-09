@@ -56,8 +56,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addUser(UserDTO userDto) {
+    public Long addUser(UserDTO userDto) {
         User user = new User();
+        user.setId(userDto.getId());
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setStatus(true);
@@ -73,8 +74,9 @@ public class UserServiceImpl implements UserService {
         profile.setUser(user);
 
         user.setProfile(profile);
-        userRepository.save(user);
-        return "User Added Successfully";
+        
+        User savedUser = userRepository.save(user);
+        return savedUser.getId();
     }
 
     @Override

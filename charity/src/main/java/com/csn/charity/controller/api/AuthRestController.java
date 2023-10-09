@@ -22,8 +22,9 @@ import com.csn.charity.configs.JwtService;
 import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.dto.UserDTO;
-import com.csn.charity.firebase.UserFirebaseService;
+import com.csn.charity.firebase.FirebaseService;
 import com.csn.charity.model.User;
+import com.csn.charity.model.UserDoc;
 import com.csn.charity.service.interfaces.ProfileService;
 import com.csn.charity.service.interfaces.UserService;
 
@@ -43,15 +44,19 @@ public class AuthRestController {
     private ProfileService profileService;
 
     @Autowired
-    private UserFirebaseService userFirebaseService;
+    private FirebaseService firebaseService;
 
     @PostMapping("/register/")
     @CrossOrigin
     public ResponseEntity<String> addNewUser(@RequestBody UserDTO userDto) {
         try {
-            this.userFirebaseService.saveUser(userDto);
-            String result = this.userService.addUser(userDto);
-            return new ResponseEntity<>(result, HttpStatus.CREATED);
+            Long userId = this.userService.addUser(userDto);
+            UserDoc userDoc = new UserDoc();
+            userDoc.setId(userId);
+            userDoc.setDisplayName(userDto.getUsername());
+            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
+                    HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
@@ -68,6 +73,18 @@ public class AuthRestController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
         return new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/facebook/")
+    @CrossOrigin
+    public ResponseEntity<String> loginWithFacebook() {
+        return new ResponseEntity<>("redirect:/oauth2/authorization/facebook", HttpStatus.OK);
+    }
+
+    @GetMapping("/google/")
+    @CrossOrigin
+    public String loginWithGoogle() {
+        return "redirect:/oauth2/authorization/google";
     }
 
     @GetMapping("/current-user/")

@@ -9,7 +9,7 @@ import com.csn.charity.model.AuthenticationType;
 import com.csn.charity.model.User;
 
 public interface UserService extends UserDetailsService {
-    String addUser(UserDTO userDto);
+    Long addUser(UserDTO userDto);
 
     User findUserByUsername(String username);
 

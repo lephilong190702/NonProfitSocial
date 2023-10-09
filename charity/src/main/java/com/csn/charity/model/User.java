@@ -54,6 +54,7 @@ public class User implements Serializable {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
+    @JsonIgnore
     private Profile profile;
 
     @Enumerated(EnumType.STRING)
@@ -89,6 +90,7 @@ public class User implements Serializable {
     private List<UserReportPost> reports = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<UserRatingProject> ratings = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -100,5 +102,6 @@ public class User implements Serializable {
 
     @ManyToMany
     @JoinTable(name = "user_event", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @JsonIgnore
     private List<Event> events = new ArrayList<>();
 }

@@ -13,7 +13,7 @@ import com.google.firebase.FirebaseOptions;
 
 @Service
 public class FirebaseConfig {
-    
+
     @PostConstruct
     public void init() {
         FileInputStream serviceAccount;
@@ -26,7 +26,6 @@ public class FirebaseConfig {
 
             FirebaseApp.initializeApp(options);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

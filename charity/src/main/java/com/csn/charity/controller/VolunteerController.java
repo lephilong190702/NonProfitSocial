@@ -28,6 +28,12 @@ public class VolunteerController {
         return "pages/landing_page";
     }
 
+    @GetMapping("/export")
+    public String getContribution(Model model) {
+        model.addAttribute("contributions", this.donateService.getAllContribute());
+        return "pages/exportexcel";
+    }
+
     @GetMapping("/stats")
     public String stats() {
         return "pages/test";

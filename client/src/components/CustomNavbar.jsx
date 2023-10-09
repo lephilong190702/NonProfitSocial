@@ -15,6 +15,7 @@ import { UserContext } from "../App";
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
   const [newsCategory, setNewsCategory] = useState([]);
+  const [projectCategory, setProjectCategory] = useState([]);
   const [kw, setKw] = useState("");
   const nav = useNavigate();
 
@@ -31,6 +32,19 @@ const CustomNavbar = () => {
       }
     };
 
+    const loadProjects = async () => {
+      // let res = await fetch("http://localhost:9090/api/ncategories/");
+      // let data = await res.json();
+      try {
+        let res = await ApiConfig.get(endpoints["projectCategory"]);
+
+        setProjectCategory(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadProjects();
     loadNews();
   }, []);
 
@@ -46,6 +60,7 @@ const CustomNavbar = () => {
   };
 
   if (newsCategory.length === 0) return <MySpinner />;
+  if (projectCategory.length === 0) return <MySpinner />;
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -58,9 +73,9 @@ const CustomNavbar = () => {
             </Link>
 
             <NavDropdown title="Dự án" id="basic-nav-dropdown">
-              {newsCategory.length > 0 &&
-                newsCategory.map((c) => {
-                  let h = `/?cateId=${c.id}`;
+              {projectCategory.length > 0 &&
+                projectCategory.map((c) => {
+                  let h = `/projects/?cateId=${c.id}`;
                   return (
                     <Link to={h} className="dropdown-item" key={c.id}>
                       {c.name}

@@ -25,6 +25,9 @@ const SERVER = "http://localhost:9090"
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
+    "newsId": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
+    "project": `${SERVER_CONTEXT}/api/projects/`,
+    "projectCategory": `${SERVER_CONTEXT}/api/pcategories/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
     "profile": `${SERVER_CONTEXT}/api/profile/`,
@@ -40,7 +43,7 @@ export const endpoints = {
     "react": `${SERVER_CONTEXT}/api/reaction/`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
     "report-post": `${SERVER_CONTEXT}/api/report/`,
-    "vn-pay": `${SERVER_CONTEXT}/api/report/`,
+    "vn-pay": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}/donate/`,
     "user": `${SERVER_CONTEXT}/api/users/`,
     "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`
 

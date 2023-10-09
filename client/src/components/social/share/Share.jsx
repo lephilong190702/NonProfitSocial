@@ -12,7 +12,7 @@ const Share = () => {
   const [share, setShare] = useState({
     content: "",
     tags: "",
-    images: [], // Mảng lưu trữ các tệp hình ảnh đã chọn
+    files: [], // Mảng lưu trữ các tệp hình ảnh đã chọn
   });
 
   const images = useRef();
@@ -20,6 +20,7 @@ const Share = () => {
   const handleImageUpload = (event) => {
     const selectedImages = event.target.files;
     const imageArray = Array.from(selectedImages);
+    console.log(imageArray);
     setShare((current) => ({
       ...current,
       images: imageArray,
@@ -33,20 +34,22 @@ const Share = () => {
       let shareForm = new FormData();
       shareForm.append("content", share.content);
       shareForm.append("tags", share.tags);
+      
       share.images.forEach((image, index) => {
         shareForm.append(`images[${index}]`, image);
       });
+      
 
       try {
         let res = await authApi().post(endpoints["post"], shareForm);
-
+        console.log(res.data);
         setSuccessMessage("Đăng bài thành công");
         setTimeout(() => {
           setSuccessMessage("");
         }, 3000);
         setShare(res.data);
       } catch (error) {
-        console.error(error);
+        console.error(error.response.data);
       }
     };
     process();
@@ -86,14 +89,13 @@ const Share = () => {
                 onClick={() => images.current.click()}
               />
               <span className="shareOptionText">Photo or Video</span>
-              {share.images.length > 0 && (
+              {/* {share.images.length > 0 && (
                 <span className="selectedImagesCount">
                   {share.images.length} selected
                 </span>
-              )}
+              )} */}
               <input
                 type="file"
-                accept="image/*"
                 ref={images}
                 style={{ display: "none" }}
                 multiple

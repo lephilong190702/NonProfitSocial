@@ -50,6 +50,22 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
+    public void skipReport(Long reportId) {
+        Optional<UserReportPost> reportOptional = reportRepository.findById(reportId);
+        reportOptional.ifPresent(report -> {
+            Optional<Post> postOptional = postRepository.findById(report.getPost().getId());
+            postOptional.ifPresent(post -> {
+                if (post.getStatus() == false) {
+                    post.setStatus(true);
+                    postRepository.save(post);
+                }
+            });
+            report.setResolved(true);
+            reportRepository.save(report);
+        });
+    }
+
+    @Override
     public UserReportPost report(ReportDTO reportDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {

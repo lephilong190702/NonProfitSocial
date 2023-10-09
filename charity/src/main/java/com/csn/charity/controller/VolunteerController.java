@@ -15,6 +15,7 @@ public class VolunteerController {
     @Autowired
     private DonateService donateService;
 
+
     @GetMapping("/volunteers")
     public String getVolunteer(Model model) {
         model.addAttribute("volunteers", this.volunteerService.getAll());

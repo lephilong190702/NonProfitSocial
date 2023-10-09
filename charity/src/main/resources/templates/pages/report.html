@@ -86,9 +86,15 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12 d-flex justify-content-end ">
-                                        <a th:href="@{/resolve/{id}(id=${r.id})}" class="btn btn-primary me-1 mb-1 mt-5"
-                                            mt-2>XỬ LÝ</a>
+                                    <div class="row mt-2">
+                                        <div class="col-6 d-flex justify-content-start">
+                                            <a th:href="@{/skip/{id}(id=${r.id})}" class="btn btn-primary me-1 mb-1">BỎ
+                                                QUA</a>
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-end">
+                                            <a th:href="@{/resolve/{id}(id=${r.id})}"
+                                                class="btn btn-primary me-1 mb-1">XỬ LÝ</a>
+                                        </div>
                                     </div>
                             </div>
                             </span>

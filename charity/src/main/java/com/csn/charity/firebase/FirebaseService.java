@@ -9,12 +9,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.MessageDoc;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserDoc;
 import com.csn.charity.repository.UserRepository;
-import com.csn.charity.service.interfaces.UserService;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;

@@ -1,8 +1,12 @@
 package com.csn.charity.controller.api;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.VolunteerRequestDTO;
+import com.csn.charity.model.User;
+import com.csn.charity.repository.UserRepository;
+import com.csn.charity.service.interfaces.MailService;
 import com.csn.charity.service.interfaces.SkillService;
 import com.csn.charity.service.interfaces.VolunteerService;
 
@@ -21,12 +28,28 @@ public class VolunteerRestController {
     private VolunteerService volunteerService;
     @Autowired
     private SkillService skillService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/volunteer/")
     @CrossOrigin
     public ResponseEntity<String> saveVolunteer(@RequestBody VolunteerRequestDTO requestDTO) {
         try {
             volunteerService.saveVolunteer(requestDTO);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated()) {
+                throw new SecurityException("Unauthorized access");
+            }
+
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new NoSuchElementException("Không tìm thấy người dùng");
+            }
+            if(user.getEmail() != null)
+                mailService.sendConfirmEmail(user.getEmail());
             return ResponseEntity.ok("Đăng ký tình nguyện thành công");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

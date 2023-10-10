@@ -42,6 +42,7 @@ export const endpoints = {
     "skill": `${SERVER_CONTEXT}/api/skills/`,
     "post": `${SERVER_CONTEXT}/api/posts/`,
     "react": `${SERVER_CONTEXT}/api/reaction/`,
+    "react-post": (postId) => `${SERVER_CONTEXT}/api/reaction/${postId}`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
     "report-post": `${SERVER_CONTEXT}/api/report/`,
     "vn-pay": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}/donate/`,

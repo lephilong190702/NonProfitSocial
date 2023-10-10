@@ -12,7 +12,7 @@ const Share = () => {
   const [share, setShare] = useState({
     content: "",
     tags: "",
-    files: [], // Mảng lưu trữ các tệp hình ảnh đã chọn
+    files: [],
   });
 
   const images = useRef();
@@ -23,7 +23,7 @@ const Share = () => {
     console.log(imageArray);
     setShare((current) => ({
       ...current,
-      images: imageArray,
+      files: current.files.concat(imageArray),
     }));
   };
 
@@ -34,11 +34,10 @@ const Share = () => {
       let shareForm = new FormData();
       shareForm.append("content", share.content);
       shareForm.append("tags", share.tags);
-      
-      share.images.forEach((image, index) => {
-        shareForm.append(`images[${index}]`, image);
+
+      share.files.forEach((image, index) => {
+        shareForm.append(`files[${index}]`, image);
       });
-      
 
       try {
         let res = await authApi().post(endpoints["post"], shareForm);
@@ -47,7 +46,8 @@ const Share = () => {
         setTimeout(() => {
           setSuccessMessage("");
         }, 3000);
-        setShare(res.data);
+
+        setShare({ content: "", tags: "", files: [] });
       } catch (error) {
         console.error(error.response.data);
       }
@@ -70,6 +70,7 @@ const Share = () => {
             placeholder="What's in your mind?"
             className="shareInput"
             onChange={(e) => change(e, "content")}
+            value={share.content}
           />
           <Form>
             <Form.Control
@@ -83,37 +84,23 @@ const Share = () => {
         <div className="shareBottom">
           <div className="shareOptions">
             <div className="shareOption">
-              <PermMedia
-                htmlColor="tomato"
-                className="shareIcon"
-                onClick={() => images.current.click()}
-              />
+              <label htmlFor="imageUpload">
+                <PermMedia htmlColor="tomato" className="shareIcon" />
+              </label>
               <span className="shareOptionText">Photo or Video</span>
-              {/* {share.images.length > 0 && (
-                <span className="selectedImagesCount">
-                  {share.images.length} selected
-                </span>
-              )} */}
               <input
                 type="file"
+                id="imageUpload"
                 ref={images}
                 style={{ display: "none" }}
                 multiple
                 onChange={handleImageUpload}
               />
+              {share.files.length > 0 && (
+                <span>{share.files.length} image(s) selected</span>
+              )}
             </div>
-            <div className="shareOption">
-              <Label htmlColor="blue" className="shareIcon" />
-              <span className="shareOptionText">Tag</span>
-            </div>
-            <div className="shareOption">
-              <Room htmlColor="green" className="shareIcon" />
-              <span className="shareOptionText">Location</span>
-            </div>
-            <div className="shareOption">
-              <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Feelings</span>
-            </div>
+            {/* Các tùy chọn khác */}
           </div>
           <Button className="shareButton" type="submit" onClick={sharePosted}>
             Share

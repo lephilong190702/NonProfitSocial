@@ -28,6 +28,7 @@ const Post = () => {
   const [editedPostId, setEditedPostId] = useState(null);
   const [editedPostContent, setEditedPostContent] = useState("");
   const [replyContent, setReplyContent] = useState({});
+  const [reactions, setReactions] = useState({});
 
   const likeHandler = async (postId) => {
     try {
@@ -165,6 +166,16 @@ const Post = () => {
       try {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
+    
+        const totalLikes = {};
+    
+        for (const p of res.data) {
+          const postId = p.id;
+          const reactionsData = await authApi().get(endpoints["react-post"](postId));
+          totalLikes[postId] = reactionsData.length; 
+        }
+    
+        setReactions(totalLikes);
       } catch (error) {
         console.error(error);
       }
@@ -246,12 +257,12 @@ const Post = () => {
                   alt=""
                 />
                 <span className="postLikeCounter">
-                  {like[p.id] || 0} people like it
+                  {reactions[p.id] || 0} người đã thích
                 </span>
               </div>
               <div className="postBottomRight">
                 <span className="postCommentText">
-                  {(comments[p.id] || []).length} comments
+                  {(comments[p.id] || []).length} bình luận
                 </span>
               </div>
             </div>
@@ -321,7 +332,7 @@ const Post = () => {
                     </ListGroup.Item>
                   ))
                 ) : (
-                  <div>No comments available</div>
+                  <div>Không có bình luận</div>
                 )}
               </ListGroup>
             </div>

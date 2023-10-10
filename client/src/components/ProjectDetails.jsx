@@ -1,146 +1,47 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../App';
+import { useParams } from 'react-router-dom';
+import { Button, Col, Row } from 'react-bootstrap';
+import ApiConfig, { endpoints } from '../configs/ApiConfig';
+import MySpinner from '../layout/MySpinner';
 
 const ProjectDetails = () => {
     const [user] = useContext(UserContext);
     const { projectId } = useParams();
-    const [news, setNews] = useState(null);
-    const [comments, setComments] = useState([]);
-    const [content, setContent] = useState('');
-    const [replyContent, setReplyContent] = useState('');
+    const [project, setProject] = useState(null);
+
 
     useEffect(() => {
-        const loadNews = async () => {
-            let { data } = await ApiConfig.get(endpoints["details"](projectId));
-            setNews(data);
+        const loadProject = async () => {
+            let { data } = await ApiConfig.get(endpoints["details-project"](projectId));
+            setProject(data);
         }
 
-        const loadComments = async () => {
-            // Kiểm tra xem có dữ liệu đã lưu trong Local Storage không
-            const storedComments = localStorage.getItem('comments');
-            if (storedComments) {
-                setComments(JSON.parse(storedComments));
-            } else {
-                let { data } = await authApi().get(endpoints["comments"](projectId));
-                setComments(data);
-                // Lưu dữ liệu vào Local Storage
-                localStorage.setItem('comments', JSON.stringify(data));
-            }
-        }
 
-        const loadNewsReply = async () => {
-            let { data } = await authApi().get(endpoints["replies"](parentId));
-            setReplyContent(data);
-        }
-
-        loadNews();
-        loadComments();
-        loadNewsReply();
+        loadProject();
     }, [projectId]);
 
-    const addComment = () => {
-        const process = async () => {
-            let { data } = await authApi().post(endpoints["add-comment"], {
-                "content": content,
-                "projectId": news.id,
-            });
 
-            setComments([...comments, data]);
-            // Cập nhật Local Storage khi thêm bình luận mới
-            localStorage.setItem('comments', JSON.stringify([...comments, data]));
-        }
-
-        process();
-    }
-
-    const addReply = (parentId) => {
-        const process = async () => {
-            let { data } = await authApi().post(endpoints["replies"](parentId), {
-                "content": replyContent,
-                "projectId": news.id,
-            });
-
-            const updatedComments = comments.map((c) => {
-                if (c.id === parentId) {
-                    c.reply_news = c.reply_news || [];
-                    c.reply_news.push(data);
-                }
-                return c;
-            });
-
-            setComments(updatedComments);
-            // Cập nhật Local Storage khi thêm phản hồi mới
-            localStorage.setItem('comments', JSON.stringify(updatedComments));
-            setReplyContent('');
-        }
-
-        process();
-    }
-
-    if (news === null)
+    if (project === null)
         return <MySpinner />;
 
-    let url = `/login?next=/news/${projectId}`;
+    let url = `/login?next=/projects/${projectId}`;
     return (
         <>
-            <Header />
-            <h1 className="text-center text-info mt-2">{news.name}</h1>
+            <h1 className="text-center text-info mt-2">{project.title}</h1>
             <hr />
             <Row>
-                <Col md={5} xs={6}>
-                    <Image src={news.image} rounded fluid />
+                {/* <Col md={5} xs={6}>
+                    <Image src={project.image} rounded fluid />
+                </Col> */}
+                <Col>
+                    <h2 className="text-danger">{project.title}</h2>
+                    <p>{project.content}</p>
+                    <h3>{project.startDate}</h3>
                 </Col>
-                <Col md={5} xs={6}>
-                    <h2 className="text-danger">{news.name}</h2>
-                    <p>{news.content}</p>
-                    <h3>{news.createdDate}</h3>
-                </Col>
+                <Button>Đóng góp</Button>
             </Row>
             <hr />
-
-            {user === null ? (
-                <p>Vui lòng <Link to={url}>đăng nhập</Link> để bình luận! </p>
-            ) : (
-                <>
-                    <Form.Control
-                        as="textarea"
-                        aria-label="With textarea"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        placeholder="Nội dung bình luận"
-                    />
-                    <Button onClick={addComment} className="mt-2" variant="info">
-                        Bình luận
-                    </Button>
-                </>
-            )}
-            <hr />
-
-            <ListGroup>
-                {comments.map((comment) => (
-                    <ListGroup.Item key={comment.id}>
-                        {comment.user.username} - {comment.content} - {comment.createdDate}
-                        <Form.Control
-                            type="text"
-                            value={replyContent}
-                            onChange={(e) => setReplyContent(e.target.value)}
-                            placeholder="Nội dung phản hồi"
-                        />
-                        <Button
-                            variant="link"
-                            onClick={() => addReply(comment.id)}
-                        >
-                            Trả lời
-                        </Button>
-                        
-                        {comment.reply_news && comment.reply_news.map((reply) => (
-                            <div key={reply.id} className="ml-4">
-                                {reply.user.username} - {reply.content} - {reply.createdDate}
-                            </div>
-                        ))}
-                    </ListGroup.Item>
-                ))}
-            </ListGroup>
         </>
     );
 }

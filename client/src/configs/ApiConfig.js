@@ -35,6 +35,7 @@ export const endpoints = {
     "volunteer": `${SERVER_CONTEXT}/api/volunteer/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,
     "details": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}`,
+    "details-project": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}`,
     "comments": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}/comments/`,
     "replies": (parentId) => `${SERVER_CONTEXT}/api/news-comment/${parentId}/replies/`,
     "add-comment": `${SERVER_CONTEXT}/api/news-comment/`,

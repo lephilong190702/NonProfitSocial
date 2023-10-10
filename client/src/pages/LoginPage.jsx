@@ -81,7 +81,7 @@ const LoginPage = () => {
                 </Form.Group>
                 <span className="loginForgot">Forgot Password?</span>
                 <Form.Group className="mb-3">
-                  <Button type="submit" variant="danger">
+                  <Button type="submit" variant="danger" className="loginRegisterButton">
                     Đăng nhập
                   </Button>
                 </Form.Group>

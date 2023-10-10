@@ -56,13 +56,11 @@ const ProjectPage = () => {
         },
       });
 
-      // Lấy đường dẫn từ dữ liệu phản hồi của server
       const redirectUrl = res.data;
       console.log(res);
 
-      // Đảm bảo đã lấy được đường dẫn trước khi chuyển hướng
       if (redirectUrl) {
-        window.location.href = redirectUrl; // Chuyển hướng trình duyệt đến đường dẫn mới
+        window.location.href = redirectUrl;
       } else {
         console.error("Không có đường dẫn trả về từ server.");
       }
@@ -72,12 +70,12 @@ const ProjectPage = () => {
   };
 
   const openModal = (projectId) => {
-    setSelectedProjectId(projectId); // Lưu projectId của dự án được chọn
+    setSelectedProjectId(projectId); 
     setShowModal(true);
   };
 
   const closeModal = () => {
-    setSelectedProjectId(null); // Đặt lại projectId khi đóng modal
+    setSelectedProjectId(null);
     setShowModal(false);
   };
 
@@ -101,7 +99,7 @@ const ProjectPage = () => {
           return (
             <Col xs={12} md={3} key={p.id}>
               <Card>
-                <Card.Img variant="top" src={p.image} />
+              <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} />
                 <Card.Body>
                   <Card.Title>{p.title}</Card.Title>
                   <Card.Text>{p.content}</Card.Text>

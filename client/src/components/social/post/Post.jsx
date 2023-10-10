@@ -17,18 +17,17 @@ const Post = () => {
   const [post, setPost] = useState([]);
   const [like, setLike] = useState({});
   const [comments, setComments] = useState({});
-  const [content, setContent] = useState(""); // Đây là nội dung bình luận mới
-
-  const [menuOpen, setMenuOpen] = useState({}); // Trạng thái của menu mở hoặc đóng
-
-  const [reportModalOpen, setReportModalOpen] = useState(false); // Trạng thái của modal báo cáo
+  const [replies, setReplies] = useState({});
+  const [content, setContent] = useState({});
+  const [menuOpen, setMenuOpen] = useState({});
+  const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportPostId, setReportPostId] = useState(null);
   const [reportSuccess, setReportSuccess] = useState(false);
-
-  const [editPostModalOpen, setEditPostModalOpen] = useState(false); // Trạng thái của modal chỉnh sửa bài viết
+  const [editPostModalOpen, setEditPostModalOpen] = useState(false);
   const [editedPostId, setEditedPostId] = useState(null);
   const [editedPostContent, setEditedPostContent] = useState("");
+  const [replyContent, setReplyContent] = useState({});
 
   const likeHandler = async (postId) => {
     try {
@@ -62,7 +61,7 @@ const Post = () => {
 
         setTimeout(() => {
           setReportSuccess(false);
-        }, 3000); // 3 giây
+        }, 3000);
       }
     } catch (error) {
       console.error(error);
@@ -103,14 +102,12 @@ const Post = () => {
     try {
       const response = await authApi().post(endpoints["post-comment"], {
         postId: postId,
-        content: content,
+        content: content[postId],
       });
 
-      // Sau khi thêm bình luận thành công, cập nhật danh sách bình luận
       loadCommentsByPostId(postId);
 
-      // Xóa nội dung bình luận sau khi thêm
-      setContent("");
+      setContent({ ...content, [postId]: "" });
     } catch (error) {
       console.error(error);
     }
@@ -130,6 +127,39 @@ const Post = () => {
     }
   };
 
+  const handleShowReplies = (commentId) => {
+    loadRepliesByCommentId(commentId);
+  };
+
+  const loadRepliesByCommentId = async (commentId) => {
+    try {
+      const response = await authApi().get(
+        endpoints["replies-post"](commentId)
+      );
+      setReplies((prevReplies) => ({
+        ...prevReplies,
+        [commentId]: response.data,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addReply = async (commentId) => {
+    try {
+      const response = await authApi().post(endpoints["replies-post"](commentId), {
+        commentId: commentId,
+        content: replyContent[commentId],
+      });
+
+      loadRepliesByCommentId(commentId);
+
+      setReplyContent({ ...replyContent, [commentId]: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -142,7 +172,6 @@ const Post = () => {
 
     const loadComments = async () => {
       try {
-        // Load comments for each post when the component mounts
         post.forEach((p) => {
           loadCommentsByPostId(p.id);
         });
@@ -230,8 +259,10 @@ const Post = () => {
               <Form.Control
                 as="textarea"
                 aria-label="With textarea"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                value={content[p.id] || ""}
+                onChange={(e) =>
+                  setContent({ ...content, [p.id]: e.target.value })
+                }
                 placeholder="Nội dung bình luận"
               />
               <Button
@@ -250,6 +281,43 @@ const Post = () => {
                       <span className="commentContent">
                         {comment.user.username} - {comment.content}
                       </span>
+                      <Button
+                        variant="link"
+                        onClick={() => handleShowReplies(comment.id)}
+                      >
+                        Hiển thị phản hồi
+                      </Button>
+
+                      {Array.isArray(replies[comment.id]) &&
+                      replies[comment.id].length > 0 ? (
+                        replies[comment.id].map((reply) => (
+                          <div key={reply.id} className="reply">
+                            <span className="replyContent">
+                              {reply.user.username} - {reply.content}
+                            </span>
+                          </div>
+                        ))
+                      ) : null}
+
+                      <Form.Control
+                        as="textarea"
+                        aria-label="With textarea"
+                        value={replyContent[comment.id] || ""}
+                        onChange={(e) =>
+                          setReplyContent({
+                            ...replyContent,
+                            [comment.id]: e.target.value,
+                          })
+                        }
+                        placeholder="Nội dung phản hồi"
+                      />
+                      <Button
+                        onClick={() => addReply(comment.id, p.id)}
+                        className="mt-2"
+                        variant="info"
+                      >
+                        Thêm phản hồi
+                      </Button>
                     </ListGroup.Item>
                   ))
                 ) : (
@@ -261,7 +329,6 @@ const Post = () => {
         </div>
       ))}
 
-      {/* Modal báo cáo */}
       <Modal show={reportModalOpen} onHide={() => setReportModalOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Báo cáo bài viết</Modal.Title>
@@ -290,14 +357,12 @@ const Post = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* Thông báo báo cáo thành công */}
       {reportSuccess && (
         <Alert variant="success" className="mt-3">
           Báo cáo đã được gửi thành công!
         </Alert>
       )}
 
-      {/* Modal chỉnh sửa bài viết */}
       <Modal
         show={editPostModalOpen}
         onHide={() => setEditPostModalOpen(false)}

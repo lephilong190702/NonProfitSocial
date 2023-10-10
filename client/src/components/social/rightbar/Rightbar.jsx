@@ -34,9 +34,6 @@ const Rightbar = ({ profile }) => {
         {/* <img className="rightbarAd" src="/gift.png" alt="" /> */}
         <h4 className="rightbarTitle">Online Friends</h4>
         <ul className="rightbarFriendList">
-          {/* {users.map((u) => (
-            <Online key={u.id} user={u} />
-          ))} */}
           <Online />
         </ul>
       </>
@@ -46,72 +43,6 @@ const Rightbar = ({ profile }) => {
   const ProfileRightbar = () => {
     return (
       <>
-        <h4 className="rightbarTitle">User information</h4>
-        <div className="rightbarInfo">
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">City:</span>
-            <span className="rightbarInfoValue">New York</span>
-          </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">From:</span>
-            <span className="rightbarInfoValue">Madrid</span>
-          </div>
-          <div className="rightbarInfoItem">
-            <span className="rightbarInfoKey">Relationship:</span>
-            <span className="rightbarInfoValue">Single</span>
-          </div>
-        </div>
-        <h4 className="rightbarTitle">User friends</h4>
-        <div className="rightbarFollowings">
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-          <div className="rightbarFollowing">
-            <img
-              src="/public/gift.png"
-              alt=""
-              className="rightbarFollowingImg"
-            />
-            <span className="rightbarFollowingName">John Carter</span>
-          </div>
-        </div>
       </>
     );
   };

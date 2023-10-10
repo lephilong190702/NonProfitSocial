@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../App";
 import "./online.css";
 import { authApi, endpoints } from "../../../configs/ApiConfig";
-import Chatbox from "../Chatbox";
+import Chatbox from "../Chat/Chatbox";
 
 const Online = () => {
   const [user] = useContext(UserContext);
@@ -57,7 +57,7 @@ const Online = () => {
         ))}
       </ul>
   
-      {userId && <Chatbox userId={userId} />} {/* Truyền userId vào Chatbox */}
+      {userId && <Chatbox userId={userId} />} 
     </div>
   );
 };

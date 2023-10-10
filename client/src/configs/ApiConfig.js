@@ -42,7 +42,8 @@ export const endpoints = {
     "report-post": `${SERVER_CONTEXT}/api/report/`,
     "vn-pay": `${SERVER_CONTEXT}/api/report/`,
     "user": `${SERVER_CONTEXT}/api/users/`,
-    "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`
+    "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`,
+    "chat": `${SERVER_CONTEXT}/api/chat/`
 
 
     

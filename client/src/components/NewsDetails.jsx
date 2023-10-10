@@ -89,7 +89,6 @@ const NewsDetails = () => {
     let url = `/login?next=/news/${newsId}`;
     return (
         <>
-            <Header />
             <h1 className="text-center text-info mt-2">{news.name}</h1>
             <hr />
             <Row>

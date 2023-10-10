@@ -10,6 +10,7 @@ import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
 import ProjectPage from './pages/ProjectPage';
 import { Header } from './components';
+import ProjectDetails from './components/ProjectDetails';
 
 export const UserContext = createContext();
 
@@ -37,6 +38,8 @@ const App = () => {
           <Route path="/social/" element={<Home />} />
           <Route path="/social/profile" element={<Profile />} />
           <Route path='/projects' element ={<ProjectPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDetails />} />
+          
 
 
         </Routes>

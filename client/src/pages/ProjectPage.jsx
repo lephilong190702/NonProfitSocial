@@ -105,6 +105,9 @@ const ProjectPage = () => {
                 <Card.Body>
                   <Card.Title>{p.title}</Card.Title>
                   <Card.Text>{p.content}</Card.Text>
+                  <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
+                  <Card.Footer>Số tiền đã quyên góp: {p.totalAmount}</Card.Footer>
+
                   <Link
                     to={url}
                     className="btn btn-info"

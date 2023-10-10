@@ -8,6 +8,8 @@ import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 import NewsDetails from './components/NewsDetails';
 import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
+import ProjectPage from './pages/ProjectPage';
+import { Header } from './components';
 
 export const UserContext = createContext();
 
@@ -17,6 +19,7 @@ const App = () => {
   return (
     <UserContext.Provider value={[user, dispatch]}>
       <BrowserRouter>
+      <Header />
         {/* <h1 className='text-red-500'>Hello</h1>
         <Header />
         <Routes>
@@ -33,6 +36,7 @@ const App = () => {
           <Route path="/news/:newsId" element={<NewsDetails />} />
           <Route path="/social/" element={<Home />} />
           <Route path="/social/profile" element={<Profile />} />
+          <Route path='/projects' element ={<ProjectPage />} />
 
 
         </Routes>

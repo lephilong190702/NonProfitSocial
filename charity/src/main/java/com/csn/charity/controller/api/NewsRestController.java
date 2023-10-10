@@ -64,7 +64,8 @@ public class NewsRestController {
         }
     }
 
-    @GetMapping("/ncategories/{id}/news/")
+    @GetMapping("news/ncategories/{id}/")
+    @CrossOrigin
     public ResponseEntity<List<New>> getNewsByCategory(@PathVariable Long id) {
         return new ResponseEntity<>(this.newsService.getNewsByCategory(id), HttpStatus.OK);
     }

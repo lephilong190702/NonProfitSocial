@@ -49,7 +49,7 @@ public class ProjectRestController {
         }
     }
 
-    @GetMapping("/pcategories/{id}/projects/")
+    @GetMapping("projects/pcategories/{id}/")
     @CrossOrigin
     public ResponseEntity<List<Project>> getProjectByCategory(@PathVariable Long id) {
         return new ResponseEntity<>(projectService.getProjectsByCategory(id), HttpStatus.OK);

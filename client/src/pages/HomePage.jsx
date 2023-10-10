@@ -6,12 +6,15 @@ import { useSearchParams } from "react-router-dom";
 import reactIcon from "../assets/react.svg";
 import { Header, Post, Slider } from "../components";
 import Footer from "../components/Footer";
+import { NewsPage } from ".";
+import ProjectPage from "./ProjectPage";
 
 const HomePage = () => {
 
   return (
     <>
-      <Header />
+      <NewsPage />
+      <ProjectPage />
       {/* <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
       <Row>
         {news.map((n) => {
@@ -31,9 +34,9 @@ const HomePage = () => {
           );
         })}
       </Row> */}
-      <Slider />
+      {/* <Slider /> */}
       {/* <Post /> */}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

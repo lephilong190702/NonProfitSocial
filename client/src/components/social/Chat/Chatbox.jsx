@@ -7,13 +7,11 @@ import { addDoc, collection, getDocs, onSnapshot, orderBy, query, serverTimestam
 import { db } from '../../../configs/Firebase';
 import { useParams } from 'react-router-dom';
 
-const Chatbox = ({userId}) => {
+const Chatbox = () => {
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const userRef = collection(db, "users")
   const messageRef = collection(db, "messages")
-  const [targetUser, setTargetUser] = useState(null)
   const [user] = useContext(UserContext);
 
   const sendMessage = async (evt) => {
@@ -21,13 +19,11 @@ const Chatbox = ({userId}) => {
     if (newMessage.trim() === "") {
       return;
     }
-    console.log("USER ID" + user.id);
 
     try {
       let res = await authApi().post(endpoints["chat"], {
         content: newMessage,
         userId: user.id,
-        roomName: roomName,
       });
       setNewMessage("");
     } catch (error) {
@@ -38,7 +34,7 @@ const Chatbox = ({userId}) => {
   useEffect(() => {
     const fetchMessage = async () => {
       const queryMessages = query(
-        messageRef, 
+        messageRef,
         orderBy("createAt")
       );
 
@@ -52,35 +48,21 @@ const Chatbox = ({userId}) => {
       return () => unsuscribe()
     }
 
-  //   const fetchTargetUser = () => {
-  //     const queryUser = query(userRef, where("id", "==", parseInt(userId)));
-  //     console.log("USERID " + userId)
-  //     onSnapshot(queryUser, (snapshot) => {
-  //         snapshot.forEach((doc) => {
-  //             setTargetUser({...doc.data()});
-  //         })
-  //     })
-  // }
-    console.log(userId)
-    if (userId != null){
-      console.log("ID" + userId);
-      fetchMessage()
-      // fetchTargetUser()
-    }
-  }, [userId])
+    fetchMessage()
+  }, [])
 
 
   return (
-    <div className="chatbox-container">
+    <div className="chatbox-container mt-3">
       <div className="chatbox-messages">
         <Card>
           <Card.Body>
-            <Card.Title>BoxChat của bạn {userId} </Card.Title>
+            <Card.Title>NONPROFIT SOCIAL NETWORK CHATGROUP</Card.Title>
             <hr />
-            <div className="message-box">
+            <div className="message-box" style={{ height: "400px", overflowY: "auto" }}>
               {
                 messages?.map((newMessage, i) => (
-                  <p key={i}>
+                  <p key={i} >
                     {newMessage.content}
                   </p>
                 ))

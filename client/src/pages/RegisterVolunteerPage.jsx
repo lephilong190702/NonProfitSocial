@@ -80,7 +80,6 @@ const RegisterVolunteerPage = () => {
 
   return (
     <>
-      <Header />
       <Form onSubmit={registerVol}>
         <h1 className="text-center text-info mt-2">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
 

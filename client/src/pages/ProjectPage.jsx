@@ -4,6 +4,7 @@ import { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
 import { Header } from "../components";
 import { Alert, Card, Col, Row, Button, Modal, Form } from "react-bootstrap";
+import "./projects.css"; // Import CSS file
 
 const ProjectPage = () => {
   const [project, setProject] = useState([]);
@@ -70,7 +71,7 @@ const ProjectPage = () => {
   };
 
   const openModal = (projectId) => {
-    setSelectedProjectId(projectId); 
+    setSelectedProjectId(projectId);
     setShowModal(true);
   };
 
@@ -91,32 +92,27 @@ const ProjectPage = () => {
     );
 
   return (
-    <>
-      <h1 className="text-center text-info">DANH SÁCH DỰ ÁN</h1>
+    <div className="container">
+      <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
       <Row>
         {project.map((p) => {
           let url = `/projects/${p.id}`;
           return (
             <Col xs={12} md={3} key={p.id}>
-              <Card>
-              <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} />
+              <Card className="card">
+                <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} className="card-img" />
                 <Card.Body>
-                  <Card.Title>{p.title}</Card.Title>
-                  <Card.Text>{p.content}</Card.Text>
+                  <Card.Title className="card-title">{p.title}</Card.Title>
+                  <Card.Text className="card-text">{p.content}</Card.Text>
                   <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
                   <Card.Footer>Số tiền đã quyên góp: {p.totalAmount}</Card.Footer>
 
-                  <Link
-                    to={url}
-                    className="btn btn-info"
-                    style={{ marginRight: "5px" }}
-                    variant="primary"
-                  >
+                  <Link to={url} className="card-link">
                     Xem chi tiết
                   </Link>
                   <Button
                     onClick={() => openModal(p.id)}
-                    className="btn btn-info btn-danger"
+                    className="card-link donate-link"
                     style={{ marginRight: "5px" }}
                     variant="primary"
                   >
@@ -166,7 +162,7 @@ const ProjectPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 };
 

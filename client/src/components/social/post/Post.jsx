@@ -29,6 +29,7 @@ const Post = () => {
   const [editedPostContent, setEditedPostContent] = useState("");
   const [replyContent, setReplyContent] = useState({});
   const [reactions, setReactions] = useState({});
+  const [likeCount, setLikeCount] = useState({});
 
   const likeHandler = async (postId) => {
     try {
@@ -36,7 +37,12 @@ const Post = () => {
         reaction: "LIKE",
         postId: postId,
       });
-      setLike({ ...like, [postId]: data });
+
+      // Cập nhật số lần "LIKE" trong state
+      setLikeCount((prevLikeCount) => {
+        return { ...prevLikeCount, [postId]: data.length };
+      });
+      
     } catch (error) {
       console.error(error);
     }
@@ -167,15 +173,22 @@ const Post = () => {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
     
-        const totalLikes = {};
-    
-        for (const p of res.data) {
+        const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
-          const reactionsData = await authApi().get(endpoints["react-post"](postId));
-          totalLikes[postId] = reactionsData.length; 
-        }
+          return authApi().get(endpoints["react-post"](postId))
+            .then((response) => response.data); // Lấy dữ liệu từ response
+        });
     
-        setReactions(totalLikes);
+        const reactionsData = await Promise.all(reactionsPromises);
+    
+        const totalLikes = {};
+        reactionsData.forEach((data, index) => {
+          const postId = res.data[index].id;
+          totalLikes[postId] = data.length;
+        });
+        console.log(totalLikes)
+    
+        setLikeCount(totalLikes);
       } catch (error) {
         console.error(error);
       }
@@ -257,7 +270,7 @@ const Post = () => {
                   alt=""
                 />
                 <span className="postLikeCounter">
-                  {reactions[p.id] || 0} người đã thích
+                  {likeCount[p.id] || 0} người đã thích
                 </span>
               </div>
               <div className="postBottomRight">
@@ -290,7 +303,7 @@ const Post = () => {
                   comments[p.id].map((comment) => (
                     <ListGroup.Item key={comment.id}>
                       <span className="commentContent">
-                        {comment.user.username} - {comment.content}
+                        {comment.user.username} - {comment.content} - {comment.createDate}
                       </span>
                       <Button
                         variant="link"

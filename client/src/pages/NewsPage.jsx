@@ -4,6 +4,7 @@ import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import { Alert, Button, Card, Col, Row } from "react-bootstrap";
 import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "../components";
+import "./news.css"; // Import CSS file
 
 const NewsPage = () => {
   const [news, setNews] = useState(null);
@@ -42,44 +43,32 @@ const NewsPage = () => {
     );
 
   return (
-    <>
-      <h1 className="text-center text-info">DANH SÁCH TIN TỨC</h1>
+    <div className="container">
+      <h1 className="page-title">DANH SÁCH TIN TỨC</h1>
       <Row>
         {news.map((n) => {
           let url = `/news/${n.id}`;
           let vnpay = `/news/${n.id}/donate/`;
           return (
-            <>
-              <Col xs={12} md={3} className="2">
-                <Card>
-                  <Card.Img variant="top" src={n.image} />
-                  <Card.Body>
-                    <Card.Title>{n.name}</Card.Title>
-                    <Card.Text>{n.content}</Card.Text>
-                    <Link
-                      to={url}
-                      className="btn btn-info"
-                      style={{ marginRight: "5px" }}
-                      variant="primary"
-                    >
-                      Xem chi tiết
-                    </Link>
-                    <Link
-                      to={vnpay}
-                      className="btn btn-info btn-danger"
-                      style={{ marginRight: "5px" }}
-                      variant="primary"
-                    >
-                      Đóng góp
-                    </Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </>
+            <Col xs={12} md={3} key={n.id}>
+              <Card className="card">
+                <Card.Img variant="top" src={n.image} className="card-img" />
+                <Card.Body>
+                  <Card.Title className="card-title">{n.name}</Card.Title>
+                  <Card.Text className="card-text">{n.content}</Card.Text>
+                  <Link to={url} className="card-link">
+                    Xem chi tiết
+                  </Link>
+                  <Link to={vnpay} className="card-link donate-link">
+                    Đóng góp
+                  </Link>
+                </Card.Body>
+              </Card>
+            </Col>
           );
         })}
       </Row>
-    </>
+    </div>
   );
 };
 

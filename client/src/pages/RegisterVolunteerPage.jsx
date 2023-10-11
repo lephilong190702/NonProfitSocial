@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "../components";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import { useNavigate } from "react-router-dom";
+import "./registerVolunteer.css";
 
 const RegisterVolunteerPage = () => {
   const [user, setUser] = useState();
   const [volunteer, setVolunteer] = useState({
     projectId: "",
     startDate: "",
-    endDate: "" ,
+    endDate: "",
     description: "",
     skills: [],
   });
@@ -79,11 +79,11 @@ const RegisterVolunteerPage = () => {
   };
 
   return (
-    <>
+    <div className="container">
       <Form onSubmit={registerVol}>
-        <h1 className="text-center text-info mt-2">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
+        <h1 className="form-heading">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
 
-        <Row className="mb-3">
+        <Row className="form-group">
           <Form.Group as={Col} controlId="startDate">
             <Form.Label>Ngày tham gia</Form.Label>
             <Form.Control
@@ -91,6 +91,7 @@ const RegisterVolunteerPage = () => {
               max={volunteer.endDate}
               value={volunteer.startDate}
               onChange={(e) => change(e, "startDate")}
+              className="form-control"
             />
           </Form.Group>
 
@@ -101,20 +102,22 @@ const RegisterVolunteerPage = () => {
               min={volunteer.startDate}
               value={volunteer.endDate}
               onChange={(e) => change(e, "endDate")}
+              className="form-control"
             />
           </Form.Group>
 
           <Form.Group as={Col} controlId="formGridState">
             <Form.Label>Kỹ năng</Form.Label>
             {skillList.map((skill) => (
-              <Form.Check
-                key={skill.id}
-                type="checkbox"
-                id={`skill-${skill.id}`}
-                label={skill.name}
-                checked={volunteer.skills.includes(skill.id)}
-                onChange={() => toggleSkill(skill.id)}
-              />
+              <label key={skill.id} className="checkbox-label">
+                <input
+                  type="checkbox"
+                  id={`skill-${skill.id}`}
+                  checked={volunteer.skills.includes(skill.id)}
+                  onChange={() => toggleSkill(skill.id)}
+                />
+                {skill.name}
+              </label>
             ))}
           </Form.Group>
         </Row>
@@ -125,6 +128,7 @@ const RegisterVolunteerPage = () => {
             defaultValue="Choose..."
             value={volunteer.projectId}
             onChange={(e) => change(e, "projectId")}
+            className="form-select"
           >
             <option value="">Choose...</option>
             {projectList.map((project) => (
@@ -135,21 +139,22 @@ const RegisterVolunteerPage = () => {
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formGridAddress2">
+        <Form.Group className="form-group" controlId="formGridAddress2">
           <Form.Label>Ghi chú</Form.Label>
           <Form.Control
             type="text"
             placeholder="Apartment, studio, or floor"
             value={volunteer.description}
             onChange={(e) => change(e, "description")}
+            className="form-control"
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" className="btn-submit">
           ĐĂNG KÝ
         </Button>
       </Form>
-    </>
+    </div>
   );
 };
 

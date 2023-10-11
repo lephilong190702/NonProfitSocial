@@ -19,6 +19,7 @@ import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.firestore.v1.Document;
 
 @Service
 public class FirebaseService {
@@ -40,19 +41,14 @@ public class FirebaseService {
         return documentReference.get();
     }
 
-    public String sendMessage(MessageDoc messageDoc) throws InterruptedException, ExecutionException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("Unauthorized access");
-        }
+    public DocumentReference getReference(String documentId, String collectionName) {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        return dbFirestore.collection(collectionName).document(documentId);
+    }
 
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new NoSuchElementException("Không tìm thấy người dùng");
-        }
-
-        messageDoc.setUserId(user.getId());
+    public String sendMessage(MessageDoc messageDoc, Long userId) throws InterruptedException, ExecutionException {
+        DocumentReference userDocumentReference = getReference(userId.toString(), "users");
+        messageDoc.setUser(userDocumentReference);
         messageDoc.setCreateAt(new Date());
         messageDoc.setUpdateAt(new Date());
         messageDoc.setRoomName("NONPROFIT SOCIAL NETWORK CHATGROUP");

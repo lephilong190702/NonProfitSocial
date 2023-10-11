@@ -25,10 +25,9 @@ public class FirebaseController {
         return this.firebaseService.getUser(userId);
     }
 
-    @PostMapping("/chat/")
+    @PostMapping("/chat/{userId}")
     @CrossOrigin
-    public String sendMessage(@RequestBody MessageDoc messageDoc) throws InterruptedException, ExecutionException {
-        System.out.println("DEBUG" + messageDoc.toString());
-        return this.firebaseService.sendMessage(messageDoc);
+    public String sendMessage(@RequestBody MessageDoc messageDoc, @PathVariable Long userId) throws InterruptedException, ExecutionException {
+        return this.firebaseService.sendMessage(messageDoc, userId);
     }
 }

@@ -84,14 +84,6 @@ const CustomNavbar = () => {
                 })}
             </NavDropdown>
 
-            <NavDropdown title="Đóng góp" id="basic-nav-dropdown">
-              {newsCategory.map((c) => (
-                <NavDropdown.Item href="#contribution" key={c.id}>
-                  {c.name}
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
-
             <Nav.Link href="#financial_report">Báo cáo tài chính</Nav.Link>
 
             <Link to="/social" className="nav-link">

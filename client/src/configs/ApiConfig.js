@@ -33,7 +33,6 @@ export const endpoints = {
     "profile": `${SERVER_CONTEXT}/api/profile/`,
     "register": `${SERVER_CONTEXT}/api/register/`,
     "volunteer": `${SERVER_CONTEXT}/api/volunteer/`,
-    "project": `${SERVER_CONTEXT}/api/projects/`,
     "details": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}`,
     "details-project": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}`,
     "comments": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}/comments/`,

@@ -58,7 +58,7 @@ const ProjectPage = () => {
 
       // Lấy đường dẫn từ dữ liệu phản hồi của server
       const redirectUrl = res.data;
-      console.log(res);
+      console.log(res.data);
 
       // Đảm bảo đã lấy được đường dẫn trước khi chuyển hướng
       if (redirectUrl) {

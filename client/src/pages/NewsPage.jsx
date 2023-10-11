@@ -52,7 +52,7 @@ const NewsPage = () => {
             <>
               <Col xs={12} md={3} className="2">
                 <Card>
-                  <Card.Img variant="top" src="{n.image}" />
+                  <Card.Img variant="top" src={n.image} />
                   <Card.Body>
                     <Card.Title>{n.name}</Card.Title>
                     <Card.Text>{n.content}</Card.Text>

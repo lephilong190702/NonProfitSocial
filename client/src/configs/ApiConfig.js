@@ -42,12 +42,15 @@ export const endpoints = {
     "skill": `${SERVER_CONTEXT}/api/skills/`,
     "post": `${SERVER_CONTEXT}/api/posts/`,
     "react": `${SERVER_CONTEXT}/api/reaction/`,
+    "react-post": (postId) => `${SERVER_CONTEXT}/api/reaction/${postId}`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
     "report-post": `${SERVER_CONTEXT}/api/report/`,
     "vn-pay": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}/donate/`,
     "user": `${SERVER_CONTEXT}/api/users/`,
     "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`,
-    "chat": `${SERVER_CONTEXT}/api/chat/`    
+    "chat": `${SERVER_CONTEXT}/api/chat/`,
+    "replies-post": (parentId) => `${SERVER_CONTEXT}/api/post-comment/${parentId}/replies/`,
+    "comment-post": (postId) => `${SERVER_CONTEXT}/api/post/${postId}/comments/`,
 }
 
 export const authApi = () => {

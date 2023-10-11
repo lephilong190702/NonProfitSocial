@@ -171,6 +171,7 @@ public class PostRestController {
     }
 
     @GetMapping("/reaction/{postId}")
+    @CrossOrigin
     public ResponseEntity<List<UserReactPost>> getReactionByPost(@PathVariable Long postId){
         List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
         return new ResponseEntity<>(reactPosts, HttpStatus.OK);

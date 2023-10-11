@@ -3,6 +3,7 @@ package com.csn.charity.firebase;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +20,15 @@ public class FirebaseController {
     @Autowired
     private FirebaseService firebaseService;
 
-    @GetMapping("/firebase/{userId}")
+    @GetMapping("/chat/{userId}")
     public UserDoc getUser(@PathVariable String userId) throws InterruptedException, ExecutionException {
-        return firebaseService.getUser(userId);
+        return this.firebaseService.getUser(userId);
     }
 
     @PostMapping("/chat/")
+    @CrossOrigin
     public String sendMessage(@RequestBody MessageDoc messageDoc) throws InterruptedException, ExecutionException {
+        System.out.println("DEBUG" + messageDoc.toString());
         return this.firebaseService.sendMessage(messageDoc);
     }
 }

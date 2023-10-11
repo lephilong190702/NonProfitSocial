@@ -55,7 +55,7 @@ public class FirebaseService {
         messageDoc.setUserId(user.getId());
         messageDoc.setCreateAt(new Date());
         messageDoc.setUpdateAt(new Date());
-        messageDoc.setRoomName("ROOM_" + user.getId() + "_");
+        messageDoc.setRoomName("NONPROFIT SOCIAL NETWORK CHATGROUP");
 
         DocumentReference documentReference = create(messageDoc);
         return documentReference.getId();

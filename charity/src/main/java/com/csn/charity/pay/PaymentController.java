@@ -1,9 +1,12 @@
 package com.csn.charity.pay;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,15 +44,14 @@ public class PaymentController {
         userContributeProject.setNote(note);
         System.out.println("NOTE" + note);
 
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(donateAmount, projectId, baseUrl);
+        String vnpayUrl = vnPayService.createOrder(donateAmount, projectId);
         return new ResponseEntity<>(vnpayUrl, HttpStatus.CREATED);
     }
 
     @GetMapping("/vnpay-payment/{projectId}")
     @CrossOrigin
-    public ResponseEntity<Map<String, Object>> getPaymentStatus(@PathVariable(value = "projectId") Long projectId,
-            HttpServletRequest request) {
+    public ResponseEntity<?> getPaymentStatus(@PathVariable(value = "projectId") Long projectId,
+            HttpServletRequest request) throws IOException {
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -56,22 +59,16 @@ public class PaymentController {
         String transactionId = request.getParameter("vnp_TransactionNo");
         String totalPrice = request.getParameter("vnp_Amount");
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("orderId", orderInfo);
-        response.put("totalPrice", totalPrice);
-        response.put("paymentTime", paymentTime);
-        response.put("transactionId", transactionId);
-        response.put("paymentStatus", paymentStatus);
-
         System.out.println("STATUS" + paymentStatus);
         if (paymentStatus == 1) {
             BigDecimal donatedAmount = new BigDecimal(totalPrice);
             UserContributeProject userContributeProject = new UserContributeProject();
             userContributeProject.setDonateAmount(donatedAmount.divide(new BigDecimal(100)));
+            System.out.println(userContributeProject.getUser());
             donateService.donate(projectId, userContributeProject);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>("Xong", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Lỗi", HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.csn.charity.pay;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -13,7 +15,7 @@ import java.util.*;
 @Service
 public class VNPayService {
 
-    public String createOrder(BigDecimal total, Long projectId, String urlReturn) throws UnsupportedEncodingException {
+    public String createOrder(BigDecimal total, Long projectId) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other-type";
@@ -35,8 +37,7 @@ public class VNPayService {
         vnp_Params.put("vnp_OrderType", orderType);
 
         vnp_Params.put("vnp_Locale", "vn");
-        urlReturn += VNPayConfig.vnp_ReturnUrl + projectId;
-        vnp_Params.put("vnp_ReturnUrl", urlReturn);
+        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));

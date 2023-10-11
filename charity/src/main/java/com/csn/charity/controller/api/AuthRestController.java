@@ -98,7 +98,6 @@ public class AuthRestController {
         return new ResponseEntity<>(userDoc, HttpStatus.OK);
     }
 
-
     @GetMapping("/facebook/")
     @CrossOrigin
     public ResponseEntity<String> loginWithFacebook() {
@@ -123,7 +122,7 @@ public class AuthRestController {
     public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
             @RequestPart(value = "firstName") String firstName,
             @RequestPart(value = "lastName") String lastName,
-            @RequestPart(value = "phone") String phone) {
+            @RequestPart(value = "phone") String phone) throws InterruptedException, ExecutionException {
 
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);

@@ -63,7 +63,7 @@ public class NewsServiceImpl implements NewsService {
         news.setCategory(n.getCategory());
         news.setName(n.getName());
         news.setContent(n.getContent());
-        news.setCreateDate(n.getCreateDate());
+        news.setCreateDate(new Date());
         if (!n.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(n.getFile().getBytes(),

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.csn.charity.dto.VolunteerRequestDTO;
 import com.csn.charity.model.User;
 import com.csn.charity.repository.UserRepository;
+import com.csn.charity.service.interfaces.DonateService;
 import com.csn.charity.service.interfaces.MailService;
 import com.csn.charity.service.interfaces.SkillService;
 import com.csn.charity.service.interfaces.VolunteerService;
@@ -32,6 +33,8 @@ public class VolunteerRestController {
     private MailService mailService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DonateService donateService;
 
     @PostMapping("/volunteer/")
     @CrossOrigin
@@ -67,6 +70,16 @@ public class VolunteerRestController {
         }
     }
 
+    @GetMapping("/contributions/")
+    @CrossOrigin
+    public ResponseEntity<?> getAllContribution() {
+        try {
+            return new ResponseEntity<>(this.donateService.getAllContribute(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // @PostMapping("{projectId}/donate/")
     // public ResponseEntity<UserContributeProject> donate(@PathVariable(value =
     // "projectId") Long projectId, @RequestParam("donateAmount") BigDecimal
@@ -80,4 +93,6 @@ public class VolunteerRestController {
 
     // return new ResponseEntity<>(result, HttpStatus.CREATED);
     // }
+
+
 }

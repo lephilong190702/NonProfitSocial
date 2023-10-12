@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.csn.charity.model.Project;
 import com.csn.charity.model.UserContributeProject;
 
 public interface DonateRepository extends JpaRepository<UserContributeProject, Long> {
@@ -19,4 +20,6 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
 
     @Query("SELECT YEAR(u.donateDate) as year, SUM(u.donateAmount) as totalDonation FROM UserContributeProject u GROUP BY YEAR(u.donateDate)")
     List<Object[]> getTotalDonationByYear();
+
+    List<UserContributeProject> findByProject(Project project);
 }

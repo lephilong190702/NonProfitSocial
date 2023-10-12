@@ -102,7 +102,8 @@ public class SpringSecurityConfig {
                                 "/api/firebase/{username}", "/api/facebook/", "/api/google/",
                                 "/api/firebase/{userId}", "/api/users/", "/api/users/{id}",
                                 "/api/user-docs/{id}", "/api/projects/{id}", "/api/projects/pcategories/{id}",
-                                "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/" )
+                                "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
+                                "/api/contributions/{projectId}" )
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")

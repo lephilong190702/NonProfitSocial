@@ -72,7 +72,6 @@ public class Project implements Serializable{
     private ProjectCategory category;
      
     @OneToMany(mappedBy = "project" )
-    @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
     
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)

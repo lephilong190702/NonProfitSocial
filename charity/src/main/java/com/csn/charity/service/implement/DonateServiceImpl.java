@@ -64,4 +64,12 @@ public class DonateServiceImpl implements DonateService {
         return this.donateRepository.findAll();
     }
 
+    @Override
+    public List<UserContributeProject> getContributionByProject(Long id) {
+        Project project = this.projectRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        
+        return this.donateRepository.findByProject(project);
+    }
+
 }

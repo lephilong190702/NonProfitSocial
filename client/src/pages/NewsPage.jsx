@@ -23,7 +23,7 @@ const NewsPage = () => {
         }
         console.log(e);
 
-        let res = await authApi().get(e);
+        let res = await ApiConfig.get(e);
         setNews(res.data);
       } catch (ex) {
         console.error(ex);

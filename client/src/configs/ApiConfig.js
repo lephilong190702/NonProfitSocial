@@ -33,7 +33,6 @@ export const endpoints = {
     "profile": `${SERVER_CONTEXT}/api/profile/`,
     "register": `${SERVER_CONTEXT}/api/register/`,
     "volunteer": `${SERVER_CONTEXT}/api/volunteer/`,
-    "project": `${SERVER_CONTEXT}/api/projects/`,
     "details": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}`,
     "details-project": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}`,
     "comments": (newsId) => `${SERVER_CONTEXT}/api/news/${newsId}/comments/`,
@@ -48,7 +47,7 @@ export const endpoints = {
     "vn-pay": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}/donate/`,
     "user": `${SERVER_CONTEXT}/api/users/`,
     "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`,
-    "chat": `${SERVER_CONTEXT}/api/chat/`,
+    "chat": (userId) => `${SERVER_CONTEXT}/api/chat/${userId}`,
     "replies-post": (parentId) => `${SERVER_CONTEXT}/api/post-comment/${parentId}/replies/`,
     "comment-post": (postId) => `${SERVER_CONTEXT}/api/post/${postId}/comments/`,
     "statistic": `${SERVER_CONTEXT}/api/export/`

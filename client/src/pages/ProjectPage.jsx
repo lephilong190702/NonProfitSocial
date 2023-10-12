@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { authApi, endpoints } from "../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
 import { Header } from "../components";
 import { Alert, Card, Col, Row, Button, Modal, Form } from "react-bootstrap";
 import "./projects.css"; // Import CSS file
 
 const ProjectPage = () => {
-  const [project, setProject] = useState([]);
+  const [project, setProject] = useState(null);
   const [pay, setPay] = useState({
     projectId: "",
     donateAmount: "",
@@ -22,15 +22,20 @@ const ProjectPage = () => {
     let loadProject = async () => {
       try {
         let e = endpoints["project"];
-
+        console.log(e);
         let cateId = q.get("cateId");
-        if (cateId !== null) e = `${e}pcategories/${cateId}/`;
+        
+        if (cateId !== null) {
+          e = `${e}pcategories/${cateId}`;
+          console.log(e)
+        }
+
         else {
           let kw = q.get("kw");
           if (kw !== null) e = `${e}?kw=${kw}`;
         }
 
-        let res = await authApi().get(e);
+        let res = await ApiConfig.get(e);
         setProject(res.data);
       } catch (ex) {
         console.error(ex);

@@ -1,18 +1,12 @@
 package com.csn.charity.firebase;
 
 import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.model.MessageDoc;
-import com.csn.charity.model.User;
 import com.csn.charity.model.UserDoc;
-import com.csn.charity.repository.UserRepository;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
@@ -22,9 +16,6 @@ import com.google.firebase.cloud.FirestoreClient;
 
 @Service
 public class FirebaseService {
-    @Autowired
-    private UserRepository userRepository;
-
     public String saveOrUpdateUser(UserDoc userDoc) throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
         userDoc.setUpdateAt(new Date());
@@ -40,19 +31,14 @@ public class FirebaseService {
         return documentReference.get();
     }
 
-    public String sendMessage(MessageDoc messageDoc) throws InterruptedException, ExecutionException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("Unauthorized access");
-        }
+    public DocumentReference getReference(String documentId, String collectionName) {
+        Firestore dbFirestore = FirestoreClient.getFirestore();
+        return dbFirestore.collection(collectionName).document(documentId);
+    }
 
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new NoSuchElementException("Không tìm thấy người dùng");
-        }
-
-        messageDoc.setUserId(user.getId());
+    public String sendMessage(MessageDoc messageDoc, Long userId) throws InterruptedException, ExecutionException {
+        DocumentReference userDocumentReference = getReference(userId.toString(), "users");
+        messageDoc.setUser(userDocumentReference);
         messageDoc.setCreateAt(new Date());
         messageDoc.setUpdateAt(new Date());
         messageDoc.setRoomName("NONPROFIT SOCIAL NETWORK CHATGROUP");

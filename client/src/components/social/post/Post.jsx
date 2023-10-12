@@ -186,7 +186,6 @@ const Post = () => {
           const postId = res.data[index].id;
           totalLikes[postId] = data.length;
         });
-        console.log(totalLikes)
     
         setLikeCount(totalLikes);
       } catch (error) {

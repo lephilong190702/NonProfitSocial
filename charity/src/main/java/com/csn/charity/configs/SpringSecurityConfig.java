@@ -93,16 +93,16 @@ public class SpringSecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/register/", "/api/login/").permitAll()
-                        .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/pcategories/",
+                        .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/projects/{id}", "/api/pcategories/",
                                 "/api/posts/","/api/posts/{postId}",
                                 "/api/post-comment/{parentId}/replies/",
                                 "/api/news-comment/{parentId}/replies/",
                                 "/api/news/{newsId}", "/api/skills/",
-                                "/api/news/{newsId}/comments/", "/api/firebase/",
+                                "/api/news/{newsId}/comments/", "/api/firebase/", "/api/reaction/{postId}",
                                 "/api/firebase/{username}", "/api/facebook/", "/api/google/",
                                 "/api/firebase/{userId}", "/api/users/", "/api/users/{id}",
-                                "/api/user-docs/{id}", "/api/projects/{id}", "/api/pcategories/{id}/projects/",
-                                "/api/ncategories/{id}/news/", "/api/export/", "/api/vnpay-payment/{projectId}" )
+                                "/api/user-docs/{id}", "/api/projects/{id}", "/api/projects/pcategories/{id}",
+                                "/api/news/ncategories/{id}/", "/api/export/", "/api/vnpay-payment/{projectId}" )
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")

@@ -35,6 +35,7 @@ const App = () => {
           <Route path="/social/profile" element={<Profile />} />
           <Route path='/projects' element ={<ProjectPage />} />
           <Route path="/projects/:projectId" element={<ProjectDetails />} />
+          
         </Routes>
         <Footer />
       </BrowserRouter>

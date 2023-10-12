@@ -1,31 +1,48 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Topbar from '../../components/social/topbar/Topbar';
 import Feed from '../../components/social/feed/Feed';
 import Rightbar from '../../components/social/rightbar/Rightbar';
 import "./profile.css"
+import { UserContext } from '../../App';
+import { authApi, endpoints } from '../../configs/ApiConfig';
 
 const Profile = () => {
+  const [user] = useContext(UserContext);
+  const [profile, setProfile] = useState([]);
+
+  useEffect(() => {
+    const loadUserById = async () => {
+  
+      try {
+        let res = await authApi().get(endpoints["userId"](user.id))
+        setProfile(res.data);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    loadUserById();
+  }, [])
+
   return (
     <>
       <Topbar />
       <div className="profile">
-        <Sidebar />
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
               <img
                 className="profileCoverImg"
-                src="/public/gift.png"
+                src={user.profile?.avatar}
                 alt=""
               />
               <img
                 className="profileUserImg"
-                src="/public/gift.png"
+                src={user.profile?.avatar}
                 alt=""
               />
             </div>
             <div className="profileInfo">
-                <h4 className="profileInfoName">Safak Kocaoglu</h4>
+                <h4 className="profileInfoName">{profile.profile?.firstName} {profile.profile?.firstName}</h4>
                 <span className="profileInfoDesc">Hello my friends!</span>
             </div>
           </div>

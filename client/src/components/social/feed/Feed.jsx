@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import "./feed.css";
 import Share from '../share/Share';
 import ApiConfig, { endpoints } from '../../../configs/ApiConfig';
 import Post from '../post/Post';
+import { UserContext } from '../../../App';
+import { Link } from 'react-router-dom';
 
 const Feed = () => {
-  const [posts, setPosts] = useState([]); // Sử dụng một mảng để lưu trữ danh sách bài viết
+  const [posts, setPosts] = useState([]);
+  const [user] = useContext(UserContext);
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -23,18 +26,14 @@ const Feed = () => {
   return (
     <div className="feed">
       <div className="feedWrapper">
-        <Share />
-        {/* Hiển thị danh sách bài viết */}
-        {posts.map((post) => (
-          <Post
-            key={post.id}
-            id={post.id}
-            content={post.content}
-            createDate={post.createDate}
-            emoji={post.status}
-            userId={post.user_id}
-          />
-        ))}
+        {user === null ? (
+        <p>
+          Vui lòng <Link to={"/login"} className="login-link">đăng nhập</Link> để đăng bài viết{" "}
+        </p>) : (
+          <Share />
+        )}
+        
+        <Post />
       </div>
     </div>
   );

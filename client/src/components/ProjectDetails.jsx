@@ -213,7 +213,7 @@ const ProjectDetails = () => {
       <hr />
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProjectTitle}</Modal.Title> {/* Hiển thị tiêu đề ở đầu trang modal */}
+          <Modal.Title>{selectedProjectTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

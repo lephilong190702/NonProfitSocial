@@ -11,6 +11,7 @@ import {
   ListGroup,
 } from "react-bootstrap";
 import { UserContext } from "../../../App";
+import moment from "moment";
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -42,7 +43,6 @@ const Post = () => {
       setLikeCount((prevLikeCount) => {
         return { ...prevLikeCount, [postId]: data.length };
       });
-      
     } catch (error) {
       console.error(error);
     }
@@ -122,9 +122,7 @@ const Post = () => {
 
   const loadCommentsByPostId = async (postId) => {
     try {
-      const response = await authApi().get(
-        endpoints["comment-post"](postId)
-      );
+      const response = await authApi().get(endpoints["comment-post"](postId));
       setComments((prevComments) => ({
         ...prevComments,
         [postId]: response.data,
@@ -154,10 +152,13 @@ const Post = () => {
 
   const addReply = async (commentId) => {
     try {
-      const response = await authApi().post(endpoints["replies-post"](commentId), {
-        commentId: commentId,
-        content: replyContent[commentId],
-      });
+      const response = await authApi().post(
+        endpoints["replies-post"](commentId),
+        {
+          commentId: commentId,
+          content: replyContent[commentId],
+        }
+      );
 
       loadRepliesByCommentId(commentId);
 
@@ -172,21 +173,22 @@ const Post = () => {
       try {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
-    
+
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
-          return authApi().get(endpoints["react-post"](postId))
+          return authApi()
+            .get(endpoints["react-post"](postId))
             .then((response) => response.data); // Lấy dữ liệu từ response
         });
-    
+
         const reactionsData = await Promise.all(reactionsPromises);
-    
+
         const totalLikes = {};
         reactionsData.forEach((data, index) => {
           const postId = res.data[index].id;
           totalLikes[postId] = data.length;
         });
-    
+
         setLikeCount(totalLikes);
       } catch (error) {
         console.error(error);
@@ -227,7 +229,10 @@ const Post = () => {
                   alt=""
                 />
                 <span className="postUsername">{p.user.username}</span>
-                <span className="postDate">{p.createDate}</span>
+                <span className="postDate">
+                  {" "}
+                  {moment(p.createDate).fromNow()}
+                </span>
               </div>
               <div className="postTopRight">
                 <Dropdown
@@ -255,11 +260,10 @@ const Post = () => {
               <span className="postText">{p.content}</span>
             </div>
             <div className="postCenter">
-              {
-                p.images.length > 0 && p.images.map((image, index) => (
+              {p.images.length > 0 &&
+                p.images.map((image, index) => (
                   <img src={image.image} key={index} alt="image" />
-                ))
-              }
+                ))}
             </div>
             <div className="postBottom">
               <div className="postBottomLeft">
@@ -308,8 +312,27 @@ const Post = () => {
                 {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
                   comments[p.id].map((comment) => (
                     <ListGroup.Item key={comment.id}>
-                      <span className="commentContent">
-                        {comment.user.username} - {comment.content} - {comment.createDate}
+                      <span
+                        className="commentContent"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <img
+                          src={comment.user.profile.avatar}
+                          alt="avatar"
+                          style={{
+                            width: "32px",
+                            height: "32px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            marginRight: "5px",
+                          }}
+                        />
+                        {comment.user.username} - {comment.content} -{" "}
+                        {moment(comment.createDate).fromNow()}
                       </span>
                       <Button
                         variant="link"
@@ -319,15 +342,34 @@ const Post = () => {
                       </Button>
 
                       {Array.isArray(replies[comment.id]) &&
-                      replies[comment.id].length > 0 ? (
-                        replies[comment.id].map((reply) => (
-                          <div key={reply.id} className="reply">
-                            <span className="replyContent">
-                              {reply.user.username} - {reply.content}
-                            </span>
-                          </div>
-                        ))
-                      ) : null}
+                      replies[comment.id].length > 0
+                        ? replies[comment.id].map((reply) => (
+                            <div key={reply.id} className="reply">
+                              <span
+                                className="replyContent"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginBottom: "10px",
+                                }}
+                              >
+                                <img
+                                  src={reply.user.profile.avatar}
+                                  alt="avatar"
+                                  style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                    marginRight: "5px",
+                                  }}
+                                />{" "}
+                                {reply.user.username} - {reply.content} -{" "}
+                                {moment(reply.createDate).fromNow()}
+                              </span>
+                            </div>
+                          ))
+                        : null}
 
                       <Form.Control
                         as="textarea"

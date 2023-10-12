@@ -4,7 +4,6 @@ import CustomNavbar from './CustomNavbar'
 const Header = () => {
   return (
     <div>
-        
         <CustomNavbar />
     </div>
   )

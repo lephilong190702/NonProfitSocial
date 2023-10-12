@@ -17,12 +17,9 @@ const ProjectPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const currentURL = window.location.href;
-
-  // Tạo một đối tượng URLSearchParams từ URL
   const urlParams = new URLSearchParams(currentURL);
-
-  // Trích xuất các giá trị từ URL sử dụng get() method
-  const vnpAmount = urlParams.get("vnp_Amount");
+  const url = new URL(currentURL);
+  const vnpAmount = url.searchParams.get("vnp_Amount");
   const vnpBankCode = urlParams.get("vnp_BankCode");
   const vnpBankTranNo = urlParams.get("vnp_BankTranNo");
   const vnpCardType = urlParams.get("vnp_CardType");
@@ -37,15 +34,16 @@ const ProjectPage = () => {
   const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
 
   useEffect(() => {
-    let loadProject = async () => {
+    console.log("vnpAmount: ", vnpAmount);
+    const savedProjectId = localStorage.getItem("selectedProjectId");
+
+    const loadProject = async () => {
       try {
         let e = endpoints["project"];
-        console.log(e);
         let cateId = q.get("cateId");
 
         if (cateId !== null) {
           e = `${e}pcategories/${cateId}`;
-          console.log(e)
         }
 
         else {
@@ -60,9 +58,8 @@ const ProjectPage = () => {
       }
     };
 
-    let payment = async () => {
+    const payment = async () => {
       const form = new FormData();
-      form.append("projectId", selectedProjectId);
       form.append("vnp_Amount", vnpAmount);
       form.append("vnp_BankCode", vnpBankCode)
       form.append("vnp_BankTranNo", vnpBankTranNo)
@@ -76,19 +73,18 @@ const ProjectPage = () => {
       form.append("vnp_TransactionStatus", vnpTransactionStatus)
       form.append("vnp_TxnRef", vnpTxnRef)
 
-      console.log("DEBUG" + selectedProjectId)
-      let e = await authApi().post(endpoints["callback"](selectedProjectId), form, {
+      let e = await authApi().post(endpoints["callback"](savedProjectId), form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(e.data)
 
     }
-    
-    if (urlParams.has("vnp_BankCode")) {
+
+    if (urlParams.has("vnp_PayDate")) {
       payment();
     }
+
     loadProject();
   }, [q]);
 
@@ -104,8 +100,6 @@ const ProjectPage = () => {
       formData.append("projectId", selectedProjectId);
       formData.append("donateAmount", pay.donateAmount);
       formData.append("note", pay.note);
-
-      console.log("DEBUG" + selectedProjectId)
       let res = await authApi().post(endpoints["vn-pay"](selectedProjectId), formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -127,14 +121,12 @@ const ProjectPage = () => {
 
   };
 
-  const handleProjectSelection = (projectId) => {
-    setSelectedProjectId(projectId);
-  };
-
   const openModal = (projectId, projectTitle) => {
+    localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
-    setSelectedProjectTitle(projectTitle); // Lưu tiêu đề của dự án
+    setSelectedProjectTitle(projectTitle);
     setShowModal(true);
+
   };
 
   const closeModal = () => {

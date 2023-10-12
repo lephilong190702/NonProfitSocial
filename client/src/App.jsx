@@ -21,12 +21,6 @@ const App = () => {
     <UserContext.Provider value={[user, dispatch]}>
       <BrowserRouter>
       <Header />
-        {/* <h1 className='text-red-500'>Hello</h1>
-        <Header />
-        <Routes>
-          <Route path='/' element={<Home />} />
-        </Routes>
-        <Footer /> */}
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
@@ -39,9 +33,6 @@ const App = () => {
           <Route path="/social/profile" element={<Profile />} />
           <Route path='/projects' element ={<ProjectPage />} />
           <Route path="/projects/:projectId" element={<ProjectDetails />} />
-          
-
-
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

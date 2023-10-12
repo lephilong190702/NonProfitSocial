@@ -254,6 +254,13 @@ const Post = () => {
             <div className="postCenter">
               <span className="postText">{p.content}</span>
             </div>
+            <div className="postCenter">
+              {
+                p.images.length > 0 && p.images.map((image, index) => (
+                  <img src={image.image} key={index} alt="image" />
+                ))
+              }
+            </div>
             <div className="postBottom">
               <div className="postBottomLeft">
                 <img

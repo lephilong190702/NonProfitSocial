@@ -34,6 +34,7 @@ const ProjectPage = () => {
   const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
   const vnpTxnRef = urlParams.get("vnp_TxnRef");
   const vnpSecureHash = urlParams.get("vnp_SecureHash");
+  const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
 
   useEffect(() => {
     let loadProject = async () => {
@@ -130,8 +131,9 @@ const ProjectPage = () => {
     setSelectedProjectId(projectId);
   };
 
-  const openModal = (projectId) => {
+  const openModal = (projectId, projectTitle) => {
     setSelectedProjectId(projectId);
+    setSelectedProjectTitle(projectTitle); // Lưu tiêu đề của dự án
     setShowModal(true);
   };
 
@@ -171,10 +173,7 @@ const ProjectPage = () => {
                     Xem chi tiết
                   </Link>
                   <Button
-                    onClick={() => {
-                      handleProjectSelection(p.id);
-                      openModal(p.id);
-                    }}
+                    onClick={() => openModal(p.id, p.title)} // Truyền tiêu đề của dự án
                     className="card-link donate-link"
                     style={{ marginRight: "5px" }}
                     variant="primary"
@@ -189,7 +188,7 @@ const ProjectPage = () => {
       </Row>
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Thông tin đóng góp</Modal.Title>
+          <Modal.Title>{selectedProjectTitle}</Modal.Title> {/* Hiển thị tiêu đề ở đầu trang modal */}
         </Modal.Header>
         <Modal.Body>
           <Form>

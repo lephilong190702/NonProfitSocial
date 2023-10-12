@@ -21,6 +21,7 @@ const NewsPage = () => {
           let kw = q.get("kw");
           if (kw !== null) e = `${e}?kw=${kw}`;
         }
+        console.log(e);
 
         let res = await ApiConfig.get(e);
         setNews(res.data);

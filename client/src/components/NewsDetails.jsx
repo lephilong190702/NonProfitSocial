@@ -22,7 +22,7 @@ const NewsDetails = () => {
         }
 
         const loadComments = async () => {
-            // Kiểm tra xem có dữ liệu đã lưu trong Local Storage không
+        
             const storedComments = localStorage.getItem('comments');
             if (storedComments) {
                 setComments(JSON.parse(storedComments));

@@ -27,7 +27,7 @@ const Share = () => {
     }));
   };
 
-  const sharePosted = async (event) => {
+  const sharePosted = (event) => {
     event.preventDefault();
 
     const process = async () => {
@@ -39,9 +39,15 @@ const Share = () => {
         shareForm.append(`files[${index}]`, image);
       });
 
+        if (share.files.length > 0)
+          for (let i = 0; i < share.files.length; i++) {
+            shareForm.append("files", share.files[i]);
+          }
+
       try {
         let res = await authApi().post(endpoints["post"], shareForm);
         console.log(res.data);
+        console.log(shareForm)
         setSuccessMessage("Đăng bài thành công");
         setTimeout(() => {
           setSuccessMessage("");
@@ -52,6 +58,7 @@ const Share = () => {
         console.error(error.response.data);
       }
     };
+    // console.log(share.content, share.tags, share.files);
     process();
   };
 
@@ -100,7 +107,7 @@ const Share = () => {
                 <span>{share.files.length} image(s) selected</span>
               )}
             </div>
-            {/* Các tùy chọn khác */}
+           
           </div>
           <Button className="shareButton" type="submit" onClick={sharePosted}>
             Share

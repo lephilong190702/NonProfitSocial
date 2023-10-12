@@ -37,6 +37,9 @@ const ProjectDetails = () => {
                 <Col>
                     <h2 className="text-danger">{project.title}</h2>
                     <p>{project.content}</p>
+                    <hr />
+                    {/* <Image {...project.images} /> */}
+                    <hr />
                     <h3>{project.startDate} - {project.endDate}</h3>
                 </Col>
                 <Button>Đóng góp</Button>

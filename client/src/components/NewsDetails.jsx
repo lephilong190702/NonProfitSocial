@@ -16,7 +16,7 @@ const NewsDetails = () => {
     const [replyContent, setReplyContent] = useState('');
 
     useEffect(() => {
-        const loadNews = async () => {
+        const loadNewsDetail = async () => {
             let { data } = await ApiConfig.get(endpoints["details"](newsId));
             setNews(data);
         }
@@ -39,7 +39,7 @@ const NewsDetails = () => {
             setReplyContent(data);
         }
 
-        loadNews();
+        loadNewsDetail();
         loadComments();
         loadNewsReply();
     }, [newsId]);

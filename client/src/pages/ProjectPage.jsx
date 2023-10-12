@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
 import { Header } from "../components";
-import { Alert, Card, Col, Row, Button, Modal, Form } from "react-bootstrap";
+import { Alert, Card, Col, Row, Button, Modal, Form, ProgressBar } from "react-bootstrap";
 import "./projects.css"; // Import CSS file
 
 const ProjectPage = () => {
@@ -91,40 +91,45 @@ const ProjectPage = () => {
   if (project.length === 0)
     return (
       <>
-        <Header />
         <Alert variant="info" className="mt-5">
-          Không có tin tức nào
+          Không có dự án nào
         </Alert>
       </>
     );
 
-  return (
-    <div className="container">
-      <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
-      <Row>
-        {project.map((p) => {
-          let url = `/projects/${p.id}`;
-          return (
-            <Col xs={12} md={3} key={p.id}>
-              <Card className="card">
-                <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} className="card-img" />
-                <Card.Body>
-                  <Card.Title className="card-title">{p.title}</Card.Title>
-                  <Card.Text className="card-text">{p.content}</Card.Text>
-                  <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
-                  <Card.Footer>Số tiền đã quyên góp: {p.totalAmount}</Card.Footer>
-
-                  <Link to={url} className="card-link">
-                    Xem chi tiết
-                  </Link>
-                  <Button
-                    onClick={() => openModal(p.id, p.title)} // Truyền tiêu đề của dự án
-                    className="card-link donate-link"
-                    style={{ marginRight: "5px" }}
-                    variant="primary"
-                  >
-                    Đóng góp
-                  </Button>
+    return (
+      <div className="container">
+        <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
+        <Row>
+          {project.map((p) => {
+            let url = `/projects/${p.id}`;
+            
+            const maxContentHeight = 100; 
+            const content = p.content.length > maxContentHeight ? p.content.substring(0, maxContentHeight) + '...' : p.content;
+            
+            return (
+              <Col xs={12} md={3} key={p.id}>
+                <Card className="card">
+                  <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} className="card-img" />
+                  <Card.Body>
+                    <Card.Title className="card-title">{p.title}</Card.Title>
+                    <Card.Text className="card-text">{content}</Card.Text> 
+                    <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
+                    <Card.Footer>Số tiền cần quyên góp: {p.totalAmount}</Card.Footer>
+                    <ProgressBar now={(p.contributedAmount / p.totalAmount) * 100} />
+                    <hr/>
+    
+                    <Link to={url} className="card-link">
+                      Xem chi tiết
+                    </Link>
+                    <Button
+                      onClick={() => openModal(p.id, p.title)}
+                      className="card-link donate-link"
+                      style={{ marginRight: "5px" }}
+                      variant="primary"
+                    >
+                      Đóng góp
+                    </Button>
                 </Card.Body>
               </Card>
             </Col>

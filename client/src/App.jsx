@@ -11,6 +11,7 @@ import Profile from './pages/profile/Profile';
 import ProjectPage from './pages/ProjectPage';
 import { Header } from './components';
 import ProjectDetails from './components/ProjectDetails';
+import Footer from './components/Footer';
 
 export const UserContext = createContext();
 
@@ -21,13 +22,8 @@ const App = () => {
     <UserContext.Provider value={[user, dispatch]}>
       <BrowserRouter>
       <Header />
-        {/* <h1 className='text-red-500'>Hello</h1>
-        <Header />
         <Routes>
-          <Route path='/' element={<Home />} />
-        </Routes>
-        <Footer /> */}
-        <Routes>
+          
           <Route path='/' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/userProfile' element={<UserProfile />} />
@@ -43,6 +39,7 @@ const App = () => {
 
 
         </Routes>
+        <Footer />
       </BrowserRouter>
     </UserContext.Provider>
   )

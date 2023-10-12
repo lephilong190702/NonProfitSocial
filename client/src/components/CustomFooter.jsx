@@ -1,26 +1,41 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import "./footer.css"
 
 const CustomFooter = () => {
   return (
-    <div>
-      <Row className="mb-3">
-        <Col>
-          <h1>Về chúng tôi</h1>
-          <p>
-            Quỹ Từ thiện Bông Sen được thành lập theo Quyết định số: 24/QĐ-BNV
-            ngày 5 tháng 1 năm 2018. Quỹ Bông Sen là phiên bản mở rộng của Quỹ
-            Từ thiện Tình Thương thành phố Hồ Chí Minh. Quỹ có phạm vi hoạt động
-            toàn quốc.
-          </p>
-        </Col>
-        <Col>
-        </Col>
-        <Col>
-        </Col>
-        <Col>
-        </Col>
-      </Row>
+    <div className="footer">
+      <div className="footer-container">
+        <div className="footer-column">
+          <h4>Công ty TNHH ABC</h4>
+          <p>Địa chỉ: 123 Đường XYZ, Phường 1, Quận 2, TP. Hồ Chí Minh</p>
+          <p>Điện thoại: 028 1234 5678</p>
+          <p>Email: abc@gmail.com</p>
+        </div>
+        <div className="footer-column">
+          <h4>Dịch vụ của chúng tôi</h4>
+          <ul>
+            <li>Thiết kế website</li>
+            <li>Phát triển ứng dụng</li>
+            <li>Tư vấn giải pháp công nghệ</li>
+            <li>Bảo trì và hỗ trợ kỹ thuật</li>
+          </ul>
+        </div>
+        <div className="footer-column">
+          <h4>Kết nối với chúng tôi</h4>
+          <div className="social-icons">
+            <a href="#"><FaFacebookF /></a>
+            <a href="#"><FaTwitter /></a>
+            <a href="#"><FaInstagram /></a>
+            <a href="#"><FaYoutube /></a>
+          </div>
+          <p>Email nhận tin tức: abc@gmail.com</p>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>Bản quyền © 2023 Công ty TNHH ABC. Mọi quyền được bảo lưu.</p>
+      </div>
     </div>
   );
 };

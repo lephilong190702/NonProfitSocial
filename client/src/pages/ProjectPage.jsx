@@ -16,18 +16,34 @@ const ProjectPage = () => {
   const [q] = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const currentURL = window.location.href;
+  const urlParams = new URLSearchParams(currentURL);
+  const url = new URL(currentURL);
+  const vnpAmount = url.searchParams.get("vnp_Amount");
+  const vnpBankCode = urlParams.get("vnp_BankCode");
+  const vnpBankTranNo = urlParams.get("vnp_BankTranNo");
+  const vnpCardType = urlParams.get("vnp_CardType");
+  const vnpOrderInfo = urlParams.get("vnp_OrderInfo");
+  const vnpPayDate = urlParams.get("vnp_PayDate");
+  const vnpResponseCode = urlParams.get("vnp_ResponseCode");
+  const vnpTmnCode = urlParams.get("vnp_TmnCode");
+  const vnpTransactionNo = urlParams.get("vnp_TransactionNo");
+  const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
+  const vnpTxnRef = urlParams.get("vnp_TxnRef");
+  const vnpSecureHash = urlParams.get("vnp_SecureHash");
   const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
 
   useEffect(() => {
-    let loadProject = async () => {
+    console.log("vnpAmount: ", vnpAmount);
+    const savedProjectId = localStorage.getItem("selectedProjectId");
+
+    const loadProject = async () => {
       try {
         let e = endpoints["project"];
-        console.log(e);
         let cateId = q.get("cateId");
-        
+
         if (cateId !== null) {
           e = `${e}pcategories/${cateId}`;
-          console.log(e)
         }
 
         else {
@@ -42,8 +58,36 @@ const ProjectPage = () => {
       }
     };
 
+    const payment = async () => {
+      const form = new FormData();
+      form.append("vnp_Amount", vnpAmount);
+      form.append("vnp_BankCode", vnpBankCode)
+      form.append("vnp_BankTranNo", vnpBankTranNo)
+      form.append("vnp_CardType", vnpCardType)
+      form.append("vnp_OrderInfo", vnpOrderInfo)
+      form.append("vnp_PayDate", vnpPayDate)
+      form.append("vnp_ResponseCode", vnpResponseCode)
+      form.append("vnp_SecureHash", vnpSecureHash)
+      form.append("vnp_TmnCode", vnpTmnCode)
+      form.append("vnp_TransactionNo", vnpTransactionNo)
+      form.append("vnp_TransactionStatus", vnpTransactionStatus)
+      form.append("vnp_TxnRef", vnpTxnRef)
+
+      let e = await authApi().post(endpoints["callback"](savedProjectId), form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+    }
+
+    if (urlParams.has("vnp_PayDate")) {
+      payment();
+    }
+
     loadProject();
   }, [q]);
+
 
   const handlePayment = async () => {
     if (selectedProjectId === null) {
@@ -56,7 +100,6 @@ const ProjectPage = () => {
       formData.append("projectId", selectedProjectId);
       formData.append("donateAmount", pay.donateAmount);
       formData.append("note", pay.note);
-
       let res = await authApi().post(endpoints["vn-pay"](selectedProjectId), formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -71,15 +114,19 @@ const ProjectPage = () => {
       } else {
         console.error("Không có đường dẫn trả về từ server.");
       }
+
     } catch (error) {
       console.error(error);
     }
+
   };
 
   const openModal = (projectId, projectTitle) => {
+    localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
-    setSelectedProjectTitle(projectTitle); // Lưu tiêu đề của dự án
+    setSelectedProjectTitle(projectTitle);
     setShowModal(true);
+
   };
 
   const closeModal = () => {

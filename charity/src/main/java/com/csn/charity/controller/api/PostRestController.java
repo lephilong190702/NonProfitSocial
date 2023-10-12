@@ -2,7 +2,6 @@ package com.csn.charity.controller.api;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +34,6 @@ import com.csn.charity.service.interfaces.TagService;
 
 @RestController
 @RequestMapping("/api")
-@Slf4j
 public class PostRestController {
     @Autowired
     private PostService postService;

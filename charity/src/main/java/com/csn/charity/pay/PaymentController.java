@@ -13,6 +13,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,24 +50,31 @@ public class PaymentController {
         return new ResponseEntity<>(vnpayUrl, HttpStatus.CREATED);
     }
 
-    @GetMapping("/vnpay-payment/{projectId}")
+    @PostMapping("/callback/{projectId}")
     @CrossOrigin
-    public ResponseEntity<?> getPaymentStatus(@PathVariable(value = "projectId") Long projectId,
+    public ResponseEntity<?> getPaymentStatus(@PathVariable Long projectId,
             HttpServletRequest request) throws IOException {
-        int paymentStatus = vnPayService.orderReturn(request);
 
+        String totalPrice = request.getParameter("vnp_Amount");
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
         String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
+        String status = request.getParameter("vnp_TransactionStatus");
 
-        System.out.println("STATUS" + paymentStatus);
-        if (paymentStatus == 1) {
+        System.out.println("vnp_Amount: " + totalPrice);
+        System.out.println("vnp_PayDate: " + paymentTime);
+        System.out.println("vnp_BankCode: " + transactionId);
+        System.out.println("vnp_TransactionStatus: " + status);
+        if ("00".equals(status)) {
             BigDecimal donatedAmount = new BigDecimal(totalPrice);
             UserContributeProject userContributeProject = new UserContributeProject();
             userContributeProject.setDonateAmount(donatedAmount.divide(new BigDecimal(100)));
             System.out.println(userContributeProject.getUser());
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            System.out.println("DEBUG" + username);
             donateService.donate(projectId, userContributeProject);
+            System.out.println("XONG");
             return new ResponseEntity<>("Xong", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Lỗi", HttpStatus.BAD_REQUEST);

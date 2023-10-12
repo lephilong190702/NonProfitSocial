@@ -51,6 +51,7 @@ export const endpoints = {
     "chat": `${SERVER_CONTEXT}/api/chat/`,
     "replies-post": (parentId) => `${SERVER_CONTEXT}/api/post-comment/${parentId}/replies/`,
     "comment-post": (postId) => `${SERVER_CONTEXT}/api/post/${postId}/comments/`,
+    "statistic": `${SERVER_CONTEXT}/api/export/`
 }
 
 export const authApi = () => {

@@ -4,28 +4,27 @@ import {
   Container,
   Form,
   Nav,
-  NavDropdown,
   Navbar,
+  NavDropdown,
 } from "react-bootstrap";
 import MySpinner from "../layout/MySpinner";
 import { Link, useNavigate } from "react-router-dom";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
 import { UserContext } from "../App";
+import { saveAs } from "file-saver";
 
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
   const [newsCategory, setNewsCategory] = useState([]);
   const [projectCategory, setProjectCategory] = useState([]);
   const [kw, setKw] = useState("");
+  const [stats, setStats] = useState();
   const nav = useNavigate();
 
   useEffect(() => {
     const loadNews = async () => {
-      // let res = await fetch("http://localhost:9090/api/ncategories/");
-      // let data = await res.json();
       try {
         let res = await ApiConfig.get(endpoints["newsCategory"]);
-
         setNewsCategory(res.data);
       } catch (error) {
         console.log(error);
@@ -33,11 +32,8 @@ const CustomNavbar = () => {
     };
 
     const loadProjects = async () => {
-      // let res = await fetch("http://localhost:9090/api/ncategories/");
-      // let data = await res.json();
       try {
         let res = await ApiConfig.get(endpoints["projectCategory"]);
-
         setProjectCategory(res.data);
       } catch (error) {
         console.log(error);
@@ -48,9 +44,28 @@ const CustomNavbar = () => {
     loadNews();
   }, []);
 
+  const exportFinancialReport = async () => {
+    try {
+      const response = await ApiConfig.get(endpoints["statistic"]);
+      const excelData = response.data;
+
+      // Tạo Blob từ dữ liệu Excel
+      const blob = new Blob([excelData], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Sử dụng thư viện FileSaver.js để tải tệp Excel
+      saveAs(blob, "financial_report.xlsx");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const search = (evt) => {
     evt.preventDefault();
     nav(`/?kw=${kw}`);
+    console.log(`/?kw=${kw}`)
+    
   };
 
   const logout = () => {
@@ -92,7 +107,7 @@ const CustomNavbar = () => {
               ))}
             </NavDropdown>
 
-            <Nav.Link href="#financial_report">Báo cáo tài chính</Nav.Link>
+            <Nav.Link onClick={exportFinancialReport}>Báo cáo tài chính</Nav.Link>
 
             <Link to="/social" className="nav-link">
               Mạng xã hội
@@ -134,7 +149,7 @@ const CustomNavbar = () => {
           </Nav>
         </Navbar.Collapse>
 
-        <Form onSubmit={search} className="d-flex">
+        <Form onSubmit={search} inline className="d-flex">
           <Form.Control
             type="search"
             value={kw}
@@ -143,7 +158,7 @@ const CustomNavbar = () => {
             className="me-2"
             aria-label="Search"
           />
-          <Button variant="outline-success">Tìm</Button>
+          <Button variant="outline-success" type="submit">Tìm</Button>
         </Form>
       </Container>
     </Navbar>

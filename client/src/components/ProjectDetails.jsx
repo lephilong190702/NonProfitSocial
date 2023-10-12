@@ -37,7 +37,7 @@ const ProjectDetails = () => {
                 <Col>
                     <h2 className="text-danger">{project.title}</h2>
                     <p>{project.content}</p>
-                    <h3>{project.startDate}</h3>
+                    <h3>{project.startDate} - {project.endDate}</h3>
                 </Col>
                 <Button>Đóng góp</Button>
             </Row>

@@ -16,6 +16,24 @@ const ProjectPage = () => {
   const [q] = useSearchParams();
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const currentURL = window.location.href;
+
+  // Tạo một đối tượng URLSearchParams từ URL
+  const urlParams = new URLSearchParams(currentURL);
+
+  // Trích xuất các giá trị từ URL sử dụng get() method
+  const vnpAmount = urlParams.get("vnp_Amount");
+  const vnpBankCode = urlParams.get("vnp_BankCode");
+  const vnpBankTranNo = urlParams.get("vnp_BankTranNo");
+  const vnpCardType = urlParams.get("vnp_CardType");
+  const vnpOrderInfo = urlParams.get("vnp_OrderInfo");
+  const vnpPayDate = urlParams.get("vnp_PayDate");
+  const vnpResponseCode = urlParams.get("vnp_ResponseCode");
+  const vnpTmnCode = urlParams.get("vnp_TmnCode");
+  const vnpTransactionNo = urlParams.get("vnp_TransactionNo");
+  const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
+  const vnpTxnRef = urlParams.get("vnp_TxnRef");
+  const vnpSecureHash = urlParams.get("vnp_SecureHash");
 
   useEffect(() => {
     let loadProject = async () => {
@@ -23,7 +41,7 @@ const ProjectPage = () => {
         let e = endpoints["project"];
         console.log(e);
         let cateId = q.get("cateId");
-        
+
         if (cateId !== null) {
           e = `${e}pcategories/${cateId}`;
           console.log(e)
@@ -41,8 +59,38 @@ const ProjectPage = () => {
       }
     };
 
+    let payment = async () => {
+      const form = new FormData();
+      form.append("projectId", selectedProjectId);
+      form.append("vnp_Amount", vnpAmount);
+      form.append("vnp_BankCode", vnpBankCode)
+      form.append("vnp_BankTranNo", vnpBankTranNo)
+      form.append("vnp_CardType", vnpCardType)
+      form.append("vnp_OrderInfo", vnpOrderInfo)
+      form.append("vnp_PayDate", vnpPayDate)
+      form.append("vnp_ResponseCode", vnpResponseCode)
+      form.append("vnp_SecureHash", vnpSecureHash)
+      form.append("vnp_TmnCode", vnpTmnCode)
+      form.append("vnp_TransactionNo", vnpTransactionNo)
+      form.append("vnp_TransactionStatus", vnpTransactionStatus)
+      form.append("vnp_TxnRef", vnpTxnRef)
+
+      console.log("DEBUG" + selectedProjectId)
+      let e = await authApi().post(endpoints["callback"](selectedProjectId), form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(e.data)
+
+    }
+    
+    if (urlParams.has("vnp_BankCode")) {
+      payment();
+    }
     loadProject();
   }, [q]);
+
 
   const handlePayment = async () => {
     if (selectedProjectId === null) {
@@ -56,6 +104,7 @@ const ProjectPage = () => {
       formData.append("donateAmount", pay.donateAmount);
       formData.append("note", pay.note);
 
+      console.log("DEBUG" + selectedProjectId)
       let res = await authApi().post(endpoints["vn-pay"](selectedProjectId), formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -70,9 +119,15 @@ const ProjectPage = () => {
       } else {
         console.error("Không có đường dẫn trả về từ server.");
       }
+
     } catch (error) {
       console.error(error);
     }
+
+  };
+
+  const handleProjectSelection = (projectId) => {
+    setSelectedProjectId(projectId);
   };
 
   const openModal = (projectId) => {
@@ -110,13 +165,16 @@ const ProjectPage = () => {
                   <Card.Title className="card-title">{p.title}</Card.Title>
                   <Card.Text className="card-text">{p.content}</Card.Text>
                   <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
-                  <Card.Footer>Số tiền đã quyên góp: {p.totalAmount}</Card.Footer>
+                  <Card.Footer>Số tiền cần quyên góp: {p.totalAmount}</Card.Footer>
 
                   <Link to={url} className="card-link">
                     Xem chi tiết
                   </Link>
                   <Button
-                    onClick={() => openModal(p.id)}
+                    onClick={() => {
+                      handleProjectSelection(p.id);
+                      openModal(p.id);
+                    }}
                     className="card-link donate-link"
                     style={{ marginRight: "5px" }}
                     variant="primary"

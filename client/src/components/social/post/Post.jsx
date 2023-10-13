@@ -33,6 +33,12 @@ const Post = () => {
   const [likeCount, setLikeCount] = useState({});
 
   const likeHandler = async (postId) => {
+    if (!user) {
+      // Người dùng chưa đăng nhập, hiển thị thông báo
+      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
+      return;
+    }
+
     try {
       const { data } = await authApi().post(endpoints["react"], {
         reaction: "LIKE",
@@ -106,6 +112,12 @@ const Post = () => {
   };
 
   const addComment = async (postId) => {
+    if (!user) {
+      // Người dùng chưa đăng nhập, hiển thị thông báo
+      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
+      return;
+    }
+
     try {
       const response = await authApi().post(endpoints["post-comment"], {
         postId: postId,
@@ -118,7 +130,7 @@ const Post = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   const loadCommentsByPostId = async (postId) => {
     try {
@@ -309,8 +321,8 @@ const Post = () => {
             </div>
             <div className="commentList">
               <ListGroup>
-                {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
-                  comments[p.id].map((comment) => (
+              {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
+  comments[p.id].slice().reverse().map((comment) => (
                     <ListGroup.Item key={comment.id}>
                       <span
                         className="commentContent"

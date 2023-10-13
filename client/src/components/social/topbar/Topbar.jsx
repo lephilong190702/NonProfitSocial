@@ -7,23 +7,20 @@ import { authApi, endpoints } from "../../../configs/ApiConfig";
 import { Link } from "react-router-dom";
 
 const Topbar = () => {
-  const[user] = useContext(UserContext)
-  const [avatar, setAvatar] = useState([])
+  const [user] = useContext(UserContext);
+  const [avatar, setAvatar] = useState([]);
 
-
-useEffect(() => {
-  const loadUserById = async () => {
-
-    try {
-      let res = await authApi().get(endpoints["userId"](user.id))
-      setAvatar(res.data);
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  loadUserById();
-}, [])
-    
+  useEffect(() => {
+    const loadUserById = async () => {
+      try {
+        let res = await authApi().get(endpoints["userId"](user.id));
+        setAvatar(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    loadUserById();
+  }, []);
 
   return (
     <div className="topbarContainer">
@@ -42,7 +39,10 @@ useEffect(() => {
 
       <div className="topbarRight">
         <div className="topbarLinks">
-          <span className="topbarLink">Homepage</span>
+          <Link to={`/social`} style={{ color: "white" }}>
+            <span className="topbarLink">Homepage</span>
+          </Link>
+
           {/* <span className="topbarLink">Timeline</span> */}
         </div>
         <div className="topbarIcons">
@@ -60,11 +60,10 @@ useEffect(() => {
           </div>
         </div>
         <Link to={`/social/profile`}>
-        {user === null  ? (null) : (
-          <img src={avatar.profile?.avatar} alt="" className="topbarImg"/>
-        )}
+          {user === null ? null : (
+            <img src={avatar.profile?.avatar} alt="" className="topbarImg" />
+          )}
         </Link>
-        
       </div>
     </div>
   );

@@ -113,7 +113,6 @@ const Post = () => {
 
   const addComment = async (postId) => {
     if (!user) {
-      // Người dùng chưa đăng nhập, hiển thị thông báo
       alert("Bạn cần đăng nhập để thực hiện thao tác này.");
       return;
     }
@@ -130,7 +129,7 @@ const Post = () => {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const loadCommentsByPostId = async (postId) => {
     try {
@@ -302,108 +301,147 @@ const Post = () => {
               </div>
             </div>
             <div>
-              <Form.Control
-                as="textarea"
-                aria-label="With textarea"
-                value={content[p.id] || ""}
-                onChange={(e) =>
-                  setContent({ ...content, [p.id]: e.target.value })
-                }
-                placeholder="Nội dung bình luận"
-              />
-              <Button
-                onClick={() => addComment(p.id)}
-                className="mt-2"
-                variant="info"
-              >
-                Bình luận
-              </Button>
+              {user ? (
+                <Form.Control
+                  as="textarea"
+                  aria-label="With textarea"
+                  value={content[p.id] || ""}
+                  onChange={(e) =>
+                    setContent({ ...content, [p.id]: e.target.value })
+                  }
+                  placeholder="Nội dung bình luận"
+                />
+              ) : (
+                <p>Bạn cần đăng nhập để bình luận.</p>
+              )}
+              {user && (
+                <Button
+                  onClick={() => addComment(p.id)}
+                  className="mt-2"
+                  variant="info"
+                >
+                  Bình luận
+                </Button>
+              )}
             </div>
             <div className="commentList">
               <ListGroup>
-              {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
-  comments[p.id].slice().reverse().map((comment) => (
-                    <ListGroup.Item key={comment.id}>
-                      <span
-                        className="commentContent"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <img
-                          src={comment.user.profile.avatar}
-                          alt="avatar"
-                          style={{
-                            width: "32px",
-                            height: "32px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            marginRight: "5px",
-                          }}
-                        />
-                        {comment.user.username} - {comment.content} -{" "}
-                        {moment(comment.createDate).fromNow()}
-                      </span>
-                      <Button
-                        variant="link"
-                        onClick={() => handleShowReplies(comment.id)}
-                      >
-                        Hiển thị phản hồi
-                      </Button>
-
-                      {Array.isArray(replies[comment.id]) &&
-                      replies[comment.id].length > 0
-                        ? replies[comment.id].map((reply) => (
-                            <div key={reply.id} className="reply">
-                              <span
-                                className="replyContent"
+                {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
+                  comments[p.id]
+                    .slice()
+                    .reverse()
+                    .map((comment) => (
+                      <ListGroup.Item key={comment.id}>
+                        <div className="comment">
+                          <span
+                            className="commentContent "
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            <div className="comment-avatar">
+                              <img
+                                src={comment.user.profile.avatar}
+                                alt="avatar"
                                 style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  marginBottom: "10px",
+                                  width: "32px",
+                                  height: "32px",
+                                  borderRadius: "50%",
+                                  objectFit: "cover",
+                                  marginRight: "5px",
                                 }}
-                              >
-                                <img
-                                  src={reply.user.profile.avatar}
-                                  alt="avatar"
-                                  style={{
-                                    width: "32px",
-                                    height: "32px",
-                                    borderRadius: "50%",
-                                    objectFit: "cover",
-                                    marginRight: "5px",
-                                  }}
-                                />{" "}
-                                {reply.user.username} - {reply.content} -{" "}
-                                {moment(reply.createDate).fromNow()}
-                              </span>
+                              />
                             </div>
-                          ))
-                        : null}
+                            <div className="comment-details">
+                              <div className="comment-username">
+                                {comment.user.username}
+                              </div>
+                              <div className="comment-content">
+                                {comment.content}
+                              </div>
+                              <div className="comment-time">
+                                {" "}
+                                {moment(comment.createDate).fromNow()}
+                              </div>
+                            </div>
+                          </span>
+                          <Button
+                            variant="link"
+                            onClick={() => handleShowReplies(comment.id)}
+                          >
+                            Hiển thị phản hồi
+                          </Button>
+                        </div>
 
-                      <Form.Control
-                        as="textarea"
-                        aria-label="With textarea"
-                        value={replyContent[comment.id] || ""}
-                        onChange={(e) =>
-                          setReplyContent({
-                            ...replyContent,
-                            [comment.id]: e.target.value,
-                          })
-                        }
-                        placeholder="Nội dung phản hồi"
-                      />
-                      <Button
-                        onClick={() => addReply(comment.id, p.id)}
-                        className="mt-2"
-                        variant="info"
-                      >
-                        Thêm phản hồi
-                      </Button>
-                    </ListGroup.Item>
-                  ))
+                        {Array.isArray(replies[comment.id]) &&
+                        replies[comment.id].length > 0
+                          ? replies[comment.id].map((reply) => (
+                              <div key={reply.id} className="reply">
+                                <span
+                                  className="replyContent"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginBottom: "10px",
+                                  }}
+                                >
+                                  <div className="reply-avatar">
+                                    <img
+                                      src={reply.user.profile.avatar}
+                                      alt="avatar"
+                                      style={{
+                                        width: "32px",
+                                        height: "32px",
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                        marginRight: "5px",
+                                      }}
+                                    />{" "}
+                                  </div>
+                                  <div className="reply-details">
+                                    <div className="reply-username">
+                                      {reply.user.username}
+                                    </div>
+                                    <div clmassName="reply-content">
+                                      {reply.content}
+                                    </div>
+                                    <div className="reply-time">
+                                      {" "}
+                                      {moment(reply.createDate).fromNow()}
+                                    </div>
+                                  </div>
+                                </span>
+                              </div>
+                            ))
+                          : null}
+
+                        {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                          <Form.Control
+                            as="textarea"
+                            aria-label="With textarea"
+                            value={replyContent[comment.id] || ""}
+                            onChange={(e) =>
+                              setReplyContent({
+                                ...replyContent,
+                                [comment.id]: e.target.value,
+                              })
+                            }
+                            placeholder="Nội dung phản hồi"
+                          />
+                        )}
+                        {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                          <Button
+                            onClick={() => addReply(comment.id, p.id)}
+                            className="mt-2"
+                            variant="info"
+                          >
+                            Thêm phản hồi
+                          </Button>
+                        )}
+                      </ListGroup.Item>
+                    ))
                 ) : (
                   <div>Không có bình luận</div>
                 )}

@@ -1,17 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  Nav,
-  Navbar,
-  NavDropdown,
-} from "react-bootstrap";
+import { Button, Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import MySpinner from "../layout/MySpinner";
 import { Link, useNavigate } from "react-router-dom";
 import ApiConfig, { endpoints } from "../configs/ApiConfig";
 import { UserContext } from "../App";
 import { saveAs } from "file-saver";
+import * as XLSX from "xlsx";
+import JSZip from "jszip";
 
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
@@ -46,26 +41,20 @@ const CustomNavbar = () => {
 
   const exportFinancialReport = async () => {
     try {
-      const response = await ApiConfig.get(endpoints["statistic"]);
-      const excelData = response.data;
-
-      // Tạo Blob từ dữ liệu Excel
-      const blob = new Blob([excelData], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      const response = await ApiConfig.get(endpoints["statistic"], {
+        responseType: "arraybuffer",
       });
-
-      // Sử dụng thư viện FileSaver.js để tải tệp Excel
+  
+      const blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       saveAs(blob, "financial_report.xlsx");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const search = (evt) => {
     evt.preventDefault();
     nav(`/?kw=${kw}`);
-    console.log(`/?kw=${kw}`)
-    
   };
 
   const logout = () => {
@@ -99,7 +88,9 @@ const CustomNavbar = () => {
                 })}
             </NavDropdown>
 
-            <Nav.Link href="#financial_report" onClick={exportFinancialReport}>Báo cáo tài chính</Nav.Link>
+            <Nav.Link href="#financial_report" onClick={exportFinancialReport}>
+              Báo cáo tài chính
+            </Nav.Link>
 
             <Link to="/social" className="nav-link">
               Mạng xã hội
@@ -117,8 +108,10 @@ const CustomNavbar = () => {
                 })}
             </NavDropdown>
 
-            <Link to="/registerVol" className="nav-link">Liên hệ</Link>
-            
+            <Link to="/registerVol" className="nav-link">
+              Liên hệ
+            </Link>
+
             {user === null ? (
               <>
                 <Link to="/login" className="text-danger nav-link">
@@ -150,7 +143,9 @@ const CustomNavbar = () => {
             className="me-2"
             aria-label="Search"
           />
-          <Button variant="outline-success" type="submit">Tìm</Button>
+          <Button variant="outline-success" type="submit">
+            Tìm
+          </Button>
         </Form>
       </Container>
     </Navbar>

@@ -4,6 +4,7 @@ import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import "./registerVolunteer.css";
 import { UserContext } from "../App";
+import "./register.css"
 
 const RegisterVolunteerPage = () => {
   const [user] = useContext(UserContext);
@@ -16,6 +17,7 @@ const RegisterVolunteerPage = () => {
   });
   const [projectList, setProjectList] = useState([]);
   const [skillList, setSkillList] = useState([]);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const change = (evt, field) => {
     setVolunteer((current) => {
@@ -70,100 +72,102 @@ const RegisterVolunteerPage = () => {
         description: volunteer.description,
         skills: volunteer.skills,
       });
-
-      if (res.status === 201) {
-        console.log("Đăng ký thành công");
+      console.log(res.status)
+      if (res.status === 200) {
+        setRegistrationSuccess(true);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  // let url = `/login?next=/registerVol/${newsId}`;
-
   return (
     <div className="container">
-      <Form onSubmit={registerVol}>
-        <h1 className="form-heading">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
-        {user === null ? (
-          <p>
-    Vui lòng <Link to={"/login"} className="login-link">đăng nhập</Link> để đăng ký tình nguyện viên{" "}
-          </p>
-        ) : (
-          <>
-            <Row className="form-group">
-              <Form.Group as={Col} controlId="startDate">
-                <Form.Label>Ngày tham gia</Form.Label>
-                <Form.Control
-                  type="date"
-                  max={volunteer.endDate}
-                  value={volunteer.startDate}
-                  onChange={(e) => change(e, "startDate")}
-                  className="form-control"
-                />
-              </Form.Group>
+      {registrationSuccess ? (
+        <div className="success-message">Đăng ký thành công</div>
+      ) : (
+        <Form onSubmit={registerVol}>
+          <h1 className="form-heading">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
+          {user === null ? (
+            <p>
+              Vui lòng <Link to={"/login"} className="login-link">đăng nhập</Link> để đăng ký tình nguyện viên{" "}
+            </p>
+          ) : (
+            <>
+              <Row className="form-group">
+                <Form.Group as={Col} controlId="startDate">
+                  <Form.Label>Ngày tham gia</Form.Label>
+                  <Form.Control
+                    type="date"
+                    max={volunteer.endDate}
+                    value={volunteer.startDate}
+                    onChange={(e) => change(e, "startDate")}
+                    className="form-control"
+                  />
+                </Form.Group>
 
-              <Form.Group as={Col} controlId="endDate">
-                <Form.Label>Ngày kết thúc</Form.Label>
-                <Form.Control
-                  type="date"
-                  min={volunteer.startDate}
-                  value={volunteer.endDate}
-                  onChange={(e) => change(e, "endDate")}
-                  className="form-control"
-                />
-              </Form.Group>
+                <Form.Group as={Col} controlId="endDate">
+                  <Form.Label>Ngày kết thúc</Form.Label>
+                  <Form.Control
+                    type="date"
+                    min={volunteer.startDate}
+                    value={volunteer.endDate}
+                    onChange={(e) => change(e, "endDate")}
+                    className="form-control"
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridState">
+                  <Form.Label>Kỹ năng</Form.Label>
+                  {skillList.map((skill) => (
+                    <label key={skill.id} className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        id={`skill-${skill.id}`}
+                        checked={volunteer.skills.includes(skill.id)}
+                        onChange={() => toggleSkill(skill.id)}
+                      />
+                      {skill.name}
+                    </label>
+                  ))}
+                </Form.Group>
+              </Row>
 
               <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>Kỹ năng</Form.Label>
-                {skillList.map((skill) => (
-                  <label key={skill.id} className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      id={`skill-${skill.id}`}
-                      checked={volunteer.skills.includes(skill.id)}
-                      onChange={() => toggleSkill(skill.id)}
-                    />
-                    {skill.name}
-                  </label>
-                ))}
+                <Form.Label>Dự án muốn tham gia</Form.Label>
+                <Form.Select
+                  defaultValue="Choose..."
+                  value={volunteer.projectId}
+                  onChange={(e) => change(e, "projectId")}
+                  className="form-select"
+                >
+                  <option value="">Choose...</option>
+                  {projectList.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.title}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
-            </Row>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>Dự án muốn tham gia</Form.Label>
-              <Form.Select
-                defaultValue="Choose..."
-                value={volunteer.projectId}
-                onChange={(e) => change(e, "projectId")}
-                className="form-select"
-              >
-                <option value="">Choose...</option>
-                {projectList.map((project) => (
-                  <option key={project.id} value={project.id}>
-                    {project.title}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="form-group" controlId="formGridAddress2">
+                <Form.Label>Ghi chú</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Apartment, studio, or floor"
+                  value={volunteer.description}
+                  onChange={(e) => change(e, "description")}
+                  className="form-control"
+                />
+              </Form.Group>
 
-            <Form.Group className="form-group" controlId="formGridAddress2">
-              <Form.Label>Ghi chú</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Apartment, studio, or floor"
-                value={volunteer.description}
-                onChange={(e) => change(e, "description")}
-                className="form-control"
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit" className="btn-submit">
-              ĐĂNG KÝ
-            </Button>
-          </>
-        )}
-      </Form>
+              <Button variant="primary" type="submit" className="btn-submit">
+                ĐĂNG KÝ
+              </Button>
+            </>
+          )}
+        </Form>
+      )}
     </div>
   );
 };

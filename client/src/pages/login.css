@@ -82,3 +82,8 @@
       font-weight: 500;
       cursor: pointer;
   }
+
+  .error-message {
+    color: red;
+    margin: 10px 0;
+  }

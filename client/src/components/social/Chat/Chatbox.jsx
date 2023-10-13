@@ -45,27 +45,28 @@ const Chatbox = () => {
           const userRef = messageData.user;
           const userDoc = await getDoc(userRef);
           const userData = userDoc.data();
-          const displayName = userData.displayName;
-          const photoUrl = userData.photoUrl; // Lấy photoUrl từ dữ liệu người gửi
-          const userId = userData.id;
+          console.log(userData)
+          const displayName = userData?.displayName;
+          const photoUrl = userData?.photoUrl;
+          const userId = userData?.id;
           return { ...messageData, id: doc.id, userId, displayName, photoUrl };
         });
-      
+
         const messages = await Promise.all(promises);
         const senderData = {}; // Tạo đối tượng senderData mới
-      
+
         // Lặp qua messages để cập nhật senderData
         messages.forEach((message) => {
           senderData[message.id] = { userId: message.userId, displayName: message.displayName, photoUrl: message.photoUrl };
         });
-      
+
         // Cập nhật trạng thái messages và senderData
         setMessages(messages);
         setSenderData(senderData);
       });
-      
+
       return () => unsubscribe();
-      };
+    };
 
     fetchMessage();
   }, []);

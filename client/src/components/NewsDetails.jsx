@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import MySpinner from "../layout/MySpinner";
 import Header from "./Header";
 import moment from "moment";
+import "./comment.css";
 
 const NewsDetails = () => {
   const [user] = useContext(UserContext);
@@ -23,25 +24,12 @@ const NewsDetails = () => {
     };
 
     const loadComments = async () => {
-      const storedComments = localStorage.getItem("comments");
-      if (storedComments) {
-        setComments(JSON.parse(storedComments));
-      } else {
-        let { data } = await authApi().get(endpoints["comments"](newsId));
-        setComments(data);
-        // Lưu dữ liệu vào Local Storage
-        localStorage.setItem("comments", JSON.stringify(data));
-      }
-    };
-
-    const loadNewsReply = async () => {
-      let { data } = await authApi().get(endpoints["replies"](parentId));
-      setReplyContent(data);
+      let { data } = await authApi().get(endpoints["comments"](newsId));
+      setComments(data);
     };
 
     loadNewsDetail();
     loadComments();
-    loadNewsReply();
   }, [newsId]);
 
   const addComment = () => {
@@ -50,12 +38,12 @@ const NewsDetails = () => {
         content: content,
         newsId: news.id,
       });
-
-      setComments([...comments, data]);
-      // Cập nhật Local Storage khi thêm bình luận mới
-      localStorage.setItem("comments", JSON.stringify([...comments, data]));
+  
+      setComments((prevState) => [data, ...prevState]);
+  
+      setContent("");
     };
-
+  
     process();
   };
 
@@ -68,16 +56,14 @@ const NewsDetails = () => {
 
       const updatedComments = comments.map((c) => {
         if (c.id === parentId) {
-          c.reply_news = c.reply_news || [];
-          c.reply_news.push(data);
+          c.replies = c.replies || [];
+          c.replies.push(data);
         }
         return c;
       });
 
       setComments(updatedComments);
-      // Cập nhật Local Storage khi thêm phản hồi mới
-      localStorage.setItem("comments", JSON.stringify(updatedComments));
-      setReplyContent("");
+      setReplyContent(""); // Clear the reply content
     };
 
     process();
@@ -85,9 +71,9 @@ const NewsDetails = () => {
 
   if (news === null) return <MySpinner />;
 
- let url = `/login?next=/registerVol/${newsId}`;
+  let url = `/login?next=/registerVol/${newsId}`;
   return (
-    <>
+    <div className="comment-container">
       <h1 className="text-center text-info mt-2">{news.name}</h1>
       <hr />
       <Row>
@@ -102,11 +88,7 @@ const NewsDetails = () => {
       </Row>
       <hr />
 
-      {user === null ? (
-        <p>
-          Vui lòng <Link to={url}>đăng nhập</Link> để bình luận!{" "}
-        </p>
-      ) : (
+      {user !== null ? (
         <>
           <Form.Control
             as="textarea"
@@ -118,75 +100,69 @@ const NewsDetails = () => {
           <Button onClick={addComment} className="mt-2" variant="info">
             Bình luận
           </Button>
-       
-      
-      <hr />
-      
+        </>
+      ) : null}
+      <>
+        <hr />
+
         <ListGroup>
           {comments.map((comment) => (
             <ListGroup.Item key={comment.id}>
-              <li
-                key={comment.id}
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <img
-                  src={comment.user.profile.avatar}
-                  alt="avatar"
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    marginRight: "5px",
-                  }}
-                />
-                {comment.user.username} - {comment.content} -{" "}
-                {moment(comment.createDate).fromNow()}{" "}
-              </li>
+              <div className="comment">
+                <div className="comment-avatar">
+                  <img src={comment.user.profile.avatar} alt="avatar" />
+                </div>
+                <div className="comment-details">
+                  <div className="comment-username">
+                    <span>{comment.user.username}</span>
+                  </div>
+                  <div className="comment-content">
+                    <span>{comment.content}</span>
+                  </div>
+                  <div className="comment-time">
+                    <span>{moment(comment.createDate).fromNow()}</span>
+                  </div>
+                </div>
+              </div>
 
-              <Form.Control
-                type="text"
-                value={replyContent}
-                onChange={(e) => setReplyContent(e.target.value)}
-                placeholder="Nội dung phản hồi"
-              />
-              <Button variant="link" onClick={() => addReply(comment.id)}>
-                Trả lời
-              </Button>
-              {comment.reply_news &&
-                comment.reply_news.map((reply) => (
-                  <div key={reply.id} style={{ marginLeft: "20px" }}>
-                    <li
-                      key={reply.id}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBottom: "10px",
-                      }}
-                    >
-                      <img
-                        src={reply.user.profile.avatar}
-                        alt="avatar"
-                        style={{
-                          width: "32px",
-                          height: "32px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          marginRight: "5px",
-                        }}
-                      />
-                      {reply.user.username} - {reply.content} -{" "}
-                      {moment(reply.createDate).fromNow()}
-                    </li>
+              {user !== null ? (
+                <>
+                  <Form.Control
+                    type="text"
+                    value={replyContent}
+                    onChange={(e) => setReplyContent(e.target.value)}
+                    placeholder="Nội dung phản hồi"
+                  />
+                  <Button variant="link" onClick={() => addReply(comment.id)}>
+                    Trả lời
+                  </Button>
+                </>
+              ) : null}
+
+              {comment.replies &&
+                comment.replies.map((reply) => (
+                  <div className="reply">
+                    <div className="reply-avatar">
+                      <img src={reply.user.profile.avatar} alt="avatar" />
+                    </div>
+                    <div className="reply-details">
+                      <div className="reply-username">
+                        <span>{reply.user.username}</span>
+                      </div>
+                      <div className="reply-content">
+                        <span>{reply.content}</span>
+                      </div>
+                      <div className="reply-time">
+                        <span>{moment(reply.createDate).fromNow()}</span>
+                      </div>
+                    </div>
                   </div>
                 ))}
             </ListGroup.Item>
           ))}
         </ListGroup>
-        
       </>
-      )}
-    </>
+    </div>
   );
 };
 

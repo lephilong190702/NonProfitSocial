@@ -82,3 +82,11 @@
       font-weight: 500;
       cursor: pointer;
   }
+
+  .success-message {
+    background-color: #4CAF50; /* Màu nền */
+    color: white; /* Màu văn bản */
+    padding: 10px; /* Khoảng cách đệm */
+    text-align: center; /* Canh giữa văn bản */
+    margin-bottom: 10px; /* Khoảng cách phía dưới */
+  }

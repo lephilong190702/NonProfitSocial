@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: charitydb
 -- ------------------------------------------------------
--- Server version	8.0.31
+-- Server version	8.0.34
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
+  `date` datetime(6) NOT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `content` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `date` datetime(6) NOT NULL,
-  `name` varchar(100) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -49,16 +49,16 @@ DROP TABLE IF EXISTS `new`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `new` (
+  `category_id` bigint DEFAULT NULL,
+  `create_date` datetime(6) NOT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
   `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `create_date` datetime(6) NOT NULL,
-  `image` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `category_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKq8f93g3qb6fi7c2fd6vvbhitl` (`category_id`),
   CONSTRAINT `FKq8f93g3qb6fi7c2fd6vvbhitl` FOREIGN KEY (`category_id`) REFERENCES `new_category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +67,7 @@ CREATE TABLE `new` (
 
 LOCK TABLES `new` WRITE;
 /*!40000 ALTER TABLE `new` DISABLE KEYS */;
+INSERT INTO `new` VALUES (1,'2023-10-15 18:44:16.826000',1,'Từ ngày 5/6/2023 Quán Yên Vui Ninh Kiều – Cần Thơ chuyển về địa điểm mới\r\nĐịa chỉ: số 20V7, đường số 7, khu nhà ở Cán Bộ Đại Học,P.An Khánh, Q.Ninh Kiều, Tp.Cần Thơ\r\nMong rằng với địa điểm mới này, bà con lao động và các bạn sinh viên có thể dễ dàng tiếp cận suất ăn tại Quán.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697370256/aatnqotiic0pa8ntrqu7.jpg','QUÁN YÊN VUI NINH KIỀU – CẦN THƠ CHUYỂN ĐỊA ĐIỂM HOẠT ĐỘNG'),(3,'2023-10-15 19:05:25.230000',2,'Ngày 16,17,18/6 vừa qua, Quỹ Từ thiện Bông Sen đã đồng hành cùng Đoàn Y-Bác sĩ Thiện Đức thực hiện chuyến khám bệnh cho người dân nghèo, người đồng bào dân tộc tại xã Phong Phú, huyện Tuy Phong, tỉnh Bình Thuận.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371525/eig8sow50oezouxfghwt.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ PHONG PHÚ, TUY PHONG, BÌNH THUẬN'),(3,'2023-10-15 19:05:55.936000',3,'Ngày 20/03/2023, Quán Yên vui Mai Lĩnh – Quảng Trị đã đại diện Quỹ Từ thiện Bông Sen bàn giao đến Bệnh viện Đa khoa khu vực Triệu Hải 3 chiếc xe đẩy bệnh nhân phục vụ trong việc vận chuyển bệnh nhân tại bệnh viện.\r\nVới sự hỗ trợ này, chúng tôi mong rằng sẽ góp phần giúp bệnh viện thuận lợi hơn trong quá trình hỗ trợ bệnh nhân.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371555/o7zdhat9wq6tzfxc7arw.jpg','BÀN GIAO 3 XE ĐẨY CÁNG 3A ĐẾN BỆNH VIỆN ĐKKV TRIỆU HẢI, QUẢNG TRỊ'),(3,'2023-10-15 19:06:42.151000',4,'Ngày 17,18,19/3, Quỹ Bông Sen đã tiếp tục đồng hành cùng đoàn y bác sĩ Thiện Đức thực hiện chuyến khám bệnh từ thiện cho bà con xã Tân Lợi và An Hảo, huyện Tịnh Biên, tỉnh An Giang. Hàng trăm người dân đã tập trung từ rất sớm với rất đông các cụ già ngồi chờ đoàn. Để kịp tiến độ, đoàn đã làm việc liên tục, các y-bác sĩ, dược sĩ và tình nguyện viên thay phiên làm việc xuyên cả buổi trưa. ','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371602/aaziaij4lan8wwgek7lr.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ TÂN LỢI VÀ AN HẢO, HUYỆN TỊNH BIÊN, TỈNH AN GIANG');
 /*!40000 ALTER TABLE `new` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +82,7 @@ CREATE TABLE `new_category` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -90,6 +91,7 @@ CREATE TABLE `new_category` (
 
 LOCK TABLES `new_category` WRITE;
 /*!40000 ALTER TABLE `new_category` DISABLE KEYS */;
+INSERT INTO `new_category` VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
 /*!40000 ALTER TABLE `new_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,15 +103,15 @@ DROP TABLE IF EXISTS `post`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `post` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `create_date` datetime(6) NOT NULL,
   `status` bit(1) NOT NULL,
+  `create_date` datetime(6) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `user_id` bigint DEFAULT NULL,
+  `content` varchar(1000) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK72mt33dhhs48hf9gcqrq4fxte` (`user_id`),
   CONSTRAINT `FK72mt33dhhs48hf9gcqrq4fxte` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,6 +120,7 @@ CREATE TABLE `post` (
 
 LOCK TABLES `post` WRITE;
 /*!40000 ALTER TABLE `post` DISABLE KEYS */;
+INSERT INTO `post` VALUES (_binary '','2023-10-15 19:10:09.153000',1,2,'BÀI VIẾT 1 '),(_binary '','2023-10-15 19:11:17.677000',2,2,'BÀI VIẾT 2 ');
 /*!40000 ALTER TABLE `post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,12 +133,12 @@ DROP TABLE IF EXISTS `post_image`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `post_image` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `image` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `post_id` bigint DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKsip7qv57jw2fw50g97t16nrjr` (`post_id`),
   CONSTRAINT `FKsip7qv57jw2fw50g97t16nrjr` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,6 +147,7 @@ CREATE TABLE `post_image` (
 
 LOCK TABLES `post_image` WRITE;
 /*!40000 ALTER TABLE `post_image` DISABLE KEYS */;
+INSERT INTO `post_image` VALUES (1,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371879/fawvctqek6yc6mwpwxtx.jpg'),(2,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371881/vp2n1zok0rkchae53qaa.jpg');
 /*!40000 ALTER TABLE `post_image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,10 +186,10 @@ DROP TABLE IF EXISTS `profile`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `profile` (
   `user_id` bigint NOT NULL,
-  `avatar` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `first_name` varchar(20) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `last_name` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `last_name` varchar(10) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `phone` varchar(10) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `first_name` varchar(20) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `avatar` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   CONSTRAINT `FKawh070wpue34wqvytjqr4hj5e` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -197,6 +201,7 @@ CREATE TABLE `profile` (
 
 LOCK TABLES `profile` WRITE;
 /*!40000 ALTER TABLE `profile` DISABLE KEYS */;
+INSERT INTO `profile` VALUES (1,NULL,NULL,NULL,NULL),(2,'Lê Phi ','1231232','Long','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg'),(3,'TEST','123123','USER','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371979/rcy3kr7ekeqs9otbdtks.jpg');
 /*!40000 ALTER TABLE `profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,20 +213,20 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `address` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `content` longtext COLLATE utf8mb3_unicode_ci NOT NULL,
-  `contributed_amount` decimal(38,2) NOT NULL,
-  `end_date` datetime(6) DEFAULT NULL,
-  `start_date` datetime(6) DEFAULT NULL,
-  `status` bit(1) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `contributed_amount` decimal(38,2) DEFAULT NULL,
+  `status` bit(1) DEFAULT NULL,
   `total_amount` decimal(38,2) NOT NULL,
   `category_id` bigint DEFAULT NULL,
+  `end_date` datetime(6) DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `start_date` datetime(6) DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK3gxkqhaf86vo2jwt6yjxtdqiv` (`category_id`),
   CONSTRAINT `FK3gxkqhaf86vo2jwt6yjxtdqiv` FOREIGN KEY (`category_id`) REFERENCES `project_category` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +235,7 @@ CREATE TABLE `project` (
 
 LOCK TABLES `project` WRITE;
 /*!40000 ALTER TABLE `project` DISABLE KEYS */;
-INSERT INTO `project` VALUES (1,'Số 20V7, đường số 7, khu nhà ở Cán Bộ Đại Học,P.An Khánh, Q.Ninh Kiều, Tp.Cần Thơ','Mong rằng với địa điểm mới này,  bà con lao động và các bạn sinh viên có thể dễ dàng tiếp cận suất ăn tại quán',130000000.00,NULL,'2023-06-05 08:00:00.000000',_binary '','QUÁN YÊN VUI NINH KIỀU – CẦN THƠ CHUYỂN ĐỊA ĐIỂM HOẠT ĐỘNG',150000000.00,1),(2,NULL,'Một bài học nhỏ nhoi của cuộc sống sẽ giúp chugn1 ta nhìn nhận lại nhiều thứ',9000000000.00,NULL,NULL,_binary '','BÀI HỌC NHỎ - GIÁ TRỊ TO',10000000000.00,3),(10,NULL,'Sau nhiều ngày tháng chuẩn bị, Quán Yên Vui tại thành phố biển Nha Trang đã ra đời. Bà con mưu sinh ở đây sẽ đỡ đần phần nào với những bữa cơm ngon miệng giá rẻ.',153000000.00,NULL,'2023-06-05 08:00:00.000000',_binary '','QUÁN YÊN VUI NHA TRANG – KHÁNH HÒA MỞ BÁN THỬ',350000000.00,1),(11,NULL,'Trong những ngày qua, các Tác viên Quỹ Từ thiện Bông Sen từ các Quán Nụ Cười và Yên Vui tất bật hơn hẳn. Sau buổi bán, dù tay chân đã mỏi nhưng mọi người vẫn nán lại chuẩn bị quà bánh cùng những chiếc lồng đèn nho nhỏ cho chương trình trung thu với các em nhỏ có hoàn cảnh khó khăn, trẻ đường phố, những bệnh nhi và người vô gia cư.',0.00,NULL,NULL,_binary '\0','RỘN RÀNG MÙA TRUNG THU',300000000.00,1),(12,NULL,'Một hoạt động đặc biệt trong dự án trợ giúp suất ăn giá rẻ của Quỹ Từ thiện Bông Sen là “Phở Cho Mọi Người” do nhóm bạn “Ngày thứ Năm Hạnh Phúc” và một vài doanh nghiệp, tổ chức tài trợ.',200000000.00,'2023-09-05 08:00:00.000000','2023-06-05 08:00:00.000000',_binary '','PHỞ CHO MỌI NGƯỜI',200000000.00,1),(13,'số 68/12 Lữ Gia - phường 15 -quận 11, TP.HCM','Quán cơm Nụ Cười 7 nằm trong chuỗi quán cơm 2.000đ, thuộc dự án trợ giúp suất ăn giá rẻ của Quỹ từ thiện Bông Sen. Quán được khai trương vào ngày 18/11/2015, phục vụ bà con lao động nghèo và học sinh, sinh viên có hoàn cảnh khó khăn vào các ngày thứ Ba– Năm – Bảy trong tuần. Quán được điều hành bởi Ban thiện nguyện nụ cười Cựu học sinh Petrus Ký – Lê Hồng Phong.',98630000.00,NULL,'2022-12-31 08:00:00.000000',_binary '','QUÁN CƠM XÃ HỘI NỤ CƯỜI',100000000.00,1),(14,NULL,'Nếu được lựa chọn chắc hẳn không ai muốn mình sinh ra trong hoàn cảnh khó khăn, túng thiếu. Phát hiện u bì buồng trứng từ năm 2021 khi mang thai con út nhưng không có tiền điều trị, chị H đành phải lơ đi. Đến nay khối u quá to chị bắt buộc phải phẫu thuật để tránh nguy cơ u bị vỡ gây ảnh hưởng đến sức khoẻ. Chị Nguyễn T.T.H (1991) sống tại Quận Bình Thạnh, TP.HCM. Lấy chồng và sinh 3 người con nhưng chồng không phụ giúp kinh tế, sau khi ly thân cũng không chu cấp cho các con; cộng thêm 6 năm trước mẹ bị tai biến nằm một chỗ, chị H vừa lo về kinh tế vừa phải chăm mẹ và nuôi con, chạy ăn từng bữa nên cuộc sống rất khó khăn, thiếu thốn. Con lớn chị H đang học lớp 5 nhờ có khoản hỗ trợ hộ nghèo của địa phương, sách vở quần áo đều dùng lại từ chị họ; con giữa đã 5 tuổi có biểu hiện tăng động nhưng chưa được đến trường; con út 10 tháng tuổi khát sữa do mẹ không đủ sữa cho bú, sắp tới phẫu thuật chị định cho bé bỏ bú luôn, cả nhà 5 người chen chúc trong căn nhà nhỏ đã cũ được ông bà để lại. Nhìn vào tình cảnh này chúng tôi không khỏi xót xa, sao mà khổ quá.',21910000.00,NULL,NULL,_binary '','MẸ ĐƠN THÂN KHÓ KHĂN XOAY SỞ TIỀN PHẪU THUẬT',10000000.00,2),(15,NULL,'Hai vợ chồng đã lớn tuổi chăm nhau lúc tuổi già, lúc vợ trở bệnh chú lấy sợi dây làm đai giữ cô phía sau rồi đưa đi bệnh viện. Nhập viện lần 1 không có tiền phẫu thuật nên phải về nhà uống thuốc cầm chừng, lần 2 nhập viện vì quá mệt và khó thở nên phải tiếp tục đưa đi cấp cứu. Cô Nguyễn Thị H, sinh năm 1959 quê ở Đồng Nai đang thuê trọ tại TP.HCM. Cô bị tiểu đường hơn 10 năm nay, sức khỏe yếu nên chỉ ở nhà nội trợ nhưng nay phải nhập viện vì bệnh tim. Cô được chẩn đoán mất bù cấp suy tim mạn EF giảm –I50 – Nhồi máu cơ tim không st chênh lên – Nhồi máu cơ tim cũ điều trị nội – Tăng huyết áp – Viêm phổi – Đái tháo đường type 2 – Trào ngược dạ dày thực quản. Chồng cô là chú H túc trực chăm cô suốt thời gian ở bệnh viện. Cô chú gặp nhau sau khi cả 2 đều đổ vỡ trong cuộc hôn nhân trước cách đây hơn 20 năm, con cái hai bên lớn lên cũng đi làm ăn chật vật với cuộc sống gia đình riêng nên cũng không hỗ trợ được cô chú. Hai vợ chồng thuê căn phòng trọ với giá 2.5 triệu đồng/tháng làm nơi tá túc.',16868000.00,NULL,NULL,_binary '\0','HAI VỢ CHỒNG NƯƠNG TỰA NHAU LÚC LỚN TUỔI BỆNH ĐAU',12000000.00,2),(16,NULL,'Trở về nhà sau ca làm đêm, mệt mỏi lại gặp mưa to dẫn đến tai nạn thương tâm. Bệnh nhân là lao động chính của gia đình với 2 con còn nhỏ, vợ vừa sinh còn trong thời gian thai sản, thuộc hộ nghèo nên đã khó khăn nay càng túng thiếu hơn. Nguyễn T sinh năm 1994 tại Đak Lak và đang làm công nhân  cùng vợ  tại Đồng Xoài, Bình Phước. Trên đường đi làm về sau khi tan ca đêm, trời mưa to nên mất lái dẫn đến té và gãy xương  đùi, cẳng tay, đầu trên xương chày được người dân địa phương cấp cứu và chuyển đến BV Chợ Rẫy để tiếp tục điều trị.',17000000.00,NULL,NULL,_binary '','TAI NẠN KHI ĐI MƯA DẪN ĐẾN CHẤN THƯƠNG NẶNG',20000000.00,2),(17,NULL,'Buổi sáng chúng tôi đến thăm cô T mệt nhoài sau ca chạy thận đầu tiên tại bệnh viện. 3 giờ sáng 2 vợ chồng đã dậy để chuẩn bị, chú D-chồng cô T nấu đồ ăn sáng cho cô rồi 4 giờ chở cô từ Hóc Môn đến Bệnh viện 175 chạy thân. Mỗi tuần 3 lần đều đặn 8 năm nay. Đến nay nhà cũng bán, chú chạy từng cuốc xe ôm để trang trải chi phí điều trị. Cô T sinh năm 1968 đang sinh sống tại Hóc Môn. Cô bị bệnh thận đã 23 năm nay, đã chuyển sang suy thận và phải chạy thận khoảng 8 năm. Cô phải điều trị qua khắp các bệnh viện, do biến chứng của bệnh nên ngoài suy thận giai đoạn cuối thì cô còn bị nhồi máu não, suy tim tâm thu thất động mạch vành 2 lá , hở van tim vành 2 lá A14.',0.00,NULL,NULL,_binary '','HƠN 20 NĂM ĐỒNG HÀNH CÙNG VỢ ĐIỀU TRỊ BỆNH',17000000.00,2),(18,NULL,'Người mẹ nghẹn ngào kể về chặng đường của 2 mẹ con suốt 3 tháng kể từ lúc con được sinh ra và chẳng may mắc bệnh tim bẩm sinh. Người mẹ sinh mổ nhưng chẳng được nghỉ ngơi ngày nào khi tình trạng con sau phẫu thuật vẫn chưa cải thiện. Để có tiền trang trải chi phí khi bé nằm viện, người chồng phải về quê làm việc, một mình chị chăm con. Bé Đặng H.G.L, 3 tháng tuổi ở Đồng Nai, bé được chẩn đoán hở van 2 lá, hở van 3 lá nặng. Từ khi sinh ra, bé phải chuyển tuyến điều trị qua nhiều bệnh viện từ Đồng Nai đến TP.HCM. Hiện bé đã được phẫu thuật và đang tiếp tục được theo dõi tại Viện Tim TP.HCM nhưng tình trạng vẫn còn nặng phải nằm phòng hồi sức.',24032000.00,NULL,NULL,_binary '\0','HỒI HỘP TỪNG NGÀY ĐỒNG HÀNH CÙNG CON ĐIỀU TRỊ BỆNH TIM.',22000000.00,2),(19,NULL,'Dự án giáo dục Nụ Cười 3 – Em đến trường gồm 2 chương trình miễn phí:  (1) Lo việc học cho trẻ em hoàn cảnh khó khăn (Hiện đang bảo trợ 60 học sinh từ Lớp 6 đến Lớp 11, gồm học phí, sách giáo khoa, đồng phục và bảo hiểm y tế).  (2) Cung cấp suất ăn dinh dưỡng cho học sinh nghèo (Hiện đang lo cơm trưa vào các ngày thứ Hai, Tư, Sáu cho 395 học sinh của các Lớp học tình thương: Bà Huyện Thanh Quan (Quận 1), Vĩnh Hội (Quận 4), Chợ Quán (Quận 5) và Tân Hưng (Quận 7).  Với niềm tin chỉ thông qua giáo dục mới có thể giúp trẻ em nghèo cơ may thay đổi được số phận.',10000000.00,NULL,NULL,_binary '','NỤ CƯỜI 3 – EM ĐẾN TRƯỜNG',10000000.00,3),(20,NULL,'Trên mỗi người bệnh có thể để lại vài di chứng, nhưng trên nền kinh tế của cả nước, dấu tích Covid để lại cho nền kinh tế quá nặng nề.  Chuyến khảo sát miền Trung tháng 7 vừa qua, chúng tôi ghi nhận phần lớn người dân nghèo hơn hẳn so với trước đây. Có thể các khu du lịch, các tụ điểm vui chơi không thấy biểu hiện của sức mua suy giảm bởi một số thị dân không bị mất việc, còn phần lớn người lao động nghèo về quê, cuộc mưu sinh trở nên khó khăn hơn trước, giá cả leo thang chóng mặt.Ở những cơ sở từ thiện xã hội tại các tỉnh nghèo như Quảng Trị, Gia Lai v.v… cuộc sống vô cùng khó khăn. Người đến thăm viếng và tặng quà ít đi hẳn, giảm sút rất nhiều khiến nguồn thu không có. Các ma sơ chạy vạy đủ cách, chế biến trà gừng, bột ngũ cốc bán vài chục ngàn mong cải thiện bữa ăn cho các cháu mồ côi hoặc người dân tộc thất học. Càng xa trung tâm, càng ít người đến thì càng khó khăn. Mái ấm Cam Lộ ở Quảng Trị, nơi Quán Yên Vui trợ giúp thực phẩm khoảng 9 triệu mỗi tháng cho 32 cháu, các ma sơ cũng rất chật vật tìm thêm nguồn này nguồn kia cho các em. Cả đoàn chúng tôi vô cùng xúc động khi sơ HĐ tròn mắt, ngẩn người vì ngạc nhiên vỡ òa niềm vui khi nghe chúng tôi ngỏ lời giúp thêm 6 triệu nữa mỗi tháng để các cháu có thể uống sữa. Sữa! Ở nơi xa xôi này trẻ con trong Mái ấm từ thiện được uống sữa là điều quá hoang đường.  Vậy là thêm một dự án không thời hạn nằm trong chương trình hỗ trợ giáo dục trẻ em tỉnh Quảng Trị. Mỗi tháng sẽ cần vận động 8 triệu đồng cho Mái Ấm Lâm Bích ở Đông Hà và 15 triệu đồng cho Mái Ấm Cam Lộ. Chúng tôi chỉ là người giao nhận, là shipper vận chuyển lòng tốt của quý nhà hảo tâm đến những nơi cần thiết. Nhận một lời cám ơn từ các ma sơ cũng đã là quá ngại ngùng.',25000000.00,NULL,NULL,_binary '','GIÚP TRẺ MỒ CÔI TẠI MÁI ẤM',30000000.00,3),(21,NULL,'Người bạn lớn là một dự án có mục đích giúp đỡ Trẻ em không còn cha hoặc mẹ hoặc cả hai, đặc biệt là Trẻ nhỏ chịu mất mát này do đại dịch Covid-19. Chương trình thiết lập một mạng lưới Nhân viên đóng vai trò là “người anh tinh thần”, “người chị tinh thần” để chăm sóc các em. Khởi nguồn từ 9 trẻ tại Phường 8 Quận 4 vào năm 2021, đến nay chúng tôi đã hỗ trợ 32 trẻ tại Quận 4, Bình Chánh và Gò Vấp.  Trong hơn một năm triển khai chương trình, đồng hành cùng trẻ và gia đình chúng tôi hiểu được những khó khăn, chật vật của các gia đình sau khi trải qua một biến cố to lớn. Không chỉ về kinh tế mà những tổn thương về mặt tinh thần, cảm xúc, đời sống dường như vẫn còn tiếp diễn.  Đối với trẻ, chúng tôi tập trung vào hỗ trợ học bổng để duy trì việc học của trẻ tại trường, hỗ trợ dinh dưỡng cho những trẻ đã mất đi nguồn sữa mẹ từ khi mới lọt lòng. Bên cạnh đó, việc quan tâm, chăm sóc về mặt tinh thần của trẻ như sinh nhật, lễ, tết cũng được quan tâm. Quan trọng hơn hết, Người Bạn Lớn cũng đóng vai trò người anh, người chị, người bạn để trẻ được chia sẻ những tâm tư, những vấn trẻ đang gặp phải ở từng giai đoạn phát triển, đặc biệt tuổi teen.  Tính đến nay, chúng tôi đang hỗ trợ chi phí học tập hàng cho 21 trẻ về học phí, đồ dùng học tập, vé xe buýt,…. Về dinh dưỡng hàng tháng cho 13 trẻ. Có 2 trẻ được hỗ trợ về chi phí khám-điều trị bệnh. 32 trẻ đều được cập nhật thông tin và hỗ trợ khi cần thiết, tổ chức sinh nhật và tặng quà các dịp đặc biệt trong năm: Giáng sinh, Tết….  Không chỉ hỗ trợ cho trẻ, Người Bạn Lớn còn là nơi mà người chăm sóc trẻ được chia sẻ, được hướng dẫn hỗ trợ, tư vấn khi cần thiết. Khi gia đình bị mất đi một người thân, mất đi một người lao động chính thì người ở lại không chỉ khó khăn về mặt kinh tế mà đôi khi việc giao tiếp, chăm sóc các con cũng là một khó khăn khi những công việc đó vốn dĩ được chăm lo bởi người chồng/người vợ của mình. Không ít lần chúng tôi thấy được những giọt nước mắt rơi khi người chăm sóc chia sẻ về hiện tại, mặc dù đã qua một năm gắng gượng để chăm sóc các con.',10000000.00,NULL,NULL,_binary '\0','CHƯƠNG TRÌNH NGƯỜI BẠN LỚN – HỖ TRỢ TRẺ BỊ ẢNH HƯỞNG BỞI DỊCH COVID-19',10000000.00,3),(22,NULL,'Tại tuyến kênh Phèn, xã Vĩnh Viễn, Long Mỹ, Hậu Giang có 1 đoạn đường chỉ dài 1km đi vào nơi sinh sống của khoảng 30 hộ dân nhưng mấy chục năm lúc nào cũng trong tình trạng lầy lội khiến việc đi lại của người dân vô cùng vất vả. Đã gần 50 năm từ ngày bà con khai hoang ra vùng đất này, một con đường bê tông mong mỏi qua bao thế hệ vẫn chưa được hoàn thành do kinh tế khó khăn. Vào mùa mưa, đường luôn nhão nhoẹt, bùn lầy và hết sức trơn. Để lưu thông, bà con phải lội bộ ra đường, xin rửa chân hoặc có khi phải thay đồ nhờ ở nhà một người dân rồi mới đi học, đi làm. Những em bé nhỏ thì ba mẹ phải đưa đi, ảnh hưởng rất nhiều đến công việc đồng án.',22450000.00,NULL,NULL,_binary '\0','CHUNG TAY CÙNG BÀ CON TUYẾN KÊNH PHÈN, XÃ VĨNH VIỄN, LONG MỸ, HẬU GIANG XÂY CON ĐƯỜNG MONG ƯỚC CỦA BAO THẾ HỆ',22000000.00,4),(23,NULL,'Những căn phòng trọ tù túng, những ngày nằm chờ điều trị trong thấp thỏm lo âu, chán nản…đó là những điều chúng tôi thường bắt gặp khi hỗ trợ cơm cho các bệnh nhân tại khu phòng trọ gần bệnh viện K Tân Triều. Với mong muốn tạo một không gian thoáng đãng,mát mẻ an lành với vườn cây và những dãy ghế rộng cho bệnh nhân, thân nhân được lui tới hay lưu lại sau giờ cơm tại Quán Yên Vui – Tân Triều Hà Nội, chúng tôi sẽ cải tạo một khoảng sân thành khu vườn Yên Vui. Quán Yên Vui Tân Triều – Hà Nội ra đời trong thời điểm dịch bệnh bùng phát mạnh trên cả nước vào tháng 7/2021. Quán chủ yếu hỗ trợ suất ăn giá rẻ cho những bệnh nhân, thân nhân điều trị của viện K Tân Triều. Với gần 1 năm hoạt động, Quán đã hỗ trợ hơn 30 nghìn suất ăn thì chắc hẳn gần 30 nghìn lượt hỗ trợ là dành cho bệnh nhân, thân nhân ở khu vực này. Thấu hiểu bao khó khăn, vất vả của những cô chú bệnh nhân từ vùng quê xa xôi lên tận Hà Nội để điều trị, vô thuốc định kỳ, họ buộc lòng thuê những căn phòng nhỏ, giá rẻ, chịu khó tù túng chật hẹp hay khi thì nóng bức khi thì lạnh lẽo để ở tạm qua ngày. Từ bệnh viện lại về phòng chứ cũng chẳng biết tránh đi đâu. Thay vì bóng cây thì họ chỉ đối diện với 4 bức tường xi măng trong sự lặng lẽ. Mệt mỏi cả sức khỏe lẫn tinh thần.',5000000.00,NULL,NULL,_binary '','CÔNG TRÌNH CẢI TẠO VƯỜN YÊN VUI',15000000.00,4);
+INSERT INTO `project` VALUES (0.00,_binary '',0.00,1,NULL,1,NULL,' Số 09 đường Bến Chợ, phường Vạn Thạnh, Nha Trang, Khánh Hòa','QUÁN YÊN VUI NHA TRANG – KHÁNH HÒA','Sau nhiều ngày tháng chuẩn bị, Quán Yên Vui tại thành phố biển Nha Trang đã ra đời. Bà con mưu sinh ở đây sẽ đỡ đần phần nào với những bữa cơm ngon miệng giá rẻ. Quán tọa lạc tại số 09 đường Bến Chợ, phường Vạn Thạnh, Nha Trang, Khánh Hòa.\r\nSau nhiều ngày tháng chuẩn bị, Quán Yên Vui tại thành phố biển Nha Trang đã ra đời. Bà con mưu sinh ở đây sẽ đỡ đần phần nào với những bữa cơm ngon miệng giá rẻ.\r\nThêm một quán mới, toàn thể chúng tôi có thêm niềm vui mới. Mọi người xúm vào, mỗi người giúp một tay, chúng tôi đang làm những việc nhỏ nhưng với tình yêu thương thật lớn.\r\nNiềm vui mở hàng, bán thử, chúng tôi nghe lâng lâng giai điệu:\r\n“Tôi không ngủ mơ đâu\r\nNgày hôm nay trời đẹp lắm, thật mà”\r\nlvc, trong nhóm chăm sóc Quỹ Bông Sen\r\nQuán Yên Vui Nha Trang – Khánh Hòa'),(0.00,NULL,0.00,1,NULL,2,NULL,'50 Trần Khánh Dư, Mỹ Xuyên, Long Xuyên, An Giang','QUÁN YÊN VUI LONG XUYÊN – AN GIANG','Ngày 5/4/2021, Quỹ Từ thiện Bông Sen chính thức đón quán cơm 2.000 thứ 14 mở cửa bán thử, đó là quán Yên Vui Long Xuyên - An Giang.\r\nMiền Đồng bằng sông nước Cửu long lại đón thêm 1 quán cơm mới sau quán Yên Vui Ninh Kiều – Cần Thơ. Mấy năm nay, miền Tây nhiễm mặn khắp nơi, dịch bệnh khiến hàng hoá nông sản xuất khẩu không được lại càng khiến bà con thêm phần khó khăn.Thêm nhiều người rời quê lên phố… Những bữa cơm giá rẻ hy vọng sẽ tiếp sức thêm cho những người cần thiết nơi đây.\r\n\r\nQuán Yên Vui Long Xuyên – An Giang được khởi phát từ mong muốn đóng góp cho quê hương Long Xuyên của một nhóm bạn trẻ đang làm việc và sinh sống tại nước ngoài. Quỹ Từ thiện Bông Sen sẽ là chiếc cầu nối lan toả yêu thương, chỉ cần bạn có mong muốn chia sẻ đến cộng đồng, dù nhỏ dù lớn, Quỹ Tù thiện Bông Sen sẽ cùng bạn hiện thực ước mong sẻ chia đó.'),(0.00,_binary '',0.00,1,NULL,3,NULL,' 11 Nguyễn Huy Lượng, P.14, quận Bình Thạnh, TPHCM','QUÁN CƠM XÃ HỘI NỤ CƯỜI 6','Quán cơm xã hội Nụ Cười 6 là quán cơm 2.000đ tiếp theo nằm trong dự án trợ giúp suất ăn giá rẻ của Quỹ từ thiện Bông Sen. Quán khai trương ngày 19/10/2013. Quán phục vụ các suất cơm trưa 2.000đ với đầy đủ các món mặn, canh, xào, tráng miệng, cơm thoải mái và trà đá miễn phí. Đối tượng phục vụ của quán là người mưu sinh thu nhập thấp, người già neo đơn, người khuyết tật và học sinh sinh viên có hoàn cảnh khó khăn.'),(0.00,_binary '',0.00,1,NULL,4,NULL,'Số 299 Lý Thái Tổ, Phường 9, Quận 10, TP.HCM. ','QUÁN CƠM XÃ HỘI NỤ CƯỜI 1','Quán cơm xã hội Nụ Cười 1 là quán cơm 2.000đ đầu tiên nằm trong dự án trợ giúp suất ăn giá rẻ của Quỹ từ thiện Bông Sen. Quán khai trương ngày 12/10/2012. Thời gian đầu quán bán khoảng 300 suất ăn vào các buổi trưa thứ 2, 4, 6 trong tuần. Hiện nay quán phục vụ khoảng 500 suất ăn các ngày từ thứ 2 đến thứ 7. Quán Nụ Cười 1 ghi dấu những ngày đầu khó khăn nhất khi BQL Quỹ khởi động dự án trợ giúp suất ăn giá rẻ, bắt tay thực hiện những khâu chuẩn bị đầu tiên. Quán cơm xã hội Nụ Cười 1 thành công là bước đệm quan trọng cho chuỗi các quán cơm Nụ Cười khác ra đời sau này.'),(100000.00,_binary '',30000000.00,4,NULL,5,NULL,'','CHUNG TAY CÙNG BÀ CON TUYẾN KÊNH PHÈN, XÃ VĨNH VIỄN, LONG MỸ, HẬU GIANG XÂY CON ĐƯỜNG MONG ƯỚC CỦA BAO THẾ HỆ','Tại tuyến kênh Phèn, xã Vĩnh Viễn, Long Mỹ, Hậu Giang có 1 đoạn đường chỉ dài 1km đi vào nơi sinh sống của khoảng 30 hộ dân nhưng mấy chục năm lúc nào cũng trong tình trạng lầy lội khiến việc đi lại của người dân vô cùng vất vả. Đã gần 50 năm từ ngày bà con khai hoang ra vùng đất này, một con đường bê tông mong mỏi qua bao thế hệ vẫn chưa được hoàn thành do kinh tế khó khăn.'),(15000000.00,_binary '',18000000.00,3,NULL,6,NULL,'','MẸ NẰM VIỆN VẪN LO LẮNG CHO CON TRAI KHUYẾT TẬT Ở NHÀ','Nằm viện hơn 1 tháng nay tại Khoa nhiễm Việt Anh - Bệnh viện Nhiệt đới TP.HCM do Viêm màng não Herpes và đái tháo đường type 2, điều đầu tiên cô G quan tâm sau khi ra khỏi phòng chăm sóc đặc biệt là ai đang chăm sóc người con trai bị liệt ở nhà.\r\nCô Lê T. G. (1964) sống tại Thị xã Trảng Bàng, tỉnh Tây Ninh. Chồng mất sớm, cô G một mình nuôi con trai bằng công việc giao thịt bò từ lò mổ cho các quán ăn, thu nhập mỗi ngày được khoảng 200.000 đồng. Bao nhiêu yêu thương cô đều vun vén cho con nhưng không may năm 18 tuổi con trai bị tai nạn giao thông dẫn đến liệt nửa người, tổn thương não, cần có mẹ chăm sóc tắm rửa, cho ăn hơn 10 năm qua.\r\n\r\nBiến cố của con trai là một cú sốc lớn với cô G, mỗi ngày cô chỉ mong mình có đủ sức khoẻ để đồng hành cùng con nhưng khi tuổi ngày càng cao thì sức khoẻ của cô cũng dần đi xuống. Ngày 29/8 cô G nhập viện trong tình trạng hôn mê, phải điều trị bằng máy thở nội khí quản, cộng thêm lâu nay làm việc quá sức lại hay ăn uống tạm bợ cho qua bữa khiến cơ thể suy kiệt nên việc hồi sức cho cô G càng khó khăn hơn. Ngày chúng tôi đến thăm cũng là ngày cô G được ra khỏi phòng chăm sóc đặc biệt sau gần 40 ngày điều trị, cô vẫn chưa ăn uống được nhiều và tri giác vẫn có phần lơ mơ. Nhìn người phụ nữ nhỏ thó, gương mặt khắc khổ cũng phần nào thấy được những vất vả cô đã trải qua trong cuộc đời.'),(10000000.00,_binary '',28000000.00,3,NULL,7,NULL,'',' NGƯỜI MẸ VỠ ÒA KHI ĐƯỢC GẶP CON SAU 2 THÁNG ĐIỀU TRỊ BỆNH TIM.','Có những khoảnh khắc cảm động mà chúng tôi gặp được khi đến thăm T.P tại Viện Tim Tp.HCM. Người mẹ sau 2 tháng sinh con vừa được ôm ấp vỗ về con lần đầu, lần đầu được thay cho con bộ đồ mình đã chuẩn bị từ rất lâu, gấp gọn trong giỏ, trông chị có vẻ còn vụng về lúng túng nhưng trong ánh mắt yêu thương ấy chúng tôi tin bé sẽ cảm nhận được sự ấm áp của mẹ và có thêm sức để vượt qua căn bệnh tim bẩm sinh.\r\nBé Trần T.P, sinh năm 2023 tại Thủ Đức. T.P vừa tròn 2 tháng tuổi, con được chuyển từ bệnh viện địa phương đến Nhi Đồng và đến Viện Tim để điều trị. Mẹ vừa sinh sức khỏe còn yếu phải về nhà để gia đình chăm sóc. Bé được ba và bà nội túc trực chăm sóc. Bé được phẫu thuật tại Viện Tim ngày 19/07/2023 với chẩn đoán bệnh là TGV. Từ khi phẫu thuật đến nay, bé phải đặt nội khí quản 3 lần, nhiễm trùng nặng kèm theo nhịp thở không ổn định. Hiện tại đang điều trị tại khoa Hồi sức ngoại- Viện Tim. Ngày chúng tôi đến thăm là ngày đầu bé được ra phòng bệnh thường, được gặp mẹ. Hơn 2 tháng qua, mặc dù không được gặp con nhưng chị P-mẹ của bé vẫn cố gắng gửi sữa mẹ vào để con có thêm dưỡng chất và đó còn là cả tình yêu thương mong con mau khỏe mạnh. Đến hôm nay, cả nhà không giấu nỗi vui mừng vì sức khỏe của bé đã có tiến triển tích cực.'),(17000000.00,NULL,18000000.00,3,NULL,8,NULL,'','NGƯỜI CHA VỪA XUẤT VIỆN NUÔI CON TRAI BỊ TAI NẠN NHIỀU THÁNG LIỀN','Không có điều kiện chữa trị từ khi vừa tai nạn, thời gian kéo dài, vết thương càng nặng hơn và tính đến nay đã 5 tháng lên xuống bệnh viện để điều trị nhưng vẫn chưa khỏi hẳn. Dự kiến vẫn phải phẫu thuật thêm 2 lần nữa. Hai cha con luân phiên nuôi nhau ở bệnh viện kiệt cả sức lẫn tiền.\r\nHoàng X.Đ, sinh năm 1989 đang chạy grab và thuê trọ sống cùng ba ở Long An. Vào tháng 5/2023 lúc trên đường đến bệnh viện chăm ba bị bệnh thì bị tai nạn bất tỉnh được đưa vào bệnh viện cấp cứu. Chân chấn thương nặng, phải phẫu thuật nhưng vì không có BHYT chi phí sẽ cao nên Đ xuất viện về mua BHYT và chờ có hiệu lực. Sau đó, Đ được điều trị tại BV Quân Y 7A. Chẩn đoán: nhiễm trùng vết mổ 1/3 trên xương chày phải. Còn phương tiện kết hợp xương. Sau phẫu thuật lần 1 thì chân yếu, cha không đủ sức diều nên Đ bị té và nhiễm trùng. Chi phí điều trị trước nay 2 cha con xoay sở vay mượn. Bác sĩ điều trị là người đồng hành với Đạt trong thời gian dài nên hiểu hoàn cảnh và kết nối tìm nguồn lực hỗ trợ.'),(0.00,_binary '',100000000.00,2,NULL,9,NULL,'D18 – Khu dân cư Nam Long, P. Phú Thuận, Quận 7, TP HCM','NỤ CƯỜI 3 – EM ĐẾN TRƯỜNG','Dự án Nụ Cười 3 - Em đến trường là dự án Hỗ trợ giáo dục đầu tiên được Quỹ Từ thiện Bông Sen triển khai do ông Trần Trọng Thức làm chủ nhiệm dự án. Dự án gồm hai chương trình miễn phí là lo việc học cho trẻ em hoàn cảnh khó khăn, cung cấp suất ăn dinh dưỡng cho học sinh nghèo.\r\nDự án giáo dục Nụ Cười 3 – Em đến trường gồm 2 chương trình miễn phí:\r\n\r\n(1) Lo việc học cho trẻ em hoàn cảnh khó khăn (Hiện đang bảo trợ 60 học sinh từ Lớp 6 đến Lớp 11, gồm học phí, sách giáo khoa, đồng phục và bảo hiểm y tế).\r\n\r\n(2) Cung cấp suất ăn dinh dưỡng cho học sinh nghèo (Hiện đang lo cơm trưa vào các ngày thứ Hai, Tư, Sáu cho 395 học sinh của các Lớp học tình thương: Bà Huyện Thanh Quan (Quận 1), Vĩnh Hội (Quận 4), Chợ Quán (Quận 5) và Tân Hưng (Quận 7).\r\n\r\nVới niềm tin chỉ thông qua giáo dục mới có thể giúp trẻ em nghèo cơ may thay đổi được số phận. Quỹ Từ thiện Bông Sen hy vọng nhận được sự tiếp sức của quý nhà hảo tâm gần xa đồng hành với “NỤ CƯỜI 3 – EM ĐẾN TRƯỜNG”, mang đến cho những đứa trẻ kém may mắn một tương lai sáng sủa hơn.'),(0.00,_binary '',1000000.00,2,NULL,10,NULL,'','GIÚP TRẺ MỒ CÔI TẠI MÁI ẤM','Thêm một dự án không thời hạn nằm trong chương trình hỗ trợ giáo dục trẻ em tỉnh Quảng Trị. Mỗi tháng, Qũy Bông Sen sẽ cần vận động 8 triệu đồng hỗ trợ sữa cho Mái Ấm Lâm Bích ở Đông Hà và 15 triệu cho Mái Ấm Cam Lộ để hỗ trợ sữa và thực phẩm cho những trẻ mồ côi đang được nuôi dưỡng tại đây.\r\nHậu Covid\r\n\r\nTrên mỗi người bệnh có thể để lại vài di chứng, nhưng trên nền kinh tế của cả nước, dấu tích Covid để lại cho nền kinh tế quá nặng nề.\r\n\r\nChuyến khảo sát miền Trung tháng 7 vừa qua, chúng tôi ghi nhận phần lớn người dân nghèo hơn hẳn so với trước đây. Có thể các khu du lịch, các tụ điểm vui chơi không thấy biểu hiện của sức mua suy giảm bởi một số thị dân không bị mất việc, còn phần lớn người lao động nghèo về quê, cuộc mưu sinh trở nên khó khăn hơn trước, giá cả leo thang chóng mặt.Ở những cơ sở từ thiện xã hội tại các tỉnh nghèo như Quảng Trị, Gia Lai v.v… cuộc sống vô cùng khó khăn. Người đến thăm viếng và tặng quà ít đi hẳn, giảm sút rất nhiều khiến nguồn thu không có. Các ma sơ chạy vạy đủ cách, chế biến trà gừng, bột ngũ cốc bán vài chục ngàn mong cải thiện bữa ăn cho các cháu mồ côi hoặc người dân tộc thất học.\r\nCàng xa trung tâm, càng ít người đến thì càng khó khăn. Mái ấm Cam Lộ ở Quảng Trị, nơi Quán Yên Vui trợ giúp thực phẩm khoảng 9 triệu mỗi tháng cho 32 cháu, các ma sơ cũng rất chật vật tìm thêm nguồn này nguồn kia cho các em. Cả đoàn chúng tôi vô cùng xúc động khi sơ HĐ tròn mắt, ngẩn người vì ngạc nhiên vỡ òa niềm vui khi nghe chúng tôi ngỏ lời giúp thêm 6 triệu nữa mỗi tháng để các cháu có thể uống sữa. Sữa! Ở nơi xa xôi này trẻ con trong Mái ấm từ thiện được uống sữa là điều quá hoang đường.\r\n\r\nVậy là thêm một dự án không thời hạn nằm trong chương trình hỗ trợ giáo dục trẻ em tỉnh Quảng Trị. Mỗi tháng sẽ cần vận động 8 triệu đồng cho Mái Ấm Lâm Bích ở Đông Hà và 15 triệu đồng cho Mái Ấm Cam Lộ. Chúng tôi chỉ là người giao nhận, là shipper vận chuyển lòng tốt của quý nhà hảo tâm đến những nơi cần thiết. Nhận một lời cám ơn từ các ma sơ cũng đã là quá ngại ngùng.\r\nlvc, trong nhóm chăm sóc QBS'),(0.00,_binary '',100000000.00,2,NULL,11,NULL,'','CHƯƠNG TRÌNH NGƯỜI BẠN LỚN – HỖ TRỢ TRẺ BỊ ẢNH HƯỞNG BỞI DỊCH COVID-19','Người bạn lớn là một dự án có mục đích giúp đỡ Trẻ em không còn cha hoặc mẹ hoặc cả hai, đặc biệt là Trẻ nhỏ chịu mất mát này do đại dịch Covid-19. Chương trình thiết lập một mạng lưới Nhân viên đóng vai trò là “người anh tinh thần”, “người chị tinh thần” để chăm sóc các em.\r\nKhởi nguồn từ 9 trẻ tại Phường 8 Quận 4 vào năm 2021, đến nay chúng tôi đã hỗ trợ 32 trẻ tại Quận 4, Bình Chánh và Gò Vấp.\r\n\r\nTrong hơn một năm triển khai chương trình, đồng hành cùng trẻ và gia đình chúng tôi hiểu được những khó khăn, chật vật của các gia đình sau khi trải qua một biến cố to lớn. Không chỉ về kinh tế mà những tổn thương về mặt tinh thần, cảm xúc, đời sống dường như vẫn còn tiếp diễn.\r\n\r\nĐối với trẻ, chúng tôi tập trung vào hỗ trợ học bổng để duy trì việc học của trẻ tại trường, hỗ trợ dinh dưỡng cho những trẻ đã mất đi nguồn sữa mẹ từ khi mới lọt lòng. Bên cạnh đó, việc quan tâm, chăm sóc về mặt tinh thần của trẻ như sinh nhật, lễ, tết cũng được quan tâm. Quan trọng hơn hết, Người Bạn Lớn cũng đóng vai trò người anh, người chị, người bạn để trẻ được chia sẻ những tâm tư, những vấn trẻ đang gặp phải ở từng giai đoạn phát triển, đặc biệt tuổi teen.\r\n\r\nTính đến nay, chúng tôi đang hỗ trợ chi phí học tập hàng cho 21 trẻ về học phí, đồ dùng học tập, vé xe buýt,…. Về dinh dưỡng hàng tháng cho 13 trẻ. Có 2 trẻ được hỗ trợ về chi phí khám-điều trị bệnh. 32 trẻ đều được cập nhật thông tin và hỗ trợ khi cần thiết, tổ chức sinh nhật và tặng quà các dịp đặc biệt trong năm: Giáng sinh, Tết….\r\n\r\nKhông chỉ hỗ trợ cho trẻ, Người Bạn Lớn còn là nơi mà người chăm sóc trẻ được chia sẻ, được hướng dẫn hỗ trợ, tư vấn khi cần thiết. Khi gia đình bị mất đi một người thân, mất đi một người lao động chính thì người ở lại không chỉ khó khăn về mặt kinh tế mà đôi khi việc giao tiếp, chăm sóc các con cũng là một khó khăn khi những công việc đó vốn dĩ được chăm lo bởi người chồng/người vợ của mình. Không ít lần chúng tôi thấy được những giọt nước mắt rơi khi người chăm sóc chia sẻ về hiện tại, mặc dù đã qua một năm gắng gượng để chăm sóc các con.');
 /*!40000 ALTER TABLE `project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,7 +259,7 @@ CREATE TABLE `project_category` (
 
 LOCK TABLES `project_category` WRITE;
 /*!40000 ALTER TABLE `project_category` DISABLE KEYS */;
-INSERT INTO `project_category` VALUES (1,'Suất ăn'),(2,'Y tế'),(3,'Giáo dục'),(4,'Xây dựng');
+INSERT INTO `project_category` VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
 /*!40000 ALTER TABLE `project_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,12 +272,12 @@ DROP TABLE IF EXISTS `project_image`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `project_image` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `image` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `project_id` bigint DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKsrkbi9ax581cp14a13mbk9qtm` (`project_id`),
   CONSTRAINT `FKsrkbi9ax581cp14a13mbk9qtm` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -281,7 +286,32 @@ CREATE TABLE `project_image` (
 
 LOCK TABLES `project_image` WRITE;
 /*!40000 ALTER TABLE `project_image` DISABLE KEYS */;
+INSERT INTO `project_image` VALUES (1,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369971/yzabnno4c9lv1tgsksm4.jpg'),(2,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369973/sikwrnvpsxea2ztz0v3z.jpg'),(3,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369975/ujituxzyg8m1lqkvgcfz.jpg'),(4,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370120/qvqtzz3hnlmlp046cwyu.jpg'),(5,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370128/ugbdsrfrx4zhevj1z6gf.jpg'),(6,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370130/czcmvx4bkpjybwgddaj8.jpg'),(7,3,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370384/stwrwk4fm5ihpelni6hc.jpg'),(8,4,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370457/edkzlfdhsmylxlfrjefp.jpg'),(9,5,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370577/gaymldpekc0kltbugjqd.jpg'),(10,5,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370580/jy3bxfwq28epllux7t6z.jpg'),(11,6,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370719/a8k0mefmmavrozp11syc.jpg'),(12,6,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370721/gs9eymjrcmase5varj5o.jpg'),(13,7,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370804/lijwl8nuwczimc3dfbzh.jpg'),(14,7,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370806/slyc9gbbulf9iihjqywn.png'),(15,8,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370869/qnvwlpuxcvb5onmtvre9.jpg'),(16,8,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370880/fb97p0dhnononxoyapaw.jpg'),(17,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371040/by0znfcscjeiqdzbsqdi.jpg'),(18,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371042/llzaqstjs9no81mdv0y4.jpg'),(19,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371045/hoxyrnombvrutaoh5if7.jpg'),(20,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371047/e1tcyoya2ak1dksnn1i4.jpg'),(21,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371156/bt6muecydpwuw9epa1f6.jpg'),(22,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371158/p8oh9vvfealcqrnaxpxm.jpg'),(23,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371161/aiuw87pfaj1z5byb84y2.jpg'),(24,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371163/cc1b3skplu4jx9fdnixw.jpg'),(25,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371166/h9cjflq2lndfx1sf9fjo.jpg'),(26,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371264/iqrrilmedkjgbt6xhdfp.jpg'),(27,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371266/o3mgcxqqauitg2i96qld.jpg'),(28,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371268/lkcw0addy3bfdhw3hpta.jpg');
 /*!40000 ALTER TABLE `project_image` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `skill`
+--
+
+DROP TABLE IF EXISTS `skill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `skill` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `skill`
+--
+
+LOCK TABLES `skill` WRITE;
+/*!40000 ALTER TABLE `skill` DISABLE KEYS */;
+INSERT INTO `skill` VALUES (1,'Xây dựng'),(2,'Nấu ăn'),(3,'Ca hát'),(4,'Dựng trại'),(5,'Đốn củi');
+/*!40000 ALTER TABLE `skill` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -315,17 +345,15 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
+  `status` tinyint(1) DEFAULT '1',
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `auth_type` enum('Facebook','Google') COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `status` bit(1) NOT NULL,
-  `username` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `role_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`),
-  KEY `FKn4pb12f3y8ktduy8fnc2xlln1` (`role_id`),
-  CONSTRAINT `FKn4pb12f3y8ktduy8fnc2xlln1` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,6 +362,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,1,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme'),(1,2,'lephilong1907',NULL,'lephilong1907@gmail.com','$2a$10$uG5Z4uz9LLQNCY8lyLQvCe0GbRrRStYS5TIJWhSlZ4hL2QoNkk1lW'),(1,3,'user',NULL,'user@gmail.com','$2a$10$zeFW2nPGtiZj2GHYw/.rVe5dTpumxa5pWyCArvUXe2nFCNJWkGWdS');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,12 +374,12 @@ DROP TABLE IF EXISTS `user_comment_new`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_comment_new` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
   `create_date` datetime(6) NOT NULL,
-  `reply_news` bigint DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `new_id` bigint DEFAULT NULL,
+  `reply_news` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKra93e71o8qac9svgx3njm0lx2` (`reply_news`),
   KEY `FK6gt1cprqvln2b5d5r6huu24oe` (`new_id`),
@@ -358,7 +387,7 @@ CREATE TABLE `user_comment_new` (
   CONSTRAINT `FK6gt1cprqvln2b5d5r6huu24oe` FOREIGN KEY (`new_id`) REFERENCES `new` (`id`),
   CONSTRAINT `FKq4ko1h2bjmwqscdwycd3r41uo` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKra93e71o8qac9svgx3njm0lx2` FOREIGN KEY (`reply_news`) REFERENCES `user_comment_new` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -367,6 +396,7 @@ CREATE TABLE `user_comment_new` (
 
 LOCK TABLES `user_comment_new` WRITE;
 /*!40000 ALTER TABLE `user_comment_new` DISABLE KEYS */;
+INSERT INTO `user_comment_new` VALUES ('2023-10-15 19:07:13.445000',1,1,NULL,1,'Bình luận 1');
 /*!40000 ALTER TABLE `user_comment_new` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,12 +408,12 @@ DROP TABLE IF EXISTS `user_comment_post`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_comment_post` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
   `create_date` datetime(6) NOT NULL,
-  `reply_comment` bigint DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `post_id` bigint DEFAULT NULL,
+  `reply_comment` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK57d6rtfxx46dajxqa89esksk2` (`reply_comment`),
   KEY `FKp5hn4hvvik27bxi92cpan5v2g` (`post_id`),
@@ -391,7 +421,7 @@ CREATE TABLE `user_comment_post` (
   CONSTRAINT `FK57d6rtfxx46dajxqa89esksk2` FOREIGN KEY (`reply_comment`) REFERENCES `user_comment_post` (`id`),
   CONSTRAINT `FK6u0eqbcn68cxvo7lrqbnrn44i` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKp5hn4hvvik27bxi92cpan5v2g` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -400,6 +430,7 @@ CREATE TABLE `user_comment_post` (
 
 LOCK TABLES `user_comment_post` WRITE;
 /*!40000 ALTER TABLE `user_comment_post` DISABLE KEYS */;
+INSERT INTO `user_comment_post` VALUES ('2023-10-15 19:13:15.389000',1,1,NULL,3,'CMT 1'),('2023-10-15 19:13:18.171000',2,1,NULL,3,'CMT 2'),('2023-10-15 19:13:23.459000',3,2,NULL,3,'CMT 1'),('2023-10-15 19:13:50.290000',4,NULL,2,3,'Reply cmt 2'),('2023-10-15 19:13:56.410000',5,NULL,1,3,'Reply cm1');
 /*!40000 ALTER TABLE `user_comment_post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,18 +442,18 @@ DROP TABLE IF EXISTS `user_contribute_project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_contribute_project` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `donate_amount` decimal(38,2) NOT NULL,
   `donate_date` datetime(6) NOT NULL,
-  `note` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `project_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `note` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKb3690o5hintema8v3mxhu4nc9` (`project_id`),
   KEY `FKdhcjvrrlsbbadh6ewgdtjmn6f` (`user_id`),
   CONSTRAINT `FKb3690o5hintema8v3mxhu4nc9` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
   CONSTRAINT `FKdhcjvrrlsbbadh6ewgdtjmn6f` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -431,6 +462,7 @@ CREATE TABLE `user_contribute_project` (
 
 LOCK TABLES `user_contribute_project` WRITE;
 /*!40000 ALTER TABLE `user_contribute_project` DISABLE KEYS */;
+INSERT INTO `user_contribute_project` VALUES (100000.00,'2023-10-15 19:45:49.308000',1,5,2,NULL),(15000000.00,'2023-10-15 19:46:31.716000',2,6,2,NULL),(10000000.00,'2023-10-15 19:47:13.150000',3,7,2,NULL),(17000000.00,'2023-10-15 19:47:55.817000',4,8,2,NULL);
 /*!40000 ALTER TABLE `user_contribute_project` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -442,8 +474,8 @@ DROP TABLE IF EXISTS `user_event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_event` (
-  `user_id` bigint NOT NULL,
   `event_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
   KEY `FKspe8srtv69gubpphvrnd7wekt` (`event_id`),
   KEY `FKk3smcqwou8absq8qjt3wk4vy9` (`user_id`),
   CONSTRAINT `FKk3smcqwou8absq8qjt3wk4vy9` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
@@ -468,11 +500,11 @@ DROP TABLE IF EXISTS `user_rating_project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_rating_project` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `create_date` datetime(6) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `project_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `content` varchar(500) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKphxvyktt618bvapnri3buga4l` (`project_id`),
   KEY `FKsbsvuhpcjct2e5184e0tqnkvp` (`user_id`),
@@ -498,17 +530,17 @@ DROP TABLE IF EXISTS `user_react_post`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_react_post` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
   `create_date` datetime(6) NOT NULL,
-  `reaction` int NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `post_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `reaction` enum('HAHA','LIKE','SAD') COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKbiwabnpc8dwp7at7krmlex1qr` (`post_id`),
   KEY `FKomn93vq89c8axbti7gfqt2y33` (`user_id`),
   CONSTRAINT `FKbiwabnpc8dwp7at7krmlex1qr` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`),
   CONSTRAINT `FKomn93vq89c8axbti7gfqt2y33` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -517,6 +549,7 @@ CREATE TABLE `user_react_post` (
 
 LOCK TABLES `user_react_post` WRITE;
 /*!40000 ALTER TABLE `user_react_post` DISABLE KEYS */;
+INSERT INTO `user_react_post` VALUES ('2023-10-15 19:13:24.962000',1,2,3,'LIKE'),('2023-10-15 19:13:28.888000',2,1,3,'LIKE');
 /*!40000 ALTER TABLE `user_react_post` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -528,11 +561,12 @@ DROP TABLE IF EXISTS `user_report_post`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_report_post` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `resolved` bit(1) DEFAULT NULL,
   `create_date` datetime(6) NOT NULL,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `post_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `content` varchar(500) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKi5a113r8kse0vw397muu30dd5` (`post_id`),
   KEY `FK7836ewblboi5f66n2xyiv8g91` (`user_id`),
@@ -561,7 +595,7 @@ CREATE TABLE `user_role` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -570,6 +604,7 @@ CREATE TABLE `user_role` (
 
 LOCK TABLES `user_role` WRITE;
 /*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER');
 /*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -581,16 +616,19 @@ DROP TABLE IF EXISTS `user_volunteer_project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_volunteer_project` (
+  `end_date` datetime(6) DEFAULT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `register_date` datetime(6) NOT NULL,
   `project_id` bigint DEFAULT NULL,
+  `register_date` datetime(6) NOT NULL,
+  `start_date` datetime(6) DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKi7kwrlqi9pbbnq9x0hnopidgs` (`project_id`),
   KEY `FKpqb9xg9jqxuikf5j5m0d5elyr` (`user_id`),
   CONSTRAINT `FKi7kwrlqi9pbbnq9x0hnopidgs` FOREIGN KEY (`project_id`) REFERENCES `project` (`id`),
   CONSTRAINT `FKpqb9xg9jqxuikf5j5m0d5elyr` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -599,7 +637,61 @@ CREATE TABLE `user_volunteer_project` (
 
 LOCK TABLES `user_volunteer_project` WRITE;
 /*!40000 ALTER TABLE `user_volunteer_project` DISABLE KEYS */;
+INSERT INTO `user_volunteer_project` VALUES ('2023-10-16 07:00:00.000000',1,1,'2023-10-15 19:11:52.268000','2023-10-14 07:00:00.000000',2,'Em có kĩ năng nấu ăn ạ');
 /*!40000 ALTER TABLE `user_volunteer_project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users_roles`
+--
+
+DROP TABLE IF EXISTS `users_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users_roles` (
+  `role_id` bigint NOT NULL,
+  `user_id` bigint NOT NULL,
+  KEY `FKmknhyioq8hh8seoxe1fy6qo86` (`role_id`),
+  KEY `FKgd3iendaoyh04b95ykqise6qh` (`user_id`),
+  CONSTRAINT `FKgd3iendaoyh04b95ykqise6qh` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FKmknhyioq8hh8seoxe1fy6qo86` FOREIGN KEY (`role_id`) REFERENCES `user_role` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_roles`
+--
+
+LOCK TABLES `users_roles` WRITE;
+/*!40000 ALTER TABLE `users_roles` DISABLE KEYS */;
+INSERT INTO `users_roles` VALUES (1,1),(2,2),(2,3);
+/*!40000 ALTER TABLE `users_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `volunteer_skill`
+--
+
+DROP TABLE IF EXISTS `volunteer_skill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `volunteer_skill` (
+  `skill_id` bigint NOT NULL,
+  `volunteer_id` bigint NOT NULL,
+  KEY `FK811tpp4rntrhhc2dab8mtroy4` (`skill_id`),
+  KEY `FKjn5uo4kl01wajmc6r97flmvu5` (`volunteer_id`),
+  CONSTRAINT `FK811tpp4rntrhhc2dab8mtroy4` FOREIGN KEY (`skill_id`) REFERENCES `skill` (`id`),
+  CONSTRAINT `FKjn5uo4kl01wajmc6r97flmvu5` FOREIGN KEY (`volunteer_id`) REFERENCES `user_volunteer_project` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `volunteer_skill`
+--
+
+LOCK TABLES `volunteer_skill` WRITE;
+/*!40000 ALTER TABLE `volunteer_skill` DISABLE KEYS */;
+/*!40000 ALTER TABLE `volunteer_skill` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -611,4 +703,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-17 23:19:53
+-- Dump completed on 2023-10-15 19:50:06

@@ -76,7 +76,7 @@ const LoginPage = () => {
                     placeholder="Mật khẩu"
                   />
                 </Form.Group>
-                <span className="loginForgot">Forgot Password?</span>
+                {/* <span className="loginForgot">Forgot Password?</span> */}
                 <Form.Group className="mb-3">
                   <Button type="submit" variant="danger" className="loginRegisterButton">
                     Đăng nhập

@@ -8,6 +8,8 @@ import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.AuthenticationType;
 import com.csn.charity.model.User;
 
+import jakarta.mail.MessagingException;
+
 public interface UserService extends UserDetailsService {
     Long addUser(UserDTO userDto);
 
@@ -26,4 +28,8 @@ public interface UserService extends UserDetailsService {
     void disableAccount(Long id);
 
     void delete(Long id);
+
+    String forgotPassword(String email);
+    
+    String setPassword(String email, String newPassword);
 }

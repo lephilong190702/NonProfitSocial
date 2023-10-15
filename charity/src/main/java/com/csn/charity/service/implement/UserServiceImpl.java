@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,9 @@ import com.csn.charity.repository.RoleRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.UserService;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -31,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -151,5 +158,41 @@ public class UserServiceImpl implements UserService {
             this.userRepository.save(nUser);
         }
     }
+
+    @Override
+    public String forgotPassword(String email) {
+        User user = this.userRepository.findByEmail(email);
+        try {
+            sendForgotPassword(email);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return "Kiểm tra email để xác nhận đặt lại mật khẩu!";
+    }
+
+  
+    public void sendForgotPassword(String email) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Reset Password");
+        mimeMessageHelper.setText("""
+        <div>
+          <a href="http://localhost:9090/set-password?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+        </div>
+        """.formatted(email), true);
+        javaMailSender.send(mimeMessage);
+    }
+
+    @Override
+    public String setPassword(String email, String newPassword) {
+        User user = this.userRepository.findByEmail(email);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        this.userRepository.save(user);
+
+        return "Đặt mật khẩu mới thành công!!";
+    }
+
+    
 
 }

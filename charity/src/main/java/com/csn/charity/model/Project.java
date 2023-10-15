@@ -44,7 +44,7 @@ public class Project implements Serializable{
     @Column(name = "address")
     private String address;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 10000)
     @Lob
     private String content;
 

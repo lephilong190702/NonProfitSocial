@@ -83,6 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
         p.setContent(project.getContent());
         p.setStartDate(project.getStartDate());
         p.setEndDate(project.getEndDate());
+        p.setContributedAmount(project.getContributedAmount());
         p.setTotalAmount(project.getTotalAmount());
         if (project.getFiles() != null && !project.getFiles().isEmpty()) {
             List<ProjectImage> images = new ArrayList<>();

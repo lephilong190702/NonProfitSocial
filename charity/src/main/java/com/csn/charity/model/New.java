@@ -44,7 +44,7 @@ public class New implements Serializable {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "content", nullable = false, length = 500)
+    @Column(name = "content", nullable = false, length = 10000)
     private String content;
 
     @Transient

@@ -73,4 +73,9 @@ public class ProjectController {
         return "redirect:/projects";
 
     }
+
+    @GetMapping("/showMap")
+    public String index() {
+        return "pages/test";
+    }
 }

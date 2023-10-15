@@ -55,7 +55,7 @@ public class SpringSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
-                                "/error", "/login", "/oauth2/**")
+                                "/error", "/login", "/oauth2/**", "/showMap")
                         .permitAll()
                         .requestMatchers("/", "/admin/**").hasRole("ADMIN")
                         .anyRequest()
@@ -103,7 +103,7 @@ public class SpringSecurityConfig {
                                 "/api/firebase/{userId}", "/api/users/", "/api/users/{id}",
                                 "/api/user-docs/{id}", "/api/projects/{id}", "/api/projects/pcategories/{id}",
                                 "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
-                                "/api/contributions/{projectId}" )
+                                "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")

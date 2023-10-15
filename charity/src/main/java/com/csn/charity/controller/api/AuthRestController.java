@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -141,5 +143,17 @@ public class AuthRestController {
     @GetMapping("/admin/adminProfile")
     public String adminProfile() {
         return "Welcome to Admin Profile";
+    }
+
+    @PutMapping("/forgot-password/")
+    @CrossOrigin
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        return new ResponseEntity<>(userService.forgotPassword(email), HttpStatus.OK);
+    }
+
+    @PutMapping("/set-password/")
+    @CrossOrigin
+    public ResponseEntity<String> setPassword(@RequestParam String email, @RequestParam String newPassword) {
+        return new ResponseEntity<>(userService.setPassword(email, newPassword), HttpStatus.OK);
     }
 }

@@ -1,33 +1,23 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, Paper, Grid } from '@material-ui/core';
 import ApiConfig, { endpoints } from '../configs/ApiConfig';
-import axios from 'axios';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [isEmailSent, setIsEmailSent] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Tạo một đối tượng chứa dữ liệu cần gửi lên server
-    const requestData = {
-      email: email,
-    };
-
-    // Sử dụng `ApiConfig.endpoint` để xây dựng URL
-    const apiUrl = `${ApiConfig.endpoints["c"]}${endpoints.forgotPassword}`;
-
-    // Sử dụng axios để gửi yêu cầu PUT đến API
-    axios.put(apiUrl, requestData)
-      .then((response) => {
-        // Xử lý phản hồi thành công ở đây, có thể đặt isEmailSent thành true
-        setIsEmailSent(true);
-      })
-      .catch((error) => {
-        // Xử lý lỗi ở đây nếu có
-        console.error('Lỗi khi gửi yêu cầu:', error);
-      });
+  const handleResetPassword = async () => {
+    const apiUrl = `${endpoints['forgot-password']}?email=${email}`;
+    try {
+      const response = await ApiConfig.put(apiUrl);
+      if (response.status === 200) {
+        setIsEmailSent(true); // Đánh dấu rằng email đã được gửi
+      } else {
+        // Xử lý khi có lỗi
+      }
+    } catch (error) {
+      // Xử lý khi có lỗi kết nối với máy chủ
+    }
   };
 
   return (
@@ -47,7 +37,7 @@ const ForgotPassword = () => {
             </Grid>
           ) : (
             <Grid item xs={12}>
-              <form onSubmit={handleSubmit}>
+              <form>
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -62,7 +52,7 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Button
-                  type="submit"
+                  onClick={handleResetPassword}
                   fullWidth
                   variant="contained"
                   color="primary"

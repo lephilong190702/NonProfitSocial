@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
         mimeMessageHelper.setSubject("Reset Password");
         mimeMessageHelper.setText("""
         <div>
-          <a href="http://localhost:9090/set-password?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+          <a href="http://localhost:5173/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
         </div>
         """.formatted(email), true);
         javaMailSender.send(mimeMessage);

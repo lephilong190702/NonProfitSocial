@@ -5,10 +5,13 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import { endpoints } from '../configs/ApiConfig';
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -19,12 +22,12 @@ const ResetPasswordPage = () => {
   };
 
   const handleResetPassword = () => {
-    // Xử lý đặt lại mật khẩu ở đây
     if (password === confirmPassword) {
-      // Thực hiện đặt lại mật khẩu
+    const apiUrl = `${endpoints['set-password']}?email=${email}?newPassword`;
+      
       alert('Mật khẩu đã được đặt lại thành công');
     } else {
-      alert('Mật khẩu và xác nhận mật khẩu không trùng khớp');
+      setErrorMessage('Mật khẩu và xác nhận mật khẩu không trùng khớp');
     }
   };
 
@@ -49,6 +52,11 @@ const ResetPasswordPage = () => {
         onChange={handleConfirmPasswordChange}
         margin="normal"
       />
+      {errorMessage && (
+        <Typography variant="body1" color="error">
+          {errorMessage}
+        </Typography>
+      )}
       <Button
         variant="contained"
         color="primary"

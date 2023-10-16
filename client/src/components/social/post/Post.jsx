@@ -31,6 +31,9 @@ const Post = () => {
   const [replyContent, setReplyContent] = useState({});
   const [reactions, setReactions] = useState({});
   const [likeCount, setLikeCount] = useState({});
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+
 
   const likeHandler = async (postId) => {
     if (!user) {
@@ -102,12 +105,15 @@ const Post = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    try {
-      const response = await authApi().delete(`${endpoints["post"]}${postId}`);
-
-      console.log("Kết quả xóa bài viết:", response.data);
-    } catch (error) {
-      console.error(error);
+    const shouldDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
+    
+    if (shouldDelete) {
+      try {
+        const response = await authApi().delete(`${endpoints["post"]}${postId}`);
+        console.log("Kết quả xóa bài viết:", response.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 

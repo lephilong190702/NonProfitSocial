@@ -6,6 +6,7 @@ import { Header } from "../components";
 import { Navigate } from "react-router";
 import { UserContext } from "../App";
 import "./login.css";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [user, dispatch] = useContext(UserContext);
@@ -76,7 +77,10 @@ const LoginPage = () => {
                     placeholder="Mật khẩu"
                   />
                 </Form.Group>
-                {/* <span className="loginForgot">Forgot Password?</span> */}
+                <Link to="/forgotPassword">
+                <span className="loginForgot">Forgot Password?</span>
+                </Link>
+                
                 <Form.Group className="mb-3">
                   <Button type="submit" variant="danger" className="loginRegisterButton">
                     Đăng nhập

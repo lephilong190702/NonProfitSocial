@@ -16,7 +16,7 @@ const ProjectDetails = () => {
     donateAmount: "",
     note: "",
   });
-  
+
   const [showModal, setShowModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const currentURL = window.location.href;
@@ -180,9 +180,15 @@ const ProjectDetails = () => {
           )}
           <hr />
           <h3>
-            {moment(project.startDate).format("DD/MM/YYYY HH:mm")} -{" "}
-            {moment(project.endDate).format("DD/MM/YYYY HH:mm")}
+            {project.startDate
+              ? moment(project.startDate).format("DD/MM/YYYY HH:mm")
+              : "Không có ngày bắt đầu"}{" "}
+            -{" "}
+            {project.endDate
+              ? moment(project.endDate).format("DD/MM/YYYY HH:mm")
+              : "Không có ngày kết thúc"}
           </h3>
+
           <hr />
           <h4>Danh sách các người đóng góp</h4>
           <ul>
@@ -205,10 +211,14 @@ const ProjectDetails = () => {
             ))}
           </ul>
         </Col>
-        <Button onClick={() => openModal(project.id, project.title)}
-                      className="card-link donate-link"
-                      style={{ marginRight: "5px" }}
-                      variant="primary">Đóng góp</Button>
+        <Button
+          onClick={() => openModal(project.id, project.title)}
+          className="card-link donate-link"
+          style={{ marginRight: "5px" }}
+          variant="primary"
+        >
+          Đóng góp
+        </Button>
       </Row>
       <hr />
       <Modal show={showModal} onHide={closeModal}>

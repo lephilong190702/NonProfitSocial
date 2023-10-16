@@ -52,7 +52,9 @@ export const endpoints = {
     "replies-post": (parentId) => `${SERVER_CONTEXT}/api/post-comment/${parentId}/replies/`,
     "comment-post": (postId) => `${SERVER_CONTEXT}/api/post/${postId}/comments/`,
     "statistic": `${SERVER_CONTEXT}/api/export/`,
-    "contributor-post": (postId) => `${SERVER_CONTEXT}/api/contributions/${postId}`
+    "contributor-post": (postId) => `${SERVER_CONTEXT}/api/contributions/${postId}`,
+    "forgot-password": `${SERVER_CONTEXT}/api/forgot-password/`,
+    "set-password": `${SERVER_CONTEXT}/api/set-password/`,
 
 }
 
@@ -60,7 +62,7 @@ export const authApi = () => {
   return axios.create({
     baseURL: SERVER,
     headers: {
-      'Authorization': cookie.load("token")
+      'Authorization': cookie.load("token"),
     },
   });
 };

@@ -12,6 +12,8 @@ import ProjectPage from './pages/ProjectPage';
 import { Header } from './components';
 import ProjectDetails from './components/ProjectDetails';
 import Footer from './components/Footer';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassWordPage from './pages/ResetPassWordPage';
 
 export const UserContext = createContext();
 
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="/social/profile" element={<Profile />} />
           <Route path='/projects' element ={<ProjectPage />} />
           <Route path="/projects/:projectId" element={<ProjectDetails />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/resetPassword" element={<ResetPassWordPage />} />
           
         </Routes>
         <Footer />

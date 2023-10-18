@@ -25,7 +25,12 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="name" name="name" th:field="*{name}"
+<<<<<<< HEAD
                                         style="font-size: 16px; width: 80%;" required />
+=======
+                                        style="font-size: 16px; width: 80%;" />
+                                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-sm text-red-500"></span>
+>>>>>>> 520940a51a0c265e54742515f7eb18d1d6c5a7c7
                                 </div>
                                 <div class="col-sm-12 d-flex justify-content-end">
                                     <button type="submit" class="btn btn-primary me-1 mb-1"

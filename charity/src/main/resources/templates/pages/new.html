@@ -38,6 +38,7 @@
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="title" name="title" th:field="*{name}" class="form-control"
                                         placeholder="Nhập tiêu đề tin tức"/>
+                                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-sm text-red-500"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Nội Dung</label>
@@ -45,12 +46,13 @@
                                 <div class="col-md-8 form-group">
                                     <textarea id="content" name="content" th:field="*{content}" class="form-control"
                                         placeholder="Nhập nội dung"></textarea>
+                                    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-sm text-red-500"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Hình Ảnh</label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="file" id="content" name="content" th:field="*{file}" class="form-control"
+                                    <input type="file" id="file" name="content" th:field="*{file}" class="form-control"
                                         placeholder="Nhập nội dung"></textarea>
                                 </div>
                                 <div class="col-sm-12 d-flex justify-content-end">

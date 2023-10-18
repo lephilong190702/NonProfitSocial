@@ -2,9 +2,12 @@ package com.csn.charity.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,8 +63,11 @@ public class NewsController {
     }
 
     @PostMapping("/admin/new")
-    public String addOrUpdate(@ModelAttribute(value = "anew") New anew,
+    @Transactional
+    public String addOrUpdate(@Valid @ModelAttribute(value = "anew") New anew, BindingResult bindingResult,
             @RequestParam(value = "categoryId", required = false) Long categoryId) {
+        if (bindingResult.hasErrors())
+            return "pages/new";
         System.out.println("category: " + categoryId);
 
         NewCategory newCategory = this.newsCategoryService.get(categoryId);

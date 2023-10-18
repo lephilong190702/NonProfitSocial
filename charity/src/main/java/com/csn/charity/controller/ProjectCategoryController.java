@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,7 @@ import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
 
 @Controller
+@Slf4j
 public class ProjectCategoryController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
@@ -51,7 +56,11 @@ public class ProjectCategoryController {
     }
 
     @PostMapping("/admin/pcategory")
-    public String addProjectCategory(@ModelAttribute(value = "projectCategory") ProjectCategory projectCategory) {
+    @Transactional
+    public String addProjectCategory(@Valid @ModelAttribute("projectCategory") ProjectCategory projectCategory, BindingResult bindingResult) {
+        log.error(bindingResult.toString());
+        if (bindingResult.hasErrors())
+            return "pages/pcategory";
         if (projectCategory.getId() == null)
             projectCategoryService.add(projectCategory);
         else

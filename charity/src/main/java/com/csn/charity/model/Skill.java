@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Skill implements Serializable {
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "Không được bỏ trống")
     private String name;
 
     @ManyToMany(mappedBy = "skills")

@@ -1,8 +1,11 @@
 package com.csn.charity.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +39,10 @@ public class SkillController {
     }
 
     @PostMapping("/admin/skill")
-    public String addSkill(@ModelAttribute(value = "skill") Skill skill) {
+    @Transactional
+    public String addSkill(@Valid @ModelAttribute(value = "skill") Skill skill, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "pages/skill";
         if (skill.getId() == null)
             this.skillService.add(skill);
         else

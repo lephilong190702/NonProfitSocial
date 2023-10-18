@@ -38,13 +38,15 @@
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="title" name="title" th:field="*{title}" class="form-control"
                                         placeholder="Nhập tên dự án"/>
+                                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-sm text-red-500"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Địa chỉ</label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="title" name="title" th:field="*{address}"
+                                    <input type="text" id="address" name="title" th:field="*{address}"
                                         class="form-control" placeholder="Nhập địa chỉ dự án" />
+                                    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-sm text-red-500"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Nội Dung</label>
@@ -52,6 +54,7 @@
                                 <div class="col-md-8 form-group">
                                     <textarea id="content" name="content" th:field="*{content}" class="form-control"
                                         placeholder="Nhập nội dung"></textarea>
+                                    <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-sm text-red-500"></span>
 
                                 </div>
                                 <div class="col-md-4">
@@ -60,6 +63,7 @@
                                 <div class="col-md-8 form-group">
                                     <input type="number" id="totalAmount" name="totalAmount" th:field="*{totalAmount}"
                                         class="form-control" placeholder="Nhập số tiền cần quyên góp" />
+                                    <span th:if="${#fields.hasErrors('totalAmount')}" th:errors="*{totalAmount}" class="text-sm text-red-500"></span>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Hình Ảnh</label>

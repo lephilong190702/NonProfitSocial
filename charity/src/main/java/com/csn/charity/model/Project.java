@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,16 +41,20 @@ public class Project implements Serializable{
     private Long id;
 
     @Column(name = "title", nullable = false)
+    @NotBlank(message = "Không được bỏ trống")
     private String title;
 
     @Column(name = "address")
+    @NotBlank(message = "Không được bỏ trống")
     private String address;
 
     @Column(name = "content", nullable = false, length = 10000)
     @Lob
+    @NotBlank(message = "Không được bỏ trống")
     private String content;
 
     @Column(name = "contributed_amount")
+    @DecimalMin(value = "0.01", message = "Giá trị phải lớn hơn 0")
     private BigDecimal contributedAmount;
 
     @Column(name = "total_amount", nullable = false)

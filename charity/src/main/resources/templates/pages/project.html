@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="title" name="title" th:field="*{title}" class="form-control"
-                                        placeholder="Nhập tên dự án"/>
+                                        placeholder="Nhập tên dự án" required/>
                                 </div>
                                 <div class="col-md-4">
                                     <label>Địa chỉ</label>
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <textarea id="content" name="content" th:field="*{content}" class="form-control"
-                                        placeholder="Nhập nội dung"></textarea>
+                                        placeholder="Nhập nội dung" required></textarea>
 
                                 </div>
                                 <div class="col-md-4">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <input type="number" id="totalAmount" name="totalAmount" th:field="*{totalAmount}"
-                                        class="form-control" placeholder="Nhập số tiền cần quyên góp" />
+                                        class="form-control" placeholder="Nhập số tiền cần quyên góp" required />
                                 </div>
                                 <div class="col-md-4">
                                     <label>Hình Ảnh</label>

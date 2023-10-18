@@ -23,6 +23,7 @@
                             <th>NGÀY ĐĂNG KÝ</th>
                             <th>NGÀY BẮT ĐẦU</th>
                             <th>NGÀY KẾT THÚC</th>
+                            <th>MÔ TẢ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                             <td th:text="${v.registerDate}"></td>
                             <td th:text="${v.startDate}"></td>
                             <td th:text="${v.endDate}"></td>
+                            <td th:text="${v.description}"></td>
                             <!-- <td></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/ncategory/{id}(id=${c.id})}">Update</a>

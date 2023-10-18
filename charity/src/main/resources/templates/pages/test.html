@@ -4,15 +4,18 @@
     <script type="text/javascript">
       google.charts.load("current", {
         "packages":["map"],
-        "mapsApiKey": "AIzaSyCWfWHj0mhrQN7rRBZ7LIK6fL6CJSpr9jw"
+        "mapsApiKey": "AIzaSyDBI5m-P6FjA3eQjQ1cK1ZVo-m6qxg8O_o"
       });
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Lat', 'Long', 'Name'],
-          [19.0760,  72.8777, 'Mumbai'],
-          [18.5204, 73.8567, 'Pune'],
-          [19.1176, 72.9060, 'Powai'],
+          [10.675476491404563, 106.69071471593819, 'Đại học Mở TPHCM Cơ sở 3'],
+          [12.257190203653941, 109.19204428293185, 'QUÁN YÊN VUI NHA TRANG – KHÁNH HÒA'],
+          [10.377482236513776, 105.43427942419729, 'QUÁN YÊN VUI LONG XUYÊN – AN GIANG'],
+          [10.805956095175304, 106.6970319529779, 'QUÁN CƠM XÃ HỘI NỤ CƯỜI 6'],
+          [10.76798786737176, 106.6710839935096, 'QUÁN CƠM XÃ HỘI NỤ CƯỜI 1'],
+          [10.744396575946428, 106.73604005519952, 'NỤ CƯỜI 3 – EM ĐẾN TRƯỜNG']
         ]);
 
         var map = new google.visualization.Map(document.getElementById('map_div'));

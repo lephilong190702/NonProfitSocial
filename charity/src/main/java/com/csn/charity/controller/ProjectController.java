@@ -2,9 +2,12 @@ package com.csn.charity.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,8 +61,11 @@ public class ProjectController {
     }
 
     @PostMapping("/admin/project")
-    public String addOrUpdateProject(@ModelAttribute(value = "project") Project project,
-            @RequestParam(value = "categoryId", required = false) Long categoryId) {
+    @Transactional
+    public String addOrUpdateProject(@Valid @ModelAttribute(value = "project") Project project,BindingResult bindingResult,
+                                     @RequestParam(value = "categoryId", required = false) Long categoryId) {
+        if (bindingResult.hasErrors())
+            return "pages/project";
         System.out.println("category: " + categoryId);
 
         ProjectCategory projectCategory = projectCategoryService.get(categoryId);

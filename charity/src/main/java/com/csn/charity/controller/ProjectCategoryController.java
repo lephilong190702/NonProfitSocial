@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,7 @@ import com.csn.charity.service.interfaces.ProjectService;
 
 
 @Controller
+@Slf4j
 public class ProjectCategoryController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
@@ -54,16 +57,15 @@ public class ProjectCategoryController {
     }
 
     @PostMapping("/admin/pcategory")
-    public String addProjectCategory(@Valid @ModelAttribute(value = "projectCategory") ProjectCategory projectCategory,
-                                     BindingResult rs) {
-        if (rs.hasErrors()) {
-            if (projectCategory.getId() == null)
-                projectCategoryService.add(projectCategory);
-            else
-                projectCategoryService.update(projectCategory.getId(), projectCategory);
-            return "admin/pcategory";
-        }
-
+    @Transactional
+    public String addProjectCategory(@Valid @ModelAttribute("projectCategory") ProjectCategory projectCategory, BindingResult bindingResult) {
+        log.error(bindingResult.toString());
+        if (bindingResult.hasErrors())
+            return "pages/pcategory";
+        if (projectCategory.getId() == null)
+            projectCategoryService.add(projectCategory);
+        else
+            projectCategoryService.update(projectCategory.getId(), projectCategory);
 
         return "redirect:/pcategories";
     }

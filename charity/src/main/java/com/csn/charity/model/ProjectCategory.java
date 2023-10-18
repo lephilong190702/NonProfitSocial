@@ -33,7 +33,6 @@ public class ProjectCategory implements Serializable{
     private Long id;
 
     @Column(name = "name", nullable = false, length = 30)
-//    @NotNull(message = "{project_category.name.notNull}")
     @NotBlank(message = "Không được bỏ trống")
     private String name;
 

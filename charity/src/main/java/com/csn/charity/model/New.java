@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,6 +37,7 @@ public class New implements Serializable {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank(message = "Không được bỏ trống")
     private String name;
 
     @Column(name = "create_date", nullable = false)
@@ -45,6 +47,7 @@ public class New implements Serializable {
     private String image;
 
     @Column(name = "content", nullable = false, length = 10000)
+    @NotBlank(message = "Không được bỏ trống")
     private String content;
 
     @Transient

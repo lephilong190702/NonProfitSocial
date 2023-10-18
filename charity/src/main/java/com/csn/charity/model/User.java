@@ -27,7 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.aspectj.bridge.IMessage;
+// import org.aspectj.bridge.IMessage;
 
 @Entity
 @Getter
@@ -42,11 +42,11 @@ public class User implements Serializable {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 50)
-    @Nonnull
+    // @Nonnull
     private String username;
 
     @Column(name = "password", nullable = false)
-    @JsonIgnore
+    // @JsonIgnore
     private String password;
 
     @Column(name = "email", nullable = false)

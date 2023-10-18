@@ -12,10 +12,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -29,6 +33,8 @@ public class ProjectCategory implements Serializable{
     private Long id;
 
     @Column(name = "name", nullable = false, length = 30)
+//    @NotNull(message = "{project_category.name.notNull}")
+    @NotBlank(message = "Không được bỏ trống")
     private String name;
 
     @OneToMany(mappedBy = "category",  cascade = CascadeType.ALL)

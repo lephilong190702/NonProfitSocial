@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.aspectj.bridge.IMessage;
 
 @Entity
 @Getter
@@ -40,6 +42,7 @@ public class User implements Serializable {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Nonnull
     private String username;
 
     @Column(name = "password", nullable = false)

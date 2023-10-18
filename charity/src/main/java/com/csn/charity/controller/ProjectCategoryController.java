@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
+
 
 @Controller
 public class ProjectCategoryController {
@@ -38,7 +41,7 @@ public class ProjectCategoryController {
     }
 
     @GetMapping("/admin/pcategory")
-    public String addPage(Model model) {
+    public String addPage( Model model) {
         ProjectCategory projectCategory = new ProjectCategory();
         model.addAttribute("projectCategory", projectCategory);
         return "pages/pcategory";
@@ -51,11 +54,16 @@ public class ProjectCategoryController {
     }
 
     @PostMapping("/admin/pcategory")
-    public String addProjectCategory(@ModelAttribute(value = "projectCategory") ProjectCategory projectCategory) {
-        if (projectCategory.getId() == null)
-            projectCategoryService.add(projectCategory);
-        else
-            projectCategoryService.update(projectCategory.getId(), projectCategory);
+    public String addProjectCategory(@Valid @ModelAttribute(value = "projectCategory") ProjectCategory projectCategory,
+                                     BindingResult rs) {
+        if (rs.hasErrors()) {
+            if (projectCategory.getId() == null)
+                projectCategoryService.add(projectCategory);
+            else
+                projectCategoryService.update(projectCategory.getId(), projectCategory);
+            return "admin/pcategory";
+        }
+
 
         return "redirect:/pcategories";
     }

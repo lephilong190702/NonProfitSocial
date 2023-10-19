@@ -54,7 +54,7 @@ public class Project implements Serializable{
     private String content;
 
     @Column(name = "contributed_amount")
-    @DecimalMin(value = "0.01", message = "Giá trị phải lớn hơn 0")
+    // @DecimalMin(value = "0.01", message = "Giá trị phải lớn hơn 0")
     private BigDecimal contributedAmount;
 
     @Column(name = "total_amount", nullable = false)

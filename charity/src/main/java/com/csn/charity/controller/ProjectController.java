@@ -62,10 +62,15 @@ public class ProjectController {
 
     @PostMapping("/admin/project")
     @Transactional
-    public String addOrUpdateProject(@Valid @ModelAttribute(value = "project") Project project,BindingResult bindingResult,
-                                     @RequestParam(value = "categoryId", required = false) Long categoryId) {
-        if (bindingResult.hasErrors())
+    public String addOrUpdateProject(@Valid @ModelAttribute(value = "project") Project project,
+            BindingResult bindingResult, Model model,
+            @RequestParam(value = "categoryId", required = false) Long categoryId) {
+        if (bindingResult.hasErrors()) {
+            List<ProjectCategory> projectCategories = projectCategoryService.getAll();
+            model.addAttribute("projectCategories", projectCategories);
             return "pages/project";
+
+        }
         System.out.println("category: " + categoryId);
 
         ProjectCategory projectCategory = projectCategoryService.get(categoryId);

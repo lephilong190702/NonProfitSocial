@@ -64,10 +64,17 @@ public class NewsController {
 
     @PostMapping("/admin/new")
     @Transactional
-    public String addOrUpdate(@Valid @ModelAttribute(value = "anew") New anew, BindingResult bindingResult,
+    public String addOrUpdate(@Valid @ModelAttribute(value = "anew") New anew, BindingResult bindingResult, Model model,
             @RequestParam(value = "categoryId", required = false) Long categoryId) {
         if (bindingResult.hasErrors())
+        {
+            List<NewCategory> nCategories = newsCategoryService.getAll();
+
+             model.addAttribute("ncategories", nCategories);
+
             return "pages/new";
+        }
+                
         System.out.println("category: " + categoryId);
 
         NewCategory newCategory = this.newsCategoryService.get(categoryId);

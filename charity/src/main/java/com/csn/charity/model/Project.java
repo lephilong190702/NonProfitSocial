@@ -58,6 +58,7 @@ public class Project implements Serializable{
     private BigDecimal contributedAmount;
 
     @Column(name = "total_amount", nullable = false)
+    @DecimalMin(value = "10000", message = "Giá trị phải lớn hơn 10000")
     private BigDecimal totalAmount;
 
     @Column(name = "start_date")

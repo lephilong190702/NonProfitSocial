@@ -72,37 +72,61 @@ public class NewsRestController {
 
     @PostMapping("/news-comment/")
     @CrossOrigin
-    public ResponseEntity<UserCommentNew> createComment(@RequestBody CommentNewsDTO commentNewsDTO) {
-        UserCommentNew userCommentNew = this.commentNewsService.createComment(commentNewsDTO);
-        return new ResponseEntity<>(userCommentNew, HttpStatus.CREATED);
+    public ResponseEntity<?> createComment(@RequestBody CommentNewsDTO commentNewsDTO) {
+        try {
+            UserCommentNew userCommentNew = this.commentNewsService.createComment(commentNewsDTO);
+            return new ResponseEntity<>(userCommentNew, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PutMapping("/news-comment/{id}")
     @CrossOrigin
     public ResponseEntity<String> updateNewsComment(@PathVariable(value = "id") Long id,
-                                                    @RequestBody CommentNewsDTO commentNewsDTO) {
-        this.commentNewsService.updateComment(id, commentNewsDTO);
-        return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
+            @RequestBody CommentNewsDTO commentNewsDTO) {
+        try {
+            this.commentNewsService.updateComment(id, commentNewsDTO);
+            return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/news-comment/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
-        commentNewsService.deleteCommentNews(id);
-        return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+        try {
+            commentNewsService.deleteCommentNews(id);
+            return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/news/{newsId}/comments/")
     @CrossOrigin
-    public ResponseEntity<List<UserCommentNew>> listComment(@PathVariable(value = "newsId") Long id) {
-        return new ResponseEntity<>(this.commentNewsService.getCommentByNews(id), HttpStatus.OK);
+    public ResponseEntity<?> listComment(@PathVariable(value = "newsId") Long id) {
+        try {
+            return new ResponseEntity<>(this.commentNewsService.getCommentByNews(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/news-comment/{parentId}/replies/")
     @CrossOrigin
-    public ResponseEntity<UserCommentNew> addReplyToComment(@PathVariable Long parentId,
+    public ResponseEntity<?> addReplyToComment(@PathVariable Long parentId,
             @RequestBody UserCommentNew reply) {
-        UserCommentNew addedReply = commentNewsService.addReplyCommentNew(parentId, reply);
-        return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+        try {
+            UserCommentNew addedReply = commentNewsService.addReplyCommentNew(parentId, reply);
+            return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/news-comment/{parentId}/replies/")

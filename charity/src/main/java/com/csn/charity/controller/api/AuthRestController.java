@@ -53,7 +53,7 @@ public class AuthRestController {
 
     @PostMapping("/register/")
     @CrossOrigin
-    public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDto) {
+    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDto) {
         try {
             Long userId = this.userService.addUser(userDto);
             UserDoc userDoc = new UserDoc();

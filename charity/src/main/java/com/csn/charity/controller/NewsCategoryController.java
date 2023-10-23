@@ -23,6 +23,7 @@ public class NewsCategoryController {
     @Autowired
     private NewsService newsService;
 
+
     @GetMapping("/ncategories")
     public String listProjectCategories(Model model) {
         List<NewCategory> newCategories = this.newsCategoryService.getAll();

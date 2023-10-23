@@ -78,32 +78,46 @@ public class PostRestController {
 
     @PostMapping(path = "/posts/")
     @CrossOrigin
-    public ResponseEntity<Post> createPost(@RequestParam(value = "content") String content,
+    public ResponseEntity<?> createPost(@RequestParam(value = "content") String content,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "tags", required = false) List<String> tags) {
+        try {
+            PostDTO postDTO = new PostDTO();
+            postDTO.setContent(content);
+            postDTO.setFiles(files);
+            postDTO.setHashtags(tags);
 
-        PostDTO postDTO = new PostDTO();
-        postDTO.setContent(content);
-        postDTO.setFiles(files);
-        postDTO.setHashtags(tags);
+            Post createdPost = postService.createPost(postDTO);
+            return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
-        Post createdPost = postService.createPost(postDTO);
-        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
     }
 
     @PutMapping("/posts/{id}")
     @CrossOrigin
     public ResponseEntity<String> updatePost(@PathVariable(value = "id") Long id,
             @RequestBody PostDTO postDTO) {
-        this.postService.updatePost(id, postDTO);
-        return ResponseEntity.ok("Bài viết đã được cập nhật thành công.");
+        try {
+            this.postService.updatePost(id, postDTO);
+            return ResponseEntity.ok("Bài viết đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/posts/{id}")
     @CrossOrigin
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-        return ResponseEntity.ok("Bài viết đã được xóa thành công.");
+        try {
+            postService.deletePost(id);
+            return ResponseEntity.ok("Bài viết đã được xóa thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/tags/")
@@ -118,38 +132,63 @@ public class PostRestController {
 
     @PostMapping("/post-comment/")
     @CrossOrigin
-    public ResponseEntity<UserCommentPost> createComment(@RequestBody CommentPostDTO commentPostDTO) {
-        UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);
-        return new ResponseEntity<>(uCommentPost, HttpStatus.CREATED);
+    public ResponseEntity<?> createComment(@RequestBody CommentPostDTO commentPostDTO) {
+        try {
+            UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);
+            return new ResponseEntity<>(uCommentPost, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PutMapping("/post-comment/{id}")
     @CrossOrigin
     public ResponseEntity<String> updatePostComment(@PathVariable(value = "id") Long id,
             @RequestBody CommentPostDTO commentPostDTO) {
-        this.commentPostService.updateComment(id, commentPostDTO);
-        return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
+        try {
+            this.commentPostService.updateComment(id, commentPostDTO);
+            return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/post-comment/{id}")
     @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
-        commentPostService.deleteCommentPost(id);
-        return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+        try {
+            commentPostService.deleteCommentPost(id);
+            return ResponseEntity.ok("Bình luận đã được xóa thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/post/{postId}/comments/")
     @CrossOrigin
-    public ResponseEntity<List<UserCommentPost>> listComment(@PathVariable(value = "postId") Long id) {
-        return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
+    public ResponseEntity<?> listComment(@PathVariable(value = "postId") Long id) {
+        try {
+            return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PostMapping("/post-comment/{parentId}/replies/")
     @CrossOrigin
-    public ResponseEntity<UserCommentPost> addReplyToComment(@PathVariable Long parentId,
+    public ResponseEntity<?> addReplyToComment(@PathVariable Long parentId,
             @RequestBody UserCommentPost reply) {
-        UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
-        return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+        try {
+            UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
+            return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/post-comment/{parentId}/replies/")
@@ -172,9 +211,13 @@ public class PostRestController {
 
     @GetMapping("/reaction/{postId}")
     @CrossOrigin
-    public ResponseEntity<List<UserReactPost>> getReactionByPost(@PathVariable Long postId){
-        List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
-        return new ResponseEntity<>(reactPosts, HttpStatus.OK);
+    public ResponseEntity<?> getReactionByPost(@PathVariable Long postId) {
+        try {
+            List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
+            return new ResponseEntity<>(reactPosts, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/report/")
@@ -184,7 +227,7 @@ public class PostRestController {
         if (userReportPost != null) {
             return new ResponseEntity<>(userReportPost, HttpStatus.CREATED);
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Báo cáo thất bại.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Báo cáo thất bại.");
         }
     }
 

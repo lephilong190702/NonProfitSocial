@@ -8,8 +8,6 @@ import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.AuthenticationType;
 import com.csn.charity.model.User;
 
-import jakarta.mail.MessagingException;
-
 public interface UserService extends UserDetailsService {
     Long addUser(UserDTO userDto);
 

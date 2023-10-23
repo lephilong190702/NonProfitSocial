@@ -56,7 +56,7 @@ public class VolunteerRestController {
                 mailService.sendConfirmEmail(user.getEmail());
             return ResponseEntity.ok("Đăng ký tình nguyện thành công");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Lỗi trong quá trình đăng ký tình nguyện: " + e.getMessage());
         }
     }

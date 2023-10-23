@@ -61,7 +61,7 @@ public class PaymentController {
             userContributeProject.setDonateAmount(donatedAmount.divide(new BigDecimal(100)));
             donateService.donate(projectId, userContributeProject);
             System.out.println("XONG");
-            return new ResponseEntity<>("Xong", HttpStatus.OK);
+            return new ResponseEntity<>("Thanh toán thành công", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Lỗi", HttpStatus.BAD_REQUEST);
         }

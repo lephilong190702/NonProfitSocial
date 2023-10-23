@@ -35,8 +35,13 @@ public class ProjectRestController {
 
     @GetMapping("/projects/{id}")
     @CrossOrigin
-    public ResponseEntity<Project> getProject(@PathVariable Long id) {
-        return new ResponseEntity<>(this.projectService.get(id), HttpStatus.OK);
+    public ResponseEntity<?> getProject(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(this.projectService.get(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        
     }
 
     @GetMapping("/pcategories/")
@@ -51,8 +56,13 @@ public class ProjectRestController {
 
     @GetMapping("/projects/pcategories/{id}")
     @CrossOrigin
-    public ResponseEntity<List<Project>> getProjectByCategory(@PathVariable Long id) {
-        return new ResponseEntity<>(projectService.getProjectsByCategory(id), HttpStatus.OK);
+    public ResponseEntity<?> getProjectByCategory(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(projectService.getProjectsByCategory(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        
     }
 
 }

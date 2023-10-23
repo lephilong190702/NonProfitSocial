@@ -94,7 +94,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/register/", "/api/login/").permitAll()
                         .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/projects/{id}", "/api/pcategories/",
-                                "/api/posts/","/api/posts/{postId}",
+                                "/api/posts/","/api/posts/{postId}", "/api/post/{postId}/comments/",
                                 "/api/post-comment/{parentId}/replies/",
                                 "/api/news-comment/{parentId}/replies/",
                                 "/api/news/{newsId}", "/api/skills/",

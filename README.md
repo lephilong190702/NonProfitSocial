@@ -45,12 +45,13 @@ Từ thiện là một hoạt động nhân văn, có ý nghĩa cao đẹp trong
 
 ## Hướng dẫn cài đặt
 **Bước 1: Cài đặt môi trường:**
-
-- Cài đặt NodeJS: Cài đặt NodeJS 18.18.2 LTS [tại đây](https://nodejs.org/dist/v18.18.2/node-v18.18.2-x64.msi)
-- Cài đặt JDK 17: Cài đặt JSK 17 [tại đây](https://download.oracle.com/java/17/latest/jdk-17_windows-x64_bin.exe (sha256))
+- Cài đặt JDK 17 (Java Development Kit): Cài đặt JDK 17 [tại đây](https://download.oracle.com/java/17/latest/jdk-17_windows-x64_bin.exe (sha256))
+- Cài đặt biến môi trường JAVA_HOME bằng cách tìm kiếm trong Window từ Edit the system eviroment variables -> Trong tab Advanced nhấn Environment Variables -> Trong User variables chọn New -> Nhập Variable_name: JAVA_HOME và Browse Directory tới thư mục chứ jdk-17 vừa cài đặt, thường sẽ nằm ở C:\Program Files\Java\jdk-17 -> Nhấn OK
 - Cài đặt MySQL Community Server: Cài đặt MySQL Community Server 8.1.0 [tại đây](https://dev.mysql.com/get/Downloads/MySQL-8.1/mysql-8.1.0-winx64.msi)
 - Cài đặt MySQL Workbench: Cài đặt MySQL Workbench 8.0.34 [tại đây](https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-8.0.34-winx64.msi) 
 - Cài đặt Visual Studio Code: Cài đặt Visual Studio Code [tại đây](https://code.visualstudio.com/download), phù hợp với hệ điều hành của máy.
+- Cài đặt Extension Pack For Java trong Visual Studio Code: Cài đặt Extension Pack For Java [tại đây](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+- Cài đặt NodeJS: Cài đặt NodeJS 18.18.2 LTS [tại đây](https://nodejs.org/dist/v18.18.2/node-v18.18.2-x64.msi)
 - Cài đặt IntelliJ IDEA Community: Cài đặt IntelliJ IDEA Community [tai đây](https://www.jetbrains.com/idea/download/download-thanks.html?platform=windows&code=IIC)
 
 **Bước 2: Mở Command Prompt hoặc Git Bash, sau đó nhập lệnh sau để lấy project từ github về máy của mình**

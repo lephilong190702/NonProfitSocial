@@ -43,7 +43,7 @@ const NewsPage = () => {
     );
 
   return (
-    <div className="container">
+    <div className="news-container">
       <h1 className="page-title">DANH SÁCH TIN TỨC</h1>
       <Row>
         {news.map((n) => {

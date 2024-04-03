@@ -1,6 +1,6 @@
 import React, { Component, createContext, useReducer } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { HomePage, LoginPage, NewsPage, UserProfile } from './pages'
+import { HomePage, NewsPage, UserProfile } from './pages'
 import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
 import RegisterPage from './pages/RegisterPage';
@@ -14,6 +14,7 @@ import ProjectDetails from './components/ProjectDetails';
 import Footer from './components/Footer';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassWordPage from './pages/ResetPassWordPage';
+import LoginPage from './pages/login/LoginPage';
 
 export const UserContext = createContext();
 

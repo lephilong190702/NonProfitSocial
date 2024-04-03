@@ -145,7 +145,7 @@ const ProjectPage = () => {
     );
 
     return (
-      <div className="container">
+      <div className="projects-container">
         <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
         <Row>
           {project.map((p) => {

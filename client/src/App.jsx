@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { HomePage, NewsPage, UserProfile } from './pages'
 import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
-import RegisterPage from './pages/RegisterPage';
+// import RegisterPage from './pages/RegisterPage';
 import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 import NewsDetails from './components/NewsDetails';
 import Home from './pages/home/Home';
@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassWordPage from './pages/ResetPassWordPage';
 import LoginPage from './pages/login/LoginPage';
+import RegisterPage from './pages/login/RegisterPage';
 
 export const UserContext = createContext();
 

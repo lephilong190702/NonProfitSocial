@@ -113,7 +113,11 @@ const CustomNavbar = () => {
   if (projectCategory.length === 0) return <MySpinner />;
   return (
     <>
-      <div className={`font-Montserrat w-full top-0 z-[1000] duration-500 ease-in-out ${scrolled ? 'bg-[#d6fcdf]' : 'bg-white'}`}>
+      <div
+        className={`font-Montserrat w-full top-0 z-[1000] duration-500 ease-in-out ${
+          scrolled ? "bg-[#d6fcdf]" : "bg-white"
+        }`}
+      >
         <div className="bg-[#d3d3d3] pl-[10px]">
           {scrolled ? (
             <div></div>
@@ -262,57 +266,76 @@ const CustomNavbar = () => {
                     </li>
                   </div>
 
-                  <div className="hidden md:flex items-center font-bold w-auto md:order-1">
-                    <div className="border-solid border-r-2 border-[#767373] h-6 pl-3"></div>
-                  </div>
-                  <div className="hidden md:flex items-center font-bold w-auto md:order-1">
-                    <div className="group">
-                      <li className="flex flex-row">
-                        <div className="flex flex-row items-center group cursor-pointer">
-                          <FontAwesomeIcon
-                            icon={faUser}
-                            color="#000"
-                            size="lg"
-                            style={{ paddingLeft: "10px" }}
-                            className="group-hover:text-[#007fff]"
-                            fixedWidth
-                          />
-                          <p className="text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
-                            {" "}
-                            Đăng Nhập
-                          </p>
+                  {user === null ? (
+                    <>
+                      <div className="hidden md:flex items-center font-bold w-auto md:order-1">
+                        <div className="border-solid border-r-2 border-[#767373] h-6 pl-3"></div>
+                      </div>
+                      <div className="hidden md:flex items-center font-bold w-auto md:order-1">
+                        <div className="group">
+                          <li className="flex flex-row">
+                            <div className="flex flex-row items-center group cursor-pointer">
+                              <FontAwesomeIcon
+                                icon={faUser}
+                                color="#000"
+                                size="lg"
+                                style={{ paddingLeft: "10px" }}
+                                className="group-hover:text-[#007fff]"
+                                fixedWidth
+                              />
+                              <p className="text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
+                                {" "}
+                                Đăng Nhập
+                              </p>
 
-                          <div className={`group ${scrolled ? 'top-[50%]' : 'bottom-[-4%]'} hidden group-hover:block absolute top-[64%] right-[18%] w-32 h-5 bg-transparent  z-20 duration-300`}>
-                          </div>
-                          <div className={`group ${scrolled ? 'top-[50%]' : 'bottom-[75%]'} hidden group-hover:block absolute right-[20.5%] w-10 h-10 bg-[#007fff] z-20 rotate-45 duration-300`}>
-                          </div>
+                              <div
+                                className={`group ${
+                                  scrolled ? "top-[50%]" : "bottom-[-4%]"
+                                } hidden group-hover:block absolute top-[64%] right-[18%] w-32 h-5 bg-transparent  z-20 duration-300`}
+                              ></div>
+                              <div
+                                className={`group ${
+                                  scrolled ? "top-[50%]" : "bottom-[75%]"
+                                } hidden group-hover:block absolute right-[20.5%] w-10 h-10 bg-[#007fff] z-20 rotate-45 duration-300`}
+                              ></div>
 
-                          <div
-                            className={`group ${
-                              scrolled ? "top-[50%]" : "bottom-[63%]"
-                            } hidden group-hover:block absolute right-[14%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
-                          >
-                            <div className="flex flex-col gap-3 ">
-                              {/* <Link to='./login'> */}
-                              <div className="flex justify-center bg-[#38b6ff] text-sm text-[#fff] py-2 px-12 hover:bg-[#007fff] cursor-pointer">
-                              <Link to="/login" className=" nav-link">
-                                Đăng nhập
-                              </Link>
+                              <div
+                                className={`group ${
+                                  scrolled ? "top-[50%]" : "bottom-[63%]"
+                                } hidden group-hover:block absolute right-[14%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
+                              >
+                                <div className="flex flex-col gap-3 ">
+                                  {/* <Link to='./login'> */}
+                                  <div className="flex justify-center bg-[#38b6ff] text-sm text-[#fff] py-2 px-12 hover:bg-[#007fff] cursor-pointer">
+                                    <Link to="/login" className=" nav-link">
+                                      Đăng nhập
+                                    </Link>
+                                  </div>
+                                  {/* </Link> */}
+                                  {/* <Link to='./signup'> */}
+                                  <div className="flex justify-center  bg-[#38b6ff] text-sm text-[#fff] py-2 px-12 hover:bg-[#007fff] cursor-pointer">
+                                    <Link to="/register" className="nav-link">
+                                      Đăng ký
+                                    </Link>
+                                  </div>
+                                  {/* </Link> */}
+                                </div>
                               </div>
-                              {/* </Link> */}
-                              {/* <Link to='./signup'> */}
-                              <div className="flex justify-center  bg-[#38b6ff] text-sm text-[#fff] py-2 px-12 hover:bg-[#007fff] cursor-pointer">
-                              <Link to="/register" className="nav-link">
-                                Đăng ký
-                              </Link>
-                              </div>
-                              {/* </Link> */}
                             </div>
-                          </div>
+                          </li>
                         </div>
-                      </li>
-                    </div>
-                  </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/userProfile" className="text-danger nav-link">
+                        Chào {user.username}!
+                      </Link>
+                      <Button variant="secondary" onClick={logout}>
+                        Đăng xuất
+                      </Button>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>

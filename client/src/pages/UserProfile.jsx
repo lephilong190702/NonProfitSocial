@@ -46,7 +46,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="container">
+    <div className="profile-container">
       <h1 className="form-heading">HỒ SƠ NGƯỜI DÙNG</h1>
 
       <Form onSubmit={updateProfile}>

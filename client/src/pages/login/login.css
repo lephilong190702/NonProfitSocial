@@ -85,7 +85,7 @@ form.sign-in-form {
 .title-signup {
 	border-radius: 35px;
 	padding: 7px 50px;
-	background-color: #86bb86;
+	background-color: #38b6ff;
 	box-shadow: 2px 5px #888888;
 	font-size: 1.9rem;
 	color: #ffffff;
@@ -178,14 +178,14 @@ input:-webkit-autofill:focus-within {
 }
 
 .social-icon:hover {
-	color: #86bb86;
-	border: 2px solid #49B949;
+	color: #38b6ff;
+	border: 2px solid #38b6ff;
 }
 
 .btn {
 	width: 150px;
 	box-shadow: 0 6px 14px 0 rgba(0, 0, 0, 0.2), 0 6px 14px 0 rgba(0, 0, 0, 0.19);
-	background-color: #86bb86;
+	background-color: #38b6ff	;
 	border: none;
 	outline: none;
 	height: 49px;

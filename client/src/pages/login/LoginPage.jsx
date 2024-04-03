@@ -122,8 +122,6 @@ const LoginPage = () => {
                         fixedWidth
                         onClick={() => {
                           hidePassword();
-                          setHangUp(true);
-                          setGlance(false);
                         }}
                         className="icon-password"
                       />
@@ -135,8 +133,6 @@ const LoginPage = () => {
                         fixedWidth
                         onClick={() => {
                           showPassword();
-                          setHangUp(true);
-                          setGlance(true);
                         }}
                         className="icon-password"
                       />
@@ -189,9 +185,7 @@ const LoginPage = () => {
                   cộng động hàng đầu Việt Nam.
                 </p>
                 <Link to="/register">
-                  <Button className="btn transparent">
-                    Đăng ký
-                  </Button>
+                  <Button className="btn transparent">Đăng ký</Button>
                 </Link>
               </div>
               <img src="./src/assets/register.png" className="image" alt="" />
@@ -199,64 +193,6 @@ const LoginPage = () => {
           </div>
         </div>
       </Fragment>
-
-      <div className="login">
-        <div className="loginWrapper">
-          <div className="loginLeft">
-            <h3 className="loginLogo">Charity Social</h3>
-            <span className="loginDesc">
-              Connect with friends and the world around you on Charity Social.
-            </span>
-          </div>
-          <div className="loginRight">
-            <div className="loginBox">
-              {error && <div className="error-message">{error}</div>}{" "}
-              {/* Hiển thị thông báo lỗi */}
-              <Form onSubmit={login}>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                >
-                  <Form.Label>Tên đăng nhập</Form.Label>
-                  <Form.Control
-                    className="loginInput"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Tên đăng nhập"
-                  />
-                </Form.Group>
-                <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                >
-                  <Form.Label>Mật khẩu</Form.Label>
-                  <Form.Control
-                    className="loginInput"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Mật khẩu"
-                  />
-                </Form.Group>
-                <Link to="/forgotPassword">
-                  <span className="loginForgot">Forgot Password?</span>
-                </Link>
-
-                <Form.Group className="mb-3">
-                  <Button
-                    type="submit"
-                    variant="danger"
-                    className="loginRegisterButton"
-                  >
-                    Đăng nhập
-                  </Button>
-                </Form.Group>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   );
 };

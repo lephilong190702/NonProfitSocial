@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.csn.charity.dto.StatDTO;
+import com.csn.charity.service.interfaces.AddressService;
 import com.csn.charity.service.interfaces.NewsCategoryService;
 import com.csn.charity.service.interfaces.NewsService;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
@@ -42,6 +43,9 @@ public class AdminRestController {
 
     @Autowired
     private StatService statService;
+
+    @Autowired
+    private AddressService addressService;
 
     @DeleteMapping("/admin/pcategory/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -77,6 +81,12 @@ public class AdminRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSkill(@PathVariable(value = "id") Long id) {
         this.skillService.delete(id);
+    }
+
+    @DeleteMapping("/admin/address/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAddress(@PathVariable(value = "id") Long id) {
+        this.addressService.deleteById(id);
     }
 
     @GetMapping("/admin/month")

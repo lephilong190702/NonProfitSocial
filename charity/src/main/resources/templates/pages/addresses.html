@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADDRESS</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">QUẢN LÝ ĐỊA CHỈ TỪ THIỆN</h1>
+        <a th:href="@{/address}" class="btn btn-info mt-5" >XÉT DUYỆT</a>
+        <div class="container my-2 mt-5">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>DỰ ÁN</th>
+                            <th>TÊN</th>
+                            <th>VỊ TRÍ</th>
+                            <th>TRẠNG THÁI</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="a:${addresses}">
+                            <td th:text="${a.id}"></td>  
+                            <td th:text="${a.project != null ? a.project.title : 'N/A'}"></td>  
+                            <td th:text="${a.name != null ? a.name : 'N/A'}"></td>  
+                            <td th:text="${a.longitude != null && a.latitude != null ? a.longitude + ', ' + a.latitude : 'N/A'}"></td>
+                            <td th:text="${a.status != null ? a.status : 'N/A'}"></td>
+                            <td>
+                                <a class="btn btn-danger" th:attr="path=@{/admin/address/{id}(id=${a.id})}"
+                                    onclick="deleteAddress(this.getAttribute('path'))">Delete</a>
+                            </td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    function deleteAddress(path) {
+        if (confirm("Bạn chắc chắn xóa không?") === true) {
+            fetch(path, {
+                method: "delete"
+            }).then(res => {
+                if (res.status === 204)
+                    location.reload();
+                else
+                    alert("Lỗi!!!");
+            });
+        }
+    }
+</script>
+

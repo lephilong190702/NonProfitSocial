@@ -3,12 +3,13 @@ import ProjectPage from "../ProjectPage";
 import { Outlet } from "react-router-dom";
 import "./homePage.css";
 import { Slider } from "../../components";
+import NewsList from "./components/NewsList/NewsList"
 
 const HomePage = () => {
   const sliderUrls = [
-    "./src/assets/background.jpg",
-    "./src/assets/0S5A0312-scaled.jpg",
-    "./src/assets/R.jpg",
+    "./src/assets/slider1.jpg",
+    "./src/assets/slider2.jpg",
+    "./src/assets/slider3.jpg",
   ];
   const sliderTitle = [
     "QUYÊN GÓP TỪ THIỆN TẠI CHARITY ",
@@ -41,7 +42,8 @@ const HomePage = () => {
           </div>
           <div></div>
         </div> */}
-        <NewsPage />
+        <NewsList />
+        {/* <NewsPage /> */}
         <ProjectPage />
       </div>
     </>

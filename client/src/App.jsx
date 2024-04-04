@@ -6,7 +6,7 @@ import cookie from "react-cookies";
 // import RegisterPage from './pages/RegisterPage';
 import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 import NewsDetails from './components/NewsDetails';
-import Home from './pages/home/Home';
+import Home from './pages/social/Home';
 import Profile from './pages/profile/Profile';
 import ProjectPage from './pages/ProjectPage';
 import { Header } from './components';

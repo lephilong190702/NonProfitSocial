@@ -8,7 +8,7 @@ import { Header } from "../../components";
 
 const Home = () => {
   return (
-    <>
+    <>  
       <Topbar />
       <div className="homeContainer">
         <Feed />

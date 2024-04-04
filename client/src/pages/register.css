@@ -84,9 +84,9 @@
   }
 
   .success-message {
-    background-color: #4CAF50; /* Màu nền */
-    color: white; /* Màu văn bản */
-    padding: 10px; /* Khoảng cách đệm */
-    text-align: center; /* Canh giữa văn bản */
-    margin-bottom: 10px; /* Khoảng cách phía dưới */
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 10px; 
   }

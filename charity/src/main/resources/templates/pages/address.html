@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADDRESS</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">XÉT DUYỆT ĐỊA ĐIỂM TỪ THIỆN</h1>
+        <div class="container my-2 mt-5">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>DỰ ÁN</th>
+                            <th>TÊN</th>
+                            <th>VỊ TRÍ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="a:${address}">
+                            <td th:text="${a.id}"></td>  
+                            <td th:text="${a.project.title}"></td>  
+                            <td th:text="${a.name}"></td>  
+                            <td th:text="${a.longitude + ', ' + a.latitude}"></td>
+                            <td>
+                                <a th:href="@{/admin/accept/{addressId}(addressId=${a.id})}"
+                                   class="btn btn-primary me-1 mb-1"
+                                   onclick="return confirm('Bạn có chắc chắn muốn chấp nhận địa chỉ này không?')">CHẤP NHẬN</a>
+                            
+                                <a th:href="@{/admin/deny/{addressId}(addressId=${a.id})}"
+                                   class="btn btn-primary me-1 mb-1"
+                                   onclick="return confirm('Bạn có chắc chắn muốn từ chối địa chỉ này không?')">TỪ CHỐI</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

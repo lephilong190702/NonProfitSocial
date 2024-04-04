@@ -1,8 +1,8 @@
 package com.csn.charity.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,37 +17,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "address")
-public class Address implements Serializable{
+@Table(name = "history")
+public class History implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "longitude", nullable = false)
-    private String longitude;
+    @Column(name = "date", nullable = false)
+    private Date date;
 
-    @Column(name = "latitude", nullable = false)
-    private String latitude;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "status")
-    private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    @JsonIgnore
-    private Project project;
+    @Column(name = "action", nullable = false)
+    private String action;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
-
 }

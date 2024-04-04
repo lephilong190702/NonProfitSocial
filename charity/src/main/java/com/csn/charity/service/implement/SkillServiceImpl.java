@@ -28,7 +28,7 @@ public class SkillServiceImpl implements SkillService {
     public Skill update(Long id, Skill skill) {
         Skill s = this.skillReposiroty.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy với ID: " + id));
-
+        
         s.setName(skill.getName());
         return this.skillReposiroty.save(s);
     }

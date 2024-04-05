@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,9 @@ public class PostRestController {
     private ReactionService reactionService;
     @Autowired
     private ReportService reportService;
-
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+    
     @GetMapping("/posts/")
     @CrossOrigin
     public ResponseEntity<?> getAllPost() {
@@ -88,6 +91,7 @@ public class PostRestController {
             postDTO.setHashtags(tags);
 
             Post createdPost = postService.createPost(postDTO);
+            messagingTemplate.convertAndSend("/topic/posts", createdPost);
             return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

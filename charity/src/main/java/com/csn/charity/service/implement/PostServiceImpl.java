@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class PostServiceImpl implements PostService {
     private PostImageRepository postImageRepository;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public Post createPost(PostDTO postDTO) {
@@ -99,7 +102,9 @@ public class PostServiceImpl implements PostService {
                 }
             }
 
-            return postRepository.save(post);
+            Post createdPost = postRepository.save(post);
+            messagingTemplate.convertAndSend("/topic/posts", createdPost);
+            return createdPost;
         } else {
             throw new SecurityException("Không đủ quyền truy cập!!");
         }

@@ -10,6 +10,8 @@ public interface CommentPostService {
 
     List<UserCommentPost> getCommentByPost(Long id);
 
+    UserCommentPost getCommentById(Long id);
+
     void deleteCommentPost(Long id);
 
     UserCommentPost addReplyCommentPost(Long parentId, UserCommentPost reply);

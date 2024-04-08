@@ -154,4 +154,10 @@ public class CommentPostServiceImpl implements CommentPostService {
             throw new NoSuchElementException("Không tìm thấy bình luận gốc với ID: " + parentId);
         }
     }
+
+    @Override
+    public UserCommentPost getCommentById(Long id) {
+        return this.commentPostRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+    }
 }

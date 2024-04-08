@@ -45,11 +45,10 @@ const Chatbox = () => {
           const userRef = messageData.user;
           const userDoc = await getDoc(userRef);
           const userData = userDoc.data();
-          console.log(userData)
           const displayName = userData?.displayName;
           const photoUrl = userData?.photoUrl;
           const userId = userData?.id;
-          return { ...messageData, id: doc.id, userId, displayName, photoUrl };
+          return {...messageData, id: doc.id, userId, displayName, photoUrl };
         });
 
         const messages = await Promise.all(promises);
@@ -71,6 +70,13 @@ const Chatbox = () => {
     fetchMessage();
   }, []);
 
+  useEffect(() => {
+    const messageBox = document.querySelector(".message-box");
+    if (messageBox) {
+      messageBox.scrollTop = messageBox.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="chatbox-container mt-3">
       <div className="chatbox-messages">
@@ -80,9 +86,9 @@ const Chatbox = () => {
             <hr />
             <div className="message-box">
               {messages?.map((message, i) => (
-                <div key={i} className={`message ${senderData[message.id]?.userId === (user ? user.id : null) ? 'message-right' : 'message-left'}`}>
+                <div key={i} className={`message ${senderData[message.id]?.userId === (user? user.id : null)? 'message-right' : 'message-left'}`}>
                   {/* Check if the message is not sent by the current user */}
-                  {senderData[message.id]?.userId !== (user ? user.id : null) && (
+                  {senderData[message.id]?.userId!== (user? user.id : null) && (
                     <img src={senderData[message.id]?.photoUrl || "/avatar.png"} alt="Avatar" className="avatar" />
                   )}
                   <div className="message-content">{message.content}</div>
@@ -93,7 +99,7 @@ const Chatbox = () => {
         </Card>
       </div>
       <div className="chatbox-input mt-2">
-        {!user ? (
+        {!user? (
           <Link to="/login">Đăng nhập để chat</Link>
         ) : (
           <InputGroup>

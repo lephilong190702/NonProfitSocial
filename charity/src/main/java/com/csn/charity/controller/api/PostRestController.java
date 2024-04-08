@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,12 +46,15 @@ public class PostRestController {
     private ReactionService reactionService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/posts/")
     @CrossOrigin
     public ResponseEntity<?> getAllPost() {
         try {
-            return new ResponseEntity<>(this.postService.getAll(), HttpStatus.OK);
+            List<Post> posts = this.postService.getAll();
+            return new ResponseEntity<>(posts, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -60,7 +64,8 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<?> getAvailablePost() {
         try {
-            return new ResponseEntity<>(this.postService.getAvailablePosts(), HttpStatus.OK);
+            List<Post> posts = this.postService.getAvailablePosts();
+            return new ResponseEntity<>(posts, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -70,7 +75,8 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<?> getPostById(@PathVariable(value = "postId") Long postId) {
         try {
-            return new ResponseEntity<>(this.postService.getPostById(postId), HttpStatus.OK);
+            Post post = this.postService.getPostById(postId);
+            return new ResponseEntity<>(post, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -88,6 +94,7 @@ public class PostRestController {
             postDTO.setHashtags(tags);
 
             Post createdPost = postService.createPost(postDTO);
+            messagingTemplate.convertAndSend("/topic/posts", createdPost);
             return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -101,6 +108,8 @@ public class PostRestController {
             @RequestBody PostDTO postDTO) {
         try {
             this.postService.updatePost(id, postDTO);
+            Post updatedPost = this.postService.getPostById(id);
+            messagingTemplate.convertAndSend("/topic/posts/" + id, updatedPost);
             return ResponseEntity.ok("Bài viết đã được cập nhật thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -135,6 +144,7 @@ public class PostRestController {
     public ResponseEntity<?> createComment(@RequestBody CommentPostDTO commentPostDTO) {
         try {
             UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);
+            messagingTemplate.convertAndSend("/topic/comments/" + commentPostDTO.getPostId(), uCommentPost);
             return new ResponseEntity<>(uCommentPost, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -148,6 +158,8 @@ public class PostRestController {
             @RequestBody CommentPostDTO commentPostDTO) {
         try {
             this.commentPostService.updateComment(id, commentPostDTO);
+            UserCommentPost updatedComment = this.commentPostService.getCommentById(id);
+            messagingTemplate.convertAndSend("/topic/comments/" + updatedComment.getPost().getId(), updatedComment);
             return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -159,7 +171,9 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         try {
-            commentPostService.deleteCommentPost(id);
+            this.commentPostService.deleteCommentPost(id);
+            UserCommentPost deletedComment = this.commentPostService.getCommentById(id);
+            messagingTemplate.convertAndSend("/topic/comments/" + deletedComment.getPost().getId(), deletedComment);
             return ResponseEntity.ok("Bình luận đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -169,9 +183,11 @@ public class PostRestController {
 
     @GetMapping("/post/{postId}/comments/")
     @CrossOrigin
-    public ResponseEntity<?> listComment(@PathVariable(value = "postId") Long id) {
+    public ResponseEntity<?> getCommentByPost(@PathVariable(value = "postId") Long id) {
         try {
-            return new ResponseEntity<>(this.commentPostService.getCommentByPost(id), HttpStatus.OK);
+            List<UserCommentPost> comments = this.commentPostService.getCommentByPost(id);
+            messagingTemplate.convertAndSend("/topic/comments/" + id, comments);
+            return new ResponseEntity<>(comments, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -184,6 +200,7 @@ public class PostRestController {
             @RequestBody UserCommentPost reply) {
         try {
             UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
+            messagingTemplate.convertAndSend("/topic/comments/" + parentId, addedReply);
             return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -195,14 +212,16 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<List<UserCommentPost>> getAllRepliesComment(@PathVariable Long parentId) {
         List<UserCommentPost> replies = commentPostService.getAllReplyComments(parentId);
+        messagingTemplate.convertAndSend("/topic/comments/" + parentId, replies);
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 
     @PostMapping("/reaction/")
     @CrossOrigin
-    public ResponseEntity<String> reactPost(@RequestBody UserReactPostDTO userReactPostDTO) {
+    public ResponseEntity<String> createReactionPost(@RequestBody UserReactPostDTO userReactPostDTO) {
         UserReactPost userReactPost = reactionService.addReactPost(userReactPostDTO);
         if (userReactPost != null) {
+            messagingTemplate.convertAndSend("/topic/reactions/" + userReactPost.getPost().getId(), userReactPost);
             return ResponseEntity.ok("Thêm reaction thành công");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thêm reaction thất bại.");
@@ -214,17 +233,20 @@ public class PostRestController {
     public ResponseEntity<?> getReactionByPost(@PathVariable Long postId) {
         try {
             List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
+            messagingTemplate.convertAndSend("/topic/reactions/" + postId, reactPosts);
             return new ResponseEntity<>(reactPosts, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
 
     @PostMapping("/report/")
     @CrossOrigin
-    public ResponseEntity<?> reportPost(@RequestBody ReportDTO reportDTO) {
+    public ResponseEntity<?> createReportPost(@RequestBody ReportDTO reportDTO) {
         UserReportPost userReportPost = reportService.report(reportDTO);
         if (userReportPost != null) {
+            messagingTemplate.convertAndSend("/topic/reports/" + userReportPost.getPost().getId(), userReportPost);
             return new ResponseEntity<>(userReportPost, HttpStatus.CREATED);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Báo cáo thất bại.");

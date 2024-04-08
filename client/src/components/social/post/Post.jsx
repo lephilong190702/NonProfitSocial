@@ -12,6 +12,9 @@ import {
 } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import moment from "moment";
+import SockJS from "sockjs-client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faListDots } from "@fortawesome/free-solid-svg-icons";
 
 const Post = () => {
   const [user] = useContext(UserContext);

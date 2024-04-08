@@ -12,12 +12,14 @@ import {
 } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import moment from "moment";
+import Client from 'stompjs';
+import SockJS from 'sockjs-client';
 
 const Post = () => {
   const [user] = useContext(UserContext);
   const [post, setPost] = useState([]);
   const [like, setLike] = useState({});
-  const [comments, setComments] = useState({});
+  const [comments, setComments] = useState([]);
   const [replies, setReplies] = useState({});
   const [content, setContent] = useState({});
   const [menuOpen, setMenuOpen] = useState({});
@@ -106,7 +108,7 @@ const Post = () => {
 
   const handleDeletePost = async (postId) => {
     const shouldDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
-    
+
     if (shouldDelete) {
       try {
         const response = await authApi().delete(`${endpoints["post"]}${postId}`);
@@ -231,6 +233,40 @@ const Post = () => {
       ...prevState,
       [postId]: !prevState[postId],
     }));
+  };
+
+  useEffect(() => {
+    const stompClient = connectToWebSocket();
+
+    return () => {
+      stompClient.disconnect();
+    };
+  }, []);
+
+  const connectToWebSocket = () => {
+    const socket = new SockJS('http://localhost:9090/ws');
+    const stompClient = Client.over(socket);
+
+    console.log("Connecting to websocket server...");
+
+    stompClient.connect({}, () => {
+      console.log("Websocket connection established.");
+      stompClient.subscribe('/topic/posts', (message) => {
+        console.log("Received message:", message.body);
+        const newPost = JSON.parse(message.body);
+        setPost((current) => [...current, newPost]);
+      });
+
+      // stompClient.subscribe('/topic/comments/1', (message) => {
+      //   console.log("Received message:", message.body);
+      //   const newComment = JSON.parse(message.body);
+      //   setComments((current) => [...current, newComment]);
+      // });
+    }, (error) => {
+      console.error("Websocket connection error:", error);
+    });
+
+    return stompClient;
   };
 
   return (
@@ -382,45 +418,45 @@ const Post = () => {
                         </div>
 
                         {Array.isArray(replies[comment.id]) &&
-                        replies[comment.id].length > 0
+                          replies[comment.id].length > 0
                           ? replies[comment.id].map((reply) => (
-                              <div key={reply.id} className="reply">
-                                <span
-                                  className="replyContent"
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  <div className="reply-avatar">
-                                    <img
-                                      src={reply.user.profile.avatar}
-                                      alt="avatar"
-                                      style={{
-                                        width: "32px",
-                                        height: "32px",
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                        marginRight: "5px",
-                                      }}
-                                    />{" "}
+                            <div key={reply.id} className="reply">
+                              <span
+                                className="replyContent"
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginBottom: "10px",
+                                }}
+                              >
+                                <div className="reply-avatar">
+                                  <img
+                                    src={reply.user.profile.avatar}
+                                    alt="avatar"
+                                    style={{
+                                      width: "32px",
+                                      height: "32px",
+                                      borderRadius: "50%",
+                                      objectFit: "cover",
+                                      marginRight: "5px",
+                                    }}
+                                  />{" "}
+                                </div>
+                                <div className="reply-details">
+                                  <div className="reply-username">
+                                    {reply.user.username}
                                   </div>
-                                  <div className="reply-details">
-                                    <div className="reply-username">
-                                      {reply.user.username}
-                                    </div>
-                                    <div clmassName="reply-content">
-                                      {reply.content}
-                                    </div>
-                                    <div className="reply-time">
-                                      {" "}
-                                      {moment(reply.createDate).fromNow()}
-                                    </div>
+                                  <div clmassName="reply-content">
+                                    {reply.content}
                                   </div>
-                                </span>
-                              </div>
-                            ))
+                                  <div className="reply-time">
+                                    {" "}
+                                    {moment(reply.createDate).fromNow()}
+                                  </div>
+                                </div>
+                              </span>
+                            </div>
+                          ))
                           : null}
 
                         {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa

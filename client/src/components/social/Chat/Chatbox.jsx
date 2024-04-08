@@ -45,7 +45,6 @@ const Chatbox = () => {
           const userRef = messageData.user;
           const userDoc = await getDoc(userRef);
           const userData = userDoc.data();
-          console.log(userData)
           const displayName = userData?.displayName;
           const photoUrl = userData?.photoUrl;
           const userId = userData?.id;

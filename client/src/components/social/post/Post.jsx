@@ -12,6 +12,8 @@ import {
 } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import moment from "moment";
+import { faListDots } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -33,7 +35,6 @@ const Post = () => {
   const [likeCount, setLikeCount] = useState({});
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
-
 
   const likeHandler = async (postId) => {
     if (!user) {
@@ -105,11 +106,15 @@ const Post = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    const shouldDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
-    
+    const shouldDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa bài viết này?"
+    );
+
     if (shouldDelete) {
       try {
-        const response = await authApi().delete(`${endpoints["post"]}${postId}`);
+        const response = await authApi().delete(
+          `${endpoints["post"]}${postId}`
+        );
         console.log("Kết quả xóa bài viết:", response.data);
       } catch (error) {
         console.error(error);
@@ -216,12 +221,24 @@ const Post = () => {
       try {
         post.forEach((p) => {
           loadCommentsByPostId(p.id);
+          // loadRepliesByCommentId(p.id);
         });
       } catch (error) {
         console.error(error);
       }
     };
 
+    // const loadReplies = async () => {
+    //   try {
+    //     post.forEach((p) => {
+    //       loadRepliesByCommentId(p.id)
+    //     })
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
+
+    // loadReplies();
     loadComments();
     loadPosts();
   }, []);
@@ -256,8 +273,8 @@ const Post = () => {
                   show={menuOpen[p.id]}
                   onToggle={() => handleMenuToggle(p.id)}
                 >
-                  <Dropdown.Toggle variant="link" className="btn-more-vert">
-                    <MoreVert />
+                  <Dropdown.Toggle variant="link" className="btn-more-vert" style={{border: 'none', boxShadow: 'none'}}>
+                    <FontAwesomeIcon icon={faListDots} />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item onClick={() => handleEditsPost(p.id)}>
@@ -338,7 +355,7 @@ const Post = () => {
                     .reverse()
                     .map((comment) => (
                       <ListGroup.Item key={comment.id}>
-                        <div className="comment">
+                        <div className="comments">
                           <span
                             className="commentContent "
                             style={{

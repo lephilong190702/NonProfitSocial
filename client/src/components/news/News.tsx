@@ -4,7 +4,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const News = ({ id, url, name, content, link }) => {
-  const maxStars = 5;
 
   return (
     <div className="flex flex-col  bg-[#fff] border-[1px] border-[#DFDFDF]">

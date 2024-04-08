@@ -7,7 +7,7 @@
 }
 .top-menu-text {
     @apply mb-3 text-[#007fff];
-    font-size: 15px; /* Thay đổi giá trị này thành kích cỡ mong muốn */
+    font-size: 15px;
   }
   
 .top-menu-text-links{

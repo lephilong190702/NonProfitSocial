@@ -98,7 +98,7 @@ const Post = () => {
       });
 
       console.log("Kết quả chỉnh sửa bài viết:", response.data);
-
+      
       setEditPostModalOpen(false);
       setEditedPostId(null);
     } catch (error) {
@@ -113,6 +113,7 @@ const Post = () => {
       try {
         const response = await authApi().delete(`${endpoints["post"]}${postId}`);
         console.log("Kết quả xóa bài viết:", response.data);
+        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -209,6 +210,21 @@ const Post = () => {
         });
 
         setLikeCount(totalLikes);
+
+        res.data.forEach((p) => {
+          const postTopic = `/topic/posts/${p.id}`;
+          stompClient.subscribe(postTopic, (message) => {
+            console.log("Received message for post update:", message.body);
+            const updatedPost = JSON.parse(message.body);
+            setPost((current) => {
+              const index = current.findIndex((post) => post.id === updatedPost.id);
+              if (index !== -1) {
+                return [...current.slice(0, index), updatedPost, ...current.slice(index + 1)];
+              }
+              return current;
+            });
+          });
+        });
       } catch (error) {
         console.error(error);
       }
@@ -224,8 +240,14 @@ const Post = () => {
       }
     };
 
+    const stompClient = connectToWebSocket();
+
     loadComments();
     loadPosts();
+
+    return () => {
+      stompClient.disconnect();
+    };
   }, []);
 
   const handleMenuToggle = (postId) => {
@@ -235,13 +257,13 @@ const Post = () => {
     }));
   };
 
-  useEffect(() => {
-    const stompClient = connectToWebSocket();
+  // useEffect(() => {
+  //   const stompClient = connectToWebSocket();
 
-    return () => {
-      stompClient.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     stompClient.disconnect();
+  //   };
+  // }, []);
 
   const connectToWebSocket = () => {
     const socket = new SockJS('http://localhost:9090/ws');

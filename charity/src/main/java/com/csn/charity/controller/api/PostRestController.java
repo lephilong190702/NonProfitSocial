@@ -122,8 +122,6 @@ public class PostRestController {
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         try {
             postService.deletePost(id);
-            List<Post> posts = postService.getAll();
-            messagingTemplate.convertAndSend("/topic/posts", posts);
             return ResponseEntity.ok("Bài viết đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

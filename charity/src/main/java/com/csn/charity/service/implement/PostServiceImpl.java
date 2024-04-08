@@ -102,9 +102,6 @@ public class PostServiceImpl implements PostService {
                 }
             }
             return this.postRepository.save(post);
-            // Post createdPost = postRepository.save(post);
-            // messagingTemplate.convertAndSend("/topic/posts", createdPost);
-            // return createdPost;
         } else {
             throw new SecurityException("Không đủ quyền truy cập!!");
         }

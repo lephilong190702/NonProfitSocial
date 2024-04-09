@@ -361,8 +361,7 @@ const PostTests = () => {
                   {
                     <div className="comment">
                       <div>
-                        {Array.isArray(comments[p.id]) &&
-                        comments[p.id].length > 0 ? (
+                        {Array.isArray(comments[p.id]) ? (
                           comments[p.id]
                             .slice()
                             .reverse()

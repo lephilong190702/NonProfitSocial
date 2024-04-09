@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import "./homePage.css";
 import { Slider } from "../../components";
 import NewsList from "./components/NewsList/NewsList"
+import ProjectsList from "./components/NewsList/ProjectsList";
 
 const HomePage = () => {
   const sliderUrls = [
@@ -44,6 +45,7 @@ const HomePage = () => {
         </div> */}
         <NewsList />
         {/* <NewsPage /> */}
+        {/* <ProjectsList/> */}
         <ProjectPage />
       </div>
     </>

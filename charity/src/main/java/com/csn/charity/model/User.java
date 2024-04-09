@@ -103,11 +103,15 @@ public class User implements Serializable {
     private List<Address> addresses = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles", joinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
-                    @JoinColumn(name = "role_id", referencedColumnName = "id") })
+    @JoinTable(name = "users_roles", 
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id") , 
+        inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id") )
     @JsonIgnore
     private List<UserRole> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<UserJoinRoom> userRooms = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "user_event", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))

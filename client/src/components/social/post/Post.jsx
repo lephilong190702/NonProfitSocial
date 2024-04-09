@@ -15,6 +15,7 @@ import moment from "moment";
 import SockJS from "sockjs-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots } from "@fortawesome/free-solid-svg-icons";
+import Client from 'stompjs';
 
 const Post = () => {
   const [user] = useContext(UserContext);

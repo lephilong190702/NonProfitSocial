@@ -16,6 +16,8 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassWordPage from './pages/ResetPassWordPage';
 import LoginPage from './pages/login/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
+import LiveStreamPage from './pages/livestream/LiveStreamPage';
+import RoomPage from './pages/livestream/RoomPage';
 
 export const UserContext = createContext();
 
@@ -41,7 +43,9 @@ const App = () => {
           <Route path="/projects/:projectId" element={<ProjectDetails />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassWordPage />} />
-          
+          <Route path="/livestream" element={<LiveStreamPage />} />
+          <Route path="/livestream/:roomId" element={<RoomPage />} />
+
         </Routes>
         <Footer />
       </BrowserRouter>

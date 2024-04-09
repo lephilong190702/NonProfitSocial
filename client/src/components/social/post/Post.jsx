@@ -13,15 +13,10 @@ import {
 import { UserContext } from "../../../App";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-<<<<<<< HEAD
 import { faHeart, faListDots } from "@fortawesome/free-solid-svg-icons";
 import Client from "stompjs";
 import SockJS from "sockjs-client";
 import { Link } from "react-router-dom";
-=======
-import { faListDots } from "@fortawesome/free-solid-svg-icons";
-import Client from 'stompjs';
->>>>>>> a3ae12a95df45bc0e9258aec1ff90b4b042e74a5
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -302,11 +297,7 @@ const Post = () => {
   // }, []);
 
   const connectToWebSocket = () => {
-<<<<<<< HEAD
-    const socket = new SockJS("http://localhost:9090/ws");
-=======
     const socket = new SockJS('http://localhost:9090/ws');
->>>>>>> a3ae12a95df45bc0e9258aec1ff90b4b042e74a5
     const stompClient = Client.over(socket);
 
     console.log("Connecting to websocket server...");

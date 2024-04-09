@@ -15,6 +15,7 @@ import moment from "moment";
 import SockJS from "sockjs-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListDots } from "@fortawesome/free-solid-svg-icons";
+import { client } from "stompjs";
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -281,7 +282,7 @@ const Post = () => {
 
   const connectToWebSocket = () => {
     const socket = new SockJS('http://localhost:9090/ws');
-    const stompClient = Client.over(socket);
+    const stompClient = client.over(socket);
 
     console.log("Connecting to websocket server...");
 

@@ -24,6 +24,7 @@
     "@reduxjs/toolkit": "^1.9.6",
     "@stomp/stompjs": "^7.0.0",
     "@types/react-slick": "^0.23.13",
+    "@zegocloud/zego-uikit-prebuilt": "^2.0.1",
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.1",
     "bootstrap": "^5.3.3",

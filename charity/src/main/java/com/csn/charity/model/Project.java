@@ -45,7 +45,6 @@ public class Project implements Serializable{
     private String title;
 
     @Column(name = "address")
-    @NotBlank(message = "Không được bỏ trống")
     private String address;
 
     @Column(name = "content", nullable = false, length = 10000)

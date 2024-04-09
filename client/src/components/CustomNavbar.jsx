@@ -205,6 +205,14 @@ const CustomNavbar = () => {
 
                   <div>
                     <li className="top-menu-item group">
+                      <Link to="/livestream" className="nav-link">
+                        LIVESTREAM
+                      </Link>
+                    </li>
+                  </div>
+
+                  <div>
+                    <li className="top-menu-item group">
                       <Nav.Link
                         href="#financial_report"
                         onClick={exportFinancialReport}

@@ -55,7 +55,8 @@ export const endpoints = {
     "contributor-post": (postId) => `${SERVER_CONTEXT}/api/contributions/${postId}`,
     "forgot-password": `${SERVER_CONTEXT}/api/forgot-password/`,
     "set-password": `${SERVER_CONTEXT}/api/set-password/`,
-
+    "create-room": `${SERVER_CONTEXT}/api/create-room/`,
+    "join-room": (roomCode) => `${SERVER_CONTEXT}/api/rooms/${roomCode}/join/`,
 }
 
 export const authApi = () => {

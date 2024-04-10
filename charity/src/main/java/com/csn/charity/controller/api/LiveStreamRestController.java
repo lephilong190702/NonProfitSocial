@@ -57,14 +57,16 @@ public class LiveStreamRestController {
         }
     }
 
-    @GetMapping("/rooms/{roomCode}/users")
+    @PostMapping("/rooms/{roomCode}/kick/{userId}")
     @CrossOrigin
-    public ResponseEntity<?> getAllUserByRoom(@PathVariable String roomCode) {
+    public ResponseEntity<?> kickUser(@PathVariable String roomCode, @PathVariable Long userId) {
         try {
-            List<User> listUsers = this.liveRoomService.getAllUserOfRoom(roomCode);
-            return new ResponseEntity<>(listUsers, HttpStatus.OK);
+            this.liveRoomService.kickUser(roomCode, userId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }

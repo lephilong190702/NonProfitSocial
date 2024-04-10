@@ -12,5 +12,6 @@ public interface LiveRoomService {
 
     LiveRoom getLiveRoomByRoomCode(String roomCode);
 
-    List<User> getAllUserOfRoom(String roomCode);
+    void kickUser(String roomCode, Long userId);
+
 }

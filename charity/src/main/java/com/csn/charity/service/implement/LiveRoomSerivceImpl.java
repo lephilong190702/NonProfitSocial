@@ -118,13 +118,24 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
     }
 
     @Override
-    public List<User> getAllUserOfRoom(String roomCode) {
-        LiveRoom liveRoom = liveRoomRepository.findByRoomCode(roomCode);        
+    public void kickUser(String roomCode, Long userId) {
+        LiveRoom liveRoom = liveRoomRepository.findByRoomCode(roomCode);
+
         if (liveRoom == null) {
             throw new IllegalArgumentException("Phòng live không tồn tại!!!");
         }
-        return userJoinRoomRepository.findAllByRoom(liveRoom);
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy user trong phòng live!!!"));
+
+        List<UserJoinRoom> userJoinRooms = userJoinRoomRepository.findByUserAndRoom(user, liveRoom);
+
+        if (userJoinRooms.isEmpty()) {
+            throw new NoSuchElementException("Không tìm thấy user trong phòng live!!!");
+        }
+
+        UserJoinRoom userJoinRoom = userJoinRooms.get(0);
+        userJoinRoomRepository.delete(userJoinRoom);
     }
 
 }

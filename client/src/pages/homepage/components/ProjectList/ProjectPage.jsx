@@ -197,37 +197,44 @@ const ProjectPage = () => {
           return (
             <Col xs={12} md={3} key={p.id}>
               <Card className="card">
-                <Card.Img
-                  variant="top"
-                  src={p.images && p.images.length > 0 ? p.images[0].image : ""}
-                  className="card-img"
-                />
-                <Card.Body>
-                  <Card.Title className="card-title">{title}</Card.Title>
-                  <Card.Text className="card-text">{content}</Card.Text>
-                  <Card.Footer>
-                    Số tiền đã quyên góp: {p.contributedAmount}
-                  </Card.Footer>
-                  <Card.Footer>
-                    Số tiền cần quyên góp: {p.totalAmount}
-                  </Card.Footer>
-                  <ProgressBar
-                    now={(p.contributedAmount / p.totalAmount) * 100}
+                <Link to={url} className="nav-link">
+                  <Card.Img
+                    variant="top"
+                    src={
+                      p.images && p.images.length > 0 ? p.images[0].image : ""
+                    }
+                    className="card-img"
                   />
-                  <hr />
-
-                  <Link to={url} className="card-link">
+                  <Card.Body>
+                    <Card.Title className="card-title">{title}</Card.Title>
+                    <Card.Text className="card-text">{content}</Card.Text>
+                    <Card.Footer>
+                      Số tiền đã quyên góp: {p.contributedAmount}
+                    </Card.Footer>
+                    <Card.Footer>
+                      Số tiền cần quyên góp: {p.totalAmount}
+                    </Card.Footer>
+                    <ProgressBar
+                      now={(p.contributedAmount / p.totalAmount) * 100}
+                    />
+                    <hr />
+                    <div className="basis-1/4 flex flex-row justify-between pb-3">
+                      <div className="py-1 pr-3">
+                        <Link
+                          onClick={() => openModal(p.id, p.title)}
+                          className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                          style={{ marginRight: "5px" }}
+                          variant="primary"
+                        >
+                          Đóng góp
+                        </Link>
+                      </div>
+                    </div>
+                    {/* <Link to={url} className="card-link">
                     Xem chi tiết
-                  </Link>
-                  <Button
-                    onClick={() => openModal(p.id, p.title)}
-                    className="card-link donate-link"
-                    style={{ marginRight: "5px" }}
-                    variant="primary"
-                  >
-                    Đóng góp
-                  </Button>
-                </Card.Body>
+                  </Link> */}
+                  </Card.Body>
+                </Link>
               </Card>
             </Col>
           );
@@ -235,9 +242,13 @@ const ProjectPage = () => {
       </Row>
       {displayedProjects < project.length && (
         <div className="text-center mt-4">
-          <Button variant="primary" onClick={handleLoadMore}>
+          <Link
+            variant="primary"
+            onClick={handleLoadMore}
+            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-8 py-2 hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+          >
             Xem Thêm
-          </Button>
+          </Link>
         </div>
       )}
       <Modal show={showModal} onHide={closeModal}>

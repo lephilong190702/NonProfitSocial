@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
-import MySpinner from "../layout/MySpinner";
-import { Header } from "../components";
-import { Alert, Card, Col, Row, Button, Modal, Form, ProgressBar } from "react-bootstrap";
+import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
+import MySpinner from "../../../../layout/MySpinner";
+import { Header } from "../../../../components";
+import {
+  Alert,
+  Card,
+  Col,
+  Row,
+  Button,
+  Modal,
+  Form,
+  ProgressBar,
+} from "react-bootstrap";
 import "./projects.css"; // Import CSS file
 
 const ProjectPage = () => {
@@ -31,7 +40,8 @@ const ProjectPage = () => {
   const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
   const vnpTxnRef = urlParams.get("vnp_TxnRef");
   const vnpSecureHash = urlParams.get("vnp_SecureHash");
-  const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
+  const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
+  const [displayedProjects, setDisplayedProjects] = useState(4);
 
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
@@ -44,9 +54,7 @@ const ProjectPage = () => {
 
         if (cateId !== null) {
           e = `${e}pcategories/${cateId}`;
-        }
-
-        else {
+        } else {
           let kw = q.get("kw");
           if (kw !== null) e = `${e}?kw=${kw}`;
         }
@@ -58,28 +66,47 @@ const ProjectPage = () => {
       }
     };
 
+    const handleLoadMore = () => {
+      setDisplayedProjects((prev) => prev + 4);
+    };
+
+    const openModal = (projectId, projectTitle) => {
+      localStorage.setItem("selectedProjectId", projectId);
+      setSelectedProjectId(projectId);
+      setSelectedProjectTitle(projectTitle);
+      setShowModal(true);
+    };
+
+    const closeModal = () => {
+      setSelectedProjectId(null);
+      setShowModal(false);
+    };
+
     const payment = async () => {
       const form = new FormData();
       form.append("vnp_Amount", vnpAmount);
-      form.append("vnp_BankCode", vnpBankCode)
-      form.append("vnp_BankTranNo", vnpBankTranNo)
-      form.append("vnp_CardType", vnpCardType)
-      form.append("vnp_OrderInfo", vnpOrderInfo)
-      form.append("vnp_PayDate", vnpPayDate)
-      form.append("vnp_ResponseCode", vnpResponseCode)
-      form.append("vnp_SecureHash", vnpSecureHash)
-      form.append("vnp_TmnCode", vnpTmnCode)
-      form.append("vnp_TransactionNo", vnpTransactionNo)
-      form.append("vnp_TransactionStatus", vnpTransactionStatus)
-      form.append("vnp_TxnRef", vnpTxnRef)
+      form.append("vnp_BankCode", vnpBankCode);
+      form.append("vnp_BankTranNo", vnpBankTranNo);
+      form.append("vnp_CardType", vnpCardType);
+      form.append("vnp_OrderInfo", vnpOrderInfo);
+      form.append("vnp_PayDate", vnpPayDate);
+      form.append("vnp_ResponseCode", vnpResponseCode);
+      form.append("vnp_SecureHash", vnpSecureHash);
+      form.append("vnp_TmnCode", vnpTmnCode);
+      form.append("vnp_TransactionNo", vnpTransactionNo);
+      form.append("vnp_TransactionStatus", vnpTransactionStatus);
+      form.append("vnp_TxnRef", vnpTxnRef);
 
-      let e = await authApi().post(endpoints["callback"](savedProjectId), form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-    }
+      let e = await authApi().post(
+        endpoints["callback"](savedProjectId),
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+    };
 
     if (urlParams.has("vnp_PayDate")) {
       payment();
@@ -87,7 +114,6 @@ const ProjectPage = () => {
 
     loadProject();
   }, [q]);
-
 
   const handlePayment = async () => {
     if (selectedProjectId === null) {
@@ -100,11 +126,15 @@ const ProjectPage = () => {
       formData.append("projectId", selectedProjectId);
       formData.append("donateAmount", pay.donateAmount);
       formData.append("note", pay.note);
-      let res = await authApi().post(endpoints["vn-pay"](selectedProjectId), formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      let res = await authApi().post(
+        endpoints["vn-pay"](selectedProjectId),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       const redirectUrl = res.data;
       console.log(res.data);
@@ -114,11 +144,13 @@ const ProjectPage = () => {
       } else {
         console.error("Không có đường dẫn trả về từ server.");
       }
-
     } catch (error) {
       console.error(error);
     }
+  };
 
+  const handleLoadMore = () => {
+    setDisplayedProjects((prev) => prev + 4);
   };
 
   const openModal = (projectId, projectTitle) => {
@@ -126,7 +158,6 @@ const ProjectPage = () => {
     setSelectedProjectId(projectId);
     setSelectedProjectTitle(projectTitle);
     setShowModal(true);
-
   };
 
   const closeModal = () => {
@@ -144,51 +175,74 @@ const ProjectPage = () => {
       </>
     );
 
-    return (
-      <div className="projects-container">
-        <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
-        <Row>
-          {project.map((p) => {
-            let url = `/projects/${p.id}`;
-            
-            const maxContentHeight = 100; 
-            const content = p.content.length > maxContentHeight ? p.content.substring(0, maxContentHeight) + '...' : p.content;
+  return (
+    <div className="projects-container">
+      <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
+      <Row>
+        {project.slice(0, displayedProjects).map((p) => {
+          let url = `/projects/${p.id}`;
 
-            const maxTitleHeight = 50; 
-            const title = p.title.length > maxTitleHeight ? p.title.substring(0, maxTitleHeight) + '...' : p.title;
-            
-            return (
-              <Col xs={12} md={3} key={p.id}>
-                <Card className="card">
-                  <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} className="card-img" />
-                  <Card.Body>
-                    <Card.Title className="card-title">{title}</Card.Title>
-                    <Card.Text className="card-text">{content}</Card.Text> 
-                    <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
-                    <Card.Footer>Số tiền cần quyên góp: {p.totalAmount}</Card.Footer>
-                    <ProgressBar now={(p.contributedAmount / p.totalAmount) * 100} />
-                    <hr/>
-    
-                    <Link to={url} className="card-link">
-                      Xem chi tiết
-                    </Link>
-                    <Button
-                      onClick={() => openModal(p.id, p.title)}
-                      className="card-link donate-link"
-                      style={{ marginRight: "5px" }}
-                      variant="primary"
-                    >
-                      Đóng góp
-                    </Button>
+          const maxContentHeight = 100;
+          const content =
+            p.content.length > maxContentHeight
+              ? p.content.substring(0, maxContentHeight) + "..."
+              : p.content;
+
+          const maxTitleHeight = 50;
+          const title =
+            p.title.length > maxTitleHeight
+              ? p.title.substring(0, maxTitleHeight) + "..."
+              : p.title;
+
+          return (
+            <Col xs={12} md={3} key={p.id}>
+              <Card className="card">
+                <Card.Img
+                  variant="top"
+                  src={p.images && p.images.length > 0 ? p.images[0].image : ""}
+                  className="card-img"
+                />
+                <Card.Body>
+                  <Card.Title className="card-title">{title}</Card.Title>
+                  <Card.Text className="card-text">{content}</Card.Text>
+                  <Card.Footer>
+                    Số tiền đã quyên góp: {p.contributedAmount}
+                  </Card.Footer>
+                  <Card.Footer>
+                    Số tiền cần quyên góp: {p.totalAmount}
+                  </Card.Footer>
+                  <ProgressBar
+                    now={(p.contributedAmount / p.totalAmount) * 100}
+                  />
+                  <hr />
+
+                  <Link to={url} className="card-link">
+                    Xem chi tiết
+                  </Link>
+                  <Button
+                    onClick={() => openModal(p.id, p.title)}
+                    className="card-link donate-link"
+                    style={{ marginRight: "5px" }}
+                    variant="primary"
+                  >
+                    Đóng góp
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
           );
         })}
       </Row>
+      {displayedProjects < project.length && (
+        <div className="text-center mt-4">
+          <Button variant="primary" onClick={handleLoadMore}>
+            Xem Thêm
+          </Button>
+        </div>
+      )}
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProjectTitle}</Modal.Title> {/* Hiển thị tiêu đề ở đầu trang modal */}
+          <Modal.Title>{selectedProjectTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

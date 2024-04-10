@@ -8,7 +8,7 @@ import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 import NewsDetails from './components/NewsDetails';
 import Home from './pages/social/Home';
 import Profile from './pages/profile/Profile';
-import ProjectPage from './pages/ProjectPage';
+// import ProjectPage from './pages/ProjectPage';
 import { Header } from './components';
 import ProjectDetails from './components/ProjectDetails';
 import Footer from './components/Footer';
@@ -18,6 +18,8 @@ import LoginPage from './pages/login/LoginPage';
 import RegisterPage from './pages/login/RegisterPage';
 import LiveStreamPage from './pages/livestream/LiveStreamPage';
 import RoomPage from './pages/livestream/RoomPage';
+import ProjectPage from './pages/homepage/components/ProjectList/ProjectPage';
+// import ProjectPage from './pages/homepage/components/ProjectList/ProjectPage';
 
 export const UserContext = createContext();
 

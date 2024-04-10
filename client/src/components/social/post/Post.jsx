@@ -12,10 +12,11 @@ import {
 } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import moment from "moment";
-import SockJS from "sockjs-client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListDots } from "@fortawesome/free-solid-svg-icons";
-import Client from 'stompjs';
+import { faHeart, faListDots } from "@fortawesome/free-solid-svg-icons";
+import Client from "stompjs";
+import SockJS from "sockjs-client";
+import { Link } from "react-router-dom";
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -37,6 +38,13 @@ const Post = () => {
   const [likeCount, setLikeCount] = useState({});
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
+  const [openComment, setOpenComment] = useState(null);
+
+  const CommentHandler = (postId) => {
+    setOpenComment((prevOpenComment) =>
+      prevOpenComment === postId ? null : postId
+    );
+  };
 
   const likeHandler = async (postId) => {
     if (!user) {
@@ -99,7 +107,7 @@ const Post = () => {
       });
 
       console.log("Kết quả chỉnh sửa bài viết:", response.data);
-      
+
       setEditPostModalOpen(false);
       setEditedPostId(null);
     } catch (error) {
@@ -108,8 +116,10 @@ const Post = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    const shouldDelete = window.confirm("Bạn có chắc chắn muốn xóa bài viết này?");
-    
+    const shouldDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa bài viết này?"
+    );
+
     if (shouldDelete) {
       try {
         const response = await authApi().delete(
@@ -220,9 +230,15 @@ const Post = () => {
             console.log("Received message for post update:", message.body);
             const updatedPost = JSON.parse(message.body);
             setPost((current) => {
-              const index = current.findIndex((post) => post.id === updatedPost.id);
+              const index = current.findIndex(
+                (post) => post.id === updatedPost.id
+              );
               if (index !== -1) {
-                return [...current.slice(0, index), updatedPost, ...current.slice(index + 1)];
+                return [
+                  ...current.slice(0, index),
+                  updatedPost,
+                  ...current.slice(index + 1),
+                ];
               }
               return current;
             });
@@ -237,7 +253,7 @@ const Post = () => {
       try {
         post.forEach((p) => {
           loadCommentsByPostId(p.id);
-          // loadRepliesByCommentId(p.id);
+          loadRepliesByCommentId(p.id);
         });
       } catch (error) {
         console.error(error);
@@ -286,22 +302,26 @@ const Post = () => {
 
     console.log("Connecting to websocket server...");
 
-    stompClient.connect({}, () => {
-      console.log("Websocket connection established.");
-      stompClient.subscribe('/topic/posts', (message) => {
-        console.log("Received message:", message.body);
-        const newPost = JSON.parse(message.body);
-        setPost((current) => [...current, newPost]);
-      });
+    stompClient.connect(
+      {},
+      () => {
+        console.log("Websocket connection established.");
+        stompClient.subscribe("/topic/posts", (message) => {
+          console.log("Received message:", message.body);
+          const newPost = JSON.parse(message.body);
+          setPost((current) => [...current, newPost]);
+        });
 
-      // stompClient.subscribe('/topic/comments/1', (message) => {
-      //   console.log("Received message:", message.body);
-      //   const newComment = JSON.parse(message.body);
-      //   setComments((current) => [...current, newComment]);
-      // });
-    }, (error) => {
-      console.error("Websocket connection error:", error);
-    });
+        // stompClient.subscribe('/topic/comments/1', (message) => {
+        //   console.log("Received message:", message.body);
+        //   const newComment = JSON.parse(message.body);
+        //   setComments((current) => [...current, newComment]);
+        // });
+      },
+      (error) => {
+        console.error("Websocket connection error:", error);
+      }
+    );
 
     return stompClient;
   };
@@ -329,7 +349,11 @@ const Post = () => {
                   show={menuOpen[p.id]}
                   onToggle={() => handleMenuToggle(p.id)}
                 >
-                  <Dropdown.Toggle variant="link" className="btn-more-vert" style={{border: 'none', boxShadow: 'none'}}>
+                  <Dropdown.Toggle
+                    variant="link"
+                    className="btn-more-vert"
+                    style={{ border: "none", boxShadow: "none" }}
+                  >
                     <FontAwesomeIcon icon={faListDots} />
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
@@ -355,26 +379,20 @@ const Post = () => {
                   <img src={image.image} key={index} alt="image" />
                 ))}
             </div>
-            <div className="postBottom">
+            <div className="bottom-content">
               <div className="postBottomLeft">
-                <img
-                  className="likeIcon"
-                  src="public/like.png"
-                  onClick={() => likeHandler(p.id)}
-                  alt=""
-                />
-                <img
-                  className="likeIcon"
-                  src="public/heart.png"
-                  onClick={() => likeHandler(p.id)}
-                  alt=""
-                />
-                <span className="postLikeCounter">
-                  {likeCount[p.id] || 0} người đã thích
-                </span>
+                <Link className="custom-card-link">
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    onClick={() => likeHandler(p.id)}
+                  />
+                  <span className="postLikeCounter">
+                    {likeCount[p.id] || 0} người đã thích
+                  </span>
+                </Link>
               </div>
-              <div className="postBottomRight">
-                <span className="postCommentText">
+              <div className="postBottomRight" onClick={() => CommentHandler(p.id)}>
+                <span className="postCommentText" >
                   {(comments[p.id] || []).length} bình luận
                 </span>
               </div>
@@ -403,129 +421,132 @@ const Post = () => {
                 </Button>
               )}
             </div>
-            <div className="commentList">
-              <ListGroup>
-                {Array.isArray(comments[p.id]) && comments[p.id].length > 0 ? (
-                  comments[p.id]
-                    .slice()
-                    .reverse()
-                    .map((comment) => (
-                      <ListGroup.Item key={comment.id}>
-                        <div className="comments">
-                          <span
-                            className="commentContent "
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              marginBottom: "10px",
-                            }}
-                          >
-                            <div className="comment-avatar">
-                              <img
-                                src={comment.user.profile.avatar}
-                                alt="avatar"
-                                style={{
-                                  width: "32px",
-                                  height: "32px",
-                                  borderRadius: "50%",
-                                  objectFit: "cover",
-                                  marginRight: "5px",
-                                }}
-                              />
-                            </div>
-                            <div className="comment-details">
-                              <div className="comment-username">
-                                {comment.user.username}
+            {openComment === p.id && (
+              <div className="commentList">
+                <ListGroup>
+                  {Array.isArray(comments[p.id]) &&
+                  comments[p.id].length > 0 ? (
+                    comments[p.id]
+                      .slice()
+                      .reverse()
+                      .map((comment) => (
+                        <ListGroup.Item key={comment.id}>
+                          <div className="comments">
+                            <span
+                              className="commentContent "
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <div className="comment-avatar">
+                                <img
+                                  src={comment.user.profile.avatar}
+                                  alt="avatar"
+                                  style={{
+                                    width: "32px",
+                                    height: "32px",
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                    marginRight: "5px",
+                                  }}
+                                />
                               </div>
-                              <div className="comment-content">
-                                {comment.content}
+                              <div className="comment-details">
+                                <div className="comment-username">
+                                  {comment.user.username}
+                                </div>
+                                <div className="comment-content">
+                                  {comment.content}
+                                </div>
+                                <div className="comment-time">
+                                  {" "}
+                                  {moment(comment.createDate).fromNow()}
+                                </div>
                               </div>
-                              <div className="comment-time">
-                                {" "}
-                                {moment(comment.createDate).fromNow()}
-                              </div>
-                            </div>
-                          </span>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowReplies(comment.id)}
-                          >
-                            Hiển thị phản hồi
-                          </Button>
-                        </div>
+                            </span>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowReplies(comment.id)}
+                            >
+                              Hiển thị phản hồi
+                            </Button>
+                          </div>
 
-                        {Array.isArray(replies[comment.id]) &&
+                          {Array.isArray(replies[comment.id]) &&
                           replies[comment.id].length > 0
-                          ? replies[comment.id].map((reply) => (
-                            <div key={reply.id} className="reply">
-                              <span
-                                className="replyContent"
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <div className="reply-avatar">
-                                  <img
-                                    src={reply.user.profile.avatar}
-                                    alt="avatar"
+                            ? replies[comment.id].map((reply) => (
+                                <div key={reply.id} className="reply">
+                                  <span
+                                    className="replyContent"
                                     style={{
-                                      width: "32px",
-                                      height: "32px",
-                                      borderRadius: "50%",
-                                      objectFit: "cover",
-                                      marginRight: "5px",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      marginBottom: "10px",
                                     }}
-                                  />{" "}
+                                  >
+                                    <div className="reply-avatar">
+                                      <img
+                                        src={reply.user.profile.avatar}
+                                        alt="avatar"
+                                        style={{
+                                          width: "32px",
+                                          height: "32px",
+                                          borderRadius: "50%",
+                                          objectFit: "cover",
+                                          marginRight: "5px",
+                                        }}
+                                      />{" "}
+                                    </div>
+                                    <div className="reply-details">
+                                      <div className="reply-username">
+                                        {reply.user.username}
+                                      </div>
+                                      <div className="reply-content">
+                                        {reply.content}
+                                      </div>
+                                      <div className="reply-time">
+                                        {" "}
+                                        {moment(reply.createDate).fromNow()}
+                                      </div>
+                                    </div>
+                                  </span>
                                 </div>
-                                <div className="reply-details">
-                                  <div className="reply-username">
-                                    {reply.user.username}
-                                  </div>
-                                  <div clmassName="reply-content">
-                                    {reply.content}
-                                  </div>
-                                  <div className="reply-time">
-                                    {" "}
-                                    {moment(reply.createDate).fromNow()}
-                                  </div>
-                                </div>
-                              </span>
-                            </div>
-                          ))
-                          : null}
+                              ))
+                            : null}
 
-                        {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
-                          <Form.Control
-                            as="textarea"
-                            aria-label="With textarea"
-                            value={replyContent[comment.id] || ""}
-                            onChange={(e) =>
-                              setReplyContent({
-                                ...replyContent,
-                                [comment.id]: e.target.value,
-                              })
-                            }
-                            placeholder="Nội dung phản hồi"
-                          />
-                        )}
-                        {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
-                          <Button
-                            onClick={() => addReply(comment.id, p.id)}
-                            className="mt-2"
-                            variant="info"
-                          >
-                            Thêm phản hồi
-                          </Button>
-                        )}
-                      </ListGroup.Item>
-                    ))
-                ) : (
-                  <div>Không có bình luận</div>
-                )}
-              </ListGroup>
-            </div>
+                          {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                            <Form.Control
+                              as="textarea"
+                              aria-label="With textarea"
+                              value={replyContent[comment.id] || ""}
+                              onChange={(e) =>
+                                setReplyContent({
+                                  ...replyContent,
+                                  [comment.id]: e.target.value,
+                                })
+                              }
+                              placeholder="Nội dung phản hồi"
+                            />
+                          )}
+                          {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                            <Button
+                              onClick={() => addReply(comment.id, p.id)}
+                              className="mt-2"
+                              variant="info"
+                            >
+                              Thêm phản hồi
+                            </Button>
+                          )}
+                        </ListGroup.Item>
+                      ))
+                  ) : (
+                    <div>Không có bình luận</div>
+                  )}
+                </ListGroup>
+              </div>
+            )}
           </div>
         </div>
       ))}

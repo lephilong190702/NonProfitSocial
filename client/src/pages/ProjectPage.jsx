@@ -153,13 +153,16 @@ const ProjectPage = () => {
             
             const maxContentHeight = 100; 
             const content = p.content.length > maxContentHeight ? p.content.substring(0, maxContentHeight) + '...' : p.content;
+
+            const maxTitleHeight = 50; 
+            const title = p.title.length > maxTitleHeight ? p.title.substring(0, maxTitleHeight) + '...' : p.title;
             
             return (
               <Col xs={12} md={3} key={p.id}>
                 <Card className="card">
                   <Card.Img variant="top" src={p.images && p.images.length > 0 ? p.images[0].image : ""} className="card-img" />
                   <Card.Body>
-                    <Card.Title className="card-title">{p.title}</Card.Title>
+                    <Card.Title className="card-title">{title}</Card.Title>
                     <Card.Text className="card-text">{content}</Card.Text> 
                     <Card.Footer>Số tiền đã quyên góp: {p.contributedAmount}</Card.Footer>
                     <Card.Footer>Số tiền cần quyên góp: {p.totalAmount}</Card.Footer>

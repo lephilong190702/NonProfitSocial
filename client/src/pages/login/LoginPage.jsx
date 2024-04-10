@@ -59,7 +59,7 @@ const LoginPage = () => {
         console.error(ex);
         setError(
           "Đăng nhập không thành công. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu."
-        ); // Đặt thông báo lỗi ở đây
+        );
       }
     };
 

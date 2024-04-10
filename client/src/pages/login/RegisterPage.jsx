@@ -20,7 +20,7 @@ function Register() {
     password: "",
     email: "",
   });
-  const [err, setErr] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const nav = useNavigate();
 
   const [isShow, setIsShow] = useState(false);
@@ -45,21 +45,22 @@ function Register() {
     });
   };
 
-  const register = (evt) => {
+  const register = async (evt) => {
     evt.preventDefault();
 
-    const process = async () => {
-      try {
-        let res = await ApiConfig.post(endpoints["register"], user);
-        if (res.status === 201) {
-          nav("/login");
-        } else setErr("Hệ thống bị lỗi!");
-      } catch (error) {
-        console.error(err);
-        alert("Failed to register user. Check console for error details.");
+    try {
+      let res = await ApiConfig.post(endpoints["register"], user);
+      if (res.status === 201) {
+        nav("/login");
+      } else {
+        setErrorMessage("Hệ thống bị lỗi!");
       }
-    };
-    process();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(
+        "Đăng ký không thành công, có thể Tên đăng nhập đã bị trùng."
+      );
+    }
   };
 
   return (
@@ -68,8 +69,17 @@ function Register() {
         <div className="container sign-up-mode">
           <div className="forms-container">
             <div className="signin-signup">
-              <Form className="sign-up-form">
+              <Form className="sign-up-form" onSubmit={register}>
                 <div className="title-signup">Đăng Ký</div>
+                {errorMessage && (
+                  <div
+                    className="error-message"
+                    onClose={() => setErrorMessage("")}
+                    dismissible
+                  >
+                    {errorMessage}
+                  </div>
+                )}
                 <div className="input-field">
                   <FontAwesomeIcon
                     icon={faEnvelope}
@@ -125,25 +135,16 @@ function Register() {
                         color="#000"
                         size="lg"
                         fixedWidth
-                        onClick={() => {
-                          hidePassword();
-                          setHangUp(true);
-                          setGlance(false);
-                        }}
+                        onClick={() => hidePassword()}
                         className="icon-password"
                       />
                     ) : (
                       <FontAwesomeIcon
-                        // value={user.password || ""}
                         icon={faEye}
                         color="#000"
                         size="lg"
                         fixedWidth
-                        onClick={() => {
-                          showPassword();
-                          setHangUp(true);
-                          setGlance(true);
-                        }}
+                        onClick={() => showPassword()}
                         className="icon-password"
                       />
                     )}
@@ -205,63 +206,6 @@ function Register() {
           </div>
         </div>
       </Fragment>
-
-      {/* <div className="login">
-        <div className="loginWrapper">
-          <div className="loginLeft">
-            <h3 className="loginLogo">Charity Social</h3>
-            <span className="loginDesc">
-              Connect with friends and the world around you on Charity Social.
-            </span>
-          </div>
-          <div className="loginRight">
-            <div className="loginBox">
-              <Form onSubmit={register}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    className="loginInput"
-                    type="email"
-                    onChange={(e) => change(e, "email")}
-                    placeholder="Email"
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Tên đăng nhập</Form.Label>
-                  <Form.Control
-                    className="loginInput"
-                    value={user.username}
-                    onChange={(e) => change(e, "username")}
-                    type="text"
-                    placeholder="Tên đăng nhập"
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Mật khẩu</Form.Label>
-                  <Form.Control
-                    className="loginInput"
-                    value={user.password}
-                    onChange={(e) => change(e, "password")}
-                    type="password"
-                    placeholder="Mật khẩu"
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Button
-                    variant="info"
-                    type="submit"
-                    className="loginRegisterButton"
-                  >
-                    Đăng ký
-                  </Button>
-                </Form.Group>
-              </Form>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
-import MySpinner from "../../../../layout/MySpinner";
-import { Header } from "../../../../components";
+// import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
+// import MySpinner from "../../../../layout/MySpinner";
+// import { Header } from "../../../../components";
 import {
   Alert,
   Card,
@@ -13,9 +13,11 @@ import {
   Form,
   ProgressBar,
 } from "react-bootstrap";
+import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
+import MySpinner from "../../../../layout/MySpinner";
 import "./projects.css"; // Import CSS file
 
-const ProjectPage = () => {
+const ProjectsList = () => {
   const [project, setProject] = useState(null);
   const [pay, setPay] = useState({
     projectId: "",
@@ -66,21 +68,21 @@ const ProjectPage = () => {
       }
     };
 
-    const handleLoadMore = () => {
-      setDisplayedProjects((prev) => prev + 4);
-    };
+    // const handleLoadMore = () => {
+    //   setDisplayedProjects((prev) => prev + 4);
+    // };
 
-    const openModal = (projectId, projectTitle) => {
-      localStorage.setItem("selectedProjectId", projectId);
-      setSelectedProjectId(projectId);
-      setSelectedProjectTitle(projectTitle);
-      setShowModal(true);
-    };
+    // const openModal = (projectId, projectTitle) => {
+    //   localStorage.setItem("selectedProjectId", projectId);
+    //   setSelectedProjectId(projectId);
+    //   setSelectedProjectTitle(projectTitle);
+    //   setShowModal(true);
+    // };
 
-    const closeModal = () => {
-      setSelectedProjectId(null);
-      setShowModal(false);
-    };
+    // const closeModal = () => {
+    //   setSelectedProjectId(null);
+    //   setShowModal(false);
+    // };
 
     const payment = async () => {
       const form = new FormData();
@@ -293,4 +295,4 @@ const ProjectPage = () => {
   );
 };
 
-export default ProjectPage;
+export default ProjectsList;

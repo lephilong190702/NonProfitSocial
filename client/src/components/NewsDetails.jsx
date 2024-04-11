@@ -5,7 +5,7 @@ import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import { Button, Col, Form, ListGroup, Row, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MySpinner from "../layout/MySpinner";
-import Header from "./Header";
+import Header from "./header/Header";
 import moment from "moment";
 import "./comment.css";
 

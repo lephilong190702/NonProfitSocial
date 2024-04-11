@@ -1,11 +1,8 @@
-import NewsPage from "../NewsPage";
-// import ProjectPage from "../ProjectPage";
-import { Outlet } from "react-router-dom";
 import "./homePage.css";
 import { Slider } from "../../components";
 import NewsList from "./components/NewsList/NewsList"
-import ProjectPage from "./components/ProjectList/ProjectPage";
 import AboutUs from "./components/Aboutus/AboutUs";
+import ProjectsList from "./components/ProjectList/ProjectsList";
 
 const HomePage = () => {
   const sliderUrls = [
@@ -46,8 +43,8 @@ const HomePage = () => {
         </div> */}
         <NewsList />
         {/* <NewsPage /> */}
-        {/* <ProjectsList/> */}
-        <ProjectPage />
+        <ProjectsList />
+        {/* <ProjectPage /> */}
         <AboutUs />
       </div>
     </>

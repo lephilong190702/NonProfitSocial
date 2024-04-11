@@ -7,10 +7,10 @@ import {
   Navbar,
   NavDropdown,
 } from "react-bootstrap";
-import MySpinner from "../layout/MySpinner";
+import MySpinner from "../../layout/MySpinner";
 import { Link, useNavigate } from "react-router-dom";
-import ApiConfig, { endpoints } from "../configs/ApiConfig";
-import { UserContext } from "../App";
+import ApiConfig, { endpoints } from "../../configs/ApiConfig";
+import { UserContext } from "../../App";
 import { saveAs } from "file-saver";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -308,7 +308,7 @@ const CustomNavbar = () => {
 
                               <div
                                 className={`group ${
-                                  scrolled ? "top-[50%]" : "bottom-[62%]"
+                                  scrolled ? "top-[50%]" : "bottom-[63%]"
                                 } hidden group-hover:block absolute right-[5%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
                               >
                                 <div className="flex flex-col gap-3 ">

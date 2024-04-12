@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-// import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
-// import MySpinner from "../layout/MySpinner";
-// import { Header } from "../components";
+// import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
+// import MySpinner from "../../../../layout/MySpinner";
+// import { Header } from "../../../../components";
 import {
   Alert,
   Card,
@@ -15,33 +15,9 @@ import {
 } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
 import MySpinner from "../../../../layout/MySpinner";
-import Slider from "react-slick";
+import "./projects.css"; // Import CSS file
 
-function SampleNextArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      onClick={onClick}
-      className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] right-[-5%] text-2xl rounded-full p-2 bg-black/30 hover:bg-[#38b6ff] text-white cursor-pointer"
-    >
-      <img src="./src/assets/right-arrow.png" className="w-8" />
-    </div>
-  );
-}
-
-function SamplePrevArrow(props) {
-  const { onClick } = props;
-  return (
-    <div
-      onClick={onClick}
-      className="hidden group-hover:block absolute top-[50%] -translate-x-0 translate-y-[-50%] left-[-5%] text-2xl rounded-full p-2 bg-black/30 hover:bg-[#38b6ff] text-white cursor-pointer"
-    >
-      <img src="./src/assets/left-arrow.png" className="w-8" />
-    </div>
-  );
-}
-
-export default function ProjectsList() {
+const ProjectsList = () => {
   const [project, setProject] = useState(null);
   const [pay, setPay] = useState({
     projectId: "",
@@ -66,7 +42,8 @@ export default function ProjectsList() {
   const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
   const vnpTxnRef = urlParams.get("vnp_TxnRef");
   const vnpSecureHash = urlParams.get("vnp_SecureHash");
-  const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
+  const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
+  const [displayedProjects, setDisplayedProjects] = useState(4);
 
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
@@ -90,6 +67,22 @@ export default function ProjectsList() {
         console.error(ex);
       }
     };
+
+    // const handleLoadMore = () => {
+    //   setDisplayedProjects((prev) => prev + 4);
+    // };
+
+    // const openModal = (projectId, projectTitle) => {
+    //   localStorage.setItem("selectedProjectId", projectId);
+    //   setSelectedProjectId(projectId);
+    //   setSelectedProjectTitle(projectTitle);
+    //   setShowModal(true);
+    // };
+
+    // const closeModal = () => {
+    //   setSelectedProjectId(null);
+    //   setShowModal(false);
+    // };
 
     const payment = async () => {
       const form = new FormData();
@@ -158,6 +151,10 @@ export default function ProjectsList() {
     }
   };
 
+  const handleLoadMore = () => {
+    setDisplayedProjects((prev) => prev + 4);
+  };
+
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
@@ -179,61 +176,30 @@ export default function ProjectsList() {
         </Alert>
       </>
     );
-  var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    initialSlide: 0,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  };
+
   return (
-    <>
-      
+    <div className="projects-container">
+      <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
+      <Row>
+        {project.slice(0, displayedProjects).map((p) => {
+          let url = `/projects/${p.id}`;
 
-      <div className="projects-container">
-        <h1 className="page-title">DANH SÁCH DỰ ÁN</h1>
-        <Row>
-          {project.map((p) => {
-            let url = `/projects/${p.id}`;
+          const maxContentHeight = 100;
+          const content =
+            p.content.length > maxContentHeight
+              ? p.content.substring(0, maxContentHeight) + "..."
+              : p.content;
 
-            const maxContentHeight = 100;
-            const content =
-              p.content.length > maxContentHeight
-                ? p.content.substring(0, maxContentHeight) + "..."
-                : p.content;
+          const maxTitleHeight = 50;
+          const title =
+            p.title.length > maxTitleHeight
+              ? p.title.substring(0, maxTitleHeight) + "..."
+              : p.title;
 
-            return (
-              <Col xs={12} md={3} key={p.id}>
-                <Card className="card">
+          return (
+            <Col xs={12} md={3} key={p.id}>
+              <Card className="card">
+                <Link to={url} className="nav-link">
                   <Card.Img
                     variant="top"
                     src={
@@ -242,7 +208,7 @@ export default function ProjectsList() {
                     className="card-img"
                   />
                   <Card.Body>
-                    <Card.Title className="card-title">{p.title}</Card.Title>
+                    <Card.Title className="card-title">{title}</Card.Title>
                     <Card.Text className="card-text">{content}</Card.Text>
                     <Card.Footer>
                       Số tiền đã quyên góp: {p.contributedAmount}
@@ -254,64 +220,79 @@ export default function ProjectsList() {
                       now={(p.contributedAmount / p.totalAmount) * 100}
                     />
                     <hr />
-
-                    <Link to={url} className="card-link">
-                      Xem chi tiết
-                    </Link>
-                    <Button
-                      onClick={() => openModal(p.id, p.title)}
-                      className="card-link donate-link"
-                      style={{ marginRight: "5px" }}
-                      variant="primary"
-                    >
-                      Đóng góp
-                    </Button>
+                    <div className="basis-1/4 flex flex-row justify-between pb-3">
+                      <div className="py-1 pr-3">
+                        <Link
+                          onClick={() => openModal(p.id, p.title)}
+                          className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                          style={{ marginRight: "5px" }}
+                          variant="primary"
+                        >
+                          Đóng góp
+                        </Link>
+                      </div>
+                    </div>
+                    {/* <Link to={url} className="card-link">
+                    Xem chi tiết
+                  </Link> */}
                   </Card.Body>
-                </Card>
-              </Col>
-            );
-          })}
-        </Row>
-        <Modal show={showModal} onHide={closeModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{selectedProjectTitle}</Modal.Title>{" "}
-            {/* Hiển thị tiêu đề ở đầu trang modal */}
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group controlId="donateAmount">
-                <Form.Label>Số tiền đóng góp</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Nhập số tiền đóng góp"
-                  value={pay.donateAmount}
-                  onChange={(e) =>
-                    setPay({ ...pay, donateAmount: e.target.value })
-                  }
-                />
-              </Form.Group>
-              <Form.Group controlId="note">
-                <Form.Label>Ghi chú</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Nhập ghi chú (tuỳ chọn)"
-                  value={pay.note}
-                  onChange={(e) => setPay({ ...pay, note: e.target.value })}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={closeModal}>
-              Đóng
-            </Button>
-            <Button variant="primary" onClick={handlePayment}>
-              Xác nhận đóng góp
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    </>
+                </Link>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
+      {displayedProjects < project.length && (
+        <div className="text-center mt-4">
+          <Link
+            variant="primary"
+            onClick={handleLoadMore}
+            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-8 py-2 hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+          >
+            Xem Thêm
+          </Link>
+        </div>
+      )}
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedProjectTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="donateAmount">
+              <Form.Label>Số tiền đóng góp</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Nhập số tiền đóng góp"
+                value={pay.donateAmount}
+                onChange={(e) =>
+                  setPay({ ...pay, donateAmount: e.target.value })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="note">
+              <Form.Label>Ghi chú</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Nhập ghi chú (tuỳ chọn)"
+                value={pay.note}
+                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handlePayment}>
+            Xác nhận đóng góp
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
-}
+};
+
+export default ProjectsList;

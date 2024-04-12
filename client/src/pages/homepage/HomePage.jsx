@@ -35,16 +35,10 @@ const HomePage = () => {
           colorTitle={sliderTitleColor}
           colorDescription={sliderTitleDescription}
         />
-        {/* <div className="flex min-h-screen md:pt-[135px] pt-[120px] font-Montserrat">
-          <div className="flex flex-col justify-self-end w-full justify-between mb-[100px]">
-            <Outlet />
-          </div>
-          <div></div>
-        </div> */}
         <NewsList />
-        {/* <NewsPage /> */}
+
         <ProjectsList />
-        {/* <ProjectPage /> */}
+
         <AboutUs />
       </div>
     </>

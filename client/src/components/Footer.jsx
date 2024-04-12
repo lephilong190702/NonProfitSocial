@@ -1,5 +1,5 @@
 import React from 'react'
-import CustomFooter from './CustomFooter'
+import CustomFooter from './footer/CustomFooter'
 
 const Footer = () => {
   return (

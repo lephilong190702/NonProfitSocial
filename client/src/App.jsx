@@ -5,7 +5,7 @@ import UserReducer from './reducers/UserReducer';
 import cookie from "react-cookies";
 
 import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
-import NewsDetails from './components/NewsDetails';
+// import NewsDetails from './components/NewsDetails';
 import Home from './pages/social/Home';
 import Profile from './pages/profile/Profile';
 import { Header } from './components';
@@ -18,6 +18,7 @@ import RegisterPage from './pages/login/RegisterPage';
 import LiveStreamPage from './pages/livestream/LiveStreamPage';
 import RoomPage from './pages/livestream/RoomPage';
 import ProjectPage from './pages/projectpage/ProjectPage';
+import NewsDetails from './components/news/NewsDetails';
 export const UserContext = createContext();
 
 const App = () => {

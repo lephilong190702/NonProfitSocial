@@ -89,7 +89,7 @@ const LoginPage = () => {
                     fixedWidth
                     className="icon-login"
                   />
-                  <Form.Control
+                  <input
                     className="loginInput"
                     type="text"
                     value={username}
@@ -106,7 +106,7 @@ const LoginPage = () => {
                     fixedWidth
                     className="icon-login"
                   />
-                  <Form.Control
+                  <input
                     className="loginInput"
                     type={isShow ? "text" : "password"}
                     value={password}

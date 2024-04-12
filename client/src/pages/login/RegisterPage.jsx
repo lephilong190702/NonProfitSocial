@@ -88,7 +88,7 @@ function Register() {
                     fixedWidth
                     className="icon-login"
                   />
-                  <Form.Control
+                  <input
                     className="loginInput"
                     type="email"
                     onChange={(e) => change(e, "email")}
@@ -103,7 +103,7 @@ function Register() {
                     fixedWidth
                     className="icon-login"
                   />
-                  <Form.Control
+                  <input
                     className="loginInput"
                     value={user.username}
                     onChange={(e) => change(e, "username")}
@@ -120,7 +120,7 @@ function Register() {
                     fixedWidth
                     className="icon-login"
                   />
-                  <Form.Control
+                  <input
                     className="loginInput"
                     value={user.password}
                     onChange={(e) => change(e, "password")}

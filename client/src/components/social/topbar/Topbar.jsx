@@ -25,7 +25,7 @@ const Topbar = () => {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <span className="logo">Social</span>
+        <span className="logo">Social Charity</span>
       </div>
       {/* <div className="topbarCenter">
         <div className="searchbar">

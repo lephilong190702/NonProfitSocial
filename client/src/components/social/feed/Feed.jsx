@@ -5,8 +5,6 @@ import ApiConfig, { endpoints } from '../../../configs/ApiConfig';
 import Post from '../post/Post';
 import { UserContext } from '../../../App';
 import { Link } from 'react-router-dom';
-import PostTest from '../post/PostTest';
-import PostTests from '../post/PostTests';
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);

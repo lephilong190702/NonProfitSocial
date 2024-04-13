@@ -82,7 +82,7 @@ const RegisterVolunteerPage = () => {
   };
 
   return (
-    <div className="container">
+    <div className="resgisVolunContainer">
       {registrationSuccess ? (
         <div className="success-message">Đăng ký thành công</div>
       ) : (
@@ -154,7 +154,7 @@ const RegisterVolunteerPage = () => {
                 <Form.Label>Ghi chú</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Apartment, studio, or floor"
+                  placeholder="Ghi chú ..."
                   value={volunteer.description}
                   onChange={(e) => change(e, "description")}
                   className="form-control"

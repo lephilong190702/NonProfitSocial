@@ -65,7 +65,10 @@ const Post = () => {
         return { ...prevLikeCount, [postId]: data.length };
       });
       setLikeCurrent((prevLikeCurrent) => {
-        return { ...prevLikeCurrent, [postId]: (prevLikeCurrent[postId] || 0) + 1 };
+        return {
+          ...prevLikeCurrent,
+          [postId]: (prevLikeCurrent[postId] || 0) + 1,
+        };
       });
     } catch (error) {
       console.error(error);
@@ -301,7 +304,7 @@ const Post = () => {
   // }, []);
 
   const connectToWebSocket = () => {
-    const socket = new SockJS('http://localhost:9090/ws');
+    const socket = new SockJS("http://localhost:9090/ws");
     const stompClient = Client.over(socket);
 
     console.log("Connecting to websocket server...");
@@ -349,29 +352,38 @@ const Post = () => {
                 </span>
               </div>
               <div className="postTopRight">
-                <Dropdown
-                  show={menuOpen[p.id]}
-                  onToggle={() => handleMenuToggle(p.id)}
-                >
-                  <Dropdown.Toggle
-                    variant="link"
-                    className="btn-more-vert"
-                    style={{ border: "none", boxShadow: "none" }}
+                {user && (
+                  <Dropdown
+                    show={menuOpen[p.id]}
+                    onToggle={() => handleMenuToggle(p.id)}
                   >
-                    <FontAwesomeIcon icon={faListDots} />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleEditsPost(p.id)}>
-                      Chỉnh sửa bài viết
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleDeletePost(p.id)}>
-                      Xóa bài viết
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleReportPost(p.id)}>
-                      Báo cáo bài viết
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <Dropdown.Toggle
+                      variant="link"
+                      className="btn-more-vert"
+                      style={{ border: "none", boxShadow: "none" }}
+                    >
+                      <FontAwesomeIcon icon={faListDots} />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {user.username === p.user.username && (
+                        <>
+                          <Dropdown.Item onClick={() => handleEditsPost(p.id)}>
+                            Chỉnh sửa bài viết
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleDeletePost(p.id)}>
+                            Xóa bài viết
+                          </Dropdown.Item>
+                        </>
+                      )}
+
+                      {user.username !== p.user.username && (
+                        <Dropdown.Item onClick={() => handleReportPost(p.id)}>
+                          Báo cáo bài viết
+                        </Dropdown.Item>
+                      )}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                )}
               </div>
             </div>
             <div className="postCenter">
@@ -395,8 +407,11 @@ const Post = () => {
                   </span>
                 </Link>
               </div>
-              <div className="postBottomRight" onClick={() => CommentHandler(p.id)}>
-                <span className="postCommentText" >
+              <div
+                className="postBottomRight"
+                onClick={() => CommentHandler(p.id)}
+              >
+                <span className="postCommentText">
                   {(comments[p.id] || []).length} bình luận
                 </span>
               </div>

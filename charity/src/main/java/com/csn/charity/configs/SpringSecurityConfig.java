@@ -49,7 +49,7 @@ public class SpringSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
-                                "/error", "/login", "/oauth2/**", "/showMap")
+                                "/error", "/login", "/oauth2/**", "/showMap", "/ws/**")
                         .permitAll()
                         .requestMatchers("/", "/admin/**").hasRole("ADMIN")
                         .anyRequest()
@@ -90,7 +90,7 @@ public class SpringSecurityConfig {
                                 "/api/user-docs/{id}", "/api/projects/{id}", "/api/projects/pcategories/{id}",
                                 "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
                                 "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/",
-                                "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users")
+                                "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users", "/ws/**")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/user/userProfile").hasRole("USER")
@@ -106,9 +106,10 @@ public class SpringSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "DELETE", "OPTION", "PUT"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

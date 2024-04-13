@@ -21,7 +21,7 @@
     "@mui/material": "^5.15.3",
     "@mui/styled-engine-sc": "^6.0.0-alpha.11",
     "@react-firebase/auth": "^0.2.10",
-    "@react-firebase/database": "^0.3.11",
+    "@react-firebase/database": "^0.2.10",
     "@reduxjs/toolkit": "^1.9.6",
     "@stomp/stompjs": "^7.0.0",
     "@types/react-slick": "^0.23.13",

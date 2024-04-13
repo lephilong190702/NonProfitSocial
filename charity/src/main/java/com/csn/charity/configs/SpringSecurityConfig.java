@@ -37,12 +37,6 @@ public class SpringSecurityConfig {
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
 
-    @Autowired
-    private CustomOAuth2UserService oauth2UserService;
-
-    @Autowired
-    private OAuthLoginSuccessHandler oauthLoginSuccessHandler;
-
     @Bean
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -69,14 +63,6 @@ public class SpringSecurityConfig {
                                 .defaultSuccessUrl("/")
                                 .failureUrl("/login?error")
                                 .permitAll())
-                .oauth2Login(
-                        login -> login
-                                .loginPage("/login")
-                                .userInfoEndpoint(userInfo -> userInfo
-                                        .userService(oauth2UserService) 
-                                )
-                                .defaultSuccessUrl("/")
-                                .successHandler(oauthLoginSuccessHandler))
                 .logout(logout -> logout.logoutSuccessUrl("/"))
                 .exceptionHandling(handling -> handling.accessDeniedPage("/login?accessDenied"))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

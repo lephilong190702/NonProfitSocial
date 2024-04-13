@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springbootserver
+spec:
+  selector:
+    matchLabels:
+      app: charity
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: charity
+    spec:
+      containers:
+        - name: springbootserver
+          image: lephilong1907/springbootserver:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9090
+          env:
+            - name: DB_HOST
+              value: mysql
+            - name: DB_NAME
+              value: charitydb
+            - name: DB_USERNAME
+              value: root
+            - name: DB_PASSWORD
+              value: Long1907@
+# This seperator --- below is MANDATORY!!!
+---
+
+# Define a 'Service' To Expose the application
+apiVersion: v1
+kind: NodePort
+metadata:
+  name: springbootserver-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: charity
+  ports:
+    - protocol: "TCP"
+      port: 9090
+      targetPort: 9090

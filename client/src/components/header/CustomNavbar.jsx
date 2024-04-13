@@ -149,7 +149,7 @@ const CustomNavbar = () => {
         <div>
           <nav>
             <div className="flex flex-row px-5 py-5 md:px-20 md:py-5 border-b ">
-              <a className="flex  md:pt-1" href="">
+              <a className="flex  md:pt-1">
                 <img
                   src="./src/assets/charityLogo.png"
                   className="w-full md:w-60"

@@ -1,11 +1,22 @@
 import moment from "moment";
 import React, { useState } from "react";
-import { ListGroup } from "react-bootstrap";
+
 import "./replyNews.css";
 
-const ReplyBox = ({ comment }) => {
+const ReplyBox = ({ comment, addReply, value, onChange, user }) => {
   const [openReply, setOpenReply] = useState(null);
-  const [replyContent, setReplyContent] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const commentsPerPage = 5;
+
+  const totalPages = Math.ceil(comment.replies.length / commentsPerPage);
+  const indexOfLastComment = currentPage * commentsPerPage;
+  const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+  const currentComments = comment.replies.slice(
+    indexOfFirstComment,
+    indexOfLastComment
+  );
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const replyHandler = (commentId) => {
     setOpenReply((prevOpenReply) =>
@@ -13,19 +24,13 @@ const ReplyBox = ({ comment }) => {
     );
   };
 
-  const handleChange = (event) => {
-    setReplyContent(event.target.value); // Cập nhật nội dung trả lời khi người dùng nhập
-  };
-
-  const handleSubmit = () => {
-    // Xử lý logic khi người dùng hoàn thành việc nhập và gửi trả lời
-    console.log("Nội dung trả lời:", replyContent);
-    // Đồng thời có thể gửi nội dung trả lời đến máy chủ ở đây
+  const handleAddReply = () => {
+    addReply(comment.id);
   };
 
   return (
     <>
-      <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] py-5">
+      <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
         {/* <ListGroup.Item key={comment.id}> */}
         <div className="comment">
           <div className="comment-avatar">
@@ -53,18 +58,26 @@ const ReplyBox = ({ comment }) => {
             </div>
             {openReply === comment.id && (
               <div className="reply-news-box">
-                <div className="reply-news-box">
-                  <textarea
-                    className="w-full h-[145px] font-medium text-sm  px-4 py-4 border-[1px] border-[#E1E1E1] rounded-md placeholder:text-[#A7A7A7]"
-                    placeholder="Nhập gì đó..."
-                  />
-                  <button
-                    onClick={handleSubmit}
-                    className="float-right font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-12 py-2  hover:bg-[#1775ee] hover:text-[#fff] hover:shadow-md hover:shadow-[#1775ee]"
-                  >
-                    Gửi
-                  </button>
-                </div>
+                {user !== null ? (
+                  <>
+                    <div className="reply-news-box">
+                      <textarea
+                        className="w-full h-[145px] font-medium text-sm  px-4 py-4 border-[1px] border-[#E1E1E1] rounded-md placeholder:text-[#A7A7A7]"
+                        placeholder="Nhập gì đó..."
+                        value={value}
+                        onChange={onChange}
+                      />
+                      <button
+                        onClick={handleAddReply}
+                        className="float-right font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-12 py-2  hover:bg-[#1775ee] hover:text-[#fff] hover:shadow-md hover:shadow-[#1775ee]"
+                      >
+                        Gửi
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-danger">Vui lòng đăng nhập để bình luận</p>
+                )}
               </div>
             )}
           </div>
@@ -73,7 +86,7 @@ const ReplyBox = ({ comment }) => {
       </div>
       {comment.replies &&
         comment.replies.map((reply) => (
-          <div className="flex flex-row gap-3  py-5">
+          <div className="flex flex-row gap-3 py-2">
             <div>
               <div className="reply-news">
                 <div className="reply-news-avatar">

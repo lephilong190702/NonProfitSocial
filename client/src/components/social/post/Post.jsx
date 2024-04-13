@@ -36,6 +36,7 @@ const Post = () => {
   const [replyContent, setReplyContent] = useState({});
   const [reactions, setReactions] = useState({});
   const [likeCount, setLikeCount] = useState({});
+  const [likeCurrent, setLikeCurrent] = useState({});
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
   const [openComment, setOpenComment] = useState(null);
@@ -62,6 +63,9 @@ const Post = () => {
       // Cập nhật số lần "LIKE" trong state
       setLikeCount((prevLikeCount) => {
         return { ...prevLikeCount, [postId]: data.length };
+      });
+      setLikeCurrent((prevLikeCurrent) => {
+        return { ...prevLikeCurrent, [postId]: (prevLikeCurrent[postId] || 0) + 1 };
       });
     } catch (error) {
       console.error(error);
@@ -222,7 +226,7 @@ const Post = () => {
           totalLikes[postId] = data.length;
         });
 
-        setLikeCount(totalLikes);
+        setLikeCurrent(totalLikes);
 
         res.data.forEach((p) => {
           const postTopic = `/topic/posts/${p.id}`;
@@ -387,7 +391,7 @@ const Post = () => {
                     onClick={() => likeHandler(p.id)}
                   />
                   <span className="postLikeCounter">
-                    {likeCount[p.id] || 0} người đã thích
+                    {likeCurrent[p.id] || 0} người đã thích
                   </span>
                 </Link>
               </div>

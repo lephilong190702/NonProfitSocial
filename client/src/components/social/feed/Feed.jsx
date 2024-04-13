@@ -34,7 +34,7 @@ const Feed = () => {
         </p>) : (
           <Share />
         )}
-        <PostTests />
+        {/* <PostTests /> */}
         <Post />
       </div>
     </div>

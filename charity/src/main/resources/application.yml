@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #Deployment 
-    # url: jdbc:mysql://${DB_HOST}/${DB_NAME}?useSSL=false
+    # #Deployment 
+    # url: jdbc:mysql://${DB_HOST}/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
     # username: ${DB_USERNAME}
     # password: ${DB_PASSWORD}
     #Local 

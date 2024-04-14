@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: charity-mysql
   labels:
     app: mysql
     tier: database

@@ -33,11 +33,11 @@ spec:
 
 # Define a 'Service' To Expose the application
 apiVersion: v1
-kind: NodePort
+kind: Service
 metadata:
   name: springbootserver-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: charity
   ports:

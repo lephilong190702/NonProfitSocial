@@ -125,9 +125,9 @@
   align-items: center;
   margin: 10px;
   padding: 10px;
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   border-radius: 10px;
-  background-color: #e0e0e0;
+  /* background-color: #e0e0e0; */
   margin-left: 5%;
 }
 
@@ -149,7 +149,7 @@
 .reply .reply-username {
   font-size: 16px;
   font-weight: bold;
-  color: #0000ff;
+  color: black;
 }
 
 .reply .reply-content {

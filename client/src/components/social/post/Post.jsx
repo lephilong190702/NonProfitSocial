@@ -40,10 +40,17 @@ const Post = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
   const [openComment, setOpenComment] = useState(null);
+  const [openReply, setOpenReply] = useState(null);
 
   const CommentHandler = (postId) => {
     setOpenComment((prevOpenComment) =>
       prevOpenComment === postId ? null : postId
+    );
+  };
+
+  const replyHandler = (commentId) => {
+    setOpenReply((prevOpenReply) =>
+      prevOpenReply === commentId ? null : commentId
     );
   };
 
@@ -494,9 +501,7 @@ const Post = () => {
                                       </p>
                                       <p
                                         className="font-semibold text-sm cursor-pointer"
-                                        onClick={() =>
-                                          handleShowReplies(comment.id)
-                                        }
+                                        onClick={() => replyHandler(comment.id)}
                                       >
                                         Trả lời
                                       </p>
@@ -512,70 +517,75 @@ const Post = () => {
                               </div>
                             </div>
 
-                            {Array.isArray(replies[comment.id]) &&
-                            replies[comment.id].length > 0
-                              ? replies[comment.id].map((reply) => (
-                                  <div key={reply.id} className="reply">
-                                    <span
-                                      className="replyContent"
-                                      style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        marginBottom: "10px",
-                                      }}
-                                    >
-                                      <div className="reply-avatar">
-                                        <img
-                                          src={reply.user.profile.avatar}
-                                          alt="avatar"
+                            {openReply === comment.id && (
+                              <>
+                                {Array.isArray(replies[comment.id]) &&
+                                replies[comment.id].length > 0
+                                  ? replies[comment.id].map((reply) => (
+                                      <div key={reply.id} className="reply">
+                                        <span
+                                          className="replyContent"
                                           style={{
-                                            width: "32px",
-                                            height: "32px",
-                                            borderRadius: "50%",
-                                            objectFit: "cover",
-                                            marginRight: "5px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            marginBottom: "10px",
                                           }}
-                                        />{" "}
+                                        >
+                                          <div className="reply-avatar">
+                                            <img
+                                              src={reply.user.profile.avatar}
+                                              alt="avatar"
+                                              style={{
+                                                width: "32px",
+                                                height: "32px",
+                                                borderRadius: "50%",
+                                                objectFit: "cover",
+                                                marginRight: "5px",
+                                              }}
+                                            />{" "}
+                                          </div>
+                                          <div className="reply-details">
+                                            <div className="reply-username">
+                                              {reply.user.username}
+                                            </div>
+                                            <div className="reply-content">
+                                              {reply.content}
+                                            </div>
+                                            <div className="reply-time">
+                                              {" "}
+                                              {moment(
+                                                reply.createDate
+                                              ).fromNow()}
+                                            </div>
+                                          </div>
+                                        </span>
                                       </div>
-                                      <div className="reply-details">
-                                        <div className="reply-username">
-                                          {reply.user.username}
-                                        </div>
-                                        <div className="reply-content">
-                                          {reply.content}
-                                        </div>
-                                        <div className="reply-time">
-                                          {" "}
-                                          {moment(reply.createDate).fromNow()}
-                                        </div>
-                                      </div>
-                                    </span>
-                                  </div>
-                                ))
-                              : null}
-
-                            {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
-                              <Form.Control
-                                as="textarea"
-                                aria-label="With textarea"
-                                value={replyContent[comment.id] || ""}
-                                onChange={(e) =>
-                                  setReplyContent({
-                                    ...replyContent,
-                                    [comment.id]: e.target.value,
-                                  })
-                                }
-                                placeholder="Nội dung phản hồi"
-                              />
-                            )}
-                            {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
-                              <Button
-                                onClick={() => addReply(comment.id, p.id)}
-                                className="mt-2"
-                                variant="info"
-                              >
-                                Thêm phản hồi
-                              </Button>
+                                    ))
+                                  : null}
+                                {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                                  <Form.Control
+                                    as="textarea"
+                                    aria-label="With textarea"
+                                    value={replyContent[comment.id] || ""}
+                                    onChange={(e) =>
+                                      setReplyContent({
+                                        ...replyContent,
+                                        [comment.id]: e.target.value,
+                                      })
+                                    }
+                                    placeholder="Nội dung phản hồi"
+                                  />
+                                )}
+                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                                  <Button
+                                    onClick={() => addReply(comment.id, p.id)}
+                                    className="mt-2"
+                                    variant="info"
+                                  >
+                                    Thêm phản hồi
+                                  </Button>
+                                )}
+                              </>
                             )}
                           </ListGroup.Item>
                         ))

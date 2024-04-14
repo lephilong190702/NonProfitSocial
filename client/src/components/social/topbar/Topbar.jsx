@@ -25,9 +25,9 @@ const Topbar = () => {
   return (
     <div className="topbarContainer">
       <div className="topbarLeft">
-        <span className="logo">Social</span>
+        <span className="logo">Social Charity</span>
       </div>
-      <div className="topbarCenter">
+      {/* <div className="topbarCenter">
         <div className="searchbar">
           <Search />
           <input
@@ -35,17 +35,17 @@ const Topbar = () => {
             className="searchInput"
           ></input>
         </div>
-      </div>
+      </div> */}
 
       <div className="topbarRight">
         <div className="topbarLinks">
-          <Link to={`/social`} style={{ color: "white" }}>
+          {/* <Link to={`/social`} style={{ color: "white" }}>
             <span className="topbarLink">Homepage</span>
-          </Link>
+          </Link> */}
 
           {/* <span className="topbarLink">Timeline</span> */}
         </div>
-        <div className="topbarIcons">
+        {/* <div className="topbarIcons">
           <div className="topbarIconItem">
             <Person />
             <span className="topbarIconBadge">1</span>
@@ -58,12 +58,12 @@ const Topbar = () => {
             <Notifications />
             <span className="topbarIconBadge">1</span>
           </div>
-        </div>
-        <Link to={`/social/profile`}>
+        </div> */}
+        {/* <Link to={`/social/profile`}>
           {user === null ? null : (
             <img src={avatar.profile?.avatar} alt="" className="topbarImg" />
           )}
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

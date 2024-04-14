@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import News from "../../../../components/news/news";
+import News from "../../../../components/news/News";
 import Slider from "react-slick";
 import { useSearchParams, Link } from "react-router-dom";
 import ApiConfig, { endpoints } from "../../../../configs/ApiConfig";

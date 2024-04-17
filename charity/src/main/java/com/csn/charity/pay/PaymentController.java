@@ -43,6 +43,23 @@ public class PaymentController {
         return new ResponseEntity<>(vnpayUrl, HttpStatus.CREATED);
     }
 
+    @PostMapping("/projects/{projectId}/refund/")
+    @CrossOrigin
+    public ResponseEntity<String> refund(@PathVariable(value = "projectId") Long projectId,
+                                         @RequestParam("donateAmount") BigDecimal donateAmount,
+                                         HttpServletRequest request) throws UnsupportedEncodingException {
+
+        // Call VNPayService to perform cancellation
+
+        // BigDecimal refundAmount = 10000000;// Determine refund amount based on transaction ID, if applicable
+        String refundUrl = vnPayService.refundOrder(donateAmount, projectId);
+        System.out.println(refundUrl);
+        
+        // Perform additional actions if needed
+        
+        return new ResponseEntity<>(refundUrl, HttpStatus.CREATED);
+    }
+
     @PostMapping("/callback/{projectId}")
     @CrossOrigin
     public ResponseEntity<?> getPaymentStatus(@PathVariable Long projectId,

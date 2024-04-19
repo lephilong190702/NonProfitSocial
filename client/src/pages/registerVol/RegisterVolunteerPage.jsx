@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../configs/ApiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import "./registerVolunteer.css";
-import { UserContext } from "../App";
-import "./register.css"
+import { UserContext } from "../../App";
+import "./register.css";
 
 const RegisterVolunteerPage = () => {
   const [user] = useContext(UserContext);
@@ -18,6 +18,33 @@ const RegisterVolunteerPage = () => {
   const [projectList, setProjectList] = useState([]);
   const [skillList, setSkillList] = useState([]);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [showStartDateAlert, setShowStartDateAlert] = useState(false);
+  const [showEndDateAlert, setShowEndDateAlert] = useState(false);
+  const [showProjectAlert, setShowProjectAlert] = useState(false);
+
+  const handleStartDateChange = (evt) => {
+    setVolunteer((current) => {
+      return { ...current, startDate: evt.target.value };
+    });
+    setShowStartDateAlert(false); // Ẩn thông báo khi người dùng thay đổi ngày bắt đầu
+  };
+
+  // Hàm thay đổi trạng thái khi người dùng thay đổi input ngày kết thúc
+  const handleEndDateChange = (evt) => {
+    setVolunteer((current) => {
+      return { ...current, endDate: evt.target.value };
+    });
+    setShowEndDateAlert(false); // Ẩn thông báo khi người dùng thay đổi ngày kết thúc
+  };
+
+  // Hàm thay đổi trạng thái khi người dùng thay đổi input dự án
+  const handleProjectChange = (evt) => {
+    setVolunteer((current) => {
+      return { ...current, projectId: evt.target.value };
+    });
+    setShowProjectAlert(false); // Ẩn thông báo khi người dùng thay đổi dự án
+  };
+
 
   const change = (evt, field) => {
     setVolunteer((current) => {
@@ -63,6 +90,20 @@ const RegisterVolunteerPage = () => {
   const registerVol = async (evt) => {
     evt.preventDefault();
     console.log(volunteer.skills, volunteer.startDate, volunteer.endDate);
+    if (!volunteer.startDate) {
+      setShowStartDateAlert(true);
+      // setShowEndDateAlert(true);
+      // setShowProjectAlert(true);
+      // return;
+    }
+    if (!volunteer.endDate) {
+      setShowEndDateAlert(true);
+      // return;
+    }
+    if (!volunteer.projectId) {
+      setShowProjectAlert(true);
+      return;
+    }
 
     try {
       const res = await authApi().post(endpoints["volunteer"], {
@@ -72,7 +113,7 @@ const RegisterVolunteerPage = () => {
         description: volunteer.description,
         skills: volunteer.skills,
       });
-      console.log(res.status)
+      console.log(res.status);
       if (res.status === 200) {
         setRegistrationSuccess(true);
       }
@@ -90,7 +131,11 @@ const RegisterVolunteerPage = () => {
           <h1 className="form-heading">ĐĂNG KÝ TÌNH NGUYỆN VIÊN</h1>
           {user === null ? (
             <p>
-              Vui lòng <Link to={"/login"} className="login-link">đăng nhập</Link> để đăng ký tình nguyện viên{" "}
+              Vui lòng{" "}
+              <Link to={"/login"} className="login-link">
+                đăng nhập
+              </Link>{" "}
+              để đăng ký tình nguyện viên{" "}
             </p>
           ) : (
             <>
@@ -101,9 +146,12 @@ const RegisterVolunteerPage = () => {
                     type="date"
                     max={volunteer.endDate}
                     value={volunteer.startDate}
-                    onChange={(e) => change(e, "startDate")}
+                    onChange={handleStartDateChange}
                     className="form-control"
                   />
+                  {showStartDateAlert && (
+                    <p className="text-danger">Vui lòng chọn ngày bắt đầu.</p>
+                  )}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="endDate">
@@ -112,9 +160,12 @@ const RegisterVolunteerPage = () => {
                     type="date"
                     min={volunteer.startDate}
                     value={volunteer.endDate}
-                    onChange={(e) => change(e, "endDate")}
+                    onChange={handleEndDateChange}
                     className="form-control"
                   />
+                  {showEndDateAlert && (
+                    <p className="text-danger">Vui lòng chọn ngày kết thúc.</p>
+                  )}
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
@@ -138,7 +189,7 @@ const RegisterVolunteerPage = () => {
                 <Form.Select
                   defaultValue="Choose..."
                   value={volunteer.projectId}
-                  onChange={(e) => change(e, "projectId")}
+                  onChange={handleProjectChange}
                   className="form-select"
                 >
                   <option value="">Choose...</option>
@@ -148,6 +199,11 @@ const RegisterVolunteerPage = () => {
                     </option>
                   ))}
                 </Form.Select>
+                {showProjectAlert && (
+                  <p className="text-danger">
+                    Vui lòng chọn dự án.
+                  </p>
+                )}
               </Form.Group>
 
               <Form.Group className="form-group" controlId="formGridAddress2">

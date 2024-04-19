@@ -260,6 +260,23 @@ const Post = () => {
       try {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
+        
+        const commentPromises = res.data.map((post) => {
+          const postId = post.id;
+          return authApi().get(endpoints["comment-post"](postId))
+            .then((response) => response.data.map(comment => ({ ...comment, postId })));
+        });
+        console.log(commentPromises);
+        
+        Promise.all(commentPromises)
+          .then((commentArrays) => {
+            const commentss = commentArrays; // Merge comment arrays into a single array
+            setComments(commentss); // Set the comments state
+            console.log(commentss)
+          })
+          .catch((error) => {
+            // Handle errors
+          });
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
@@ -302,13 +319,17 @@ const Post = () => {
         console.error(error);
       }
     };
+    
 
     const loadComments = async () => {
       try {
-        post.forEach((p) => {
-          loadCommentsByPostId(p.id);
-          loadRepliesByCommentId(p.id);
-        });
+        // post.forEach((p) => {
+        //   loadCommentsByPostId(p.id);
+        //   loadRepliesByCommentId(p.id);
+        // });
+        // let {data} = await authApi().get(endpoints["comment-post"](post.id));
+        // setComments(data);
+        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -464,7 +485,7 @@ const Post = () => {
                   onClick={() => CommentHandler(p.id)}
                 >
                   <span className="postCommentText">
-                    {(comments[p.id] || []).length} bình luận
+                    {/* {(comments[p.id] || []).length} bình luận */}
                   </span>
                 </div>
               </div>
@@ -504,7 +525,7 @@ const Post = () => {
                   ? "Hiển thị toàn bộ bình luận"
                   : "Hiển thị một phần bình luận"}
               </Link>
-              {openComment === p.id && (
+              { (
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&

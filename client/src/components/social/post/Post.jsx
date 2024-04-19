@@ -492,10 +492,17 @@ const Post = () => {
                   </Button>
                 )}
               </div>
-              <Link onClick={() => toggleCommentDisplay(p.id)}>
+              <Link
+                onClick={() => toggleCommentDisplay(p.id)}
+                className={
+                  commentDisplayModes[p.id]
+                    ? "gray-link"
+                    : "gray-link underline-on-hover"
+                }
+              >
                 {commentDisplayModes[p.id]
-                  ? "Hiển thị một phần bình luận"
-                  : "Hiển thị toàn bộ bình luận"}
+                  ? "Hiển thị toàn bộ bình luận"
+                  : "Hiển thị một phần bình luận"}
               </Link>
               {openComment === p.id && (
                 <div className="commentList">
@@ -503,7 +510,7 @@ const Post = () => {
                     {Array.isArray(comments[p.id]) &&
                     comments[p.id].length > 0 ? (
                       comments[p.id]
-                        .slice()
+                        .slice(commentDisplayModes[p.id] ? -4 : undefined)
                         .reverse()
                         .map((comment) => (
                           <ListGroup.Item key={comment.id}>
@@ -587,7 +594,7 @@ const Post = () => {
                                 )}
                                 {Array.isArray(replies[comment.id]) &&
                                 replies[comment.id].length > 0
-                                  ? replies[comment.id].map((reply) => (
+                                  ? replies[comment.id].slice().reverse().map((reply) => (
                                       <div key={reply.id} className="reply">
                                         <span
                                           className="replyContent"

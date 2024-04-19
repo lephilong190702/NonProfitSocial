@@ -253,14 +253,15 @@ const ProjectsList = () => {
                           </Link>
                         )}
                         {p.contributedAmount >= p.totalAmount && (
-                          <div
+                          <Link
                             // onClick={() => openModal(p.id, p.title)}
-                            className="font-semibold text-[#fff] bg-[#86bb86]  shadow-md shadow-[#86bb86] text-[13px] border-2 px-2 py-2  hover:bg-[#49B949] hover:text-[#fff] hover:shadow-md hover:shadow-[#49B949]"
+                            to={url}
+                            className="custom-card-link font-semibold text-[#fff] bg-[#86bb86]  shadow-md shadow-[#86bb86] text-[13px] border-2 px-1 py-2  hover:bg-[#49B949] hover:text-[#fff] hover:shadow-md hover:shadow-[#49B949]"
                             style={{ marginRight: "5px" }}
                             variant="primary"
                           >
                             ĐÃ HOÀN THÀNH
-                          </div>
+                          </Link>
                         )}
                       </div>
                     </div>

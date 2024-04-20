@@ -45,6 +45,8 @@ const ProjectsList = () => {
   const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
   const [displayedProjects, setDisplayedProjects] = useState(4);
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
     const savedProjectId = localStorage.getItem("selectedProjectId");
@@ -120,6 +122,24 @@ const ProjectsList = () => {
   const handlePayment = async () => {
     if (selectedProjectId === null) {
       console.error("Chưa chọn dự án để đóng góp.");
+      return;
+    }
+
+    if (!pay.donateAmount.trim()) {
+      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
+
+    const donationAmount = parseFloat(pay.donateAmount);
+    console.log(donationAmount);
+    if (
+      donationAmount > 1000000000 ||
+      donationAmount < 10000 
+    ) {
+      setErrorMessage(
+        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+      );
+      console.log(errorMessage);
       return;
     }
 
@@ -222,14 +242,27 @@ const ProjectsList = () => {
                     <hr />
                     <div className="basis-1/4 flex flex-row justify-between pb-3">
                       <div className="py-1 pr-3">
-                        <Link
-                          onClick={() => openModal(p.id, p.title)}
-                          className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-                          style={{ marginRight: "5px" }}
-                          variant="primary"
-                        >
-                          Đóng góp
-                        </Link>
+                        {p.contributedAmount < p.totalAmount && (
+                          <Link
+                            onClick={() => openModal(p.id, p.title)}
+                            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                            style={{ marginRight: "5px" }}
+                            variant="primary"
+                          >
+                            Đóng góp
+                          </Link>
+                        )}
+                        {p.contributedAmount >= p.totalAmount && (
+                          <Link
+                            // onClick={() => openModal(p.id, p.title)}
+                            to={url}
+                            className="custom-card-link font-semibold text-[#fff] bg-[#86bb86]  shadow-md shadow-[#86bb86] text-[13px] border-2 px-1 py-2  hover:bg-[#49B949] hover:text-[#fff] hover:shadow-md hover:shadow-[#49B949]"
+                            style={{ marginRight: "5px" }}
+                            variant="primary"
+                          >
+                            ĐÃ HOÀN THÀNH
+                          </Link>
+                        )}
                       </div>
                     </div>
                     {/* <Link to={url} className="card-link">
@@ -265,10 +298,14 @@ const ProjectsList = () => {
                 type="number"
                 placeholder="Nhập số tiền đóng góp"
                 value={pay.donateAmount}
-                onChange={(e) =>
-                  setPay({ ...pay, donateAmount: e.target.value })
-                }
+                onChange={(e) => {
+                  setPay({ ...pay, donateAmount: e.target.value });
+                  setErrorMessage("");
+                }}
               />
+              {errorMessage && (
+                <Form.Text className="text-danger">{errorMessage}</Form.Text>
+              )}
             </Form.Group>
             <Form.Group controlId="note">
               <Form.Label>Ghi chú</Form.Label>

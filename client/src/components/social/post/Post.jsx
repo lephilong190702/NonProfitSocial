@@ -33,6 +33,7 @@ const Post = () => {
   const [editPostModalOpen, setEditPostModalOpen] = useState(false);
   const [editedPostId, setEditedPostId] = useState(null);
   const [editedPostContent, setEditedPostContent] = useState("");
+  const [contentNow, setContentNow] = useState("");
   const [replyContent, setReplyContent] = useState({});
   const [reactions, setReactions] = useState({});
   const [likeCount, setLikeCount] = useState({});
@@ -41,6 +42,18 @@ const Post = () => {
   const [postToDelete, setPostToDelete] = useState(null);
   const [openComment, setOpenComment] = useState(null);
   const [openReply, setOpenReply] = useState(null);
+
+  const [image, setImage] = useState([]);
+  const [editedImages, setEditedImages] = useState([]);
+
+  const [commentDisplayModes, setCommentDisplayModes] = useState({});
+
+  const toggleCommentDisplay = (postId) => {
+    setCommentDisplayModes((prevModes) => ({
+      ...prevModes,
+      [postId]: !prevModes[postId], // Chuyển đổi giữa true và false
+    }));
+  };
 
   const CommentHandler = (postId) => {
     setOpenComment((prevOpenComment) =>
@@ -109,15 +122,42 @@ const Post = () => {
     }
   };
 
-  const handleEditsPost = (postId) => {
-    setEditedPostId(postId);
+  const handleEditsPost = (post) => {
+    setImage(post.images);
+    setContentNow(post.content);
+    setEditedPostId(post.id);
+    setEditedImages(post.images);
     setEditPostModalOpen(true);
+  };
+
+  const handleImageChange = (e, index) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const newImage = { image: reader.result };
+      const updatedImages = [...editedImages];
+      updatedImages[index] = newImage;
+      setEditedImages(updatedImages);
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleEditPost = async (postId) => {
     try {
+      // Ensure edited images are set before updating the post
+      const updatedPostImages = image.map((image, index) => {
+        if (editedImages[index]) {
+          return editedImages[index];
+        } else {
+          return image;
+        }
+      });
+
       const response = await authApi().put(`${endpoints["post"]}${postId}`, {
         content: editedPostContent,
+        image: updatedPostImages,
       });
 
       console.log("Kết quả chỉnh sửa bài viết:", response.data);
@@ -220,6 +260,23 @@ const Post = () => {
       try {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
+        
+        const commentPromises = res.data.map((post) => {
+          const postId = post.id;
+          return authApi().get(endpoints["comment-post"](postId))
+            .then((response) => response.data.map(comment => ({ ...comment, postId })));
+        });
+        console.log(commentPromises);
+        
+        Promise.all(commentPromises)
+          .then((commentArrays) => {
+            const commentss = commentArrays; // Merge comment arrays into a single array
+            setComments(commentss); // Set the comments state
+            console.log(commentss)
+          })
+          .catch((error) => {
+            // Handle errors
+          });
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
@@ -262,13 +319,17 @@ const Post = () => {
         console.error(error);
       }
     };
+    
 
     const loadComments = async () => {
       try {
-        post.forEach((p) => {
-          loadCommentsByPostId(p.id);
-          loadRepliesByCommentId(p.id);
-        });
+        // post.forEach((p) => {
+        //   loadCommentsByPostId(p.id);
+        //   loadRepliesByCommentId(p.id);
+        // });
+        // let {data} = await authApi().get(endpoints["comment-post"](post.id));
+        // setComments(data);
+        console.log(data);
       } catch (error) {
         console.error(error);
       }
@@ -377,9 +438,7 @@ const Post = () => {
                       <Dropdown.Menu>
                         {user.username === p.user.username && (
                           <>
-                            <Dropdown.Item
-                              onClick={() => handleEditsPost(p.id)}
-                            >
+                            <Dropdown.Item onClick={() => handleEditsPost(p)}>
                               Chỉnh sửa bài viết
                             </Dropdown.Item>
                             <Dropdown.Item
@@ -426,7 +485,7 @@ const Post = () => {
                   onClick={() => CommentHandler(p.id)}
                 >
                   <span className="postCommentText">
-                    {(comments[p.id] || []).length} bình luận
+                    {/* {(comments[p.id] || []).length} bình luận */}
                   </span>
                 </div>
               </div>
@@ -454,13 +513,25 @@ const Post = () => {
                   </Button>
                 )}
               </div>
-              {openComment === p.id && (
+              <Link
+                onClick={() => toggleCommentDisplay(p.id)}
+                className={
+                  commentDisplayModes[p.id]
+                    ? "gray-link"
+                    : "gray-link underline-on-hover"
+                }
+              >
+                {commentDisplayModes[p.id]
+                  ? "Hiển thị toàn bộ bình luận"
+                  : "Hiển thị một phần bình luận"}
+              </Link>
+              { (
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
                     comments[p.id].length > 0 ? (
                       comments[p.id]
-                        .slice()
+                        .slice(commentDisplayModes[p.id] ? -4 : undefined)
                         .reverse()
                         .map((comment) => (
                           <ListGroup.Item key={comment.id}>
@@ -519,9 +590,32 @@ const Post = () => {
 
                             {openReply === comment.id && (
                               <>
+                                {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                                  <Form.Control
+                                    as="textarea"
+                                    aria-label="With textarea"
+                                    value={replyContent[comment.id] || ""}
+                                    onChange={(e) =>
+                                      setReplyContent({
+                                        ...replyContent,
+                                        [comment.id]: e.target.value,
+                                      })
+                                    }
+                                    placeholder="Nội dung phản hồi"
+                                  />
+                                )}
+                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                                  <Button
+                                    onClick={() => addReply(comment.id, p.id)}
+                                    className="mt-2"
+                                    variant="info"
+                                  >
+                                    Thêm phản hồi
+                                  </Button>
+                                )}
                                 {Array.isArray(replies[comment.id]) &&
                                 replies[comment.id].length > 0
-                                  ? replies[comment.id].map((reply) => (
+                                  ? replies[comment.id].slice().reverse().map((reply) => (
                                       <div key={reply.id} className="reply">
                                         <span
                                           className="replyContent"
@@ -562,29 +656,6 @@ const Post = () => {
                                       </div>
                                     ))
                                   : null}
-                                {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
-                                  <Form.Control
-                                    as="textarea"
-                                    aria-label="With textarea"
-                                    value={replyContent[comment.id] || ""}
-                                    onChange={(e) =>
-                                      setReplyContent({
-                                        ...replyContent,
-                                        [comment.id]: e.target.value,
-                                      })
-                                    }
-                                    placeholder="Nội dung phản hồi"
-                                  />
-                                )}
-                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
-                                  <Button
-                                    onClick={() => addReply(comment.id, p.id)}
-                                    className="mt-2"
-                                    variant="info"
-                                  >
-                                    Thêm phản hồi
-                                  </Button>
-                                )}
                               </>
                             )}
                           </ListGroup.Item>
@@ -646,9 +717,19 @@ const Post = () => {
             <Form.Control
               as="textarea"
               rows={4}
-              value={editedPostContent}
+              defaultValue={contentNow}
               onChange={(e) => setEditedPostContent(e.target.value)}
             />
+            {image.map((image, index) => (
+              <div key={index}>
+                <img src={image.image} alt="image" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, index)}
+                />
+              </div>
+            ))}
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { authApi, endpoints } from "../configs/ApiConfig";
 import { Header } from "../components";
 import "./userProfile.css"; // Import CSS file
+import { UserContext } from "../App";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({
@@ -11,6 +12,8 @@ const UserProfile = () => {
     phone: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
+  const [user, dispatch] = useContext(UserContext);
+
 
   const avatar = useRef();
 
@@ -56,6 +59,7 @@ const UserProfile = () => {
             type="text"
             onChange={(e) => change(e, "firstName")}
             placeholder="Tên"
+            defaultValue={user.profile.firstName}
             required
             className="form-control"
           />
@@ -66,6 +70,7 @@ const UserProfile = () => {
             type="text"
             onChange={(e) => change(e, "lastName")}
             placeholder="Họ và chữ lót"
+            defaultValue={user.profile.lastName}
             required
             className="form-control"
           />
@@ -76,6 +81,7 @@ const UserProfile = () => {
             type="tel"
             onChange={(e) => change(e, "phone")}
             placeholder="Điện thoại"
+            defaultValue={user.profile.phone}
             className="form-control"
           />
         </Form.Group>

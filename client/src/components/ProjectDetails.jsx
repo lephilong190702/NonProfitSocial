@@ -36,6 +36,8 @@ const ProjectDetails = () => {
   const vnpSecureHash = urlParams.get("vnp_SecureHash");
   const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
     const savedProjectId = localStorage.getItem("selectedProjectId");
@@ -104,8 +106,27 @@ const ProjectDetails = () => {
       console.error("Chưa chọn dự án để đóng góp.");
       return;
     }
+    
+    if (!pay.donateAmount.trim()) {
+      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
+
+    const donationAmount = parseFloat(pay.donateAmount);
+    console.log(donationAmount);
+    if (
+      donationAmount > 1000000000 ||
+      donationAmount < 10000
+    ) {
+      setErrorMessage(
+        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+      );
+      console.log(errorMessage);
+      return;
+    }
 
     try {
+      setErrorMessage("");
       const formData = new FormData();
       formData.append("projectId", selectedProjectId);
       formData.append("donateAmount", pay.donateAmount);
@@ -233,10 +254,14 @@ const ProjectDetails = () => {
                 type="number"
                 placeholder="Nhập số tiền đóng góp"
                 value={pay.donateAmount}
-                onChange={(e) =>
-                  setPay({ ...pay, donateAmount: e.target.value })
-                }
+                onChange={(e) => {
+                  setPay({ ...pay, donateAmount: e.target.value });
+                  setErrorMessage("");
+                }}
               />
+              {errorMessage && (
+                <Form.Text className="text-danger">{errorMessage}</Form.Text>
+              )}
             </Form.Group>
             <Form.Group controlId="note">
               <Form.Label>Ghi chú</Form.Label>

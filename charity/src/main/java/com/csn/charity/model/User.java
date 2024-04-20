@@ -22,6 +22,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +46,7 @@ public class User implements Serializable {
     private String username;
 
     @Column(name = "password", nullable = false)
-     @JsonIgnore
+    @JsonIgnore
     private String password;
 
     @Column(name = "email", nullable = false)
@@ -53,6 +54,9 @@ public class User implements Serializable {
 
     @Column(name = "status", columnDefinition = "BOOLEAN DEFAULT TRUE")
     private Boolean status;
+
+    @Column (name = "enabled", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private Boolean enabled;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn

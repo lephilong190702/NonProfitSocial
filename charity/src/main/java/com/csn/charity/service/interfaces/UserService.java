@@ -2,6 +2,7 @@ package com.csn.charity.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.csn.charity.dto.UserDTO;
@@ -10,6 +11,7 @@ import com.csn.charity.model.User;
 
 public interface UserService extends UserDetailsService {
     Long addUser(UserDTO userDto);
+    ResponseEntity<?> confirmEmail(String confirmationToken);
 
     User findUserByUsername(String username);
 
@@ -30,4 +32,5 @@ public interface UserService extends UserDetailsService {
     String forgotPassword(String email);
     
     String setPassword(String email, String newPassword);
+
 }

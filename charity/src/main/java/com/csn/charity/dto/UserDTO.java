@@ -13,11 +13,12 @@ public class UserDTO {
     private String password;
     private String email;
     private Boolean status;
+    private Boolean enabled;
     
     @Override
     public String toString() {
         return "UserDTO [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-                + ", status=" + status + "]";
+                + ", status=" + status + ", enabled=" + enabled + "]";
     }
 
     

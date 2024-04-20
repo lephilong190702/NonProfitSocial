@@ -51,7 +51,8 @@ public class SpringSecurityConfig {
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
                                 "/error", "/login", "/oauth2/**", "/showMap", "/ws/**")
                         .permitAll()
-                        .requestMatchers("/", "/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
+                        .requestMatchers("/users/**").hasRole("SUPERADMIN")
                         .anyRequest()
                         .authenticated())
                 .formLogin(

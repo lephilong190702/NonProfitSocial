@@ -10,11 +10,17 @@
 <body>
 
     <div class="main-content container-fluid" layout:fragment="content">
-        <h1 class="text-info text-center">QUẢN LÝ NGƯỜI DÙNG</h1>
-        <div class="container my-2 mt-5" align="center">
-            <div class="table-responsive">
-                <table class="table table-striped mb-0">
-                    <thead>
+        <div th:unless="${hasAdminRole}">
+            <div class="alert alert-danger" role="alert">
+                Bạn không có quyền truy cập trang này.
+            </div>
+        </div>
+        <div th:if="${hasAdminRole}">
+            <h1 class="text-info text-center">QUẢN LÝ NGƯỜI DÙNG</h1>
+            <div class="container my-2 mt-5" align="center">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead>
                         <tr>
                             <th>ID</th>
                             <th>TÀI KHOẢN</th>
@@ -22,8 +28,8 @@
                             <th>TRẠNG THÁI</th>
                             <th>TÍNH NĂNG</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr th:each="u:${users}">
                             <td th:text="${u.id}"></td>
                             <td th:text="${u.username}"></td>
@@ -42,10 +48,12 @@
                                 <a class="btn btn-danger" th:attr="path=@{/admin/user/{id}(id=${u.id})}"  onclick="deleteUser(this.getAttribute('path'))">Delete</a>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
     </div>
 
 

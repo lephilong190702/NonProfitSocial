@@ -49,14 +49,16 @@
                             <span>Tin Tức</span>
                         </a>
                     </li>
+                    <div th:if="${hasAdminRole}">
+                        <li class='sidebar-title'>QUẢN LÝ NGƯỜI DÙNG</li>
+                        <li class="sidebar-item">
+                            <a th:href="@{/users}" class='sidebar-link'>
+                                <i data-feather="file-text" width="20"></i>
+                                <span>Tài Khoản</span>
+                            </a>
+                        </li>
+                    </div>
 
-                    <li class='sidebar-title'>QUẢN LÝ NGƯỜI DÙNG</li>
-                    <li class="sidebar-item">
-                        <a th:href="@{/users}" class='sidebar-link'>
-                            <i data-feather="file-text" width="20"></i>
-                            <span>Tài Khoản</span>
-                        </a>
-                    </li>
 
                     <li class='sidebar-title'>QUẢN LÝ TÌNH NGUYỆN</li>
                     <li class="sidebar-item">

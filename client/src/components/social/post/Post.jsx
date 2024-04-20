@@ -270,13 +270,15 @@ const Post = () => {
         
         Promise.all(commentPromises)
           .then((commentArrays) => {
-            const commentss = commentArrays; // Merge comment arrays into a single array
-            setComments(commentss); // Set the comments state
-            console.log(commentss)
+            commentArrays.unshift([]);
+            setComments(commentArrays);
+            console.log(commentArrays);
+            
           })
           .catch((error) => {
             // Handle errors
           });
+
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
@@ -522,8 +524,8 @@ const Post = () => {
                 }
               >
                 {commentDisplayModes[p.id]
-                  ? "Hiển thị toàn bộ bình luận"
-                  : "Hiển thị một phần bình luận"}
+                  ? "Hiển thị một phần bình luận"
+                  : "Hiển thị toàn bộ bình luận"}
               </Link>
               { (
                 <div className="commentList">
@@ -531,7 +533,7 @@ const Post = () => {
                     {Array.isArray(comments[p.id]) &&
                     comments[p.id].length > 0 ? (
                       comments[p.id]
-                        .slice(commentDisplayModes[p.id] ? -4 : undefined)
+                        .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
                         .map((comment) => (
                           <ListGroup.Item key={comment.id}>

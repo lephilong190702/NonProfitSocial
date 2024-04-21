@@ -14,6 +14,7 @@ import {
   ProgressBar,
   Pagination,
 } from "react-bootstrap";
+import { Box, InputBase, Typography } from "@mui/material";
 
 const ProjectPage = () => {
   const [project, setProject] = useState([]);
@@ -42,6 +43,9 @@ const ProjectPage = () => {
   const vnpSecureHash = urlParams.get("vnp_SecureHash");
   const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
   const projectsPerPage = 4;
 
   useEffect(() => {
@@ -105,8 +109,27 @@ const ProjectPage = () => {
       console.error("Chưa chọn dự án để đóng góp.");
       return;
     }
+    
+    if (!pay.donateAmount.trim()) {
+      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
+
+    const donationAmount = parseFloat(pay.donateAmount);
+    console.log(donationAmount);
+    if (
+      donationAmount > 1000000000 ||
+      donationAmount < 10000
+    ) {
+      setErrorMessage(
+        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+      );
+      console.log(errorMessage);
+      return;
+    }
 
     try {
+      setErrorMessage("");
       const formData = new FormData();
       formData.append("projectId", selectedProjectId);
       formData.append("donateAmount", pay.donateAmount);
@@ -261,20 +284,73 @@ const ProjectPage = () => {
 
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProjectTitle}</Modal.Title>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="donateAmount">
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="flex">Số tiền đóng góp</Typography>
+                <InputBase
+                  required
+                  type="number"
+                  className="border p-2"
+                  placeholder="Nhập số tiền đóng góp"
+                  value={pay.donateAmount}
+                  onChange={(e) => {
+                    setPay({ ...pay, donateAmount: e.target.value });
+                    setErrorMessage("");
+                  }}
+                />
+                {errorMessage && (
+                  <Form.Text className="text-danger">{errorMessage}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="mt-2">Ghi chú</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  value={pay.note}
+                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+                />
+              </div>
+            </div>
+          </Box>
+          {/* <div>
+            <p>Số tiền đóng góp</p>
+            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
+          </div>
+          <div className="mt-3">
+            <p>Ghi chú</p>
+            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
+          </div> */}
+          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
+            <Form.Group className="" controlId="donateAmount">
               <Form.Label>Số tiền đóng góp</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Nhập số tiền đóng góp"
                 value={pay.donateAmount}
-                onChange={(e) =>
-                  setPay({ ...pay, donateAmount: e.target.value })
-                }
+                onChange={(e) => {
+                  setPay({ ...pay, donateAmount: e.target.value });
+                  setErrorMessage("");
+                }}
               />
+              {errorMessage && (
+                <Form.Text className="text-danger">{errorMessage}</Form.Text>
+              )}
             </Form.Group>
             <Form.Group controlId="note">
               <Form.Label>Ghi chú</Form.Label>
@@ -286,7 +362,7 @@ const ProjectPage = () => {
                 onChange={(e) => setPay({ ...pay, note: e.target.value })}
               />
             </Form.Group>
-          </Form>
+          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>

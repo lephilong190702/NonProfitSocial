@@ -26,6 +26,8 @@ function Register() {
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
 
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+
   const showPassword = () => {
     setIsShow(true);
   };
@@ -51,6 +53,10 @@ function Register() {
     try {
       let res = await ApiConfig.post(endpoints["register"], user);
       if (res.status === 201) {
+        // <Alert variant="success" className="mt-3">
+        //   Báo cáo đã được gửi thành công!
+        // </Alert>
+        setRegisterSuccess(true);
         nav("/login");
       } else {
         setErrorMessage("Hệ thống bị lỗi!");
@@ -206,6 +212,11 @@ function Register() {
           </div>
         </div>
       </Fragment>
+      {registerSuccess && (
+        <Alert variant="success" className="mt-3">
+          Đăng ký thành công!
+        </Alert>
+      )}
     </>
   );
 }

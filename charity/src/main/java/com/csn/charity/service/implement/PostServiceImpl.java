@@ -40,8 +40,6 @@ public class PostServiceImpl implements PostService {
     private PostImageRepository postImageRepository;
     @Autowired
     private Cloudinary cloudinary;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public Post createPost(PostDTO postDTO) {

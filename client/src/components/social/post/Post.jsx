@@ -187,37 +187,7 @@ const Post = () => {
     }
   };
 
-  const addComment = async (postId) => {
-    if (!user) {
-      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
-      return;
-    }
 
-    try {
-      const response = await authApi().post(endpoints["post-comment"], {
-        postId: postId,
-        content: content[postId],
-      });
-
-      loadCommentsByPostId(postId);
-
-      setContent({ ...content, [postId]: "" });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const loadCommentsByPostId = async (postId) => {
-    try {
-      const response = await authApi().get(endpoints["comment-post"](postId));
-      setComments((prevComments) => ({
-        ...prevComments,
-        [postId]: response.data,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleShowReplies = (commentId) => {
     loadRepliesByCommentId(commentId);
@@ -255,101 +225,131 @@ const Post = () => {
     }
   };
 
+  const addComment = async (postId) => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
+      return;
+    }
+
+    try {
+      const response = await authApi().post(endpoints["post-comment"], {
+        postId: postId,
+        content: content[postId],
+      });
+
+      loadCommentsByPostId(postId);
+
+      setContent({ ...content, [postId]: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadCommentsByPostId = async (postId) => {
+    try {
+      const response = await authApi().get(endpoints["comment-post"](postId));
+      setComments((prevComments) => ({
+        ...prevComments,
+        [postId]: response.data,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadPosts = async (stompClient) => {
+    try {
+      let res = await authApi().get(endpoints["post"]);
+      setPost(res.data);
+
+      const commentPromises = res.data.map((post) => {
+        const postId = post.id;
+        loadCommentsByPostId(postId);
+      });
+
+      console.log(commentPromises);
+
+      const reactionsPromises = res.data.map((p) => {
+        const postId = p.id;
+        return authApi()
+          .get(endpoints["react-post"](postId))
+          .then((response) => response.data); // Lấy dữ liệu từ response
+      });
+
+      const reactionsData = await Promise.all(reactionsPromises);
+
+      const totalLikes = {};
+      reactionsData.forEach((data, index) => {
+        const postId = res.data[index].id;
+        totalLikes[postId] = data.length;
+      });
+
+      setLikeCurrent(totalLikes);
+
+      res.data.forEach((p) => {
+        const postTopic = `/topic/posts/${p.id}`;
+        stompClient.subscribe(postTopic, (message) => {
+          console.log("Received message for post update:", message.body);
+          const updatedPost = JSON.parse(message.body);
+          setPost((current) => {
+            const index = current.findIndex(
+              (post) => post.id === updatedPost.id
+            );
+            if (index !== -1) {
+              return [
+                ...current.slice(0, index),
+                updatedPost,
+                ...current.slice(index + 1),
+              ];
+            }
+            return current;
+          });
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const connectToWebSocket = () => {
+    const socket = new SockJS("http://localhost:9090/ws");
+    const stompClient = Client.over(socket);
+
+    console.log("Connecting to websocket server...");
+
+    stompClient.connect({}, () => {
+      console.log("Websocket connection established.");
+
+      stompClient.subscribe("/topic/posts", (message) => {
+        console.log("Received message:", message.body);
+        const newPost = JSON.parse(message.body);
+        setPost((current) => [...current, newPost]);
+      });
+
+      stompClient.subscribe("/topic/comments/", (message) => {
+        console.log("Received message:", message.body);
+        const newComment = JSON.parse(message.body);
+        console.log("newComment", newComment);
+        const postId = newComment.post.id;
+        console.log("postId", postId)
+        setComments((current) => ({
+          ...current,
+          [postId]: [...(current[postId] || []), newComment]
+        }));
+      });
+
+      loadPosts(stompClient);
+    },
+      (error) => {
+        console.error("Websocket connection error:", error);
+      }
+    );
+
+    return stompClient;
+  };
+
   useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        let res = await authApi().get(endpoints["post"]);
-        setPost(res.data);
-        
-        const commentPromises = res.data.map((post) => {
-          const postId = post.id;
-          return authApi().get(endpoints["comment-post"](postId))
-            .then((response) => response.data.map(comment => ({ ...comment, postId })));
-        });
-        console.log(commentPromises);
-        
-        Promise.all(commentPromises)
-          .then((commentArrays) => {
-            const commentss = commentArrays; // Merge comment arrays into a single array
-            setComments(commentss); // Set the comments state
-            console.log(commentss)
-          })
-          .catch((error) => {
-            // Handle errors
-          });
-
-        const reactionsPromises = res.data.map((p) => {
-          const postId = p.id;
-          return authApi()
-            .get(endpoints["react-post"](postId))
-            .then((response) => response.data); // Lấy dữ liệu từ response
-        });
-
-        const reactionsData = await Promise.all(reactionsPromises);
-
-        const totalLikes = {};
-        reactionsData.forEach((data, index) => {
-          const postId = res.data[index].id;
-          totalLikes[postId] = data.length;
-        });
-
-        setLikeCurrent(totalLikes);
-
-        res.data.forEach((p) => {
-          const postTopic = `/topic/posts/${p.id}`;
-          stompClient.subscribe(postTopic, (message) => {
-            console.log("Received message for post update:", message.body);
-            const updatedPost = JSON.parse(message.body);
-            setPost((current) => {
-              const index = current.findIndex(
-                (post) => post.id === updatedPost.id
-              );
-              if (index !== -1) {
-                return [
-                  ...current.slice(0, index),
-                  updatedPost,
-                  ...current.slice(index + 1),
-                ];
-              }
-              return current;
-            });
-          });
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    
-
-    const loadComments = async () => {
-      try {
-        // post.forEach((p) => {
-        //   loadCommentsByPostId(p.id);
-        //   loadRepliesByCommentId(p.id);
-        // });
-        // let {data} = await authApi().get(endpoints["comment-post"](post.id));
-        // setComments(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     const stompClient = connectToWebSocket();
-
-    // const loadReplies = async () => {
-    //   try {
-    //     post.forEach((p) => {
-    //       loadRepliesByCommentId(p.id)
-    //     })
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
-
-    // loadReplies();
-    loadComments();
-    loadPosts();
 
     return () => {
       stompClient.disconnect();
@@ -363,43 +363,7 @@ const Post = () => {
     }));
   };
 
-  // useEffect(() => {
-  //   const stompClient = connectToWebSocket();
 
-  //   return () => {
-  //     stompClient.disconnect();
-  //   };
-  // }, []);
-
-  const connectToWebSocket = () => {
-    const socket = new SockJS("http://localhost:9090/ws");
-    const stompClient = Client.over(socket);
-
-    console.log("Connecting to websocket server...");
-
-    stompClient.connect(
-      {},
-      () => {
-        console.log("Websocket connection established.");
-        stompClient.subscribe("/topic/posts", (message) => {
-          console.log("Received message:", message.body);
-          const newPost = JSON.parse(message.body);
-          setPost((current) => [...current, newPost]);
-        });
-
-        // stompClient.subscribe('/topic/comments/1', (message) => {
-        //   console.log("Received message:", message.body);
-        //   const newComment = JSON.parse(message.body);
-        //   setComments((current) => [...current, newComment]);
-        // });
-      },
-      (error) => {
-        console.error("Websocket connection error:", error);
-      }
-    );
-
-    return stompClient;
-  };
 
   return (
     <>
@@ -522,16 +486,16 @@ const Post = () => {
                 }
               >
                 {commentDisplayModes[p.id]
-                  ? "Hiển thị toàn bộ bình luận"
-                  : "Hiển thị một phần bình luận"}
+                  ? "Hiển thị một phần bình luận"
+                  : "Hiển thị toàn bộ bình luận"}
               </Link>
-              { (
+              {(
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
-                    comments[p.id].length > 0 ? (
+                      comments[p.id].length > 0 ? (
                       comments[p.id]
-                        .slice(commentDisplayModes[p.id] ? -4 : undefined)
+                        .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
                         .map((comment) => (
                           <ListGroup.Item key={comment.id}>
@@ -614,47 +578,47 @@ const Post = () => {
                                   </Button>
                                 )}
                                 {Array.isArray(replies[comment.id]) &&
-                                replies[comment.id].length > 0
+                                  replies[comment.id].length > 0
                                   ? replies[comment.id].slice().reverse().map((reply) => (
-                                      <div key={reply.id} className="reply">
-                                        <span
-                                          className="replyContent"
-                                          style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          <div className="reply-avatar">
-                                            <img
-                                              src={reply.user.profile.avatar}
-                                              alt="avatar"
-                                              style={{
-                                                width: "32px",
-                                                height: "32px",
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                                marginRight: "5px",
-                                              }}
-                                            />{" "}
+                                    <div key={reply.id} className="reply">
+                                      <span
+                                        className="replyContent"
+                                        style={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          marginBottom: "10px",
+                                        }}
+                                      >
+                                        <div className="reply-avatar">
+                                          <img
+                                            src={reply.user.profile.avatar}
+                                            alt="avatar"
+                                            style={{
+                                              width: "32px",
+                                              height: "32px",
+                                              borderRadius: "50%",
+                                              objectFit: "cover",
+                                              marginRight: "5px",
+                                            }}
+                                          />{" "}
+                                        </div>
+                                        <div className="reply-details">
+                                          <div className="reply-username">
+                                            {reply.user.username}
                                           </div>
-                                          <div className="reply-details">
-                                            <div className="reply-username">
-                                              {reply.user.username}
-                                            </div>
-                                            <div className="reply-content">
-                                              {reply.content}
-                                            </div>
-                                            <div className="reply-time">
-                                              {" "}
-                                              {moment(
-                                                reply.createDate
-                                              ).fromNow()}
-                                            </div>
+                                          <div className="reply-content">
+                                            {reply.content}
                                           </div>
-                                        </span>
-                                      </div>
-                                    ))
+                                          <div className="reply-time">
+                                            {" "}
+                                            {moment(
+                                              reply.createDate
+                                            ).fromNow()}
+                                          </div>
+                                        </div>
+                                      </span>
+                                    </div>
+                                  ))
                                   : null}
                               </>
                             )}

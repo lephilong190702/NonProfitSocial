@@ -3,7 +3,6 @@ package com.csn.charity.service.implement;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -95,15 +95,6 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findAll();
     }
 
-    private UserDTO mapToUserDto(User user) {
-        UserDTO userDto = new UserDTO();
-        userDto.setId(user.getId());
-        userDto.setUsername(user.getUsername());
-        userDto.setEmail(user.getEmail());
-        userDto.setStatus(user.getStatus());
-        return userDto;
-    }
-
     @Override
     public void activateAccount(Long id) {
         User user = this.userRepository.findById(id).get();

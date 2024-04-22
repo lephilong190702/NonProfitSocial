@@ -64,6 +64,7 @@ public class Post implements Serializable {
     private List<PostImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserCommentPost> comments = new ArrayList<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

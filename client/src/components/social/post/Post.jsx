@@ -195,37 +195,7 @@ const Post = () => {
     }
   };
 
-  const addComment = async (postId) => {
-    if (!user) {
-      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
-      return;
-    }
 
-    try {
-      const response = await authApi().post(endpoints["post-comment"], {
-        postId: postId,
-        content: content[postId],
-      });
-
-      loadCommentsByPostId(postId);
-
-      setContent({ ...content, [postId]: "" });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const loadCommentsByPostId = async (postId) => {
-    try {
-      const response = await authApi().get(endpoints["comment-post"](postId));
-      setComments((prevComments) => ({
-        ...prevComments,
-        [postId]: response.data,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleShowReplies = (commentId) => {
     loadRepliesByCommentId(commentId);
@@ -261,6 +231,129 @@ const Post = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const addComment = async (postId) => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để thực hiện thao tác này.");
+      return;
+    }
+
+    try {
+      const response = await authApi().post(endpoints["post-comment"], {
+        postId: postId,
+        content: content[postId],
+      });
+
+      loadCommentsByPostId(postId);
+
+      setContent({ ...content, [postId]: "" });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadCommentsByPostId = async (postId) => {
+    try {
+      const response = await authApi().get(endpoints["comment-post"](postId));
+      setComments((prevComments) => ({
+        ...prevComments,
+        [postId]: response.data,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadPosts = async (stompClient) => {
+    try {
+      let res = await authApi().get(endpoints["post"]);
+      setPost(res.data);
+
+      const commentPromises = res.data.map((post) => {
+        const postId = post.id;
+        loadCommentsByPostId(postId);
+      });
+
+      console.log(commentPromises);
+
+      const reactionsPromises = res.data.map((p) => {
+        const postId = p.id;
+        return authApi()
+          .get(endpoints["react-post"](postId))
+          .then((response) => response.data); // Lấy dữ liệu từ response
+      });
+
+      const reactionsData = await Promise.all(reactionsPromises);
+
+      const totalLikes = {};
+      reactionsData.forEach((data, index) => {
+        const postId = res.data[index].id;
+        totalLikes[postId] = data.length;
+      });
+
+      setLikeCurrent(totalLikes);
+
+      res.data.forEach((p) => {
+        const postTopic = `/topic/posts/${p.id}`;
+        stompClient.subscribe(postTopic, (message) => {
+          console.log("Received message for post update:", message.body);
+          const updatedPost = JSON.parse(message.body);
+          setPost((current) => {
+            const index = current.findIndex(
+              (post) => post.id === updatedPost.id
+            );
+            if (index !== -1) {
+              return [
+                ...current.slice(0, index),
+                updatedPost,
+                ...current.slice(index + 1),
+              ];
+            }
+            return current;
+          });
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const connectToWebSocket = () => {
+    const socket = new SockJS("http://localhost:9090/ws");
+    const stompClient = Client.over(socket);
+
+    console.log("Connecting to websocket server...");
+
+    stompClient.connect({}, () => {
+      console.log("Websocket connection established.");
+
+      stompClient.subscribe("/topic/posts", (message) => {
+        console.log("Received message:", message.body);
+        const newPost = JSON.parse(message.body);
+        setPost((current) => [...current, newPost]);
+      });
+
+      stompClient.subscribe("/topic/comments/", (message) => {
+        console.log("Received message:", message.body);
+        const newComment = JSON.parse(message.body);
+        console.log("newComment", newComment);
+        const postId = newComment.post.id;
+        console.log("postId", postId)
+        setComments((current) => ({
+          ...current,
+          [postId]: [...(current[postId] || []), newComment]
+        }));
+      });
+
+      loadPosts(stompClient);
+    },
+      (error) => {
+        console.error("Websocket connection error:", error);
+      }
+    );
+
+    return stompClient;
   };
 
   useEffect(() => {
@@ -337,43 +430,7 @@ const Post = () => {
     }));
   };
 
-  // useEffect(() => {
-  //   const stompClient = connectToWebSocket();
 
-  //   return () => {
-  //     stompClient.disconnect();
-  //   };
-  // }, []);
-
-  const connectToWebSocket = () => {
-    const socket = new SockJS("http://localhost:9090/ws");
-    const stompClient = Client.over(socket);
-
-    console.log("Connecting to websocket server...");
-
-    stompClient.connect(
-      {},
-      () => {
-        console.log("Websocket connection established.");
-        stompClient.subscribe("/topic/posts", (message) => {
-          console.log("Received message:", message.body);
-          const newPost = JSON.parse(message.body);
-          setPost((current) => [...current, newPost]);
-        });
-
-        // stompClient.subscribe('/topic/comments/1', (message) => {
-        //   console.log("Received message:", message.body);
-        //   const newComment = JSON.parse(message.body);
-        //   setComments((current) => [...current, newComment]);
-        // });
-      },
-      (error) => {
-        console.error("Websocket connection error:", error);
-      }
-    );
-
-    return stompClient;
-  };
 
   return (
     <>
@@ -503,8 +560,9 @@ const Post = () => {
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
-                    comments[p.id].length > 0 ? (
+                      comments[p.id].length > 0 ? (
                       comments[p.id]
+                        .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
                         .map((comment) => (

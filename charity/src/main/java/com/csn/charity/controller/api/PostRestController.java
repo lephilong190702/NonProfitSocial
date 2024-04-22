@@ -144,7 +144,7 @@ public class PostRestController {
     public ResponseEntity<?> createComment(@RequestBody CommentPostDTO commentPostDTO) {
         try {
             UserCommentPost uCommentPost = this.commentPostService.createComment(commentPostDTO);
-            messagingTemplate.convertAndSend("/topic/comments/" + commentPostDTO.getPostId(), uCommentPost);
+            messagingTemplate.convertAndSend("/topic/comments/", uCommentPost);
             return new ResponseEntity<>(uCommentPost, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -186,7 +186,7 @@ public class PostRestController {
     public ResponseEntity<?> getCommentByPost(@PathVariable(value = "postId") Long id) {
         try {
             List<UserCommentPost> comments = this.commentPostService.getCommentByPost(id);
-            messagingTemplate.convertAndSend("/topic/comments/" + id, comments);
+            messagingTemplate.convertAndSend("/topic/comments/", comments);
             return new ResponseEntity<>(comments, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -200,7 +200,7 @@ public class PostRestController {
             @RequestBody UserCommentPost reply) {
         try {
             UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
-            messagingTemplate.convertAndSend("/topic/comments/" + parentId, addedReply);
+            messagingTemplate.convertAndSend("/topic/reply-comments/" + parentId, addedReply);
             return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

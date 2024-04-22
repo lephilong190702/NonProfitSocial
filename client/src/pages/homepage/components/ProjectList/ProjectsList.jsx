@@ -15,7 +15,18 @@ import {
 } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
 import MySpinner from "../../../../layout/MySpinner";
+// import { Button, Checkbox, Form, Input } from 'antd';
 import "./projects.css"; // Import CSS file
+import {
+  Box,
+  Grid,
+  Input,
+  InputBase,
+  InputLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { SpaceBar } from "@material-ui/icons";
 
 const ProjectsList = () => {
   const [project, setProject] = useState(null);
@@ -132,10 +143,7 @@ const ProjectsList = () => {
 
     const donationAmount = parseFloat(pay.donateAmount);
     console.log(donationAmount);
-    if (
-      donationAmount > 1000000000 ||
-      donationAmount < 10000 
-    ) {
+    if (donationAmount > 1000000000 || donationAmount < 10000) {
       setErrorMessage(
         "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
       );
@@ -286,13 +294,63 @@ const ProjectsList = () => {
           </Link>
         </div>
       )}
+
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProjectTitle}</Modal.Title>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="donateAmount">
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="flex">Số tiền đóng góp</Typography>
+                <InputBase
+                  required
+                  type="number"
+                  className="border p-2"
+                  placeholder="Nhập số tiền đóng góp"
+                  value={pay.donateAmount}
+                  onChange={(e) => {
+                    setPay({ ...pay, donateAmount: e.target.value });
+                    setErrorMessage("");
+                  }}
+                />
+                {errorMessage && (
+                  <Form.Text className="text-danger">{errorMessage}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="mt-2">Ghi chú</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  value={pay.note}
+                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+                />
+              </div>
+            </div>
+          </Box>
+          {/* <div>
+            <p>Số tiền đóng góp</p>
+            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
+          </div>
+          <div className="mt-3">
+            <p>Ghi chú</p>
+            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
+          </div> */}
+          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
+            <Form.Group className="" controlId="donateAmount">
               <Form.Label>Số tiền đóng góp</Form.Label>
               <Form.Control
                 type="number"
@@ -317,7 +375,7 @@ const ProjectsList = () => {
                 onChange={(e) => setPay({ ...pay, note: e.target.value })}
               />
             </Form.Group>
-          </Form>
+          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>

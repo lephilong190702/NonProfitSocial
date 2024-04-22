@@ -8,4 +8,6 @@ import com.csn.charity.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
     User findByEmail(String email);
+    User findByEmailIgnoreCase(String emailId);
+//    Boolean existsByUserEmail(String email);
 }

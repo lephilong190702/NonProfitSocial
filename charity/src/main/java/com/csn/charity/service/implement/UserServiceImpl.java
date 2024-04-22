@@ -5,7 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.csn.charity.model.*;
+import com.csn.charity.repository.ConfirmationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.DisabledException;
@@ -17,10 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.UserDTO;
-import com.csn.charity.model.AuthenticationType;
-import com.csn.charity.model.Profile;
-import com.csn.charity.model.User;
-import com.csn.charity.model.UserRole;
 import com.csn.charity.repository.RoleRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.UserService;
@@ -38,6 +38,10 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private JavaMailSender javaMailSender;
+    @Autowired
+    ConfirmationTokenRepository confirmationTokenRepository;
+    @Autowired
+    MailServiceImpl mailService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -68,6 +72,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setStatus(true);
+        user.setEnabled(false);
         System.out.println("STATUS" + user.getStatus());
         if (userDto.getPassword() != null)
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
@@ -82,7 +87,34 @@ public class UserServiceImpl implements UserService {
         user.setProfile(profile);
         
         User savedUser = userRepository.save(user);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(savedUser);
+
+        confirmationTokenRepository.save(confirmationToken);
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setText("To confirm your account, please click here : "
+                +"http://localhost:9090/api/confirm-account?token="+confirmationToken.getConfirmationToken());
+        mailService.sendMailRegister(mailMessage);
+
+        System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
         return savedUser.getId();
+    }
+
+    @Override
+    public ResponseEntity<?> confirmEmail(String confirmationToken) {
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+
+        if(token != null)
+        {
+            User user = userRepository.findByEmailIgnoreCase(token.getUser().getEmail());
+            user.setEnabled(true);
+            userRepository.save(user);
+            return ResponseEntity.ok("Email verified successfully!");
+        }
+        return ResponseEntity.badRequest().body("Error: Couldn't verify email");
     }
 
     @Override

@@ -496,6 +496,7 @@ const Post = () => {
                       comments[p.id].length > 0 ? (
                       comments[p.id]
                         .slice(commentDisplayModes[p.id] ? undefined : -4)
+                        .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
                         .map((comment) => (
                           <ListGroup.Item key={comment.id}>

@@ -1,6 +1,8 @@
 package com.csn.charity.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,10 @@ public class UserController {
 
     @GetMapping("/")
     public String getContribute(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+        model.addAttribute("hasAdminRole", hasAdminRole);
         model.addAttribute("contributions", this.donateService.getAllContribute());
         return "pages/landing_page";
     }
@@ -36,9 +42,14 @@ public class UserController {
 
     @GetMapping("/users")
     public String getUser(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
+                        .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
         model.addAttribute("users", this.userService.findAllUsers());
+        model.addAttribute("hasAdminRole", hasAdminRole);
         return "pages/users";
     }
+
 
     @GetMapping("/admin/user/{id}")
     public String details(@PathVariable(value = "id") Long id) {

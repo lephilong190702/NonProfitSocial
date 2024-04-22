@@ -4,22 +4,15 @@ import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.configs.JwtService;
@@ -58,6 +51,7 @@ public class AuthRestController {
             UserDoc userDoc = new UserDoc();
             userDoc.setId(userId);
             userDoc.setDisplayName(userDto.getUsername());
+
             String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
             return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
                     HttpStatus.CREATED);
@@ -65,6 +59,12 @@ public class AuthRestController {
             String errorMessage = "Failed to add new user: " + e.getMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+    @CrossOrigin
+    public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken) {
+        return userService.confirmEmail(confirmationToken);
     }
 
     @PostMapping("/login/")

@@ -5,6 +5,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
 import moment from "moment";
+import { Box, InputBase, Typography } from "@mui/material";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
@@ -244,11 +245,60 @@ const ProjectDetails = () => {
       <hr />
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedProjectTitle}</Modal.Title>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group controlId="donateAmount">
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="flex">Số tiền đóng góp</Typography>
+                <InputBase
+                  required
+                  type="number"
+                  className="border p-2"
+                  placeholder="Nhập số tiền đóng góp"
+                  value={pay.donateAmount}
+                  onChange={(e) => {
+                    setPay({ ...pay, donateAmount: e.target.value });
+                    setErrorMessage("");
+                  }}
+                />
+                {errorMessage && (
+                  <Form.Text className="text-danger">{errorMessage}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="mt-2">Ghi chú</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  value={pay.note}
+                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+                />
+              </div>
+            </div>
+          </Box>
+          {/* <div>
+            <p>Số tiền đóng góp</p>
+            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
+          </div>
+          <div className="mt-3">
+            <p>Ghi chú</p>
+            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
+          </div> */}
+          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
+            <Form.Group className="" controlId="donateAmount">
               <Form.Label>Số tiền đóng góp</Form.Label>
               <Form.Control
                 type="number"
@@ -273,7 +323,7 @@ const ProjectDetails = () => {
                 onChange={(e) => setPay({ ...pay, note: e.target.value })}
               />
             </Form.Group>
-          </Form>
+          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>

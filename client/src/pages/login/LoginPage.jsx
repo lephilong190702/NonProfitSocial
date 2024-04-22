@@ -49,12 +49,12 @@ const LoginPage = () => {
         cookie.save("token", res.data);
 
         let { data } = await authApi().get(endpoints["current-user"]);
-        if (!data.enabled) {
-          setError(
-            "Tài khoản chưa được xác thực."
-          );
-          return;
-        }
+        // if (!data.enabled) {
+        //   setError(
+        //     "Tài khoản chưa được xác thực."
+        //   );
+        //   return;
+        // }
         cookie.save("user", data);
 
         dispatch({

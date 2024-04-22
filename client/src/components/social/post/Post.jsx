@@ -47,11 +47,19 @@ const Post = () => {
   const [editedImages, setEditedImages] = useState([]);
 
   const [commentDisplayModes, setCommentDisplayModes] = useState({});
+  const [replyDisplayModes, setReplyDisplayModes] = useState({});
 
   const toggleCommentDisplay = (postId) => {
     setCommentDisplayModes((prevModes) => ({
       ...prevModes,
       [postId]: !prevModes[postId], // Chuyển đổi giữa true và false
+    }));
+  };
+
+  const toggleReplyDisplay = (commentId) => {
+    setReplyDisplayModes((prevModes) => ({
+      ...prevModes,
+      [commentId]: !prevModes[commentId], // Chuyển đổi giữa true và false
     }));
   };
 
@@ -260,25 +268,16 @@ const Post = () => {
       try {
         let res = await authApi().get(endpoints["post"]);
         setPost(res.data);
-        
+
         const commentPromises = res.data.map((post) => {
           const postId = post.id;
-          return authApi().get(endpoints["comment-post"](postId))
-            .then((response) => response.data.map(comment => ({ ...comment, postId })));
-        });
-        console.log(commentPromises);
-        
-        Promise.all(commentPromises)
-          .then((commentArrays) => {
-            commentArrays.unshift([]);
-            setComments(commentArrays);
-            console.log(commentArrays);
-            
-          })
-          .catch((error) => {
-            // Handle errors
+          loadCommentsByPostId(postId);
+          console.log(post.comments);
+          post.comments.map((commentId) => {
+            loadRepliesByCommentId(commentId.id);
           });
-
+          // console.log(loadCommentsByPostId);
+        });
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
@@ -321,36 +320,9 @@ const Post = () => {
         console.error(error);
       }
     };
-    
-
-    const loadComments = async () => {
-      try {
-        // post.forEach((p) => {
-        //   loadCommentsByPostId(p.id);
-        //   loadRepliesByCommentId(p.id);
-        // });
-        // let {data} = await authApi().get(endpoints["comment-post"](post.id));
-        // setComments(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
     const stompClient = connectToWebSocket();
 
-    // const loadReplies = async () => {
-    //   try {
-    //     post.forEach((p) => {
-    //       loadRepliesByCommentId(p.id)
-    //     })
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
-
-    // loadReplies();
-    loadComments();
     loadPosts();
 
     return () => {
@@ -487,7 +459,7 @@ const Post = () => {
                   onClick={() => CommentHandler(p.id)}
                 >
                   <span className="postCommentText">
-                    {/* {(comments[p.id] || []).length} bình luận */}
+                    {(comments[p.id] || []).length} bình luận
                   </span>
                 </div>
               </div>
@@ -527,7 +499,7 @@ const Post = () => {
                   ? "Hiển thị một phần bình luận"
                   : "Hiển thị toàn bộ bình luận"}
               </Link>
-              { (
+              {
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
@@ -615,48 +587,65 @@ const Post = () => {
                                     Thêm phản hồi
                                   </Button>
                                 )}
+                                <br />
+                                <Link
+                                  onClick={() => toggleReplyDisplay(comment.id)}
+                                  className={
+                                    replyDisplayModes[comment.id]
+                                      ? "gray-link"
+                                      : "gray-link underline-on-hover"
+                                  }
+                                  style={{ marginLeft: 50 }}
+                                >
+                                  {replyDisplayModes[comment.id]
+                                    ? "Hiển thị một phần phản hồi"
+                                    : "Hiển thị toàn bộ phản hồi"}
+                                </Link>
                                 {Array.isArray(replies[comment.id]) &&
                                 replies[comment.id].length > 0
-                                  ? replies[comment.id].slice().reverse().map((reply) => (
-                                      <div key={reply.id} className="reply">
-                                        <span
-                                          className="replyContent"
-                                          style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          <div className="reply-avatar">
-                                            <img
-                                              src={reply.user.profile.avatar}
-                                              alt="avatar"
-                                              style={{
-                                                width: "32px",
-                                                height: "32px",
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                                marginRight: "5px",
-                                              }}
-                                            />{" "}
-                                          </div>
-                                          <div className="reply-details">
-                                            <div className="reply-username">
-                                              {reply.user.username}
+                                  ? replies[comment.id]
+                                      .slice(replyDisplayModes[comment.id] ? undefined : -2)
+                                      .reverse()
+                                      .map((reply) => (
+                                        <div key={reply.id} className="reply">
+                                          <span
+                                            className="replyContent"
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              marginBottom: "10px",
+                                            }}
+                                          >
+                                            <div className="reply-avatar">
+                                              <img
+                                                src={reply.user.profile.avatar}
+                                                alt="avatar"
+                                                style={{
+                                                  width: "32px",
+                                                  height: "32px",
+                                                  borderRadius: "50%",
+                                                  objectFit: "cover",
+                                                  marginRight: "5px",
+                                                }}
+                                              />{" "}
                                             </div>
-                                            <div className="reply-content">
-                                              {reply.content}
+                                            <div className="reply-details">
+                                              <div className="reply-username">
+                                                {reply.user.username}
+                                              </div>
+                                              <div className="reply-content">
+                                                {reply.content}
+                                              </div>
+                                              <div className="reply-time">
+                                                {" "}
+                                                {moment(
+                                                  reply.createDate
+                                                ).fromNow()}
+                                              </div>
                                             </div>
-                                            <div className="reply-time">
-                                              {" "}
-                                              {moment(
-                                                reply.createDate
-                                              ).fromNow()}
-                                            </div>
-                                          </div>
-                                        </span>
-                                      </div>
-                                    ))
+                                          </span>
+                                        </div>
+                                      ))
                                   : null}
                               </>
                             )}
@@ -667,7 +656,7 @@ const Post = () => {
                     )}
                   </div>
                 </div>
-              )}
+              }
             </div>
           </div>
         ))}

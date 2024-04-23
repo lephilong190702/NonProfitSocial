@@ -19,20 +19,20 @@ pipeline {
 		    }
 	    }
 	    
-	    stage('Build') {
-		    steps {
-                sh 'cd charity/ && mvn --version'
-                sh 'cd charity/ && java --version'
-			    sh 'cd charity/ && mvn clean package'
-		    }
-	    }
+	    // stage('Build') {
+		//     steps {
+        //         sh 'cd charity/ && mvn --version'
+        //         sh 'cd charity/ && java --version'
+		// 	    sh 'cd charity/ && mvn clean package'
+		//     }
+	    // }
 	    
-	    stage('Test') {
-		    steps {
-			    echo "Testing..."
-			    sh 'cd charity/ && mvn test'
-		    }
-	    }
+	    // stage('Test') {
+		//     steps {
+		// 	    echo "Testing..."
+		// 	    sh 'cd charity/ && mvn test'
+		//     }
+	    // }
 	    
 	    // stage('Build/Push docker image'){
         //     steps{

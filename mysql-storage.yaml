@@ -5,9 +5,9 @@ metadata:
   labels:
     app: mysql-pv
     tier: database
-    type: jenkins-server
+    type: local-storage
 spec:
-  storageClassName: jenkins-server
+  storageClassName: local-storage
   capacity:
     storage: 10Gi
   accessModes:
@@ -16,7 +16,7 @@ spec:
     namespace: default
     name: mysql-pv-claim
   gcePersistentDisk:
-    pdName: jenkins-server
+    pdName: local-storage
     fsType: ext4
 ---
 apiVersion: v1
@@ -27,7 +27,7 @@ metadata:
     app: mysql-pv-claim
     tier: database
 spec:
-  storageClassName: jenkins-server
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:

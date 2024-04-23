@@ -20,14 +20,14 @@ pipeline {
 	    
 	    stage('Build') {
 		    steps {
-			    sh 'mvn clean package'
+			    sh 'cd charity/ && mvn clean package'
 		    }
 	    }
 	    
 	    stage('Test') {
 		    steps {
 			    echo "Testing..."
-			    sh 'mvn test'
+			    sh 'cd charity/ && mvn test'
 		    }
 	    }
 	    

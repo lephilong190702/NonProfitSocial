@@ -7,7 +7,7 @@ metadata:
     tier: database
     type: local-storage
 spec:
-  storageClassName: local-storage
+  storageClassName: jenkins-server
   capacity:
     storage: 10Gi
   accessModes:
@@ -27,7 +27,7 @@ metadata:
     app: mysql-pv-claim
     tier: database
 spec:
-  storageClassName: local-storage
+  storageClassName: jenkins-server
   accessModes:
     - ReadWriteOnce
   resources:

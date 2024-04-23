@@ -6,7 +6,7 @@ pipeline {
 	
 	environment {
 		PROJECT_ID = 'social-website-421212'
-        CLUSTER_NAME = 'k8s-cluster'
+        CLUSTER_NAME = 'k8-cluster'
         LOCATION = 'asia-southeast2'
         CREDENTIALS_ID = 'kubernetes'	
         MYSQL_ROOT_LOGIN = credentials('mysql-root-login')

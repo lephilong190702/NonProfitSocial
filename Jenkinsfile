@@ -34,17 +34,17 @@ pipeline {
 		//     }
 	    // }
 	    
-	    stage('Build/Push docker image'){
-            steps{
-                // sh 'cd charity/ && docker build -t lephilong1907/charity:latest .'
-                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
-                    sh 'docker login -u lephilong1907 -p ${dockerhub}'
+	    // stage('Build/Push docker image'){
+        //     steps{
+        //         // sh 'cd charity/ && docker build -t lephilong1907/charity:latest .'
+        //         withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
+        //             sh 'docker login -u lephilong1907 -p ${dockerhub}'
                     
-                    // sh 'docker push lephilong1907/charity:latest'
-                    sh 'docker image pull mysql:latest'
-                }
-            }
-        }
+        //             // sh 'docker push lephilong1907/charity:latest'
+        //             sh 'docker image pull mysql:latest'
+        //         }
+        //     }
+        // }
 
         stage('Deploy to K8s') {
         steps{

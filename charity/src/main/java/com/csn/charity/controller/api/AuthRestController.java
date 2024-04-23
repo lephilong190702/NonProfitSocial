@@ -118,7 +118,7 @@ public class AuthRestController {
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
-    @PutMapping("/profile/")
+    @PatchMapping("/profile/")
     @CrossOrigin
     public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
             @RequestPart(value = "firstName") String firstName,

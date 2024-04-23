@@ -70,6 +70,7 @@ const Post = () => {
   };
 
   const replyHandler = (commentId) => {
+    loadRepliesByCommentId(commentId)
     setOpenReply((prevOpenReply) =>
       prevOpenReply === commentId ? null : commentId
     );
@@ -562,7 +563,6 @@ const Post = () => {
                     {Array.isArray(comments[p.id]) &&
                       comments[p.id].length > 0 ? (
                       comments[p.id]
-                        .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
                         .map((comment) => (

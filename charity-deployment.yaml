@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: charity-server
-          image: lephilong1907/springbootserver:latest
+          image: lephilong1907/charity:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 9090

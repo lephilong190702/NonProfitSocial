@@ -52,15 +52,15 @@ pipeline {
             sh 'pwd'
             sh 'cd k8s-configurations/mysql-k8s/; pwd'
             echo "Start deployment of mysql-storage.yaml"
-            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-storage.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-storage.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true, relativeTo: 'k8s-configurations/mysql-k8s'])
             echo "Start deployment of mysql-config.yaml"
-            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-config.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-config.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true, relativeTo: 'k8s-configurations/mysql-k8s'])
             echo "Start deployment of mysql-secret.yaml"
-            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-secret.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-secret.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true, relativeTo: 'k8s-configurations/mysql-k8s'])
             echo "Start deployment of mysql-deployment.yaml"
-            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true, relativeTo: 'k8s-configurations/mysql-k8s'])
             echo "Start deployment of mysql-service.yaml"
-            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+            step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true, relativeTo: 'k8s-configurations/mysql-k8s'])
             echo "Deployment Finished ..."
         }
 }

@@ -200,7 +200,7 @@ public class PostRestController {
             @RequestBody UserCommentPost reply) {
         try {
             UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
-            messagingTemplate.convertAndSend("/topic/reply-comments/" + parentId, addedReply);
+            messagingTemplate.convertAndSend("/topic/reply-comments/", addedReply);
             return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -212,7 +212,7 @@ public class PostRestController {
     @CrossOrigin
     public ResponseEntity<List<UserCommentPost>> getAllRepliesComment(@PathVariable Long parentId) {
         List<UserCommentPost> replies = commentPostService.getAllReplyComments(parentId);
-        messagingTemplate.convertAndSend("/topic/comments/" + parentId, replies);
+        messagingTemplate.convertAndSend("/topic/reply-comments/", replies);
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
 

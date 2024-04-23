@@ -50,7 +50,7 @@ pipeline {
             echo "Deployment started ..."
             sh 'ls -ltr'
             sh 'pwd > current_dir.txt'
-            sh 'cd $(cat current_dir.txt)/k8s-configurations/mysql-k8s/'
+            sh '(cd $(cat current_dir.txt)/k8s-configurations/mysql-k8s/; pwd > current_dir.txt; source current_dir.txt)'
             sh 'pwd'
             echo "Start deployment of mysql-storage.yaml"
             step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-storage.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])

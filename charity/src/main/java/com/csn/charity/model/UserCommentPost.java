@@ -53,6 +53,5 @@ public class UserCommentPost implements Serializable{
 
      @ManyToOne
      @JoinColumn(name = "reply_comment")
-     @JsonIgnore
      private UserCommentPost comment;
 }

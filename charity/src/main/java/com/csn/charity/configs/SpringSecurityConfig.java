@@ -95,7 +95,6 @@ public class SpringSecurityConfig {
                                 "/api/confirm-account/**")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
-                        .requestMatchers("/api/user/userProfile").hasRole("USER")
                         .anyRequest()
                         .authenticated())
                 .authenticationProvider(authenticationProvider())

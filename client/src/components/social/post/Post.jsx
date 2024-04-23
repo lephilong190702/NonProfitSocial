@@ -347,6 +347,19 @@ const Post = () => {
         }));
       });
 
+      stompClient.subscribe("/topic/reply-comments/", (message) => {
+        console.log("Received message:", message.body);
+        const newReplyComment = JSON.parse(message.body);
+        console.log("newReplyComment", newReplyComment);
+        const commentId = newReplyComment.comment.id;
+        console.log("commentId", commentId)
+        setReplies((current) => ({
+          ...current,
+          [commentId]: [...(current[commentId] || []), newReplyComment]
+        }));
+      });
+
+
       loadPosts(stompClient);
     },
       (error) => {
@@ -660,50 +673,50 @@ const Post = () => {
                                     : "Hiển thị toàn bộ phản hồi"}
                                 </Link>
                                 {Array.isArray(replies[comment.id]) &&
-                                replies[comment.id].length > 0
+                                  replies[comment.id].length > 0
                                   ? replies[comment.id]
-                                      .slice(replyDisplayModes[comment.id] ? undefined : -2)
-                                      .reverse()
-                                      .map((reply) => (
-                                        <div key={reply.id} className="reply">
-                                          <span
-                                            className="replyContent"
-                                            style={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              marginBottom: "10px",
-                                            }}
-                                          >
-                                            <div className="reply-avatar">
-                                              <img
-                                                src={reply.user.profile.avatar}
-                                                alt="avatar"
-                                                style={{
-                                                  width: "32px",
-                                                  height: "32px",
-                                                  borderRadius: "50%",
-                                                  objectFit: "cover",
-                                                  marginRight: "5px",
-                                                }}
-                                              />{" "}
+                                    .slice(replyDisplayModes[comment.id] ? undefined : -2)
+                                    .reverse()
+                                    .map((reply) => (
+                                      <div key={reply.id} className="reply">
+                                        <span
+                                          className="replyContent"
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            marginBottom: "10px",
+                                          }}
+                                        >
+                                          <div className="reply-avatar">
+                                            <img
+                                              src={reply.user.profile.avatar}
+                                              alt="avatar"
+                                              style={{
+                                                width: "32px",
+                                                height: "32px",
+                                                borderRadius: "50%",
+                                                objectFit: "cover",
+                                                marginRight: "5px",
+                                              }}
+                                            />{" "}
+                                          </div>
+                                          <div className="reply-details">
+                                            <div className="reply-username">
+                                              {reply.user.username}
                                             </div>
-                                            <div className="reply-details">
-                                              <div className="reply-username">
-                                                {reply.user.username}
-                                              </div>
-                                              <div className="reply-content">
-                                                {reply.content}
-                                              </div>
-                                              <div className="reply-time">
-                                                {" "}
-                                                {moment(
-                                                  reply.createDate
-                                                ).fromNow()}
-                                              </div>
+                                            <div className="reply-content">
+                                              {reply.content}
                                             </div>
-                                          </span>
-                                        </div>
-                                      ))
+                                            <div className="reply-time">
+                                              {" "}
+                                              {moment(
+                                                reply.createDate
+                                              ).fromNow()}
+                                            </div>
+                                          </div>
+                                        </span>
+                                      </div>
+                                    ))
                                   : null}
                               </>
                             )}

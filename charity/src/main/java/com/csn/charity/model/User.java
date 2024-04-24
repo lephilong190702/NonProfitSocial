@@ -49,7 +49,7 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "status", columnDefinition = "BOOLEAN DEFAULT TRUE")

@@ -64,7 +64,7 @@ function Register() {
     } catch (error) {
       console.error(error);
       setErrorMessage(
-        "Đăng ký không thành công, có thể Tên đăng nhập đã bị trùng."
+        "Đăng ký không thành công, Email hoặc Username bị trùng."
       );
     }
   };

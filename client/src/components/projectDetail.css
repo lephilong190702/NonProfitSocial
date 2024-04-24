@@ -1,0 +1,11 @@
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .project-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  

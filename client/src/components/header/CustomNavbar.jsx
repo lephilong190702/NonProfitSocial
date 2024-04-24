@@ -8,7 +8,7 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import MySpinner from "../../layout/MySpinner";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import ApiConfig, { endpoints } from "../../configs/ApiConfig";
 import { UserContext } from "../../App";
 import { saveAs } from "file-saver";
@@ -25,7 +25,9 @@ const CustomNavbar = () => {
   const [projectCategory, setProjectCategory] = useState([]);
   const [kw, setKw] = useState("");
   const [stats, setStats] = useState();
+
   const nav = useNavigate();
+  // const history = useHistory();
 
   const [scrolled, setScrolled] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -107,10 +109,14 @@ const CustomNavbar = () => {
     dispatch({
       type: "logout",
     });
+    console.log("aaa");
+    nav("/login");
+    // history.push("/login");
   };
 
   if (newsCategory.length === 0) return <MySpinner />;
   if (projectCategory.length === 0) return <MySpinner />;
+
   return (
     <>
       <div
@@ -149,16 +155,16 @@ const CustomNavbar = () => {
         <div>
           <nav>
             <div className="flex flex-row px-5 py-5 md:px-20 md:py-5 border-b ">
-              <div className="flex  md:pt-1">
+              <a className="flex  md:pt-1">
                 <img
                   src="/src/assets/charityLogo.png"
                   className="w-full md:w-60"
                   alt="Quỹ từ thiện"
                 />
-              </div>
+              </a>
 
               <div className="hidden ml-8  font-bold  w-full md:flex md:w-auto md:items-center md:justify-between md:order-1 ">
-                <ul className="flex gap-8 mr-16 text-[14px]">
+                <ul className="flex justify-center items-center gap-8 mr-16 text-[14px]">
                   <div>
                     <li className="top-menu-item">
                       <Link to="/" className="nav-link top-menu-item">
@@ -278,7 +284,7 @@ const CustomNavbar = () => {
                       <div className="hidden md:flex items-center font-bold w-auto md:order-1">
                         <div className="border-solid border-r-2 border-[#767373] h-6 pl-3"></div>
                       </div>
-                      <div className="hidden md:flex items-center font-bold w-auto md:order-1">
+                      <div className="hidden md:flex items-center justify-center font-bold w-auto md:order-1">
                         <div className="group">
                           <li className="flex flex-row">
                             <div className="flex flex-row items-center group cursor-pointer">
@@ -290,10 +296,10 @@ const CustomNavbar = () => {
                                 className="group-hover:text-[#007fff]"
                                 fixedWidth
                               />
-                              <p className="text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
-                                {" "}
+                              <div class="flex justify-center items-center text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
+                                
                                 Đăng Nhập
-                              </p>
+                              </div>
 
                               <div
                                 className={`group ${
@@ -308,13 +314,13 @@ const CustomNavbar = () => {
 
                               <div
                                 className={`group ${
-                                  scrolled ? "top-[50%]" : "bottom-[63%]"
+                                  scrolled ? "top-[50%]" : "bottom-[63.5%]"
                                 } hidden group-hover:block absolute right-[5%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
                               >
                                 <div className="flex flex-col gap-3 ">
                                   {/* <Link to='./login'> */}
                                   <div className="flex justify-center bg-[#38b6ff] text-sm text-[#fff] py-2 px-12 hover:bg-[#007fff] cursor-pointer">
-                                    <Link to="/login" className=" nav-link">
+                                    <Link to="/login" className=" nav-link ">
                                       Đăng nhập
                                     </Link>
                                   </div>
@@ -342,6 +348,7 @@ const CustomNavbar = () => {
                         Chào {user.username}!
                       </Link>
                       <Link
+                        to="/login"
                         className="nav-link "
                         variant="secondary"
                         onClick={logout}

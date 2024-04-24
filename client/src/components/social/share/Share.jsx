@@ -39,15 +39,15 @@ const Share = () => {
         shareForm.append(`files[${index}]`, image);
       });
 
-        if (share.files.length > 0)
-          for (let i = 0; i < share.files.length; i++) {
-            shareForm.append("files", share.files[i]);
-          }
+      if (share.files.length > 0)
+        for (let i = 0; i < share.files.length; i++) {
+          shareForm.append("files", share.files[i]);
+        }
 
       try {
         let res = await authApi().post(endpoints["post"], shareForm);
         console.log(res.data);
-        console.log(shareForm)
+        console.log(shareForm);
         setSuccessMessage("Đăng bài thành công");
         setTimeout(() => {
           setSuccessMessage("");
@@ -107,9 +107,19 @@ const Share = () => {
                 <span>{share.files.length} image(s) selected</span>
               )}
             </div>
-           
           </div>
-          <Button className="shareButton" type="submit" onClick={sharePosted}>
+          <Button
+            className="shareButton"
+            type="submit"
+            onClick={(event) => {
+              if (!share.content.trim()) {
+                event.preventDefault();
+                alert("Vui lòng nhập gì đó trước khi share bài viết!!!");
+              } else {
+                sharePosted(event);
+              }
+            }}
+          >
             Share
           </Button>
         </div>

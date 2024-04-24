@@ -183,7 +183,7 @@ const CustomNavbar = () => {
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
                         className={`group ${
-                          scrolled ? "top-[125px]" : "top-[130px]"
+                          !user ? "top-[130px]" : "top-[138px]"
                         }  duration-500 h-0 overflow-hidden group-hover:h-[100px] absolute bg-white z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
@@ -238,7 +238,7 @@ const CustomNavbar = () => {
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
                         className={`group ${
-                          scrolled ? "top-[125px]" : "top-[130px]"
+                          !user ? "top-[130px]" : "top-[138px]"
                         }  duration-500 h-0 overflow-hidden group-hover:h-[100px] absolute bg-white z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">

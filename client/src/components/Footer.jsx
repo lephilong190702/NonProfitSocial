@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div>
         <CustomFooter />
-        <GoogleMapProject />
+        {/* <GoogleMapProject /> */}
     </div>
   )
 }

@@ -29,10 +29,10 @@ public class Address implements Serializable{
     private Long id;
 
     @Column(name = "longitude", nullable = false)
-    private String longitude;
+    private Double longitude;
 
     @Column(name = "latitude", nullable = false)
-    private String latitude;
+    private Double latitude;
 
     @Column(name = "name", nullable = false)
     private String name;

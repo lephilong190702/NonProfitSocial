@@ -12,6 +12,7 @@ import {
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
 import "./projectDetail.css";
+import GoogleMapProject from "./googleMap/GoogleMapProject";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
@@ -46,6 +47,8 @@ const ProjectDetails = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [address, setAddress] = useState([]);
 
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
@@ -89,6 +92,7 @@ const ProjectDetails = () => {
           endpoints["details-project"](projectId)
         );
         setProject(data);
+        console.log(project);
       } catch (error) {
         console.error("Error loading project:", error);
         setProject([]);
@@ -106,6 +110,16 @@ const ProjectDetails = () => {
       }
     };
 
+    const loadAddressProject = async () => {
+      try {
+        const { data } = await ApiConfig.get(endpoints["address-project"](projectId));
+        setAddress(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    loadAddressProject();
     loadContributor();
     loadProject();
   }, [projectId]);
@@ -303,6 +317,7 @@ const ProjectDetails = () => {
       </Row>
 
       <hr />
+      <GoogleMapProject projectId={projectId} />
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <div className="text-xl text-center font-bold">

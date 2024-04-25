@@ -26,6 +26,7 @@
                             <th>TÀI KHOẢN</th>
                             <th>EMAIL</th>
                             <th>TRẠNG THÁI</th>
+                            <!-- <th>VAI TRÒ</th> -->
                             <th>TÍNH NĂNG</th>
                         </tr>
                         </thead>
@@ -34,6 +35,12 @@
                             <td th:text="${u.id}"></td>
                             <td th:text="${u.username}"></td>
                             <td th:text="${u.email}"></td>
+                            <!-- <td>
+                                <select multiple="multiple" class="form-control" id="userRoles" th:field="*{userRoles}">
+                                    <option th:each="role : ${userRoles}" th:value="${role.id}" th:text="${role.name}"></option>
+                                </select>
+                            </td> -->
+
                             <td th:text="${u.status != null ? (u.status ? 'Active' : 'Disabled') : 'N/A'}"></td>
                             <td>
                                 <form th:action="@{/admin/active/{id}(id=${u.id})}" method="post">

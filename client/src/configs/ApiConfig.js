@@ -20,8 +20,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-// const SERVER = "http://34.101.159.170" //deploy
-const SERVER = "http://localhost:9090"  //local
+const SERVER = "http://localhost:9090" 
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
@@ -58,6 +57,7 @@ export const endpoints = {
     "set-password": `${SERVER_CONTEXT}/api/set-password/`,
     "create-room": `${SERVER_CONTEXT}/api/create-room/`,
     "join-room": (roomCode) => `${SERVER_CONTEXT}/api/rooms/${roomCode}/join/`,
+    "address-project": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/addresses/`,
 }
 
 export const authApi = () => {

@@ -33,4 +33,6 @@ public interface UserService extends UserDetailsService {
     
     String setPassword(String email, String newPassword);
 
+    void updateUserRole(Long userId, Long roleId);
+
 }

@@ -1,5 +1,6 @@
 package com.csn.charity.controller;
 
+import com.csn.charity.service.interfaces.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,9 @@ public class UserController {
     @Autowired
     private DonateService donateService;
 
+    @Autowired
+    private UserRoleService userRoleService;
+
     @GetMapping("/")
     public String getContribute(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -46,8 +50,20 @@ public class UserController {
         boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
                         .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
         model.addAttribute("users", this.userService.findAllUsers());
+        model.addAttribute("userRoles", this.userRoleService.findAllUserRoles());
         model.addAttribute("hasAdminRole", hasAdminRole);
         return "pages/users";
+    }
+
+    @GetMapping("/userRole")
+    public String getUserRole(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
+                .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+        model.addAttribute("users", this.userService.findAllUsers());
+        model.addAttribute("userRoles", this.userRoleService.findAllUserRoles());
+        model.addAttribute("hasAdminRole", hasAdminRole);
+        return "pages/userRole";
     }
 
 
@@ -96,6 +112,13 @@ public class UserController {
     public String disableAccount(@PathVariable(value = "id") Long id) {
         this.userService.disableAccount(id);
         return "redirect:/users";
+    }
+
+    @PostMapping("/admin/user/{userId}/role/{roleId}")
+    public String setRoleAccount(@PathVariable(value = "userId") Long userId,
+                                 @PathVariable(value = "roleId") Long roleId) {
+        this.userService.updateUserRole(userId, roleId);
+        return "redirect:/userRole";
     }
 
 }

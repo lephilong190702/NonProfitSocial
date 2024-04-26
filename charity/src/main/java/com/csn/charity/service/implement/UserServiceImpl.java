@@ -3,6 +3,7 @@ package com.csn.charity.service.implement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.csn.charity.model.*;
@@ -214,6 +215,27 @@ public class UserServiceImpl implements UserService {
         this.userRepository.save(user);
 
         return "Đặt mật khẩu mới thành công!!";
+    }
+
+    public void updateUserRole(Long userId, Long roleId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<UserRole> roleOptional = roleRepository.findById(roleId);
+
+        if (userOptional.isPresent() && roleOptional.isPresent()) {
+            User user = userOptional.get();
+            UserRole role = roleOptional.get();
+
+            // Remove existing role
+            user.getRoles().clear();
+
+            // Add new role
+            user.getRoles().add(role);
+
+            // Save user
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
 }

@@ -216,6 +216,4 @@ public class UserServiceImpl implements UserService {
         return "Đặt mật khẩu mới thành công!!";
     }
 
-    
-
 }

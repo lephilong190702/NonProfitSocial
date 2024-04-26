@@ -5,11 +5,10 @@ pipeline {
 	}
 	
 	environment {
-		PROJECT_ID = 'social-website-421212'
-        CLUSTER_NAME = 'k8-cluster'
+		PROJECT_ID = 'nonprofit-social-421415'
+        CLUSTER_NAME = 'k8s-cluster'
         LOCATION = 'asia-southeast2'
         CREDENTIALS_ID = 'kubernetes'	
-        MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
 	}
 	
     stages {
@@ -34,7 +33,7 @@ pipeline {
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 echo "Start deployment of mysql-service.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Deployment Finished ..."
+                echo "Deployment MySQL Finished ..."
             }
         }
 
@@ -45,14 +44,7 @@ pipeline {
 			    sh 'cd charity/ && mvn clean install -DskipTests'
 		    }
 	    }
-	    
-	    // stage('Test') {
-		//     steps {
-		// 	    echo "Testing..."
-		// 	    sh 'cd charity/ && mvn test'
-		//     }
-	    // }
-	    
+	 
 	    stage('Build/Push docker image'){
             steps{
                 sh 'cd charity/ && docker build -t lephilong1907/charity:latest .'
@@ -69,15 +61,27 @@ pipeline {
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'
-                echo "Start deployment of charity-deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'charity-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of charity-service.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'charity-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+                echo "Start deployment of server-deployment.yaml"
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'server-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+                echo "Start deployment of server-service.yaml"
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'server-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
         
-                echo "Deployment Finished ..."
+                echo "Deployment Server Finished ..."
             }
         }
 
-	
+        stage('Deploy ReactJS to K8s') {
+            steps{
+                echo "Deployment started ..."
+                sh 'ls -ltr'
+                sh 'pwd'
+                echo "Start deployment of client-deployment.yaml"
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'client-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+                echo "Start deployment of client-service.yaml"
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'client-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+        
+                echo "Deployment Client Finished ..."
+            }
+        }
     }
 }

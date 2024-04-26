@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: charity-client
+  name: client
 spec:
   replicas: 1
   selector:
@@ -17,4 +17,4 @@ spec:
           image: lephilong1907/client:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 3000

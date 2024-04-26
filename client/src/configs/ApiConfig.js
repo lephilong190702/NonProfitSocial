@@ -20,7 +20,8 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-const SERVER = "http://localhost:9090"
+// const SERVER = "http://34.101.159.170" //deploy
+const SERVER = "http://localhost:9090"  //local
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,

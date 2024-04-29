@@ -2,10 +2,10 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-const SERVER = "http://34.128.126.148" 
+const SERVER = "http://34.128.126.148:9090" 
 
 export const endpoints = {
-    "newsCategory": `${SERVER}/api/ncategories/`,
+    "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
     "newsId": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,

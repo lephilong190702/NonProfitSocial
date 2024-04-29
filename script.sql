@@ -1,13 +1,26 @@
-INSERT INTO `user` (status, id, username, auth_type, email, password, enabled) VALUES 
+-- User
+
+INSERT INTO `user` (status, id, username, pathotype, email, password, enabled) VALUES 
 (1,1,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme',1),
 (1,2,'superadmin',NULL,'superadmin@gmail.com','$2a$10$PKrMUFBrnTwd1Dxf9sIPUe5SczNe2209lUO.MpMcpe6zl9fwuSsUK',1),
 (1,3,'user',NULL,'drakecrys29@gmail.com','$2a$10$O0yot0tAvgC/S9CRiqlCQu.0/mDgb3fVhhRTrNmwDH/.XiPFBsUNi',1),
 (1,4,'user123',NULL,'datluongtan1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
 
-INSERT INTO `users_roles` VALUES (1,1),(3,16),(2,31),(2,45);
+-- Role
+INSERT INTO `user_role` VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER'),(3,'ROLE_SUPERADMIN');
 
 
-INSERT INTO `project` VALUES 
+-- User_Role
+INSERT INTO `users_roles` VALUES (1,1),(3,2),(2,3),(2,4);
+
+
+-- project cate
+
+INSERT INTO `project_category` (id, name) VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
+
+-- Project
+
+INSERT INTO `project` (contributed_amount, status, total_amount, category_id, end_date, id, start_date, address, title, content) VALUES 
 (40000.00,1,10000000.00,1,NULL,1,NULL,' Số 09 đường Bến Chợ, phường Vạn Thạnh, Nha Trang, Khánh Hòa','QUÁN YÊN VUI NHA TRANG – KHÁNH HÒA','Sau nhiều ngày tháng chuẩn bị, Quán Yên Vui tại thành phố biển Nha Trang đã ra đời. Bà con mưu sinh ở đây sẽ đỡ đần phần nào với những bữa cơm ngon miệng giá rẻ. Quán tọa lạc tại số 09 đường Bến Chợ, phường Vạn Thạnh, Nha Trang, Khánh Hòa.\r\nSau nhiều ngày tháng chuẩn bị, Quán Yên Vui tại thành phố biển Nha Trang đã ra đời. Bà con mưu sinh ở đây sẽ đỡ đần phần nào với những bữa cơm ngon miệng giá rẻ.\r\nThêm một quán mới, toàn thể chúng tôi có thêm niềm vui mới. Mọi người xúm vào, mỗi người giúp một tay, chúng tôi đang làm những việc nhỏ nhưng với tình yêu thương thật lớn.\r\nNiềm vui mở hàng, bán thử, chúng tôi nghe lâng lâng giai điệu:\r\n“Tôi không ngủ mơ đâu\r\nNgày hôm nay trời đẹp lắm, thật mà”\r\nlvc, trong nhóm chăm sóc Quỹ Bông Sen\r\nQuán Yên Vui Nha Trang – Khánh Hòa'),
 
 (0.00,NULL,0.00,1,NULL,2,NULL,'50 Trần Khánh Dư, Mỹ Xuyên, Long Xuyên, An Giang','QUÁN YÊN VUI LONG XUYÊN – AN GIANG','Ngày 5/4/2021, Quỹ Từ thiện Bông Sen chính thức đón quán cơm 2.000 thứ 14 mở cửa bán thử, đó là quán Yên Vui Long Xuyên - An Giang.\r\nMiền Đồng bằng sông nước Cửu long lại đón thêm 1 quán cơm mới sau quán Yên Vui Ninh Kiều – Cần Thơ. Mấy năm nay, miền Tây nhiễm mặn khắp nơi, dịch bệnh khiến hàng hoá nông sản xuất khẩu không được lại càng khiến bà con thêm phần khó khăn.Thêm nhiều người rời quê lên phố… Những bữa cơm giá rẻ hy vọng sẽ tiếp sức thêm cho những người cần thiết nơi đây.\r\n\r\nQuán Yên Vui Long Xuyên – An Giang được khởi phát từ mong muốn đóng góp cho quê hương Long Xuyên của một nhóm bạn trẻ đang làm việc và sinh sống tại nước ngoài. Quỹ Từ thiện Bông Sen sẽ là chiếc cầu nối lan toả yêu thương, chỉ cần bạn có mong muốn chia sẻ đến cộng đồng, dù nhỏ dù lớn, Quỹ Tù thiện Bông Sen sẽ cùng bạn hiện thực ước mong sẻ chia đó.'),
@@ -31,26 +44,22 @@ INSERT INTO `project` VALUES
 (0.00,1,100000000.00,2,NULL,11,NULL,'','CHƯƠNG TRÌNH NGƯỜI BẠN LỚN – HỖ TRỢ TRẺ BỊ ẢNH HƯỞNG BỞI DỊCH COVID-19','Người bạn lớn là một dự án có mục đích giúp đỡ Trẻ em không còn cha hoặc mẹ hoặc cả hai, đặc biệt là Trẻ nhỏ chịu mất mát này do đại dịch Covid-19. Chương trình thiết lập một mạng lưới Nhân viên đóng vai trò là “người anh tinh thần”, “người chị tinh thần” để chăm sóc các em.\r\nKhởi nguồn từ 9 trẻ tại Phường 8 Quận 4 vào năm 2021, đến nay chúng tôi đã hỗ trợ 32 trẻ tại Quận 4, Bình Chánh và Gò Vấp.\r\n\r\nTrong hơn một năm triển khai chương trình, đồng hành cùng trẻ và gia đình chúng tôi hiểu được những khó khăn, chật vật của các gia đình sau khi trải qua một biến cố to lớn. Không chỉ về kinh tế mà những tổn thương về mặt tinh thần, cảm xúc, đời sống dường như vẫn còn tiếp diễn.\r\n\r\nĐối với trẻ, chúng tôi tập trung vào hỗ trợ học bổng để duy trì việc học của trẻ tại trường, hỗ trợ dinh dưỡng cho những trẻ đã mất đi nguồn sữa mẹ từ khi mới lọt lòng. Bên cạnh đó, việc quan tâm, chăm sóc về mặt tinh thần của trẻ như sinh nhật, lễ, tết cũng được quan tâm. Quan trọng hơn hết, Người Bạn Lớn cũng đóng vai trò người anh, người chị, người bạn để trẻ được chia sẻ những tâm tư, những vấn trẻ đang gặp phải ở từng giai đoạn phát triển, đặc biệt tuổi teen.\r\n\r\nTính đến nay, chúng tôi đang hỗ trợ chi phí học tập hàng cho 21 trẻ về học phí, đồ dùng học tập, vé xe buýt,…. Về dinh dưỡng hàng tháng cho 13 trẻ. Có 2 trẻ được hỗ trợ về chi phí khám-điều trị bệnh. 32 trẻ đều được cập nhật thông tin và hỗ trợ khi cần thiết, tổ chức sinh nhật và tặng quà các dịp đặc biệt trong năm: Giáng sinh, Tết….\r\n\r\nKhông chỉ hỗ trợ cho trẻ, Người Bạn Lớn còn là nơi mà người chăm sóc trẻ được chia sẻ, được hướng dẫn hỗ trợ, tư vấn khi cần thiết. Khi gia đình bị mất đi một người thân, mất đi một người lao động chính thì người ở lại không chỉ khó khăn về mặt kinh tế mà đôi khi việc giao tiếp, chăm sóc các con cũng là một khó khăn khi những công việc đó vốn dĩ được chăm lo bởi người chồng/người vợ của mình. Không ít lần chúng tôi thấy được những giọt nước mắt rơi khi người chăm sóc chia sẻ về hiện tại, mặc dù đã qua một năm gắng gượng để chăm sóc các con.'),
 
 
-INSERT INTO `project_category` VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
 
+-- news cate
 
+INSERT INTO `new_category` (id, name) VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
 
-INSERT INTO `new` VALUES 
+-- news
+
+INSERT INTO `new` (category_id, create_date, id, content, image, name) VALUES 
 (1,'2023-10-15 18:44:16.826000',1,'Từ ngày 5/6/2023 Quán Yên Vui Ninh Kiều – Cần Thơ chuyển về địa điểm mới\r\nĐịa chỉ: số 20V7, đường số 7, khu nhà ở Cán Bộ Đại Học,P.An Khánh, Q.Ninh Kiều, Tp.Cần Thơ\r\nMong rằng với địa điểm mới này, bà con lao động và các bạn sinh viên có thể dễ dàng tiếp cận suất ăn tại Quán.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697370256/aatnqotiic0pa8ntrqu7.jpg','QUÁN YÊN VUI NINH KIỀU – CẦN THƠ CHUYỂN ĐỊA ĐIỂM HOẠT ĐỘNG'),
 
 (3,'2023-10-15 19:05:25.230000',2,'Ngày 16,17,18/6 vừa qua, Quỹ Từ thiện Bông Sen đã đồng hành cùng Đoàn Y-Bác sĩ Thiện Đức thực hiện chuyến khám bệnh cho người dân nghèo, người đồng bào dân tộc tại xã Phong Phú, huyện Tuy Phong, tỉnh Bình Thuận.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371525/eig8sow50oezouxfghwt.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ PHONG PHÚ, TUY PHONG, BÌNH THUẬN'),
 
 (3,'2023-10-15 19:05:55.936000',3,'Ngày 20/03/2023, Quán Yên vui Mai Lĩnh – Quảng Trị đã đại diện Quỹ Từ thiện Bông Sen bàn giao đến Bệnh viện Đa khoa khu vực Triệu Hải 3 chiếc xe đẩy bệnh nhân phục vụ trong việc vận chuyển bệnh nhân tại bệnh viện.\r\nVới sự hỗ trợ này, chúng tôi mong rằng sẽ góp phần giúp bệnh viện thuận lợi hơn trong quá trình hỗ trợ bệnh nhân.','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371555/o7zdhat9wq6tzfxc7arw.jpg','BÀN GIAO 3 XE ĐẨY CÁNG 3A ĐẾN BỆNH VIỆN ĐKKV TRIỆU HẢI, QUẢNG TRỊ'),
 
-(3,'2023-10-15 19:06:42.151000',4,'Ngày 17,18,19/3, Quỹ Bông Sen đã tiếp tục đồng hành cùng đoàn y bác sĩ Thiện Đức thực hiện chuyến khám bệnh từ thiện cho bà con xã Tân Lợi và An Hảo, huyện Tịnh Biên, tỉnh An Giang. Hàng trăm người dân đã tập trung từ rất sớm với rất đông các cụ già ngồi chờ đoàn. Để kịp tiến độ, đoàn đã làm việc liên tục, các y-bác sĩ, dược sĩ và tình nguyện viên thay phiên làm việc xuyên cả buổi trưa. ','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371602/aaziaij4lan8wwgek7lr.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ TÂN LỢI VÀ AN HẢO, HUYỆN TỊNH BIÊN, TỈNH AN GIANG'),(1,'2023-10-19 21:53:21.399000',5,'',NULL,''),(1,'2023-10-19 21:53:49.197000',6,'',NULL,''),
-
-(1,'2023-10-19 21:54:49.086000',7,'',NULL,''),(1,'2023-10-19 22:01:39.350000',8,'',NULL,''),
-
-(1,'2023-10-19 23:51:46.718000',9,'aaaaaaaaa',NULL,'Lương Tấn Đạt'),
-
-(2,'2023-10-19 23:54:53.234000',10,'Lương Tấn Đạt','https://res.cloudinary.com/dvgpizkep/image/upload/v1697734492/mnjzsbl5wqhgtt3amr1u.png','Lương Tấn Đạt');
+(3,'2023-10-15 19:06:42.151000',4,'Ngày 17,18,19/3, Quỹ Bông Sen đã tiếp tục đồng hành cùng đoàn y bác sĩ Thiện Đức thực hiện chuyến khám bệnh từ thiện cho bà con xã Tân Lợi và An Hảo, huyện Tịnh Biên, tỉnh An Giang. Hàng trăm người dân đã tập trung từ rất sớm với rất đông các cụ già ngồi chờ đoàn. Để kịp tiến độ, đoàn đã làm việc liên tục, các y-bác sĩ, dược sĩ và tình nguyện viên thay phiên làm việc xuyên cả buổi trưa. ','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371602/aaziaij4lan8wwgek7lr.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ TÂN LỢI VÀ AN HẢO, HUYỆN TỊNH BIÊN, TỈNH AN GIANG'),(1,'2023-10-19 21:53:21.399000',5,'',NULL,''),(1,'2023-10-19 21:53:49.197000',6,'',NULL,'');
 
 
-INSERT INTO `new_category` VALUES (1,'Suất ăn'),(2,'Giáo dục'),(3,'Y tế'),(4,'Xây dựng');
 
 

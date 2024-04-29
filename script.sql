@@ -1,6 +1,6 @@
 -- User
 
-INSERT INTO `user` (status, id, username, pathotype, email, password, enabled) VALUES 
+INSERT INTO `user` (status, id, username, auth_type, email, password, enabled) VALUES 
 (1,1,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme',1),
 (1,2,'superadmin',NULL,'superadmin@gmail.com','$2a$10$PKrMUFBrnTwd1Dxf9sIPUe5SczNe2209lUO.MpMcpe6zl9fwuSsUK',1),
 (1,3,'user',NULL,'drakecrys29@gmail.com','$2a$10$O0yot0tAvgC/S9CRiqlCQu.0/mDgb3fVhhRTrNmwDH/.XiPFBsUNi',1),

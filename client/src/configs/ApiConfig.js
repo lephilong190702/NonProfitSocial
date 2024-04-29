@@ -5,11 +5,11 @@ const SERVER_CONTEXT = ""
 const SERVER = "http://34.101.250.153:9090" 
 
 export const endpoints = {
-    "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
+    "newsCategory": `/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
     "newsId": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,
-    "projectCategory": `${SERVER_CONTEXT}/api/pcategories/`,
+    "projectCategory": `/api/pcategories/`,
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
     "profile": `${SERVER_CONTEXT}/api/profile/`,

@@ -9,7 +9,6 @@ pipeline {
         CLUSTER_NAME = 'k8s-cluster'
         LOCATION = 'asia-southeast2-a'
         CREDENTIALS_ID = 'kubernetes'	
-        MYSQL_ROOT_LOGIN = credentialsId('mysql-root-login')
 	}
 	
     stages {
@@ -35,7 +34,7 @@ pipeline {
                 echo "Start deployment of mysql-service.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 echo "Deployment MySQL Finished ..."
-                sh 'docker exec -i mysql mysql --user =root --password=${MYSQL_ROOT_LOGIN} < script.sql'
+                sh 'docker exec -i mysql mysql --user=root --password=admin < script.sql'
             }
         }
 

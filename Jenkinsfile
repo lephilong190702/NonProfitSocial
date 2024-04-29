@@ -34,7 +34,13 @@ pipeline {
                 echo "Start deployment of mysql-service.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 echo "Deployment MySQL Finished ..."
-                sh 'docker exec -i mysql mysql --user=root --password=admin < script.sql'
+            }
+        }
+
+        stage('Initialize MySQL Database') {
+            steps {
+                echo "Initializing MySQL database..."
+                sh 'kubectl exec -it $(kubectl get pods -l app=mysql -o jsonpath="{.items[0].metadata.name}") -- mysql -u root -p admin < script.sql'
             }
         }
 

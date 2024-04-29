@@ -37,13 +37,6 @@ pipeline {
             }
         }
 
-        // stage('Initialize MySQL Database') {
-        //     steps {
-        //         echo "Initializing MySQL database..."
-        //         sh 'kubectl exec -it $(kubectl get pods -l app=mysql -o jsonpath="{.items[0].metadata.name}") -- mysql -u root -p admin < script.sql'
-        //     }
-        // }
-
         stage('Build') {
 		    steps {
                 sh 'cd charity/ && mvn --version'

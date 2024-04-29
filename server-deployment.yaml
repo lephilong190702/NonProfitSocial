@@ -15,7 +15,7 @@ spec:
       containers:
         - name: server
           image: lephilong1907/charity:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 9090
           env:

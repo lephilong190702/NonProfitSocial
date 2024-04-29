@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         profile.setUser(user);
 
         user.setProfile(profile);
-        
+
         User savedUser = userRepository.save(user);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(savedUser);
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Complete Registration!");
         mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:9090/api/confirm-account?token="+confirmationToken.getConfirmationToken());
+                + "http://localhost:9090/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
         mailService.sendMailRegister(mailMessage);
 
         System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
@@ -108,8 +108,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> confirmEmail(String confirmationToken) {
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
-        if(token != null)
-        {
+        if (token != null) {
             User user = userRepository.findByEmailIgnoreCase(token.getUser().getEmail());
             user.setEnabled(true);
             userRepository.save(user);
@@ -170,7 +169,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerOAuthUser(String email, AuthenticationType type) {
         User user = userRepository.findByEmail(email);
-        if(user == null) {
+        if (user == null) {
             User nUser = new User();
             nUser.setEmail(email);
             nUser.setAuthType(type);
@@ -194,17 +193,19 @@ public class UserServiceImpl implements UserService {
         return "Kiểm tra email để xác nhận đặt lại mật khẩu!";
     }
 
-  
     public void sendForgotPassword(String email) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject("Reset Password");
-        mimeMessageHelper.setText("""
-        <div>
-          <a href="http://localhost:5173/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
-        </div>
-        """.formatted(email), true);
+        mimeMessageHelper.setText(
+                """
+                        <div>
+                          <a href="http://localhost:5173/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+                        </div>
+                        """
+                        .formatted(email),
+                true);
         javaMailSender.send(mimeMessage);
     }
 
@@ -236,6 +237,12 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("User not found");
         }
+    }
+
+    @Override
+    public boolean isAdmin(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN"));
     }
 
 }

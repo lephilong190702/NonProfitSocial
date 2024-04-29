@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: mysql-config
 data:
- host: mysql
- dbName: charitydb
+  host: mysql
+  dbName: charitydb

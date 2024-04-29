@@ -7,7 +7,7 @@ pipeline {
 	environment {
 		PROJECT_ID = 'nonprofit-social-421415'
         CLUSTER_NAME = 'k8s-cluster'
-        LOCATION = 'asia-southeast2'
+        LOCATION = 'asia-southeast2-a'
         CREDENTIALS_ID = 'kubernetes'	
 	}
 	
@@ -36,6 +36,13 @@ pipeline {
                 echo "Deployment MySQL Finished ..."
             }
         }
+
+        // stage('Initialize MySQL Database') {
+        //     steps {
+        //         echo "Initializing MySQL database..."
+        //         sh 'kubectl exec -it $(kubectl get pods -l app=mysql -o jsonpath="{.items[0].metadata.name}") -- mysql -u root -p admin < script.sql'
+        //     }
+        // }
 
         stage('Build') {
 		    steps {

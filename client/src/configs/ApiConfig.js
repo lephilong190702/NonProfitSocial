@@ -59,7 +59,8 @@ export const endpoints = {
     "join-room": (roomCode) => `${SERVER_CONTEXT}/api/rooms/${roomCode}/join/`,
     "address-project-all": `${SERVER_CONTEXT}/api/addresses/`,
     "address-project": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/addresses/`,
-    "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`
+    "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`,
+    "check-admin-role": (userId) => `${SERVER_CONTEXT}/api/check-admin-role/${userId}`,
 }
 
 export const authApi = () => {

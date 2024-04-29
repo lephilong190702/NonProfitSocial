@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/dashboard}">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Details</title>
+</head>
+
+<body>
+  <div class="main-content container-fluid" layout:fragment="content">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" >Thông tin địa chỉ dự án chi tiết</h4>
+      </div>
+      <div class="card-content">
+        <div class="card-body">
+          <form th:action="@{/admin/address}" method="post" th:object="${address}" enctype="multipart/form-data">
+            <input type="hidden" id="addressId" name="addressId"  th:field="*{id}"/>
+            <div class="form-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <label>Tên dự án</label>
+                </div>
+                <div class="col-md-8 form-group">
+                  <select id="projectId" name="projectId" class="form-control"
+                      style="background-color: #ffffff; border: 1px solid #ccc; border-radius: 5px; padding: 10px; width: 100%;">
+                      <option th:each="p : ${projects}" th:value="${p.id}"
+                          th:text="${p.title}">
+                      </option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label>Latitude</label>
+                </div>
+                <div class="col-md-8 form-group">
+                  <input type="text" id="latitude" name="latitude" th:field="*{latitude}" class="form-control"
+                      placeholder="Nhập latitude"/>
+                  <span th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}" class="text-sm text-red-500"></span>
+                </div>
+                <div class="col-md-4">
+                  <label>Longitude</label>
+                </div>
+                <div class="col-md-8 form-group">
+                  <input type="text" id="longitude" name="longitude" th:field="*{longitude}" class="form-control"
+                      placeholder="Nhập longitude"/>
+                  <span th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}" class="text-sm text-red-500"></span>
+                </div>
+                <div class="col-md-4">
+                  <label>Ghi chú</label>
+                </div>
+                <div class="col-md-8 form-group">
+                  <input type="text" id="name" name="name" th:field="*{name}" class="form-control"
+                      placeholder="Nhập ghi chú"/>
+                  <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-sm text-red-500"></span>
+                </div>
+                <div class="col-sm-12 d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+                  <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

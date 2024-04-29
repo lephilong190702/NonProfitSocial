@@ -25,15 +25,15 @@
                     </thead>
                     <tbody>
                         <tr th:each="a:${address}">
-                            <td th:text="${a.id}"></td>  
-                            <td th:text="${a.project.title}"></td>  
-                            <td th:text="${a.name}"></td>  
+                            <td th:text="${a.id}"></td>
+                            <td th:text="${a.project.title}"></td>
+                            <td th:text="${a.name}"></td>
                             <td th:text="${a.longitude + ', ' + a.latitude}"></td>
-                            <td>
+                            <td style="white-space: nowrap;">
                                 <a th:href="@{/admin/accept/{addressId}(addressId=${a.id})}"
                                    class="btn btn-primary me-1 mb-1"
                                    onclick="return confirm('Bạn có chắc chắn muốn chấp nhận địa chỉ này không?')">CHẤP NHẬN</a>
-                            
+
                                 <a th:href="@{/admin/deny/{addressId}(addressId=${a.id})}"
                                    class="btn btn-primary me-1 mb-1"
                                    onclick="return confirm('Bạn có chắc chắn muốn từ chối địa chỉ này không?')">TỪ CHỐI</a>

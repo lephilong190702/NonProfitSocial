@@ -100,7 +100,7 @@ public class AddressServiceImpl implements AddressService  {
 
         Address a = this.addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy địa chỉ với ID: " + id));
 
-        boolean isAdmin = user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+        boolean isAdmin = user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN") || role.getName().equals("ROLE_SUPERADMIN"));
         if (!a.getUser().equals(user) && !isAdmin) {
             throw new SecurityException("Bạn không có quyền cập nhật địa điểm này!!!");
         }
@@ -135,7 +135,7 @@ public class AddressServiceImpl implements AddressService  {
         }
         
         Address a = this.addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Không tìm thấy địa chỉ với ID: " + id));
-        boolean isAdmin = user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+        boolean isAdmin = user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN") || role.getName().equals("ROLE_SUPERADMIN"));
         if (!a.getUser().equals(user) && !isAdmin) {
             throw new SecurityException("Bạn không có quyền xóa địa điểm này!!!");
         }

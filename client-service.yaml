@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: client
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: client
   ports:

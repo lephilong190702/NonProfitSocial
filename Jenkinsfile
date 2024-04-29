@@ -60,6 +60,8 @@ pipeline {
                     sh 'docker login -u lephilong1907 -p ${dockerhub}'
                     
                     sh 'docker push lephilong1907/charity:latest'
+
+                    sh 'docker push lephilong1907/client:latest'
                 }
             }
         }

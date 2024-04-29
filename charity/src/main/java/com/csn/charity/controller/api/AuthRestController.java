@@ -155,4 +155,11 @@ public class AuthRestController {
     public ResponseEntity<String> setPassword(@RequestParam String email, @RequestParam String newPassword) {
         return new ResponseEntity<>(userService.setPassword(email, newPassword), HttpStatus.OK);
     }
+
+    @GetMapping("/check-admin-role/{userId}")
+    @CrossOrigin
+    public ResponseEntity<Boolean> checkAdminRole(@PathVariable Long userId) {
+        boolean isAdmin = userService.isAdmin(userId);
+        return ResponseEntity.ok(isAdmin);
+    }
 }

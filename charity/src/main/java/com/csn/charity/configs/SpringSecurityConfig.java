@@ -92,7 +92,7 @@ public class SpringSecurityConfig {
                                 "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
                                 "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/",
                                 "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users", "/ws/**",
-                                "/api/confirm-account/**")
+                                "/api/confirm-account/**", "/api/check-admin-role/{userId}")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .anyRequest()

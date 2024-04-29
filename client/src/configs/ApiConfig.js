@@ -57,7 +57,9 @@ export const endpoints = {
     "set-password": `${SERVER_CONTEXT}/api/set-password/`,
     "create-room": `${SERVER_CONTEXT}/api/create-room/`,
     "join-room": (roomCode) => `${SERVER_CONTEXT}/api/rooms/${roomCode}/join/`,
+    "address-project-all": `${SERVER_CONTEXT}/api/addresses/`,
     "address-project": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/addresses/`,
+    "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`
 }
 
 export const authApi = () => {

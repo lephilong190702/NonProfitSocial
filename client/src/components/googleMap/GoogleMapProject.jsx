@@ -9,16 +9,16 @@ const GoogleMapProject = ({projectId}) => {
       height: "100vh",
     };
     const center = {
-      lat: 7.2905715,
-      lng: 80.6337262,
+      lat: 10.762622,
+      lng: 106.660172,
     };
 
     const [markers, setMarkers] = useState([]);
     
     useEffect(() => {
-      const loadAddressProject = async () => { // Make function async
+      const loadAddressProject = async () => {
           try {
-              const { data } = await ApiConfig.get(endpoints["address-project"](projectId)); // Await the API call
+              const { data } = await ApiConfig.get(endpoints["address-project"](projectId));
               setMarkers(data);
           } catch (error) {
               console.log(error);

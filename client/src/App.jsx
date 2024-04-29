@@ -20,6 +20,7 @@ import RoomPage from './pages/livestream/RoomPage';
 import ProjectPage from './pages/projectpage/ProjectPage';
 import NewsDetails from './components/news/NewsDetails';
 import RegisterVolunteerPage from './pages/registerVol/RegisterVolunteerPage';
+import ProjectsMap from './pages/projectpage/ProjectsMap';
 export const UserContext = createContext();
 
 const App = () => {
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/social/" element={<Home />} />
           <Route path="/social/profile" element={<Profile />} />
           <Route path='/projects' element ={<ProjectPage />} />
+          <Route path='/projects-map' element ={<ProjectsMap />} />
           <Route path="/projects/:projectId" element={<ProjectDetails />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/resetPassword" element={<ResetPassWordPage />} />

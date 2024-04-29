@@ -26,23 +26,21 @@ const RegisterVolunteerPage = () => {
     setVolunteer((current) => {
       return { ...current, startDate: evt.target.value };
     });
-    setShowStartDateAlert(false); // Ẩn thông báo khi người dùng thay đổi ngày bắt đầu
+    setShowStartDateAlert(false); 
   };
 
-  // Hàm thay đổi trạng thái khi người dùng thay đổi input ngày kết thúc
   const handleEndDateChange = (evt) => {
     setVolunteer((current) => {
       return { ...current, endDate: evt.target.value };
     });
-    setShowEndDateAlert(false); // Ẩn thông báo khi người dùng thay đổi ngày kết thúc
+    setShowEndDateAlert(false);
   };
 
-  // Hàm thay đổi trạng thái khi người dùng thay đổi input dự án
   const handleProjectChange = (evt) => {
     setVolunteer((current) => {
       return { ...current, projectId: evt.target.value };
     });
-    setShowProjectAlert(false); // Ẩn thông báo khi người dùng thay đổi dự án
+    setShowProjectAlert(false);
   };
 
 

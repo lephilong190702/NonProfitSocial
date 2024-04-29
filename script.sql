@@ -1,9 +1,9 @@
 
-INSERT INTO `user` VALUES 
-(1,1,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme',1),
-(1,16,'superadmin',NULL,'superadmin@gmail.com','$2a$10$PKrMUFBrnTwd1Dxf9sIPUe5SczNe2209lUO.MpMcpe6zl9fwuSsUK',1),
-(1,31,'user',NULL,'drakecrys29@gmail.com','$2a$10$O0yot0tAvgC/S9CRiqlCQu.0/mDgb3fVhhRTrNmwDH/.XiPFBsUNi',1),
-(1,45,'user123',NULL,'datluongtan1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
+INSERT INTO `user` (status, id, username, auth_type, email, password, enabled) VALUES 
+(1,2,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme',1),
+(1,3,'superadmin',NULL,'superadmin@gmail.com','$2a$10$PKrMUFBrnTwd1Dxf9sIPUe5SczNe2209lUO.MpMcpe6zl9fwuSsUK',1),
+(1,4,'user',NULL,'drakecrys29@gmail.com','$2a$10$O0yot0tAvgC/S9CRiqlCQu.0/mDgb3fVhhRTrNmwDH/.XiPFBsUNi',1),
+(1,5,'user123',NULL,'datluongtan1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
 
 INSERT INTO `users_roles` VALUES (1,1),(3,16),(2,31),(2,45);
 

@@ -1,21 +1,3 @@
-// import axios from "axios";
-// import cookie from "react-cookies";
-
-// export const SERVER_CONTEXT = "http://localhost:8080/server";
-
-// export const authApi = () => {
-//   return axios.create({
-//     baseURL: SERVER_CONTEXT,
-//     headers: {
-    //   Authorization: cookie.load("token"),
-//     },
-//   });
-// };
-
-// export default axios.create({
-//   baseURL: SERVER_CONTEXT,
-// });
-
 import axios from "axios";
 import cookie from "react-cookies";
 
@@ -23,7 +5,7 @@ const SERVER_CONTEXT = ""
 const SERVER = "http://34.128.126.148" 
 
 export const endpoints = {
-    "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
+    "newsCategory": `${SERVER}/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
     "newsId": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,

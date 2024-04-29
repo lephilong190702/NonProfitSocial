@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
 import moment from "moment";
-import { Box, InputBase, Typography } from "@mui/material";
+import { Box, InputBase, TextField, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookMessenger,
@@ -16,6 +16,7 @@ import GoogleMapProject from "./googleMap/GoogleMapProject";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
+  const nav = useNavigate();
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [contributor, setContributor] = useState([]);
@@ -25,7 +26,14 @@ const ProjectDetails = () => {
     note: "",
   });
 
+  const [addressRecommended, setAddressRecommended] = useState({
+    latitude: "",
+    longitude: "",
+    name: "",
+  });
+
   const [showModal, setShowModal] = useState(false);
+  const [showModelAddress, setShowModalAddress] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
@@ -45,10 +53,14 @@ const ProjectDetails = () => {
   const [selectedProjectTitle, setSelectedProjectTitle] = useState(""); // Thêm state mới
 
   const [errorMessage, setErrorMessage] = useState("");
-
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const [address, setAddress] = useState([]);
+
+  const [errorLat, setErrorLat] = useState("");
+  const [errorLng, setErrorLng] = useState("");
+  const [errorName, setErrorName] = useState("");
+
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
     console.log("vnpAmount: ", vnpAmount);
@@ -112,17 +124,57 @@ const ProjectDetails = () => {
 
     const loadAddressProject = async () => {
       try {
-        const { data } = await ApiConfig.get(endpoints["address-project"](projectId));
+        const { data } = await ApiConfig.get(
+          endpoints["address-project"](projectId)
+        );
         setAddress(data);
       } catch (error) {
         console.log(error);
       }
-    }
+    };
 
     loadAddressProject();
     loadContributor();
     loadProject();
   }, [projectId]);
+
+  const handleAddressProject = async () => {
+    const data = {
+      latitude: addressRecommended.latitude,
+      longitude: addressRecommended.longitude,
+      name: addressRecommended.name
+    };
+
+    if (!addressRecommended.latitude.trim()) {
+      setErrorLat("Vui lòng nhập latitude");
+    }
+
+    if (!addressRecommended.longitude.trim()) {
+      setErrorLng("Vui lòng nhập longitude");
+    }
+
+    if (!addressRecommended.name.trim()) {
+      setErrorName("Vui lòng nhập ghi chú");
+      return;
+    }
+  
+    try {
+      const res = await authApi().post(endpoints["post-address"](selectedProjectId), data, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      setSuccess("Gửi địa chỉ thành công");
+      setTimeout(() => {
+        setSuccess("");
+        nav("/projects-map");
+      }, 2000);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handlePayment = async () => {
     if (selectedProjectId === null) {
@@ -181,9 +233,21 @@ const ProjectDetails = () => {
     setShowModal(true);
   };
 
+  const openProposeAddress = (projectId, projectTitle) => {
+    localStorage.setItem("selectedProjectId", projectId);
+    setSelectedProjectId(projectId);
+    setSelectedProjectTitle(projectTitle);
+    setShowModalAddress(true);
+  };
+
   const closeModal = () => {
     setSelectedProjectId(null);
     setShowModal(false);
+  };
+
+  const closeModalAddress = () => {
+    setSelectedProjectId(null);
+    setShowModalAddress(false);
   };
 
   if (project === null) {
@@ -318,6 +382,14 @@ const ProjectDetails = () => {
 
       <hr />
       <GoogleMapProject projectId={projectId} />
+
+      <button
+        onClick={() => openProposeAddress(project.id, project.title)}
+        className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+      >
+        Đề xuất địa chỉ
+      </button>
+
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <div className="text-xl text-center font-bold">
@@ -364,41 +436,6 @@ const ProjectDetails = () => {
               </div>
             </div>
           </Box>
-          {/* <div>
-            <p>Số tiền đóng góp</p>
-            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
-          </div>
-          <div className="mt-3">
-            <p>Ghi chú</p>
-            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
-          </div> */}
-          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
-            <Form.Group className="" controlId="donateAmount">
-              <Form.Label>Số tiền đóng góp</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Nhập số tiền đóng góp"
-                value={pay.donateAmount}
-                onChange={(e) => {
-                  setPay({ ...pay, donateAmount: e.target.value });
-                  setErrorMessage("");
-                }}
-              />
-              {errorMessage && (
-                <Form.Text className="text-danger">{errorMessage}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group controlId="note">
-              <Form.Label>Ghi chú</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Nhập ghi chú (tuỳ chọn)"
-                value={pay.note}
-                onChange={(e) => setPay({ ...pay, note: e.target.value })}
-              />
-            </Form.Group>
-          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>
@@ -408,6 +445,95 @@ const ProjectDetails = () => {
             Xác nhận đóng góp
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      <Modal show={showModelAddress} onHide={closeModalAddress}>
+        <Modal.Header closeButton>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-row w-full">
+              <div className="flex flex-col">
+                 <TextField
+                id="standard-number"
+                label="Latitude"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+                value={addressRecommended.latitude}
+                onChange={(e) => {setAddressRecommended({ ...addressRecommended, latitude: e.target.value });
+                                  setErrorLat("");
+                }}
+                />
+                {errorLat && (
+                  <Form.Text className="text-danger">{errorLat}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <TextField
+                id="standard-number"
+                label="Longitude"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+                value={addressRecommended.longitude}
+                onChange={(e) => {setAddressRecommended({ ...addressRecommended, longitude: e.target.value });
+                                  setErrorLng("");
+                }}
+                />
+                {errorLng && (
+                  <Form.Text className="text-danger">{errorLng}</Form.Text>
+                )}
+              </div>
+             
+              
+            </div>
+
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="mt-2">Ghi chú</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  value={addressRecommended.name}
+                  onChange={(e) => {setAddressRecommended({ ...addressRecommended, name: e.target.value });
+                                    setErrorName("");
+                }}
+                />
+                {errorName && (
+                  <Form.Text className="text-danger">{errorName}</Form.Text>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModalAddress}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleAddressProject}>
+            Xác nhận thông tin
+          </Button>
+        </Modal.Footer>
+        {success && (
+          <div className="alert alert-success">{success}</div>
+        )}
       </Modal>
     </>
   );

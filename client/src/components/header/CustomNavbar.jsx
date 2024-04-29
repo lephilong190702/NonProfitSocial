@@ -176,7 +176,7 @@ const CustomNavbar = () => {
                   <div>
                     <div className="group">
                       <li className="top-menu-item">
-                        <Link to="" className="nav-link top-menu-item">
+                        <Link to="/projects-map" className="nav-link top-menu-item">
                           DỰ ÁN
                         </Link>
                       </li>

@@ -48,7 +48,7 @@ pipeline {
 	    stage('Build/Push docker image'){
             steps{
                 sh 'cd charity/ && docker build -t lephilong1907/charity:latest .'
-                sh 'cd client/ && docker build -t lephilong1907/client:latest .'
+                sh 'cd client/ && docker build --no-cache -t lephilong1907/client:latest .'
                 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
                     sh 'docker login -u lephilong1907 -p ${dockerhub}'
                     

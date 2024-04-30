@@ -47,9 +47,8 @@ pipeline {
 
         stage('Build Docker Image') {
 		    steps {
-			    sh 'cd ./charity/'
 			    script {
-				    server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}")
+                    server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}", './charity')
 			    }
 		    }
 	    }

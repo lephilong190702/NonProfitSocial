@@ -2,7 +2,7 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-const SERVER = "http://34.101.249.81:80" 
+const SERVER = "http://34.101.94.147:80" 
 // const SERVER="http://localhost:9090"
 
 export const endpoints = {

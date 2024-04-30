@@ -321,7 +321,7 @@ const Post = () => {
   };
 
   const connectToWebSocket = () => {
-    const socket = new SockJS("http://34.101.249.81:80/ws");
+    const socket = new SockJS("http://localhost:9090/ws");
     const stompClient = Client.over(socket);
 
     console.log("Connecting to websocket server...");
@@ -374,6 +374,7 @@ const Post = () => {
     const loadPosts = async () => {
       try {
         let res = await authApi().get(endpoints["public-posts"]);
+        console.log(res.data);
         setPost(res.data);
 
         const commentPromises = res.data.map((post) => {

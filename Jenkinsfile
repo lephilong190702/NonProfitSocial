@@ -47,17 +47,28 @@ pipeline {
 
         stage('Build Docker Image') {
 		    steps {
-			    sh 'whoami'
+			    sh 'cd ./charity/'
 			    script {
-				    myimage = docker.build("ameintu/devops:${env.BUILD_ID}")
+				    server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}")
+			    }
+		    }
+	    }
+
+        stage("Push Docker Image") {
+		    steps {
+			    script {
+				    echo "Push Docker Image"
+				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            				sh "docker login -u lephilong1907 -p ${dockerhub}"
+				    }
+				        server_image.push("${env.BUILD_ID}")
+				    
 			    }
 		    }
 	    }
 	 
 	    stage('Build/Push docker image'){
             steps{
-                sh 'cd charity/ && docker build -t lephilong1907/charity:${env.BUILD_ID}'
-                sh 'cd client/ && docker build  -t lephilong1907/client:${env.BUILD_ID}'
                 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
                     sh 'docker login -u lephilong1907 -p ${dockerhub}'
                     

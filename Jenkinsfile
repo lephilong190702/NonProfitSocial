@@ -37,13 +37,6 @@ pipeline {
             }
         }
 
-        // stage('Initialize MySQL Database') {
-        //     steps {
-        //         echo "Initializing MySQL database..."
-        //         sh 'kubectl exec -it $(kubectl get pods -l app=mysql -o jsonpath="{.items[0].metadata.name}") -- mysql -u root -p admin < script.sql'
-        //     }
-        // }
-
         stage('Build') {
 		    steps {
                 sh 'cd charity/ && mvn --version'
@@ -54,17 +47,21 @@ pipeline {
 	 
 	    stage('Build/Push docker image'){
             steps{
-                sh 'cd charity/ && docker build -t lephilong1907/charity:latest .'
+                sh 'cd charity/ && docker build --no-cache -t lephilong1907/charity:latest .'
+                sh 'cd client/ && docker build --no-cache -t lephilong1907/client:latest .'
                 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
                     sh 'docker login -u lephilong1907 -p ${dockerhub}'
                     
                     sh 'docker push lephilong1907/charity:latest'
+
+                    sh 'docker push lephilong1907/client:latest'
                 }
             }
         }
 
         stage('Deploy Spring Boot to K8s') {
             steps{
+                sh 'docker image pull lephilong1907/charity:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'
@@ -79,6 +76,7 @@ pipeline {
 
         stage('Deploy ReactJS to K8s') {
             steps{
+                sh 'docker image pull lephilong1907/client:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'

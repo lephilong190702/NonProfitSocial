@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: lephilong1907/client:latest
+          image: lephilong1907/client:tagversion
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

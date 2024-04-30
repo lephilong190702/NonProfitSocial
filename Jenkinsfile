@@ -44,27 +44,36 @@ pipeline {
 			    sh 'cd charity/ && mvn clean install -DskipTests'
 		    }
 	    }
-	 
-	    stage('Build/Push docker image'){
-            steps{
-                sh 'cd charity/ && docker build --no-cache -t lephilong1907/charity:latest .'
-                sh 'cd client/ && docker build --no-cache -t lephilong1907/client:latest .'
-                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
-                    sh 'docker login -u lephilong1907 -p ${dockerhub}'
-                    
-                    sh 'docker push lephilong1907/charity:latest'
 
-                    sh 'docker push lephilong1907/client:latest'
-                }
-            }
-        }
+        stage('Build Docker Image') {
+		    steps {
+			    script {
+                    server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}", './charity')
+                    client_image = docker.build("lephilong1907/client:${env.BUILD_ID}", './client')
+			    }
+		    }
+	    }
+
+        stage("Push Docker Image") {
+		    steps {
+			    script {
+				    echo "Push Docker Image"
+				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            				sh "docker login -u lephilong1907 -p ${dockerhub}"
+				    }
+				        server_image.push("${env.BUILD_ID}")
+                        client_image.push("${env.BUILD_ID}")
+				    
+			    }
+		    }
+	    }
 
         stage('Deploy Spring Boot to K8s') {
             steps{
-                sh 'docker image pull lephilong1907/charity:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'
+                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' server-deployment.yaml"
                 echo "Start deployment of server-deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'server-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 echo "Start deployment of server-service.yaml"
@@ -76,10 +85,10 @@ pipeline {
 
         stage('Deploy ReactJS to K8s') {
             steps{
-                sh 'docker image pull lephilong1907/client:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'
+                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' client-deployment.yaml"
                 echo "Start deployment of client-deployment.yaml"
                 step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'client-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
                 echo "Start deployment of client-service.yaml"

@@ -373,7 +373,8 @@ const Post = () => {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        let res = await authApi().get(endpoints["post"]);
+        let res = await authApi().get(endpoints["public-posts"]);
+        console.log(res.data);
         setPost(res.data);
 
         const commentPromises = res.data.map((post) => {

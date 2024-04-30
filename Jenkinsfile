@@ -49,6 +49,7 @@ pipeline {
 		    steps {
 			    script {
                     server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}", './charity')
+                    client_image = docker.build("lephilong1907/client:${env.BUILD_ID}", './client')
 			    }
 		    }
 	    }
@@ -61,22 +62,11 @@ pipeline {
             				sh "docker login -u lephilong1907 -p ${dockerhub}"
 				    }
 				        server_image.push("${env.BUILD_ID}")
+                        client_image.push("${env.BUILD_ID}")
 				    
 			    }
 		    }
 	    }
-	 
-	    stage('Build/Push docker image'){
-            steps{
-                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) { 
-                    sh 'docker login -u lephilong1907 -p ${dockerhub}'
-                    
-                    sh 'docker push lephilong1907/charity:${env.BUILD_ID}'
-
-                    sh 'docker push lephilong1907/client:${env.BUILD_ID}'
-                }
-            }
-        }
 
         stage('Deploy Spring Boot to K8s') {
             steps{

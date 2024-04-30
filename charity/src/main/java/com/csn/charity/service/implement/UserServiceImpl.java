@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
         mimeMessageHelper.setText(
                 """
                         <div>
-                          <a href="http://localhost:5173/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+                          <a href="http://34.101.249.81:80/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
                         </div>
                         """
                         .formatted(email),

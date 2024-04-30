@@ -1,11 +1,7 @@
 package com.csn.charity.service.implement;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,7 +50,7 @@ public class PostServiceImpl implements PostService {
             Post post = new Post();
             post.setContent(postDTO.getContent());
             post.setUser(user);
-            post.setStatus(true);
+            post.setStatus(false);
             post.setCreateDate(new Date());
 
             List<Tag> postHashtags = new ArrayList<>();
@@ -180,5 +176,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAvailablePosts() {
         return this.postRepository.findByStatus(true);
+    }
+
+    @Override
+    public List<Post> getUnAvailablePosts() {
+        return this.postRepository.findByStatus(false);
+    }
+
+    @Override
+    public void activePost (Long id){
+        Post post = this.postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+        post.setStatus(true);
+        this.postRepository.save(post);
     }
 }

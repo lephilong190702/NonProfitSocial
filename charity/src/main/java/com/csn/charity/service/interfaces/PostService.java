@@ -17,4 +17,7 @@ public interface PostService {
     Post getPostById(Long id);
 
     List<Post> getAvailablePosts();
+    List<Post> getUnAvailablePosts();
+
+    void activePost(Long id);
 }

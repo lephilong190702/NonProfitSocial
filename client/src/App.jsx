@@ -6,7 +6,7 @@ import cookie from "react-cookies";
 
 // import RegisterVolunteerPage from './pages/RegisterVolunteerPage';
 // import NewsDetails from './components/NewsDetails';
-import Home from './pages/social/Home';
+// import Home from './pages/social/Home';
 import Profile from './pages/profile/Profile';
 import { Header } from './components';
 import ProjectDetails from './components/ProjectDetails';
@@ -21,6 +21,8 @@ import ProjectPage from './pages/projectpage/ProjectPage';
 import NewsDetails from './components/news/NewsDetails';
 import RegisterVolunteerPage from './pages/registerVol/RegisterVolunteerPage';
 import ProjectsMap from './pages/projectpage/ProjectsMap';
+import Home from './pages/social/home/Home';
+import AcceptPost from './pages/social/accepted_post/AcceptPost';
 export const UserContext = createContext();
 
 const App = () => {
@@ -48,6 +50,7 @@ const App = () => {
           <Route path="/resetPassword" element={<ResetPassWordPage />} />
           <Route path="/livestream" element={<LiveStreamPage />} />
           <Route path="/livestream/:roomId" element={<RoomPage />} />
+          <Route path='/accept_post' element={<AcceptPost />} />
 
         </Routes>
         <Footer />

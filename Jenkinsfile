@@ -70,7 +70,6 @@ pipeline {
 
         stage('Deploy Spring Boot to K8s') {
             steps{
-                sh 'docker image pull lephilong1907/charity:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'
@@ -86,7 +85,6 @@ pipeline {
 
         stage('Deploy ReactJS to K8s') {
             steps{
-                sh 'docker image pull lephilong1907/client:latest'
                 echo "Deployment started ..."
                 sh 'ls -ltr'
                 sh 'pwd'

@@ -4,12 +4,9 @@ WORKDIR /client
 
 COPY ./package.json /client
 
-
 RUN npm install --force
 
-COPY . .
-
-RUN npm run build
+COPY . . 
 
 EXPOSE 3000
 

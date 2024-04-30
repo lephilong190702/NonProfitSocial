@@ -1,21 +1,26 @@
 package com.csn.charity.controller;
 
+import com.csn.charity.model.Address;
+import com.csn.charity.model.Project;
+import com.csn.charity.service.interfaces.ProjectService;
+import jakarta.validation.Valid;
+import org.apache.commons.math3.analysis.function.Add;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import com.csn.charity.service.interfaces.AddressService;
+
+import java.util.List;
 
 @Controller
 @SessionAttributes("currentPage")
 public class AddressController {
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private ProjectService projectService;
     
     @GetMapping("/addresses")
     public String getAllAddress(Model model) {
@@ -42,4 +47,36 @@ public class AddressController {
         return "redirect:/address";
     }
 
+    @GetMapping("/admin/address")
+    public String addAddress(Model model) {
+        Address address = new Address();
+        model.addAttribute("address", address);
+        List<Project> projects = projectService.getAll();
+        model.addAttribute("projects", projects);
+        return "pages/address_info";
+    }
+    @GetMapping("/admin/address/{id}")
+    public String update(Model model, @PathVariable(value = "id") Long id) {
+        model.addAttribute("address", addressService.getById(id));
+        List<Project> projects = projectService.getAll();
+        model.addAttribute("projects", projects);
+        return "pages/address_info";
+    }
+
+    @PostMapping("/admin/address")
+    public String updateAddress(@Valid @ModelAttribute(value = "address") Address address,
+                                Model model, @RequestParam(value = "projectId", required = false) Long projectId) {
+        Project project = projectService.get(projectId);
+        address.setProject(project);
+        if (address.getId() == null) {
+            addressService.addAddress(address, projectId);
+        }
+        else {
+            addressService.updateById(address.getId(), address);
+        }
+
+        return "redirect:/addresses";
+    }
+
+//    @PostMapping
 }

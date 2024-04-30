@@ -11,7 +11,7 @@
 <body>
     <div class="main-content container-fluid" layout:fragment="content">
         <h1 class="text-info text-center">QUẢN LÝ ĐỊA CHỈ TỪ THIỆN</h1>
-        <a th:href="@{/address}" class="btn btn-info mt-5" >XÉT DUYỆT</a>
+        <a th:href="@{/admin/address}" class="btn btn-info mt-5" >THÊM ĐỊA CHỈ</a>
         <div class="container my-2 mt-5">
             <div class="table-responsive">
                 <table class="table table-bordered mb-0">
@@ -33,8 +33,11 @@
                             <td th:text="${a.longitude != null && a.latitude != null ? a.longitude + ', ' + a.latitude : 'N/A'}"></td>
                             <td th:text="${a.status != null ? a.status : 'N/A'}"></td>
                             <td>
-                                <a class="btn btn-danger" th:attr="path=@{/admin/address/{id}(id=${a.id})}"
-                                    onclick="deleteAddress(this.getAttribute('path'))">Delete</a>
+                                <div class="btn-group" role="group" aria-label="Address Actions">
+                                    <a class="btn btn-primary" th:href="@{/admin/address/{id}(id=${a.id})}">Update</a>
+                                    <span style="margin-left: 10px;"></span>
+                                    <a class="btn btn-danger" th:attr="path=@{/admin/address/{id}(id=${a.id})}" onclick="deleteAddress(this.getAttribute('path'))">Delete</a>
+                                </div>
                             </td>
                         </tr>
                         

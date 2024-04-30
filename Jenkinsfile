@@ -47,7 +47,6 @@ pipeline {
 
         stage('Build Docker Image') {
 		    steps {
-			    sh 'whoami'
 			    script {
 				    server_image = docker.build("lephilong1907/charity:${env.BUILD_ID}")
 

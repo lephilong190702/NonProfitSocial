@@ -9,7 +9,7 @@ import {
 } from "react-bootstrap";
 import MySpinner from "../../layout/MySpinner";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import ApiConfig, { endpoints } from "../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../configs/ApiConfig";
 import { UserContext } from "../../App";
 import { saveAs } from "file-saver";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,6 +21,8 @@ import {
 
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
+  const [employee, setEmployee] = useState(false);
+
   const [newsCategory, setNewsCategory] = useState([]);
   const [projectCategory, setProjectCategory] = useState([]);
   const [kw, setKw] = useState("");
@@ -81,9 +83,25 @@ const CustomNavbar = () => {
       }
     };
 
+    const isEmployee = async () => {
+      try {
+        const response = await authApi().get(endpoints["current-user"]);
+        const userId = response.data.id;
+        const res = await authApi().get(endpoints["check-employee-role"](userId));
+        console.log(res.data);
+        if (res.data === true) {
+          setEmployee(true);
+          console.log(employee);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    isEmployee();
     loadProjects();
     loadNews();
-  }, []);
+  }, [user]);
 
   const exportFinancialReport = async () => {
     try {
@@ -106,12 +124,12 @@ const CustomNavbar = () => {
   };
 
   const logout = () => {
+    setEmployee(false);
+    
     dispatch({
       type: "logout",
     });
-    console.log("aaa");
     nav("/login");
-    // history.push("/login");
   };
 
   if (newsCategory.length === 0) return <MySpinner />;
@@ -176,7 +194,10 @@ const CustomNavbar = () => {
                   <div>
                     <div className="group">
                       <li className="top-menu-item">
-                        <Link to="/projects-map" className="nav-link top-menu-item">
+                        <Link
+                          to="/projects-map"
+                          className="nav-link top-menu-item"
+                        >
                           DỰ ÁN
                         </Link>
                       </li>
@@ -279,6 +300,15 @@ const CustomNavbar = () => {
                       </Link>
                     </li>
                   </div>
+                  {employee && (
+                    <div>
+                      <li className="top-menu-item group">
+                        <Link to="/accept_post" className="nav-link">
+                          DUYỆT BÀI
+                        </Link>
+                      </li>
+                    </div>
+                  )}
                   {user === null ? (
                     <>
                       <div className="hidden md:flex items-center font-bold w-auto md:order-1">
@@ -297,7 +327,6 @@ const CustomNavbar = () => {
                                 fixedWidth
                               />
                               <div class="flex justify-center items-center text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
-                                
                                 Đăng Nhập
                               </div>
 

@@ -49,6 +49,12 @@ const Post = () => {
   const [commentDisplayModes, setCommentDisplayModes] = useState({});
   const [replyDisplayModes, setReplyDisplayModes] = useState({});
 
+  const [edit, setEdit] = useState({
+    content: "",
+    tags: [],
+    image: [],
+  });
+
   const toggleCommentDisplay = (postId) => {
     setCommentDisplayModes((prevModes) => ({
       ...prevModes,
@@ -155,7 +161,7 @@ const Post = () => {
 
   const handleEditPost = async (postId) => {
     try {
-      // Ensure edited images are set before updating the post
+
       const updatedPostImages = image.map((image, index) => {
         if (editedImages[index]) {
           return editedImages[index];
@@ -169,7 +175,7 @@ const Post = () => {
         image: updatedPostImages,
       });
 
-      console.log("Kết quả chỉnh sửa bài viết:", response.data);
+      console.log("Kết quả chỉnh sửa bài viết:", response.content);
 
       setEditPostModalOpen(false);
       setEditedPostId(null);
@@ -436,7 +442,7 @@ const Post = () => {
     return () => {
       stompClient.disconnect();
     };
-  }, []);
+  }, [editedPostContent]);
 
   const handleMenuToggle = (postId) => {
     setMenuOpen((prevState) => ({

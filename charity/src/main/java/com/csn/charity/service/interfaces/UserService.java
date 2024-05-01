@@ -37,4 +37,6 @@ public interface UserService extends UserDetailsService {
     
     boolean isAdmin(Long userId);
 
+    boolean isEmployee(Long userId);
+
 }

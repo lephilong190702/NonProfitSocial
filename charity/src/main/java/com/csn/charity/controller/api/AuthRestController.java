@@ -162,4 +162,11 @@ public class AuthRestController {
         boolean isAdmin = userService.isAdmin(userId);
         return ResponseEntity.ok(isAdmin);
     }
+
+    @GetMapping("/check-employee-role/{userId}")
+    @CrossOrigin
+    public   ResponseEntity<Boolean> checkEmployeeRole(@PathVariable Long userId) {
+        boolean isEmployee = userService.isEmployee(userId);
+        return ResponseEntity.ok(isEmployee);
+    }
 }

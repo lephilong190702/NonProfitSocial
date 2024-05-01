@@ -245,4 +245,10 @@ public class UserServiceImpl implements UserService {
         return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_ADMIN"));
     }
 
+    @Override
+    public boolean isEmployee(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_EMPLOYEE"));
+    }
+
 }

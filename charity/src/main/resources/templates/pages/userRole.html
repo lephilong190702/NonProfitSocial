@@ -25,7 +25,6 @@
                             <th>EMAIL</th>
                             <th>TRẠNG THÁI</th>
                             <th>VAI TRÒ</th>
-                            <th>ACTION</th>
                         </thead>
                         <tbody>
                             <tr th:each="u:${users}">
@@ -34,16 +33,16 @@
                                 <td th:text="${u.email}"></td>
                                 <td th:text="${u.status != null ? (u.status ? 'Active' : 'Disabled') : 'N/A'}"></td>
                                 <td>
-                                    <form id="userRoleForm" action="/admin/userRoles" method="post">
-                                        <select class="form-control" id="userRoles" th:attr="data-user-id=${u.id}">
-                                            <option th:each="role : ${u.roles}" th:text="${role.name}" selected></option>
-                                            <option th:each="role : ${userRoles}" th:unless="${u.roles.contains(role)}" th:value="${role.id}" th:text="${role.name}"></option>
-                                        </select>
-                                        <td>                 
-                                            <button class="btn btn-primary" type="submit" id="saveButton" disabled>Save</button>
-                                        </td>
+                                    <form class="user-role-form" action="/admin/userRoles" method="post">
+                                        <input type="hidden" name="userId" th:value="${u.id}" />
+                                        <div class="d-flex">
+                                            <select class="form-control user-role-select">
+                                                <option th:each="role : ${u.roles}" th:text="${role.name}" th:value="${role.id}" selected></option>
+                                                <option th:each="role : ${userRoles}" th:unless="${u.roles.contains(role)}" th:value="${role.id}" th:text="${role.name}"></option>
+                                            </select>
+                                            <button class="btn btn-primary save-button" type="submit" disabled>Save</button>
+                                        </div>
                                     </form>
-                                    
                                 </td>
                             </tr>
                         </tbody>
@@ -51,21 +50,23 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
 </body>
 
 </html>
 
 <script>
-    document.getElementById('userRoles').addEventListener('change', function() {
-    var userId = this.getAttribute('data-user-id');
-    var roleId = this.value;
-    if (roleId !== '') {
-        document.getElementById('saveButton').disabled = false;
-        document.getElementById('userRoleForm').setAttribute('action', '/admin/user/' + userId + '/role/' + roleId);
-    } else {
-        document.getElementById('saveButton').disabled = true;
-    }
-});
-
+    document.querySelectorAll('.user-role-select').forEach(function(select) {
+        select.addEventListener('change', function() {
+            var roleId = this.value;
+            var form = this.closest('.user-role-form');
+            var saveButton = form.querySelector('.save-button');
+            if (roleId !== '') {
+                saveButton.disabled = false;
+                form.setAttribute('action', '/admin/user/' + form.querySelector('input[name="userId"]').value + '/role/' + roleId);
+            } else {
+                saveButton.disabled = true;
+            }
+        });
+    });
 </script>

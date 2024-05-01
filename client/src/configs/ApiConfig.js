@@ -24,6 +24,9 @@ export const endpoints = {
     "skill": `${SERVER_CONTEXT}/api/skills/`,
     "post": `${SERVER_CONTEXT}/api/posts/`,
     "public-posts": `${SERVER_CONTEXT}/api/public-posts/`,
+    "private-posts": `${SERVER_CONTEXT}/api/private-posts/`,
+    "active-post":(postId) => `${SERVER_CONTEXT}/api/post/${postId}`,
+    "delete-post":(postId) => `${SERVER_CONTEXT}/api/posts/${postId}`,
     "react": `${SERVER_CONTEXT}/api/reaction/`,
     "react-post": (postId) => `${SERVER_CONTEXT}/api/reaction/${postId}`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,
@@ -45,6 +48,7 @@ export const endpoints = {
     "address-project": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/addresses/`,
     "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`,
     "check-admin-role": (userId) => `${SERVER_CONTEXT}/api/check-admin-role/${userId}`,
+    "check-employee-role": (userId) => `${SERVER_CONTEXT}/api/check-employee-role/${userId}`,
 }
 
 export const authApi = () => {

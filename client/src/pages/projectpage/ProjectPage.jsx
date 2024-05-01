@@ -328,41 +328,6 @@ const ProjectPage = () => {
               </div>
             </div>
           </Box>
-          {/* <div>
-            <p>Số tiền đóng góp</p>
-            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
-          </div>
-          <div className="mt-3">
-            <p>Ghi chú</p>
-            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
-          </div> */}
-          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
-            <Form.Group className="" controlId="donateAmount">
-              <Form.Label>Số tiền đóng góp</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Nhập số tiền đóng góp"
-                value={pay.donateAmount}
-                onChange={(e) => {
-                  setPay({ ...pay, donateAmount: e.target.value });
-                  setErrorMessage("");
-                }}
-              />
-              {errorMessage && (
-                <Form.Text className="text-danger">{errorMessage}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group controlId="note">
-              <Form.Label>Ghi chú</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Nhập ghi chú (tuỳ chọn)"
-                value={pay.note}
-                onChange={(e) => setPay({ ...pay, note: e.target.value })}
-              />
-            </Form.Group>
-          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>

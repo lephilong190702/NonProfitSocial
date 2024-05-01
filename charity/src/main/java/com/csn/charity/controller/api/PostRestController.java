@@ -61,7 +61,7 @@ public class PostRestController {
         }
     }
 
-    @GetMapping("/private-post/")
+    @GetMapping("/private-posts/")
     @CrossOrigin
     public ResponseEntity<?> getUnAvailablePost() {
         try {

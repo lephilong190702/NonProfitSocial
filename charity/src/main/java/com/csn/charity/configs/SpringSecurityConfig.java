@@ -92,7 +92,7 @@ public class SpringSecurityConfig {
                                 "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
                                 "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/",
                                 "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users", "/ws/**",
-                                "/api/confirm-account/**", "/api/check-admin-role/{userId}")
+                                "/api/confirm-account/**", "/api/check-admin-role/{userId}", "/api/check-employee-role/{userId}")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .anyRequest()
@@ -111,7 +111,7 @@ public class SpringSecurityConfig {
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("*"));
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+//        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -29,7 +29,7 @@ const GoogleMapProject = ({projectId}) => {
   }, [projectId]);
 
     const { isLoaded, loadError } = useLoadScript({
-      googleMapsApiKey: 'AIzaSyD4V6SrIbhDYqYOzqpBxiYdR3Ya7rE7MFc',
+      googleMapsApiKey: 'AIzaSyBE0gDXlRaS_WWteASOzcIFafyUpLQHtvc',
       libraries,
     });
 

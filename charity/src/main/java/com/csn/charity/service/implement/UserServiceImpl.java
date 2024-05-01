@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
 
         Profile profile = new Profile();
         profile.setUser(user);
+        profile.setAvatar("https://res.cloudinary.com/dvgpizkep/image/upload/v1714564338/s2rav4aobxn8dzwsrait.jpg");
 
         user.setProfile(profile);
 

@@ -45,15 +45,14 @@ public class AuthRestController {
     @CrossOrigin
     public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDto) {
         try {
-            // Long userId = this.userService.addUser(userDto);
-            // UserDoc userDoc = new UserDoc();
-            // userDoc.setId(userId);
-            // userDoc.setDisplayName(userDto.getUsername());
+            Long userId = this.userService.addUser(userDto);
+            UserDoc userDoc = new UserDoc();
+            userDoc.setId(userId);
+            userDoc.setDisplayName(userDto.getUsername());
 
-            // String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
-            // return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
-            //         HttpStatus.CREATED);
-            return new ResponseEntity<>(this.userService.addUser(userDto), HttpStatus.CREATED);
+            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
+                    HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();
             return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);

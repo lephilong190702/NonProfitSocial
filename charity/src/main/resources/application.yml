@@ -5,13 +5,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     #Deployment 
-    # url: jdbc:mysql://${DB_HOST}/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
-    # username: ${DB_USERNAME}
-    # password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     # Local 
-    url: jdbc:mysql://localhost:3306/charitydb
-    username: root
-    password: TanDat1410
+    # url: jdbc:mysql://localhost:3306/charitydb
+    # username: root
+    # password: Long1907@
   jpa:
     show-sql: true
     properties:

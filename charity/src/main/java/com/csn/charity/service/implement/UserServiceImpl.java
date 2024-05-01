@@ -10,6 +10,7 @@ import com.csn.charity.model.*;
 import com.csn.charity.repository.ConfirmationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -93,12 +94,16 @@ public class UserServiceImpl implements UserService {
 
         confirmationTokenRepository.save(confirmationToken);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account, please click here : "
-                + "http://localhost:9090/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
-        mailService.sendMailRegister(mailMessage);
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setText("To confirm your account, please click here : "
+                    + "http://34.101.50.127:80/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
+            mailService.sendMailRegister(mailMessage);
+        } catch (MailException e) {
+            System.out.println("Error sending email: " + e.getMessage());
+        }
 
         System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
         return savedUser.getId();
@@ -201,7 +206,7 @@ public class UserServiceImpl implements UserService {
         mimeMessageHelper.setText(
                 """
                         <div>
-                          <a href="http://localhost:5173/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+                          <a href="http://34.101.249.81:80/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
                         </div>
                         """
                         .formatted(email),

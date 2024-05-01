@@ -49,12 +49,13 @@ public class SpringSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
-                                "/error", "/login", "/oauth2/**", "/showMap", "/ws/**")
+                                "/error", "/login", "/oauth2/**", "/showMap")
                         .permitAll()
                         .requestMatchers("/", "/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                         .requestMatchers("/users/**").hasRole("SUPERADMIN")
                         .anyRequest()
                         .authenticated())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .formLogin(
                         form -> form
                                 .loginPage("/login")
@@ -92,7 +93,7 @@ public class SpringSecurityConfig {
                                 "/api/news/ncategories/{id}/", "/api/export/", "/api/contributions/",
                                 "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/",
                                 "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users", "/ws/**",
-                                "/api/confirm-account/**", "/api/check-admin-role/{userId}", "/api/check-employee-role/{userId}")
+                                "/api/confirm-account/**", "/api/check-admin-role/{userId}", "/api/ws/**", "/api/check-employee-role/{userId}")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .anyRequest()

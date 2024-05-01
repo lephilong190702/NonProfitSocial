@@ -87,8 +87,7 @@ const LiveStreamPage = () => {
         </form>
       )}
       <div style={{ marginLeft: '100px' }}>
-        <form className="live-form">
-          <label>NHẬP MÃ PHÒNG</label>
+          <label style={{ fontWeight: 'bold', fontSize: '13px', margin: '10px' }}>NHẬP MÃ PHÒNG</label>
           <Input
             value={roomCode}
             onChange={(event) => setRoomCode(event.target.value)}
@@ -102,7 +101,6 @@ const LiveStreamPage = () => {
           >
             Tham gia
           </button>
-        </form>
       </div>
     </div>
   );

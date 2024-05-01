@@ -4,14 +4,23 @@ INSERT INTO `user` (status, id, username, auth_type, email, password, enabled) V
 (1,1,'admin',NULL,'admin@gmail.com','$2a$10$YsX8v64HcyOCsBsKpq.0K.sfoQBagZG2Z5ybISlnbQMB.Akixxvme',1),
 (1,2,'superadmin',NULL,'superadmin@gmail.com','$2a$10$PKrMUFBrnTwd1Dxf9sIPUe5SczNe2209lUO.MpMcpe6zl9fwuSsUK',1),
 (1,3,'user',NULL,'drakecrys29@gmail.com','$2a$10$O0yot0tAvgC/S9CRiqlCQu.0/mDgb3fVhhRTrNmwDH/.XiPFBsUNi',1),
-(1,4,'user123',NULL,'datluongtan1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
+(1,4,'user123',NULL,'datluongtan1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1),
+(1,5,'employee',NULL,'employee1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
 
 -- Role
-INSERT INTO `user_role` (id, name) VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER'),(3,'ROLE_SUPERADMIN');
+INSERT INTO `user_role` (id, name) VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER'),(3,'ROLE_SUPERADMIN'), (4,'ROLE_EMPLOYEE');
 
 
 -- User_Role
-INSERT INTO `users_roles` (role_id, user_id) VALUES (1,1),(3,2),(2,3),(2,4);
+INSERT INTO `users_roles` (role_id, user_id) VALUES (1,1),(3,2),(2,3),(2,4),(4,5);
+
+-- profile
+INSERT INTO `profile` (user_id, last_name, phone, first_name, avatar) VALUES 
+(1,"Long","0386221906","Lê Phi","https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg"),
+(2,"Đạt","0386221906","Lương Tấn","https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg"),
+(3,"user","0386221906","user","https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg"),
+(4,"user123","0386221906","user23","https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg"),
+(5,"employee","0386221906","employee","https://res.cloudinary.com/dvgpizkep/image/upload/v1697371841/a3wsjjezjqcah9atgadu.jpg");
 
 
 -- project cate
@@ -43,7 +52,36 @@ INSERT INTO `project` (contributed_amount, status, total_amount, category_id, en
 
 (0.00,1,100000000.00,2,NULL,11,NULL,'','CHƯƠNG TRÌNH NGƯỜI BẠN LỚN – HỖ TRỢ TRẺ BỊ ẢNH HƯỞNG BỞI DỊCH COVID-19','Người bạn lớn là một dự án có mục đích giúp đỡ Trẻ em không còn cha hoặc mẹ hoặc cả hai, đặc biệt là Trẻ nhỏ chịu mất mát này do đại dịch Covid-19. Chương trình thiết lập một mạng lưới Nhân viên đóng vai trò là “người anh tinh thần”, “người chị tinh thần” để chăm sóc các em.\r\nKhởi nguồn từ 9 trẻ tại Phường 8 Quận 4 vào năm 2021, đến nay chúng tôi đã hỗ trợ 32 trẻ tại Quận 4, Bình Chánh và Gò Vấp.\r\n\r\nTrong hơn một năm triển khai chương trình, đồng hành cùng trẻ và gia đình chúng tôi hiểu được những khó khăn, chật vật của các gia đình sau khi trải qua một biến cố to lớn. Không chỉ về kinh tế mà những tổn thương về mặt tinh thần, cảm xúc, đời sống dường như vẫn còn tiếp diễn.\r\n\r\nĐối với trẻ, chúng tôi tập trung vào hỗ trợ học bổng để duy trì việc học của trẻ tại trường, hỗ trợ dinh dưỡng cho những trẻ đã mất đi nguồn sữa mẹ từ khi mới lọt lòng. Bên cạnh đó, việc quan tâm, chăm sóc về mặt tinh thần của trẻ như sinh nhật, lễ, tết cũng được quan tâm. Quan trọng hơn hết, Người Bạn Lớn cũng đóng vai trò người anh, người chị, người bạn để trẻ được chia sẻ những tâm tư, những vấn trẻ đang gặp phải ở từng giai đoạn phát triển, đặc biệt tuổi teen.\r\n\r\nTính đến nay, chúng tôi đang hỗ trợ chi phí học tập hàng cho 21 trẻ về học phí, đồ dùng học tập, vé xe buýt,…. Về dinh dưỡng hàng tháng cho 13 trẻ. Có 2 trẻ được hỗ trợ về chi phí khám-điều trị bệnh. 32 trẻ đều được cập nhật thông tin và hỗ trợ khi cần thiết, tổ chức sinh nhật và tặng quà các dịp đặc biệt trong năm: Giáng sinh, Tết….\r\n\r\nKhông chỉ hỗ trợ cho trẻ, Người Bạn Lớn còn là nơi mà người chăm sóc trẻ được chia sẻ, được hướng dẫn hỗ trợ, tư vấn khi cần thiết. Khi gia đình bị mất đi một người thân, mất đi một người lao động chính thì người ở lại không chỉ khó khăn về mặt kinh tế mà đôi khi việc giao tiếp, chăm sóc các con cũng là một khó khăn khi những công việc đó vốn dĩ được chăm lo bởi người chồng/người vợ của mình. Không ít lần chúng tôi thấy được những giọt nước mắt rơi khi người chăm sóc chia sẻ về hiện tại, mặc dù đã qua một năm gắng gượng để chăm sóc các con.');
 
-
+-- project_image
+INSERT INTO `project_image` (id,project_id,image) VALUES 
+(1,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369971/yzabnno4c9lv1tgsksm4.jpg'),
+(2,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369973/sikwrnvpsxea2ztz0v3z.jpg'),
+(3,1,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697369975/ujituxzyg8m1lqkvgcfz.jpg'),
+(4,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370120/qvqtzz3hnlmlp046cwyu.jpg'),
+(5,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370128/ugbdsrfrx4zhevj1z6gf.jpg'),
+(6,2,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370130/czcmvx4bkpjybwgddaj8.jpg'),
+(7,3,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370384/stwrwk4fm5ihpelni6hc.jpg'),
+(8,4,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370457/edkzlfdhsmylxlfrjefp.jpg'),
+(9,5,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370577/gaymldpekc0kltbugjqd.jpg'),
+(10,5,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370580/jy3bxfwq28epllux7t6z.jpg'),
+(11,6,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370719/a8k0mefmmavrozp11syc.jpg'),
+(12,6,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370721/gs9eymjrcmase5varj5o.jpg'),
+(13,7,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370804/lijwl8nuwczimc3dfbzh.jpg'),
+(14,7,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370806/slyc9gbbulf9iihjqywn.png'),
+(15,8,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370869/qnvwlpuxcvb5onmtvre9.jpg'),
+(16,8,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697370880/fb97p0dhnononxoyapaw.jpg'),
+(17,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371040/by0znfcscjeiqdzbsqdi.jpg'),
+(18,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371042/llzaqstjs9no81mdv0y4.jpg'),
+(19,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371045/hoxyrnombvrutaoh5if7.jpg'),
+(20,9,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371047/e1tcyoya2ak1dksnn1i4.jpg'),
+(21,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371156/bt6muecydpwuw9epa1f6.jpg'),
+(22,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371158/p8oh9vvfealcqrnaxpxm.jpg'),
+(23,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371161/aiuw87pfaj1z5byb84y2.jpg'),
+(24,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371163/cc1b3skplu4jx9fdnixw.jpg'),
+(25,10,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371166/h9cjflq2lndfx1sf9fjo.jpg'),
+(26,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371264/iqrrilmedkjgbt6xhdfp.jpg'),
+(27,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371266/o3mgcxqqauitg2i96qld.jpg'),
+(28,11,'https://res.cloudinary.com/dvgpizkep/image/upload/v1697371268/lkcw0addy3bfdhw3hpta.jpg');
 
 -- news cate
 
@@ -60,6 +98,15 @@ INSERT INTO `new` (category_id, create_date, id, content, image, name) VALUES
 
 (3,'2023-10-15 19:06:42.151000',4,'Ngày 17,18,19/3, Quỹ Bông Sen đã tiếp tục đồng hành cùng đoàn y bác sĩ Thiện Đức thực hiện chuyến khám bệnh từ thiện cho bà con xã Tân Lợi và An Hảo, huyện Tịnh Biên, tỉnh An Giang. Hàng trăm người dân đã tập trung từ rất sớm với rất đông các cụ già ngồi chờ đoàn. Để kịp tiến độ, đoàn đã làm việc liên tục, các y-bác sĩ, dược sĩ và tình nguyện viên thay phiên làm việc xuyên cả buổi trưa. ','https://res.cloudinary.com/dvgpizkep/image/upload/v1697371602/aaziaij4lan8wwgek7lr.jpg','KHÁM BỆNH TỪ THIỆN TẠI XÃ TÂN LỢI VÀ AN HẢO, HUYỆN TỊNH BIÊN, TỈNH AN GIANG'),(1,'2023-10-19 21:53:21.399000',5,'',NULL,''),(1,'2023-10-19 21:53:49.197000',6,'',NULL,'');
 
+-- address
 
+INSERT INTO `address` (latitude,longitude,id,project_id,user_id,name,status) VALUES 
+(10.762622,106.660172 ,1,1,1,'Địa chỉ 1','ACCEPTED'),
+(20.865139,106.683830 ,2,1,3,'Địa chỉ 2','PENDING'),
+(9.602521,105.973907 ,3,2,2,'Địa chỉ 3','ACCEPTED'),
+(16.463713,107.590866 ,4,2,4,'Địa chỉ 4','PENDING'),
+(10.924067,106.713028 ,5,3,2,'Địa chỉ 5','ACCEPTED'),
+(18.679585,105.681335 ,6,3,1,'Địa chỉ 6','ACCEPTED'),
+(20.959902,107.042542 ,7,4,1,'Địa chỉ 7','ACCEPTED');
 
 

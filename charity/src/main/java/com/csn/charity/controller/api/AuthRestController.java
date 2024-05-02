@@ -46,12 +46,12 @@ public class AuthRestController {
     public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDto) {
         try {
             Long userId = this.userService.addUser(userDto);
-            UserDoc userDoc = new UserDoc();
-            userDoc.setId(userId);
-            userDoc.setDisplayName(userDto.getUsername());
+            // UserDoc userDoc = new UserDoc();
+            // userDoc.setId(userId);
+            // userDoc.setDisplayName(userDto.getUsername());
 
-            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
-            return new ResponseEntity<>("User registered successfully. Firestore update time: " + firestoreUpdateTime,
+            // String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>(userId,
                     HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();
@@ -59,9 +59,9 @@ public class AuthRestController {
         }
     }
 
-    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/confirm-account", method = { RequestMethod.GET, RequestMethod.POST })
     @CrossOrigin
-    public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken) {
+    public ResponseEntity<?> confirmUserAccount(@RequestParam("token") String confirmationToken) {
         return userService.confirmEmail(confirmationToken);
     }
 
@@ -163,7 +163,7 @@ public class AuthRestController {
 
     @GetMapping("/check-employee-role/{userId}")
     @CrossOrigin
-    public   ResponseEntity<Boolean> checkEmployeeRole(@PathVariable Long userId) {
+    public ResponseEntity<Boolean> checkEmployeeRole(@PathVariable Long userId) {
         boolean isEmployee = userService.isEmployee(userId);
         return ResponseEntity.ok(isEmployee);
     }

@@ -56,10 +56,10 @@ public class ProfileServiceImpl implements ProfileService {
         p.setLastName(profileDTO.getLastName());
         p.setPhone(profileDTO.getPhone());
 
-        UserDoc userDoc = new UserDoc();
-        userDoc.setId(id);
-        userDoc.setDisplayName(profileDTO.getFirstName());
-        userDoc.setUpdateAt(new Date());
+        // UserDoc userDoc = new UserDoc();
+        // userDoc.setId(id);
+        // userDoc.setDisplayName(profileDTO.getFirstName());
+        // userDoc.setUpdateAt(new Date());
 
         MultipartFile file = profileDTO.getFile();
         if (file != null && !file.isEmpty()) {
@@ -70,21 +70,21 @@ public class ProfileServiceImpl implements ProfileService {
                 String imageUrl = res.get("secure_url").toString();
                 System.out.println("Image URL: " + imageUrl);
                 p.setAvatar(imageUrl);
-                userDoc.setPhotoUrl(imageUrl);
+                // userDoc.setPhotoUrl(imageUrl);
 
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
 
-        try {
-            this.firebaseService.saveOrUpdateUser(userDoc);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        
+        // try {
+        //     this.firebaseService.saveOrUpdateUser(userDoc);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // } catch (ExecutionException e) {
+        //     e.printStackTrace();
+        // }
+
         return this.profileRepository.save(p);
     }
 

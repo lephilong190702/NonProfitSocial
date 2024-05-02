@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import "./projectDetail.css";
 import GoogleMapProject from "./googleMap/GoogleMapProject";
+import { FacebookShareButton } from "react-share";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
@@ -20,12 +21,6 @@ const ProjectDetails = () => {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const [contributor, setContributor] = useState([]);
-  // const [pay, setPay] = useState({
-  //   projectId: "",
-  //   donateAmount: "",
-  //   note: "",
-  // });
-
   const [addressRecommended, setAddressRecommended] = useState({
     latitude: "",
     longitude: "",
@@ -52,6 +47,8 @@ const ProjectDetails = () => {
 
   const [amount, setAmount] = useState(0);
   const [orderInfo, setOrderInfo] = useState("");
+
+  const currentPageUrl = window.location.href;
 
   useEffect(() => {
 
@@ -114,7 +111,7 @@ const ProjectDetails = () => {
       setErrorName("Vui lòng nhập ghi chú");
       return;
     }
-  
+
     try {
       const res = await authApi().post(endpoints["post-address"](selectedProjectId), data, {
         headers: {
@@ -184,6 +181,8 @@ const ProjectDetails = () => {
     return <p>No project data available.</p>;
   }
 
+
+
   return (
     <>
       <Row>
@@ -216,11 +215,14 @@ const ProjectDetails = () => {
                             className="w-8  cursor-pointer"
                             src="../src/assets/facebook.svg"
                           />
-                          <FontAwesomeIcon
-                            icon={faFacebookMessenger}
-                            color="#448AFF"
-                            className="text-[29px] cursor-pointer"
-                          />
+
+                          <FacebookShareButton url={currentPageUrl}>
+                            <FontAwesomeIcon
+                              icon={faFacebookMessenger}
+                              color="#448AFF"
+                              className="text-[29px] cursor-pointer"
+                            />
+                          </FacebookShareButton>
                           <FontAwesomeIcon
                             icon={faPinterest}
                             color="#BE0216"
@@ -236,14 +238,14 @@ const ProjectDetails = () => {
                             <div fixedWidth className="pr-1 text-[16px]">
                               {project.startDate
                                 ? moment(project.startDate).format(
-                                    "DD/MM/YYYY HH:mm"
-                                  )
+                                  "DD/MM/YYYY HH:mm"
+                                )
                                 : "Không có ngày bắt đầu"}{" "}
                               - <br />
                               {project.endDate
                                 ? moment(project.endDate).format(
-                                    "DD/MM/YYYY HH:mm"
-                                  )
+                                  "DD/MM/YYYY HH:mm"
+                                )
                                 : "Không có ngày kết thúc"}
                             </div>
                           </div>
@@ -392,18 +394,19 @@ const ProjectDetails = () => {
           >
             <div className="flex flex-row w-full">
               <div className="flex flex-col">
-                 <TextField
-                id="standard-number"
-                label="Latitude"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="standard"
-                value={addressRecommended.latitude}
-                onChange={(e) => {setAddressRecommended({ ...addressRecommended, latitude: e.target.value });
-                                  setErrorLat("");
-                }}
+                <TextField
+                  id="standard-number"
+                  label="Latitude"
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="standard"
+                  value={addressRecommended.latitude}
+                  onChange={(e) => {
+                    setAddressRecommended({ ...addressRecommended, latitude: e.target.value });
+                    setErrorLat("");
+                  }}
                 />
                 {errorLat && (
                   <Form.Text className="text-danger">{errorLat}</Form.Text>
@@ -412,24 +415,25 @@ const ProjectDetails = () => {
 
               <div className="flex flex-col">
                 <TextField
-                id="standard-number"
-                label="Longitude"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="standard"
-                value={addressRecommended.longitude}
-                onChange={(e) => {setAddressRecommended({ ...addressRecommended, longitude: e.target.value });
-                                  setErrorLng("");
-                }}
+                  id="standard-number"
+                  label="Longitude"
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="standard"
+                  value={addressRecommended.longitude}
+                  onChange={(e) => {
+                    setAddressRecommended({ ...addressRecommended, longitude: e.target.value });
+                    setErrorLng("");
+                  }}
                 />
                 {errorLng && (
                   <Form.Text className="text-danger">{errorLng}</Form.Text>
                 )}
               </div>
-             
-              
+
+
             </div>
 
             <div className="flex flex-col w-full">
@@ -439,9 +443,10 @@ const ProjectDetails = () => {
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
                   value={addressRecommended.name}
-                  onChange={(e) => {setAddressRecommended({ ...addressRecommended, name: e.target.value });
-                                    setErrorName("");
-                }}
+                  onChange={(e) => {
+                    setAddressRecommended({ ...addressRecommended, name: e.target.value });
+                    setErrorName("");
+                  }}
                 />
                 {errorName && (
                   <Form.Text className="text-danger">{errorName}</Form.Text>

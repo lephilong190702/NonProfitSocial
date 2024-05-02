@@ -2,8 +2,8 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-const SERVER = "http://34.101.50.127:80" 
-// const SERVER="http://localhost:9090"
+// const SERVER = "http://34.101.50.127:80" 
+const SERVER="http://localhost:9090"
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
@@ -33,6 +33,7 @@ export const endpoints = {
     "report-post": `${SERVER_CONTEXT}/api/report/`,
     "vn-pay": (projectId) => `${SERVER_CONTEXT}/api/projects/${projectId}/donate/`,
     "callback": (projectId) => `${SERVER_CONTEXT}/api/callback/${projectId}`,
+    "donate": (projectId) => `${SERVER_CONTEXT}/api/submitOrder/${projectId}`,
     "user": `${SERVER_CONTEXT}/api/users/`,
     "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`,
     "chat": (userId) => `${SERVER_CONTEXT}/api/chat/${userId}`,

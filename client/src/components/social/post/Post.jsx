@@ -76,7 +76,7 @@ const Post = () => {
   };
 
   const replyHandler = (commentId) => {
-    loadRepliesByCommentId(commentId)
+    loadRepliesByCommentId(commentId);
     setOpenReply((prevOpenReply) =>
       prevOpenReply === commentId ? null : commentId
     );
@@ -161,7 +161,6 @@ const Post = () => {
 
   const handleEditPost = async (postId) => {
     try {
-
       const updatedPostImages = image.map((image, index) => {
         if (editedImages[index]) {
           return editedImages[index];
@@ -201,8 +200,6 @@ const Post = () => {
       }
     }
   };
-
-
 
   const handleShowReplies = (commentId) => {
     loadRepliesByCommentId(commentId);
@@ -332,42 +329,43 @@ const Post = () => {
 
     console.log("Connecting to websocket server...");
 
-    stompClient.connect({}, () => {
-      console.log("Websocket connection established.");
+    stompClient.connect(
+      {},
+      () => {
+        console.log("Websocket connection established.");
 
-      stompClient.subscribe("/topic/posts", (message) => {
-        console.log("Received message:", message.body);
-        const newPost = JSON.parse(message.body);
-        setPost((current) => [...current, newPost]);
-      });
+        stompClient.subscribe("/topic/posts", (message) => {
+          console.log("Received message:", message.body);
+          const newPost = JSON.parse(message.body);
+          setPost((current) => [...current, newPost]);
+        });
 
-      stompClient.subscribe("/topic/comments/", (message) => {
-        console.log("Received message:", message.body);
-        const newComment = JSON.parse(message.body);
-        console.log("newComment", newComment);
-        const postId = newComment.post.id;
-        console.log("postId", postId)
-        setComments((current) => ({
-          ...current,
-          [postId]: [...(current[postId] || []), newComment]
-        }));
-      });
+        stompClient.subscribe("/topic/comments/", (message) => {
+          console.log("Received message:", message.body);
+          const newComment = JSON.parse(message.body);
+          console.log("newComment", newComment);
+          const postId = newComment.post.id;
+          console.log("postId", postId);
+          setComments((current) => ({
+            ...current,
+            [postId]: [...(current[postId] || []), newComment],
+          }));
+        });
 
-      stompClient.subscribe("/topic/reply-comments/", (message) => {
-        console.log("Received message:", message.body);
-        const newReplyComment = JSON.parse(message.body);
-        console.log("newReplyComment", newReplyComment);
-        const commentId = newReplyComment.comment.id;
-        console.log("commentId", commentId)
-        setReplies((current) => ({
-          ...current,
-          [commentId]: [...(current[commentId] || []), newReplyComment]
-        }));
-      });
+        stompClient.subscribe("/topic/reply-comments/", (message) => {
+          console.log("Received message:", message.body);
+          const newReplyComment = JSON.parse(message.body);
+          console.log("newReplyComment", newReplyComment);
+          const commentId = newReplyComment.comment.id;
+          console.log("commentId", commentId);
+          setReplies((current) => ({
+            ...current,
+            [commentId]: [...(current[commentId] || []), newReplyComment],
+          }));
+        });
 
-
-      loadPosts(stompClient);
-    },
+        loadPosts(stompClient);
+      },
       (error) => {
         console.error("Websocket connection error:", error);
       }
@@ -451,8 +449,6 @@ const Post = () => {
     }));
   };
 
-
-
   return (
     <>
       {post
@@ -513,6 +509,18 @@ const Post = () => {
               </div>
               <div className="postCenter">
                 <span className="postText">{p.content}</span>
+              </div>
+              <div className="postCenter">
+                <span className="postText">
+                  <a href="#" style={{ textDecoration: 'none' }}>
+                  {p.tags.map((tag) => (
+                    <span key={tag.id} className="postText link">
+                      #{tag.name}
+                    </span>
+                  ))}
+                  </a>
+                  
+                </span>
               </div>
               <div className="postCenter">
                 {p.images.length > 0 &&
@@ -581,7 +589,7 @@ const Post = () => {
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
-                      comments[p.id].length > 0 ? (
+                    comments[p.id].length > 0 ? (
                       comments[p.id]
                         .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
@@ -680,50 +688,54 @@ const Post = () => {
                                     : "Hiển thị toàn bộ phản hồi"}
                                 </Link>
                                 {Array.isArray(replies[comment.id]) &&
-                                  replies[comment.id].length > 0
+                                replies[comment.id].length > 0
                                   ? replies[comment.id]
-                                    .slice(replyDisplayModes[comment.id] ? undefined : -2)
-                                    .reverse()
-                                    .map((reply) => (
-                                      <div key={reply.id} className="reply">
-                                        <span
-                                          className="replyContent"
-                                          style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          <div className="reply-avatar">
-                                            <img
-                                              src={reply.user.profile.avatar}
-                                              alt="avatar"
-                                              style={{
-                                                width: "32px",
-                                                height: "32px",
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                                marginRight: "5px",
-                                              }}
-                                            />{" "}
-                                          </div>
-                                          <div className="reply-details">
-                                            <div className="reply-username">
-                                              {reply.user.username}
+                                      .slice(
+                                        replyDisplayModes[comment.id]
+                                          ? undefined
+                                          : -2
+                                      )
+                                      .reverse()
+                                      .map((reply) => (
+                                        <div key={reply.id} className="reply">
+                                          <span
+                                            className="replyContent"
+                                            style={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              marginBottom: "10px",
+                                            }}
+                                          >
+                                            <div className="reply-avatar">
+                                              <img
+                                                src={reply.user.profile.avatar}
+                                                alt="avatar"
+                                                style={{
+                                                  width: "32px",
+                                                  height: "32px",
+                                                  borderRadius: "50%",
+                                                  objectFit: "cover",
+                                                  marginRight: "5px",
+                                                }}
+                                              />{" "}
                                             </div>
-                                            <div className="reply-content">
-                                              {reply.content}
+                                            <div className="reply-details">
+                                              <div className="reply-username">
+                                                {reply.user.username}
+                                              </div>
+                                              <div className="reply-content">
+                                                {reply.content}
+                                              </div>
+                                              <div className="reply-time">
+                                                {" "}
+                                                {moment(
+                                                  reply.createDate
+                                                ).fromNow()}
+                                              </div>
                                             </div>
-                                            <div className="reply-time">
-                                              {" "}
-                                              {moment(
-                                                reply.createDate
-                                              ).fromNow()}
-                                            </div>
-                                          </div>
-                                        </span>
-                                      </div>
-                                    ))
+                                          </span>
+                                        </div>
+                                      ))
                                   : null}
                               </>
                             )}

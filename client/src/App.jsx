@@ -23,6 +23,7 @@ import RegisterVolunteerPage from './pages/registerVol/RegisterVolunteerPage';
 import ProjectsMap from './pages/projectpage/ProjectsMap';
 import Home from './pages/social/home/Home';
 import AcceptPost from './pages/social/accepted_post/AcceptPost';
+import Result from './pages/payment/Result';
 export const UserContext = createContext();
 
 const App = () => {
@@ -51,6 +52,7 @@ const App = () => {
           <Route path="/livestream" element={<LiveStreamPage />} />
           <Route path="/livestream/:roomId" element={<RoomPage />} />
           <Route path='/accept_post' element={<AcceptPost />} />
+          <Route path='/result' element={<Result />} />
 
         </Routes>
         <Footer />

@@ -27,19 +27,40 @@ public class DonateServiceImpl implements DonateService {
     @Autowired
     private DonateRepository donateRepository;
 
+    // @Override
+    // public UserContributeProject donate(Long projectId, UserContributeProject userContributeProject) {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     if (authentication == null || !authentication.isAuthenticated()) {
+    //         throw new SecurityException("Unauthorized access");
+    //     }
+
+    //     String username = authentication.getName();
+    //     User user = userRepository.findByUsername(username);
+    //     if (user == null) {
+    //         throw new NoSuchElementException("Không tìm thấy người dùng");
+    //     }
+
+    //     Project project = this.projectRepository.findById(projectId)
+    //             .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
+
+    //     if (project.getContributedAmount().compareTo(project.getTotalAmount()) <= 0) {
+    //         BigDecimal newContributedAmount = project.getContributedAmount()
+    //                 .add(userContributeProject.getDonateAmount());
+    //         project.setContributedAmount(newContributedAmount);
+    //         this.projectRepository.save(project);
+
+    //         userContributeProject.setProject(project);
+    //         userContributeProject.setUser(user);
+    //         userContributeProject.setDonateDate(new Date());
+    //         return this.donateRepository.save(userContributeProject);
+    //     } else {
+    //         throw new IllegalArgumentException("Số tiền quyên góp đã đủ, xin cảm ơn.");
+    //     }
+
+    // }
+
     @Override
     public UserContributeProject donate(Long projectId, UserContributeProject userContributeProject) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("Unauthorized access");
-        }
-
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new NoSuchElementException("Không tìm thấy người dùng");
-        }
-
         Project project = this.projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
 
@@ -50,7 +71,6 @@ public class DonateServiceImpl implements DonateService {
             this.projectRepository.save(project);
 
             userContributeProject.setProject(project);
-            userContributeProject.setUser(user);
             userContributeProject.setDonateDate(new Date());
             return this.donateRepository.save(userContributeProject);
         } else {

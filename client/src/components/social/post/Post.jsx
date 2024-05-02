@@ -363,8 +363,6 @@ const Post = () => {
             [commentId]: [...(current[commentId] || []), newReplyComment],
           }));
         });
-
-        loadPosts(stompClient);
       },
       (error) => {
         console.error("Websocket connection error:", error);

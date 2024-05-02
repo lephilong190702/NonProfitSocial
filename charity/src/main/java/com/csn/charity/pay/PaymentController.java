@@ -92,12 +92,12 @@ public class PaymentController {
 
             // Redirect to client-side URL
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://localhost:3000/result"));
+            headers.setLocation(URI.create("http://34.101.96.227:3000/result"));
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         } else {
             // Redirect to error page or handle error scenario
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://localhost:3000/error"));
+            headers.setLocation(URI.create("http://34.101.96.227:3000/error"));
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         }
     }

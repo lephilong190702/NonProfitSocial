@@ -269,59 +269,59 @@ const Post = () => {
     }
   };
 
-  const loadPosts = async (stompClient) => {
-    try {
-      let res = await authApi().get(endpoints["post"]);
-      setPost(res.data);
+  // const loadPosts = async (stompClient) => {
+  //   try {
+  //     let res = await authApi().get(endpoints["post"]);
+  //     setPost(res.data);
 
-      const commentPromises = res.data.map((post) => {
-        const postId = post.id;
-        loadCommentsByPostId(postId);
-      });
+  //     const commentPromises = res.data.map((post) => {
+  //       const postId = post.id;
+  //       loadCommentsByPostId(postId);
+  //     });
 
-      console.log(commentPromises);
+  //     console.log(commentPromises);
 
-      const reactionsPromises = res.data.map((p) => {
-        const postId = p.id;
-        return authApi()
-          .get(endpoints["react-post"](postId))
-          .then((response) => response.data); // Lấy dữ liệu từ response
-      });
+  //     const reactionsPromises = res.data.map((p) => {
+  //       const postId = p.id;
+  //       return authApi()
+  //         .get(endpoints["react-post"](postId))
+  //         .then((response) => response.data); // Lấy dữ liệu từ response
+  //     });
 
-      const reactionsData = await Promise.all(reactionsPromises);
+  //     const reactionsData = await Promise.all(reactionsPromises);
 
-      const totalLikes = {};
-      reactionsData.forEach((data, index) => {
-        const postId = res.data[index].id;
-        totalLikes[postId] = data.length;
-      });
+  //     const totalLikes = {};
+  //     reactionsData.forEach((data, index) => {
+  //       const postId = res.data[index].id;
+  //       totalLikes[postId] = data.length;
+  //     });
 
-      setLikeCurrent(totalLikes);
+  //     setLikeCurrent(totalLikes);
 
-      res.data.forEach((p) => {
-        const postTopic = `/topic/posts/${p.id}`;
-        stompClient.subscribe(postTopic, (message) => {
-          console.log("Received message for post update:", message.body);
-          const updatedPost = JSON.parse(message.body);
-          setPost((current) => {
-            const index = current.findIndex(
-              (post) => post.id === updatedPost.id
-            );
-            if (index !== -1) {
-              return [
-                ...current.slice(0, index),
-                updatedPost,
-                ...current.slice(index + 1),
-              ];
-            }
-            return current;
-          });
-        });
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     // res.data.forEach((p) => {
+  //     //   const postTopic = `/topic/posts/${p.id}`;
+  //     //   stompClient.subscribe(postTopic, (message) => {
+  //     //     console.log("Received message for post update:", message.body);
+  //     //     const updatedPost = JSON.parse(message.body);
+  //     //     setPost((current) => {
+  //     //       const index = current.findIndex(
+  //     //         (post) => post.id === updatedPost.id
+  //     //       );
+  //     //       if (index !== -1) {
+  //     //         return [
+  //     //           ...current.slice(0, index),
+  //     //           updatedPost,
+  //     //           ...current.slice(index + 1),
+  //     //         ];
+  //     //       }
+  //     //       return current;
+  //     //     });
+  //     //   });
+  //     // });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const connectToWebSocket = () => {
     const socket = new SockJS("http://34.101.40.246:80/api/ws");
@@ -332,13 +332,13 @@ const Post = () => {
     stompClient.connect(
       {},
       () => {
-        console.log("Websocket connection established.");
+        // console.log("Websocket connection established.");
 
-        stompClient.subscribe("/topic/posts", (message) => {
-          console.log("Received message:", message.body);
-          const newPost = JSON.parse(message.body);
-          setPost((current) => [...current, newPost]);
-        });
+        // stompClient.subscribe("/topic/posts", (message) => {
+        //   console.log("Received message:", message.body);
+        //   const newPost = JSON.parse(message.body);
+        //   setPost((current) => [...current, newPost]);
+        // });
 
         stompClient.subscribe("/topic/comments/", (message) => {
           console.log("Received message:", message.body);
@@ -408,26 +408,26 @@ const Post = () => {
 
         setLikeCurrent(totalLikes);
 
-        res.data.forEach((p) => {
-          const postTopic = `/topic/posts/${p.id}`;
-          stompClient.subscribe(postTopic, (message) => {
-            console.log("Received message for post update:", message.body);
-            const updatedPost = JSON.parse(message.body);
-            setPost((current) => {
-              const index = current.findIndex(
-                (post) => post.id === updatedPost.id
-              );
-              if (index !== -1) {
-                return [
-                  ...current.slice(0, index),
-                  updatedPost,
-                  ...current.slice(index + 1),
-                ];
-              }
-              return current;
-            });
-          });
-        });
+        // res.data.forEach((p) => {
+        //   const postTopic = `/topic/posts/${p.id}`;
+        //   stompClient.subscribe(postTopic, (message) => {
+        //     console.log("Received message for post update:", message.body);
+        //     const updatedPost = JSON.parse(message.body);
+        //     setPost((current) => {
+        //       const index = current.findIndex(
+        //         (post) => post.id === updatedPost.id
+        //       );
+        //       if (index !== -1) {
+        //         return [
+        //           ...current.slice(0, index),
+        //           updatedPost,
+        //           ...current.slice(index + 1),
+        //         ];
+        //       }
+        //       return current;
+        //     });
+        //   });
+        // });
       } catch (error) {
         console.error(error);
       }

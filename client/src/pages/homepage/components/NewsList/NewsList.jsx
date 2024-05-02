@@ -45,8 +45,10 @@ export default function NewsList() {
         if (cateId !== null) e = `${e}ncategories/${cateId}/`;
         else {
           const kw = q.get("kw");
-          if (kw !== null) e = `${e}?kw=${kw}`;
+          if (kw !== null) e = `${e}search?kw=${kw}`;
         }
+
+        console.log(e);
 
         const res = await ApiConfig.get(e);
         setNews(res.data);

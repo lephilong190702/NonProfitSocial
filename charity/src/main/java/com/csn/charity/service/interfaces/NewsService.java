@@ -20,4 +20,6 @@ public interface NewsService {
     Long countNewsByCategory(Long categoryId);
 
     List<New> getNewsByCategory(Long categoryId);
+
+    List<New> search(String kw);
 }

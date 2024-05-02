@@ -17,4 +17,7 @@ public interface NewsRepository extends JpaRepository<New, Long> {
     Long countNewsByCategoryId(@Param("categoryId") Long categoryId);
 
     List<New> findByCategory(NewCategory category);
+
+    @Query("SELECT n FROM New n WHERE n.name LIKE CONCAT('%',:kw, '%') Or n.content LIKE CONCAT('%', :kw, '%')")
+    List<New> search(String kw);
 }

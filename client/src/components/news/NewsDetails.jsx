@@ -12,6 +12,7 @@ import {
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
 import ReplyBox from "../reply/ReplyBox";
+import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, PinterestShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 
 const NewsDetails = () => {
   const [user] = useContext(UserContext);
@@ -24,6 +25,7 @@ const NewsDetails = () => {
   const [isComment, setIsComment] = useState(false);
   const [isCommentEmpty, setIsCommentEmpty] = useState(false);
   const [isReply, setIsReply] = useState(false);
+  const currentPageUrl = window.location.href;
 
   useEffect(() => {
     const loadNewsDetail = async () => {
@@ -109,24 +111,18 @@ const NewsDetails = () => {
                   <div className="flex flex-row justify-between items-center pt-2">
                     <div className="flex flex-row gap-1 items-center">
                       <div className="text-base font-normal pr-2">Chia sẻ:</div>
-                      <img
-                        className="w-8  cursor-pointer"
-                        src="../src/assets/facebook.svg"
-                      />
-                      <FontAwesomeIcon
-                        icon={faFacebookMessenger}
-                        color="#448AFF"
-                        className="text-[29px] cursor-pointer"
-                      />
-                      <FontAwesomeIcon
-                        icon={faPinterest}
-                        color="#BE0216"
-                        className="text-[29px] cursor-pointer"
-                      />
-                      <img
-                        className="w-[34px] cursor-pointer"
-                        src="../src/assets/insta.svg"
-                      />
+                      <FacebookShareButton url={currentPageUrl}>
+                        <FacebookIcon />
+                      </FacebookShareButton>
+                      <FacebookMessengerShareButton url={currentPageUrl}>
+                        <FacebookMessengerIcon />
+                      </FacebookMessengerShareButton>
+                      <TwitterShareButton url={currentPageUrl}>
+                        <TwitterIcon />
+                      </TwitterShareButton>
+                      <TelegramShareButton url={currentPageUrl}>
+                        <TelegramIcon className="text-[29px] cursor-pointer" />
+                      </TelegramShareButton >
                     </div>
                     <div className="flex flex-row gap-4 cursor-pointer">
                       <div className="w-full font-semibold text-[#F16D9A] text-[14px] hover:text-[#EE5287]">
@@ -172,9 +168,8 @@ const NewsDetails = () => {
 
             {/*open comment*/}
             <div
-              className={`flex flex-col items-center px-5 py-1 duration-500 max-h-0 overflow-hidden ${
-                isComment ? "max-h-[500px]" : ""
-              }`}
+              className={`flex flex-col items-center px-5 py-1 duration-500 max-h-0 overflow-hidden ${isComment ? "max-h-[500px]" : ""
+                }`}
             >
               {user !== null ? (
                 <>

@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import "./projectDetail.css";
 import GoogleMapProject from "./googleMap/GoogleMapProject";
-import { FacebookShareButton } from "react-share";
+import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, PinterestShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
@@ -211,27 +211,19 @@ const ProjectDetails = () => {
                           <div className="text-base font-normal pr-2">
                             Chia sẻ:
                           </div>
-                          <img
-                            className="w-8  cursor-pointer"
-                            src="../src/assets/facebook.svg"
-                          />
-
                           <FacebookShareButton url={currentPageUrl}>
-                            <FontAwesomeIcon
-                              icon={faFacebookMessenger}
-                              color="#448AFF"
-                              className="text-[29px] cursor-pointer"
-                            />
+                            <FacebookIcon />
                           </FacebookShareButton>
-                          <FontAwesomeIcon
-                            icon={faPinterest}
-                            color="#BE0216"
-                            className="text-[29px] cursor-pointer"
-                          />
-                          <img
-                            className="w-[34px] cursor-pointer"
-                            src="../src/assets/insta.svg"
-                          />
+                          <FacebookMessengerShareButton url={currentPageUrl}>
+                            <FacebookMessengerIcon />
+                          </FacebookMessengerShareButton>
+                          <TwitterShareButton url={currentPageUrl}>
+                            <TwitterIcon />
+                          </TwitterShareButton>
+                          <TelegramShareButton url={currentPageUrl}>
+                            <TelegramIcon className="text-[29px] cursor-pointer" />
+                          </TelegramShareButton >
+
                         </div>
                         <div className="flex flex-row gap-4 cursor-pointer">
                           <div className="w-full font-semibold text-[#F16D9A] text-[14px] hover:text-[#EE5287]">

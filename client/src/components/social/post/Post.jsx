@@ -324,7 +324,7 @@ const Post = () => {
   };
 
   const connectToWebSocket = () => {
-    const socket = new SockJS("http://34.101.50.127:80/api/ws");
+    const socket = new SockJS("http://34.101.40.246:80/api/ws");
     const stompClient = Client.over(socket);
 
     console.log("Connecting to websocket server...");

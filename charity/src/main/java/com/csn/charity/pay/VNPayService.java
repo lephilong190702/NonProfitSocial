@@ -60,7 +60,7 @@ public class VNPayService {
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         System.out.println("CREATE DATE: " + vnp_CreateDate);
         // Calculate the expiration date 15 minutes from now
-        cld.add(Calendar.MINUTE, 2000);
+        cld.add(Calendar.MINUTE, 430);
         Date expireDate = cld.getTime();
         String vnp_ExpireDate = formatter.format(expireDate);
         System.out.println("EXPIRE DATE: " + vnp_ExpireDate);

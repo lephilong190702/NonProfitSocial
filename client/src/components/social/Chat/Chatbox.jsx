@@ -58,7 +58,8 @@ const Chatbox = () => {
         messages.forEach((message) => {
           senderData[message.id] = { userId: message.userId, displayName: message.displayName, photoUrl: message.photoUrl };
         });
-
+        console.log("MESSAGES: " + messages);
+        console.log("SEND DATA: " + senderData);
         // Cập nhật trạng thái messages và senderData
         setMessages(messages);
         setSenderData(senderData);

@@ -145,7 +145,7 @@ const LoginPage = () => {
                     )}
                   </div>
                 </div>
-                <a href="#" className="forgot-password">
+                <a href="/forgotPassword" className="forgot-password">
                   <p>Bạn quên mật khẩu?</p>
                 </a>
                 <Form.Group className="mb-3">

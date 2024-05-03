@@ -648,30 +648,6 @@ const Post = () => {
 
                             {openReply === comment.id && (
                               <>
-                                {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
-                                  <Form.Control
-                                    as="textarea"
-                                    aria-label="With textarea"
-                                    value={replyContent[comment.id] || ""}
-                                    onChange={(e) =>
-                                      setReplyContent({
-                                        ...replyContent,
-                                        [comment.id]: e.target.value,
-                                      })
-                                    }
-                                    placeholder="Nội dung phản hồi"
-                                  />
-                                )}
-                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
-                                  <Button
-                                    onClick={() => addReply(comment.id, p.id)}
-                                    className="mt-2"
-                                    variant="info"
-                                  >
-                                    Thêm phản hồi
-                                  </Button>
-                                )}
-                                <br />
                                 <Link
                                   onClick={() => toggleReplyDisplay(comment.id)}
                                   className={
@@ -693,7 +669,7 @@ const Post = () => {
                                           ? undefined
                                           : -2
                                       )
-                                      .reverse()
+                                      // .reverse()
                                       .map((reply) => (
                                         <div key={reply.id} className="reply">
                                           <span
@@ -735,6 +711,29 @@ const Post = () => {
                                         </div>
                                       ))
                                   : null}
+                                  {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                                  <Form.Control
+                                    as="textarea"
+                                    aria-label="With textarea"
+                                    value={replyContent[comment.id] || ""}
+                                    onChange={(e) =>
+                                      setReplyContent({
+                                        ...replyContent,
+                                        [comment.id]: e.target.value,
+                                      })
+                                    }
+                                    placeholder="Nội dung phản hồi"
+                                  />
+                                )}
+                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                                  <Button
+                                    onClick={() => addReply(comment.id, p.id)}
+                                    className="mt-2"
+                                    variant="info"
+                                  >
+                                    Thêm phản hồi
+                                  </Button>
+                                )}
                               </>
                             )}
                           </ListGroup.Item>

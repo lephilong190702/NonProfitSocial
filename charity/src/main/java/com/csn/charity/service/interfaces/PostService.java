@@ -20,4 +20,5 @@ public interface PostService {
     List<Post> getUnAvailablePosts();
 
     void activePost(Long id);
+    void denyPost(Long id);
 }

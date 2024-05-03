@@ -5,6 +5,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.csn.charity.model.*;
+import com.csn.charity.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
@@ -14,14 +16,6 @@ import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.PostDTO;
-import com.csn.charity.model.Post;
-import com.csn.charity.model.PostImage;
-import com.csn.charity.model.Tag;
-import com.csn.charity.model.User;
-import com.csn.charity.repository.PostImageRepository;
-import com.csn.charity.repository.PostRepository;
-import com.csn.charity.repository.TagRepository;
-import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.PostService;
 
 @Service
@@ -36,6 +30,8 @@ public class PostServiceImpl implements PostService {
     private PostImageRepository postImageRepository;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public Post createPost(PostDTO postDTO) {
@@ -160,11 +156,16 @@ public class PostServiceImpl implements PostService {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
 
-        if (!post.getUser().equals(user)) {
+        UserRole userRole = roleRepository.findByName("ROLE_EMPLOYEE");
+
+        if (user.getRoles().contains(userRole) || post.getUser().equals(user)) {
+            this.postRepository.delete(post);
+        }
+        else {
             throw new SecurityException("Bạn không có quyền xóa bài viết này");
         }
 
-        this.postRepository.delete(post);
+//        this.postRepository.delete(post);
     }
 
     @Override
@@ -188,6 +189,13 @@ public class PostServiceImpl implements PostService {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
         post.setStatus(true);
+        this.postRepository.save(post);
+    }
+    @Override
+    public void denyPost(Long id) {
+        Post post = this.postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+        post.setStatus(false);
         this.postRepository.save(post);
     }
 }

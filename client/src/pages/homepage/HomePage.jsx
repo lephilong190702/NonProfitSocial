@@ -3,8 +3,17 @@ import { Slider } from "../../components";
 import NewsList from "./components/NewsList/NewsList"
 import AboutUs from "./components/Aboutus/AboutUs";
 import ProjectsList from "./components/ProjectList/ProjectsList";
+import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import ApiConfig, { endpoints } from "../../configs/ApiConfig";
+import SearchPage from "../search/SearchPage";
 
 const HomePage = () => {
+  const [q] = useSearchParams();
+  const [kw, setKw] = useState(false);
+  const [news, setNews] = useState(null);
+
+
   const sliderUrls = [
     "./src/assets/slider1.jpg",
     "./src/assets/slider2.jpg",
@@ -24,8 +33,37 @@ const HomePage = () => {
   const sliderButton = ["Tìm hiểu thêm", "Tìm hiểu thêm", ""];
   const sliderTitleColor = ["#fff", "#fff"];
   const sliderTitleDescription = ["#fff", "#fff"];
+
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        let e = endpoints.news;
+
+        const cateId = q.get("cateId");
+        if (cateId !== null) e = `${e}ncategories/${cateId}/`;
+        else {
+          const kw = q.get("kw");
+          if (kw !== null){
+            e = `${e}search?kw=${kw}`;
+            setKw(true);
+          }
+          else setKw(false);
+        }
+
+        console.log(e);
+
+        const res = await ApiConfig.get(e);
+        setNews(res.data);
+      } catch (ex) {
+        console.error(ex);
+      }
+    };
+
+    loadNews();
+  },[q])
   return (
     <>
+    {kw === false ? (
       <div className="bg-[#FAF9F5]">
         <Slider
           sliderUrls={sliderUrls}
@@ -41,6 +79,10 @@ const HomePage = () => {
 
         <AboutUs />
       </div>
+
+    ) : (
+      <SearchPage news={news} />
+    )}
     </>
   );
 };

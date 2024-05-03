@@ -105,4 +105,9 @@ public class NewsServiceImpl implements NewsService {
         return this.newsRepository.findByCategory(newCategory);
     }
 
+    @Override
+    public List<New> search(String kw) {
+        return newsRepository.search(kw);
+    }
+
 }

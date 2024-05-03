@@ -5,13 +5,18 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import { endpoints } from '../configs/ApiConfig';
+import ApiConfig, { endpoints } from '../configs/ApiConfig';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordReset, setIsPasswordReset] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const[q] = useSearchParams();
+
+  const nav = useNavigate();
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -23,7 +28,12 @@ const ResetPasswordPage = () => {
 
   const handleResetPassword = () => {
     if (password === confirmPassword) {
-    const apiUrl = `${endpoints['set-password']}?email=${email}?newPassword`;
+      const email = q.get("email");
+      const apiUrl = `${endpoints['set-password']}?email=${email}&newPassword=${password}`;
+      const res = ApiConfig.put(apiUrl);
+      if (res.status === 200) {
+        nav("/login");
+      }
       
       alert('Mật khẩu đã được đặt lại thành công');
     } else {

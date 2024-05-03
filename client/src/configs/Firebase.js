@@ -5,13 +5,13 @@ import { FacebookAuthProvider, getAuth} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDyHXrYZgoMuB-vTHRUWVcI_anOUXP806E",
-  authDomain: "nonprofit-social-network.firebaseapp.com",
-  projectId: "nonprofit-social-network",
-  storageBucket: "nonprofit-social-network.appspot.com",
-  messagingSenderId: "181736501806",
-  appId: "1:181736501806:web:44a6392a9638859052e5bf",
-  measurementId: "G-MSF2PH0Q9H"
+  apiKey: "AIzaSyD4V6SrIbhDYqYOzqpBxiYdR3Ya7rE7MFc",
+  authDomain: "nonprofit-social-421415.firebaseapp.com",
+  projectId: "nonprofit-social-421415",
+  storageBucket: "nonprofit-social-421415.appspot.com",
+  messagingSenderId: "1073226547247",
+  appId: "1:1073226547247:web:e067808ec4994888e686da",
+  measurementId: "G-NKP3K7CX70"
 };
 
 // Initialize Firebase

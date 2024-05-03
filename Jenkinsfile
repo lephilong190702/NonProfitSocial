@@ -6,8 +6,8 @@ pipeline {
 	
 	environment {
 		PROJECT_ID = 'nonprofit-social-421415'
-        CLUSTER_NAME = 'k8s-cluster'
-        LOCATION = 'asia-southeast2-a'
+        CLUSTER_NAME = 'nonprofit-cluster'
+        LOCATION = 'asia-southeast1'
         CREDENTIALS_ID = 'kubernetes'	
 	}
 	

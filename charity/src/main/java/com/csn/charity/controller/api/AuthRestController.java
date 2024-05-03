@@ -46,12 +46,12 @@ public class AuthRestController {
     public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDto) {
         try {
             Long userId = this.userService.addUser(userDto);
-            // UserDoc userDoc = new UserDoc();
-            // userDoc.setId(userId);
-            // userDoc.setDisplayName(userDto.getUsername());
+            UserDoc userDoc = new UserDoc();
+            userDoc.setId(userId);
+            userDoc.setDisplayName(userDto.getUsername());
 
-            // String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
-            return new ResponseEntity<>(userId,
+            String firestoreUpdateTime = firebaseService.saveOrUpdateUser(userDoc);
+            return new ResponseEntity<>(firestoreUpdateTime,
                     HttpStatus.CREATED);
         } catch (Exception e) {
             String errorMessage = "Failed to add new user: " + e.getMessage();

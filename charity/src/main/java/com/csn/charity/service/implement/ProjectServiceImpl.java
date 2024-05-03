@@ -145,4 +145,9 @@ public class ProjectServiceImpl implements ProjectService {
         return this.projectRepository.findByCategory(projectCategory);
     }
 
+    @Override
+    public List<Project> search(String kw) {
+        return projectRepository.search(kw);
+    }
+
 }

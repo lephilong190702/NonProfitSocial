@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
   faLocationDot,
+  faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -33,6 +34,15 @@ const CustomNavbar = () => {
 
   const [scrolled, setScrolled] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(false);
+
+  const [toggleSearch, setToggleSearch] = useState(false);
+
+  const openSearchMenu = () => {
+    setToggleSearch(true);
+  };
+  const closeSearchMenu = () => {
+    setToggleSearch(false);
+  };
 
   const toggleMobileMenu = () => {
     setToggleMenu(!toggleMenu);
@@ -87,7 +97,9 @@ const CustomNavbar = () => {
       try {
         const response = await authApi().get(endpoints["current-user"]);
         const userId = response.data.id;
-        const res = await authApi().get(endpoints["check-employee-role"](userId));
+        const res = await authApi().get(
+          endpoints["check-employee-role"](userId)
+        );
         console.log(res.data);
         if (res.data === true) {
           setEmployee(true);
@@ -118,6 +130,10 @@ const CustomNavbar = () => {
     }
   };
 
+  const handleInputChange = (event) => {
+    setKw(event.target.value);
+  };
+
   const search = (evt) => {
     evt.preventDefault();
     nav(`/?kw=${kw}`);
@@ -125,7 +141,7 @@ const CustomNavbar = () => {
 
   const logout = () => {
     setEmployee(false);
-    
+
     dispatch({
       type: "logout",
     });
@@ -309,6 +325,65 @@ const CustomNavbar = () => {
                       </li>
                     </div>
                   )}
+
+                  <div className="hidden md:flex items-center justify-between  font-bold">
+                    {/* <div> */}
+                      <li className="flex flex-row select-none ">
+                        {toggleSearch ? (
+                          <FontAwesomeIcon
+                            icon={faSearch}
+                            color="#38b6ff"
+                            size="lg"
+                            onClick={() => closeSearchMenu()}
+                            className="cursor-pointer"
+                            fixedWidth
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faSearch}
+                            color="#000"
+                            size="lg"
+                            onClick={() => openSearchMenu()}
+                            className="cursor-pointer"
+                            fixedWidth
+                          />
+                        )}
+                        {toggleSearch ? (
+                          <div className="-z-100 ">
+                            <div
+                              className={`group ${
+                                scrolled
+                                  ? "top-[110px]"
+                                  : "top-[150px] left-[65%]"
+                              } flex flex-col left-0 absolute  w-30  bg-white z-20 text-black`}
+                            >
+                              <div className="flex items-center max-w-screen-2xl border-b-2 border-[#38b6ff]">
+                                {/* <img src='./assets/bean.png' className='w-6 absolute top-4 left-[10]' /> */}
+                                <input
+                                  className="appearance-none bg-transparent border-none w-full text-[#000] font-medium pl-8 leading-tight focus:outline-none  placeholder:text-[#404040] placeholder:font-normal text-lg"
+                                  type="text"
+                                  placeholder="Bạn đang tìm gì?"
+                                  aria-label="Full name"
+                                  value={kw}
+                                  onChange={handleInputChange}
+                                />
+                                <FontAwesomeIcon
+                                  icon={faSearch}
+                                  color="#38b6ff"
+                                  className="pb-1 float-left cursor-pointer"
+                                  size="2x"
+                                  fixedWidth
+                                  onClick={search}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <p></p>
+                        )}
+                      </li>
+                    {/* </div> */}
+                  </div>
                   {user === null ? (
                     <>
                       <div className="hidden md:flex items-center font-bold w-auto md:order-1">

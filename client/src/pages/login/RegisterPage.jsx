@@ -25,6 +25,7 @@ function Register() {
 
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [registerSuccess, setRegisterSuccess] = useState(false);
 
@@ -41,6 +42,10 @@ function Register() {
     setIsShowConfirm(false);
   };
 
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
   const change = (evt, field) => {
     setUser((current) => {
       return { ...current, [field]: evt.target.value };
@@ -51,15 +56,22 @@ function Register() {
     evt.preventDefault();
 
     try {
-      let res = await ApiConfig.post(endpoints["register"], user);
-      if (res.status === 201) {
-        // <Alert variant="success" className="mt-3">
-        //   Báo cáo đã được gửi thành công!
-        // </Alert>
-        setRegisterSuccess(true);
-        nav("/login");
-      } else {
-        setErrorMessage("Hệ thống bị lỗi!");
+      if (user.password === confirmPassword) {
+        let res = await ApiConfig.post(endpoints["register"], user);
+        if (res.status === 201) {
+          // <Alert variant="success" className="mt-3">
+          //   Báo cáo đã được gửi thành công!
+          // </Alert>
+          setRegisterSuccess(true);
+          nav("/login");
+        } else {
+          setErrorMessage("Hệ thống bị lỗi!");
+        }
+      }
+      else {
+        setErrorMessage(
+          "Mật khẩu không trùng khớp."
+        );
       }
     } catch (error) {
       console.error(error);
@@ -151,6 +163,44 @@ function Register() {
                         size="lg"
                         fixedWidth
                         onClick={() => showPassword()}
+                        className="icon-password"
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="input-field">
+                  <FontAwesomeIcon
+                    icon={faLock}
+                    color="#acacac"
+                    size="lg"
+                    fixedWidth
+                    className="icon-login"
+                  />
+                  <input
+                    className="loginInput"
+                    value={confirmPassword}
+                    onChange={handleConfirmPasswordChange}
+                    type={isShowConfirm ? "text" : "password"}
+                    placeholder="Password"
+                    required
+                  />
+                  <div>
+                    {isShowConfirm ? (
+                      <FontAwesomeIcon
+                        icon={faEyeSlash}
+                        color="#000"
+                        size="lg"
+                        fixedWidth
+                        onClick={() => hidePasswordConfirm()}
+                        className="icon-password"
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        color="#000"
+                        size="lg"
+                        fixedWidth
+                        onClick={() => showPasswordConfirm()}
                         className="icon-password"
                       />
                     )}

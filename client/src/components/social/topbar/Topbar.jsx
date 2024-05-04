@@ -12,6 +12,17 @@ const Topbar = () => {
   const [user] = useContext(UserContext);
   const [avatar, setAvatar] = useState([]);
 
+  const [scrolled, setScrolled] = useState(false);
+  const [toggleSearch, setToggleSearch] = useState(false);
+
+  const openSearchMenu = () => {
+    setToggleSearch(true);
+  };
+  const closeSearchMenu = () => {
+    setToggleSearch(false);
+  };
+  
+
   useEffect(() => {
     const loadUserById = async () => {
       try {
@@ -21,6 +32,18 @@ const Topbar = () => {
         console.log(error);
       }
     };
+    const handleScroll = () => {
+      if (window.scrollY > 1000) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    
     loadUserById();
   }, []);
 
@@ -31,14 +54,56 @@ const Topbar = () => {
       </div>
       <div className="topbarCenter">
         <div className="">
-          <FontAwesomeIcon
-            icon={faSearch}
-            color="white"
-            size="lg"
-            // onClick={() => closeSearchMenu()}
-            className="cursor-pointer ml-1"
-            fixedWidth
-          />
+          {toggleSearch ? (
+            <FontAwesomeIcon
+              icon={faSearch}
+              color="#38b6ff"
+              size="lg"
+              onClick={() => closeSearchMenu()}
+              className="cursor-pointer ml-1"
+              fixedWidth
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faSearch}
+              color="white"
+              size="lg"
+              onClick={() => openSearchMenu()}
+              className="cursor-pointer ml-1"
+              fixedWidth
+            />
+          )}
+          {toggleSearch ? (
+            <div className="-z-100 ">
+              <div
+                className={`group ${
+                  scrolled ? "top-[170px] left-[100%]" : "top-[170px] left-[100%]"
+                } flex flex-col left-0 absolute  w-60  bg-white z-100 text-black`}
+              >
+                <div className="flex items-center max-w-screen-2xl border-b-2 border-[#38b6ff]">
+                  {/* <img src='./assets/bean.png' className='w-6 absolute top-4 left-[10]' /> */}
+                  <input
+                    className="appearance-none bg-transparent border-none w-full text-[#000] font-medium pl-8 leading-tight focus:outline-none  placeholder:text-[#404040] placeholder:font-normal text-lg"
+                    type="text"
+                    placeholder="Tìm kiếm trên social"
+                    aria-label="Full name"
+                    // value={kw}
+                    // onChange={handleInputChange}
+                  />
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    color="#38b6ff"
+                    className="pb-1 float-left cursor-pointer"
+                    size="2x"
+                    fixedWidth
+                    // onClick={search}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p></p>
+          )}
           {/* <input
             placeholder="Search for something"
             className="searchInput"

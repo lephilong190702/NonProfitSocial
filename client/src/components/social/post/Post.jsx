@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./post.css";
 import { MoreVert } from "@material-ui/icons";
-import { authApi, endpoints } from "../../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import {
   Button,
   Form,
@@ -259,7 +259,7 @@ const Post = () => {
 
   const loadCommentsByPostId = async (postId) => {
     try {
-      const response = await authApi().get(endpoints["comment-post"](postId));
+      const response = await ApiConfig.get(endpoints["comment-post"](postId));
       setComments((prevComments) => ({
         ...prevComments,
         [postId]: response.data,
@@ -383,10 +383,6 @@ const Post = () => {
           const postId = post.id;
           loadCommentsByPostId(postId);
           console.log(post.comments);
-          post.comments.map((commentId) => {
-            loadRepliesByCommentId(commentId.id);
-          });
-          // console.log(loadCommentsByPostId);
         });
 
         const reactionsPromises = res.data.map((p) => {

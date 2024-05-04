@@ -5,6 +5,8 @@ import { Nav } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import { authApi, endpoints } from "../../../configs/ApiConfig";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Topbar = () => {
   const [user] = useContext(UserContext);
@@ -27,43 +29,31 @@ const Topbar = () => {
       <div className="topbarLeft">
         <span className="logo">Social Charity</span>
       </div>
-      {/* <div className="topbarCenter">
-        <div className="searchbar">
-          <Search />
-          <input
+      <div className="topbarCenter">
+        <div className="">
+          <FontAwesomeIcon
+            icon={faSearch}
+            color="white"
+            size="lg"
+            // onClick={() => closeSearchMenu()}
+            className="cursor-pointer ml-1"
+            fixedWidth
+          />
+          {/* <input
             placeholder="Search for something"
             className="searchInput"
-          ></input>
+          ></input> */}
         </div>
-      </div> */}
+      </div>
 
       <div className="topbarRight">
-        <div className="topbarLinks">
-          {/* <Link to={`/social`} style={{ color: "white" }}>
-            <span className="topbarLink">Homepage</span>
-          </Link> */}
-
-          {/* <span className="topbarLink">Timeline</span> */}
-        </div>
-        {/* <div className="topbarIcons">
-          <div className="topbarIconItem">
-            <Person />
-            <span className="topbarIconBadge">1</span>
-          </div>
-          <div className="topbarIconItem">
-            <Chat />
-            <span className="topbarIconBadge">2</span>
-          </div>
-          <div className="topbarIconItem">
+        <div className="topbarLinks"></div>
+        <div className="topbarIcons">
+          <div className="topbarIconItem ml-1">
             <Notifications />
             <span className="topbarIconBadge">1</span>
           </div>
-        </div> */}
-        {/* <Link to={`/social/profile`}>
-          {user === null ? null : (
-            <img src={avatar.profile?.avatar} alt="" className="topbarImg" />
-          )}
-        </Link> */}
+        </div>
       </div>
     </div>
   );

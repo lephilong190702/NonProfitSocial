@@ -1,5 +1,6 @@
 package com.csn.charity.pay;
 
+import com.csn.charity.service.implement.MailServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -37,6 +40,8 @@ public class PaymentController {
     private DonateService donateService;
     @Autowired
     private UserService userService;
+    @Autowired
+    MailServiceImpl mailService;
 
     @PostMapping("/submitOrder/{projectId}")
     @CrossOrigin
@@ -93,6 +98,16 @@ public class PaymentController {
             // Redirect to client-side URL
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create("http://34.101.36.18/result"));
+
+            try {
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(userDonate.getEmail());
+                mailMessage.setSubject("QUYÊN GÓP TỪ THIỆN!");
+                mailMessage.setText("BẠN ĐÃ QUYÊN GÓP THÀNH CÔNG!!!");
+                mailService.sendMailRegister(mailMessage);
+            } catch (MailException e) {
+                System.out.println("Error sending email: " + e.getMessage());
+            }
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         } else {
             // Redirect to error page or handle error scenario

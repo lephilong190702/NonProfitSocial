@@ -1,5 +1,11 @@
 package com.csn.charity.pay;
 
+import com.csn.charity.model.ConfirmationToken;
+import com.csn.charity.repository.ConfirmationTokenRepository;
+import com.csn.charity.service.implement.MailServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.model.User;
@@ -15,6 +21,10 @@ import java.util.*;
 
 @Service
 public class VNPayService {
+    @Autowired
+    ConfirmationTokenRepository confirmationTokenRepository;
+    @Autowired
+    MailServiceImpl mailService;
 
     public String createOrder(int total, String orderInfor, String urlReturn, Long projectId, User user) {
         String vnp_Version = "2.1.0";
@@ -86,6 +96,21 @@ public class VNPayService {
         String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + queryUrl;
+
+//        ConfirmationToken confirmationToken = new ConfirmationToken(user);
+//
+//        confirmationTokenRepository.save(confirmationToken);
+
+//        try {
+//            SimpleMailMessage mailMessage = new SimpleMailMessage();
+//            mailMessage.setTo(user.getEmail());
+//            mailMessage.setSubject("Complete Registration!");
+//            mailMessage.setText("To confirm your account, please click here : ");
+//            mailService.sendMailRegister(mailMessage);
+//        } catch (MailException e) {
+//            System.out.println("Error sending email: " + e.getMessage());
+//        }
+
         return paymentUrl;
     }
 

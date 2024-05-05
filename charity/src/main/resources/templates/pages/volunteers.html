@@ -16,7 +16,7 @@
                 <table class="table table-bordered mb-0">
                     <thead>
                         <tr>
-                            <th>STT</th>
+<!--                            <th>STT</th>-->
                             <th>DỰ ÁN</th>
                             <th>NGƯỜI DÙNG</th>
                             <th>KỸ NĂNG</th>
@@ -24,11 +24,12 @@
                             <th>NGÀY BẮT ĐẦU</th>
                             <th>NGÀY KẾT THÚC</th>
                             <th>MÔ TẢ</th>
+                            <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="v:${volunteers}">
-                            <td th:text="${v.id}"></td>
+<!--                            <td th:text="${v.id}"></td>-->
                             <td th:if="${v.project != null}" th:text="${v.project.title}"></td>
                             <td th:if="${v.user != null}" th:text="${v.user.username}"></td>
                             <td>
@@ -41,6 +42,11 @@
                             <td th:text="${v.startDate}"></td>
                             <td th:text="${v.endDate}"></td>
                             <td th:text="${v.description}"></td>
+                            <td style="white-space: nowrap;">
+                                <a th:href="@{/admin/accept/volunteer/{volunteerId}(volunteerId=${v.id})}"
+                                   class="btn btn-primary me-1 mb-1"
+                                   onclick="return confirm('Bạn có chắc chắn muốn chấp nhận tình nguyện viên này không?')">CHẤP NHẬN</a>
+                            </td>
                             <!-- <td></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/ncategory/{id}(id=${c.id})}">Update</a>

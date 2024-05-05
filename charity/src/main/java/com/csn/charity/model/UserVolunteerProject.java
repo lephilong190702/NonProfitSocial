@@ -45,6 +45,9 @@ public class UserVolunteerProject implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "status", nullable = false)
+    private Boolean status;
+
     @ManyToOne
     @JoinColumn(name = "project_id")
     @JsonIgnore

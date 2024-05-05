@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.csn.charity.service.interfaces.DonateService;
 import com.csn.charity.service.interfaces.VolunteerService;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class VolunteerController {
@@ -18,7 +21,7 @@ public class VolunteerController {
 
     @GetMapping("/volunteers")
     public String getVolunteer(Model model) {
-        model.addAttribute("volunteers", this.volunteerService.getAll());
+        model.addAttribute("volunteers", this.volunteerService.getPendingVolunteer());
         return "pages/volunteers";
     }
 
@@ -37,6 +40,12 @@ public class VolunteerController {
     @GetMapping("/stats")
     public String stats() {
         return "pages/test";
+    }
+
+    @RequestMapping(value = "/admin/accept/volunteer/{volunteerId}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String approveAddress(@PathVariable Long volunteerId) {
+        volunteerService.acceptVolunteer(volunteerId);
+        return "redirect:/volunteers";
     }
 
 }

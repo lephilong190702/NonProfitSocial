@@ -1,11 +1,10 @@
 package com.csn.charity.service.implement;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,8 @@ public class VolunteerServiceImpl implements VolunteerService {
     private ProjectRepository projectRepository;
     @Autowired
     private SkillReposiroty skillReposiroty;
+    @Autowired
+    MailServiceImpl mailService;
 
     @Override
     public void saveVolunteer(VolunteerRequestDTO requestDTO) {
@@ -63,6 +64,7 @@ public class VolunteerServiceImpl implements VolunteerService {
                         });
                     }
                     userVolunteerProject.setSkills(skills);
+                    userVolunteerProject.setStatus(false);
 
                     this.volunteerRepository.save(userVolunteerProject);
                 } else {
@@ -79,6 +81,34 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Override
     public List<UserVolunteerProject> getAll() {
         return this.volunteerRepository.findAll();
+    }
+
+    @Override
+    public void acceptVolunteer(Long volunteerId) {
+        UserVolunteerProject userVolunteerProject = volunteerRepository.findById(volunteerId)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy địa chỉ cần duyệt"));
+
+        if (userVolunteerProject.getStatus()) {
+            throw new IllegalStateException("Địa chỉ không ở trạng thái chờ xem xét");
+        }
+
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(userVolunteerProject.getUser().getEmail());
+            mailMessage.setSubject("ĐĂNG KÝ LÀM TÌNH NGUYỆN VIÊN");
+            mailMessage.setText("Đăng ký tình nguyện viên thành công");
+            mailService.sendMailRegister(mailMessage);
+        } catch (MailException e) {
+            System.out.println("Error sending email: " + e.getMessage());
+        }
+
+        userVolunteerProject.setStatus(true);
+        volunteerRepository.save(userVolunteerProject);
+    }
+
+    @Override
+    public List<UserVolunteerProject> getPendingVolunteer() {
+        return this.volunteerRepository.findByStatus(false);
     }
 
 }

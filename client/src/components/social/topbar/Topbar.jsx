@@ -131,37 +131,13 @@ const Topbar = () => {
       <div className="topbarRight">
         <div className="topbarLinks"></div>
         <div className="topbarIcons">
-          <div className="topbarIconItem ml-1" onClick={toggleDropdown}>
+          <div className="topbarIconItem ml-1">
             <Notifications />
             <span className="topbarIconBadge">1</span>
             {showDropdown && (
-              <div className="-z-100 ">
-              <div
-                className={`group ${
-                  scrolled ? "top-[170px] left-[100%]" : "top-[50px] left-[100%]"
-                } flex flex-col left-0 absolute  w-60  bg-white z-100 text-black`}
-              >
-                <div className="flex items-center max-w-screen-2xl border-b-2 border-[#38b6ff]">
-                  {/* <img src='./assets/bean.png' className='w-6 absolute top-4 left-[10]' /> */}
-                  <input
-                    className="appearance-none bg-transparent border-none w-full text-[#000] font-medium pl-8 leading-tight focus:outline-none  placeholder:text-[#404040] placeholder:font-normal text-lg"
-                    type="text"
-                    placeholder="Tìm kiếm trên social"
-                    aria-label="Full name"
-                    value={kw}
-                    onChange={handleInputChange}
-                  />
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    color="#38b6ff"
-                    className="pb-1 float-left cursor-pointer"
-                    size="2x"
-                    fixedWidth
-                    onClick={search}
-                  />
-                </div>
+              <div className="dropdownContent">
+                {/* Thêm nội dung cho dropdown ở đây */}
               </div>
-            </div>
             )}
           </div>
         </div>

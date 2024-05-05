@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.cloudinary.Cloudinary;
@@ -33,6 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectCategoryRepository projectCategoryRepository;
 
     @Override
+    // @Cacheable(value="projects")
     public List<Project> getAll() {
         return this.projectRepository.findAll();
     }

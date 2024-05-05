@@ -4,7 +4,7 @@ import { Chat, Notifications, Person, Search } from "@material-ui/icons";
 import { Nav } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import { authApi, endpoints } from "../../../configs/ApiConfig";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,12 +14,24 @@ const Topbar = () => {
 
   const [scrolled, setScrolled] = useState(false);
   const [toggleSearch, setToggleSearch] = useState(false);
+  const [kw, setKw] = useState("");
+
+  const nav = useNavigate();
 
   const openSearchMenu = () => {
     setToggleSearch(true);
   };
   const closeSearchMenu = () => {
     setToggleSearch(false);
+  };
+
+  const handleInputChange = (event) => {
+    setKw(event.target.value);
+  };
+
+  const search = (evt) => {
+    evt.preventDefault();
+    nav(`/social/?kw=${kw}`);
   };
   
 
@@ -87,8 +99,8 @@ const Topbar = () => {
                     type="text"
                     placeholder="Tìm kiếm trên social"
                     aria-label="Full name"
-                    // value={kw}
-                    // onChange={handleInputChange}
+                    value={kw}
+                    onChange={handleInputChange}
                   />
                   <FontAwesomeIcon
                     icon={faSearch}
@@ -96,7 +108,7 @@ const Topbar = () => {
                     className="pb-1 float-left cursor-pointer"
                     size="2x"
                     fixedWidth
-                    // onClick={search}
+                    onClick={search}
                   />
                 </div>
               </div>

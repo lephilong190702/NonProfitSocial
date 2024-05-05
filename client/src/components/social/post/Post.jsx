@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faListDots } from "@fortawesome/free-solid-svg-icons";
 import Client from "stompjs";
 import SockJS from "sockjs-client";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const Post = () => {
   const [user] = useContext(UserContext);
@@ -48,6 +48,10 @@ const Post = () => {
 
   const [commentDisplayModes, setCommentDisplayModes] = useState({});
   const [replyDisplayModes, setReplyDisplayModes] = useState({});
+
+  const [kw, setKw] = useState(false);
+  const [q] = useSearchParams();
+  const [findPost, setFindPost] = useState([]);
 
   const [edit, setEdit] = useState({
     content: "",
@@ -269,60 +273,6 @@ const Post = () => {
     }
   };
 
-  // const loadPosts = async (stompClient) => {
-  //   try {
-  //     let res = await authApi().get(endpoints["post"]);
-  //     setPost(res.data);
-
-  //     const commentPromises = res.data.map((post) => {
-  //       const postId = post.id;
-  //       loadCommentsByPostId(postId);
-  //     });
-
-  //     console.log(commentPromises);
-
-  //     const reactionsPromises = res.data.map((p) => {
-  //       const postId = p.id;
-  //       return authApi()
-  //         .get(endpoints["react-post"](postId))
-  //         .then((response) => response.data); // Lấy dữ liệu từ response
-  //     });
-
-  //     const reactionsData = await Promise.all(reactionsPromises);
-
-  //     const totalLikes = {};
-  //     reactionsData.forEach((data, index) => {
-  //       const postId = res.data[index].id;
-  //       totalLikes[postId] = data.length;
-  //     });
-
-  //     setLikeCurrent(totalLikes);
-
-  //     // res.data.forEach((p) => {
-  //     //   const postTopic = `/topic/posts/${p.id}`;
-  //     //   stompClient.subscribe(postTopic, (message) => {
-  //     //     console.log("Received message for post update:", message.body);
-  //     //     const updatedPost = JSON.parse(message.body);
-  //     //     setPost((current) => {
-  //     //       const index = current.findIndex(
-  //     //         (post) => post.id === updatedPost.id
-  //     //       );
-  //     //       if (index !== -1) {
-  //     //         return [
-  //     //           ...current.slice(0, index),
-  //     //           updatedPost,
-  //     //           ...current.slice(index + 1),
-  //     //         ];
-  //     //       }
-  //     //       return current;
-  //     //     });
-  //     //   });
-  //     // });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const connectToWebSocket = () => {
     // const socket = new SockJS("http://34.124.235.184:80/api/ws");
     const socket = new SockJS("http://localhost:9090/api/ws");
@@ -376,7 +326,17 @@ const Post = () => {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        let res = await ApiConfig.get(endpoints["public-posts"]);
+        let p = endpoints.post;
+        const kw = q.get("kw");
+
+        if (kw !== null) {
+          p = `${p}search?kw=${kw}`;
+          setKw(true);
+        } else setKw(false);
+        const res2 = await ApiConfig.get(p);
+        setFindPost(res2.data);
+
+        let res = await authApi().get(endpoints["public-posts"]);
         console.log(res.data);
         setPost(res.data);
 
@@ -435,7 +395,7 @@ const Post = () => {
     return () => {
       stompClient.disconnect();
     };
-  }, []);
+  }, [q]);
 
   const handleMenuToggle = (postId) => {
     setMenuOpen((prevState) => ({
@@ -446,304 +406,641 @@ const Post = () => {
 
   return (
     <>
-      {post
-        .slice()
-        .reverse()
-        .map((p) => (
-          <div className="post" key={p.id}>
-            <div className="postWrapper">
-              <div className="postTop">
-                <div className="postTopLeft">
-                  <img
-                    className="postProfileImg"
-                    src={p.user.profile.avatar}
-                    alt=""
-                  />
-                  <span className="postUsername">{p.user.username}</span>
-                  <span className="postDate">
-                    {" "}
-                    {moment(p.createDate).fromNow()}
-                  </span>
-                </div>
-                <div className="postTopRight">
-                  {user && (
-                    <Dropdown
-                      show={menuOpen[p.id]}
-                      onToggle={() => handleMenuToggle(p.id)}
-                    >
-                      <Dropdown.Toggle
-                        variant="link"
-                        className="btn-more-vert"
-                        style={{ border: "none", boxShadow: "none" }}
-                      >
-                        <FontAwesomeIcon icon={faListDots} />
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {user.username === p.user.username && (
-                          <>
-                            <Dropdown.Item onClick={() => handleEditsPost(p)}>
-                              Chỉnh sửa bài viết
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() => handleDeletePost(p.id)}
-                            >
-                              Xóa bài viết
-                            </Dropdown.Item>
-                          </>
-                        )}
-
-                        {user.username !== p.user.username && (
-                          <Dropdown.Item onClick={() => handleReportPost(p.id)}>
-                            Báo cáo bài viết
-                          </Dropdown.Item>
-                        )}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  )}
-                </div>
-              </div>
-              <div className="postCenter">
-                <span className="postText">{p.content}</span>
-              </div>
-              <div className="postCenter">
-                <span className="postText">
-                  <a href="#" style={{ textDecoration: 'none' }}>
-                  {p.tags.map((tag) => (
-                    <span key={tag.id} className="postText link">
-                      #{tag.name}
-                    </span>
-                  ))}
-                  </a>
-                  
-                </span>
-              </div>
-              <div className="postCenter">
-                {p.images.length > 0 &&
-                  p.images.map((image, index) => (
-                    <img src={image.image} key={index} alt="image" />
-                  ))}
-              </div>
-              <div className="bottom-content">
-                <div className="postBottomLeft">
-                  <Link
-                    className="custom-card-link"
-                    onClick={() => likeHandler(p.id)}
-                  >
-                    <FontAwesomeIcon icon={faHeart} />
-                    <span className="postLikeCounter">
-                      {likeCurrent[p.id] || 0} lượt yêu thích
-                    </span>
-                  </Link>
-                </div>
-                <div
-                  className="postBottomRight"
-                  onClick={() => CommentHandler(p.id)}
-                >
-                  <span className="postCommentText">
-                    {(comments[p.id] || []).length} bình luận
-                  </span>
-                </div>
-              </div>
-              <div>
-                {user ? (
-                  <Form.Control
-                    as="textarea"
-                    aria-label="With textarea"
-                    value={content[p.id] || ""}
-                    onChange={(e) =>
-                      setContent({ ...content, [p.id]: e.target.value })
-                    }
-                    placeholder="Nội dung bình luận"
-                  />
-                ) : (
-                  <p>Bạn cần đăng nhập để bình luận.</p>
-                )}
-                {user && (
-                  <Button
-                    onClick={() => addComment(p.id)}
-                    className="mt-2"
-                    variant="info"
-                  >
-                    Bình luận
-                  </Button>
-                )}
-              </div>
-              <Link
-                onClick={() => toggleCommentDisplay(p.id)}
-                className={
-                  commentDisplayModes[p.id]
-                    ? "gray-link"
-                    : "gray-link underline-on-hover"
-                }
-              >
-                {commentDisplayModes[p.id]
-                  ? "Hiển thị một phần bình luận"
-                  : "Hiển thị toàn bộ bình luận"}
-              </Link>
-              {
-                <div className="commentList">
-                  <div>
-                    {Array.isArray(comments[p.id]) &&
-                    comments[p.id].length > 0 ? (
-                      comments[p.id]
-                        .slice(commentDisplayModes[p.id] ? undefined : -2)
-                        .reverse()
-                        .map((comment) => (
-                          <ListGroup.Item key={comment.id}>
-                            <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
-                              <div className="comment-post">
-                                <span
-                                  className="commentContent "
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    marginBottom: "10px",
-                                  }}
+      {!kw ? (
+        <div>
+          {post
+            .slice()
+            .reverse()
+            .map((p) => (
+              <div className="post" key={p.id}>
+                <div className="postWrapper">
+                  <div className="postTop">
+                    <div className="postTopLeft">
+                      <img
+                        className="postProfileImg"
+                        src={p.user.profile.avatar}
+                        alt=""
+                      />
+                      <span className="postUsername">{p.user.username}</span>
+                      <span className="postDate">
+                        {" "}
+                        {moment(p.createDate).fromNow()}
+                      </span>
+                    </div>
+                    <div className="postTopRight">
+                      {user && (
+                        <Dropdown
+                          show={menuOpen[p.id]}
+                          onToggle={() => handleMenuToggle(p.id)}
+                        >
+                          <Dropdown.Toggle
+                            variant="link"
+                            className="btn-more-vert"
+                            style={{ border: "none", boxShadow: "none" }}
+                          >
+                            <FontAwesomeIcon icon={faListDots} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            {user.username === p.user.username && (
+                              <>
+                                <Dropdown.Item
+                                  onClick={() => handleEditsPost(p)}
                                 >
-                                  <div className="comment-avatar">
-                                    <img
-                                      src={comment.user.profile.avatar}
-                                      alt="avatar"
+                                  Chỉnh sửa bài viết
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => handleDeletePost(p.id)}
+                                >
+                                  Xóa bài viết
+                                </Dropdown.Item>
+                              </>
+                            )}
+
+                            {user.username !== p.user.username && (
+                              <Dropdown.Item
+                                onClick={() => handleReportPost(p.id)}
+                              >
+                                Báo cáo bài viết
+                              </Dropdown.Item>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
+                    </div>
+                  </div>
+                  <div className="postCenter">
+                    <span className="postText">{p.content}</span>
+                  </div>
+                  <div className="postCenter">
+                    <span className="postText">
+                      <a href="#" style={{ textDecoration: "none" }}>
+                        {p.tags.map((tag) => (
+                          <span key={tag.id} className="postText link">
+                            #{tag.name}
+                          </span>
+                        ))}
+                      </a>
+                    </span>
+                  </div>
+                  <div className="postCenter">
+                    {p.images.length > 0 &&
+                      p.images.map((image, index) => (
+                        <img src={image.image} key={index} alt="image" />
+                      ))}
+                  </div>
+                  <div className="bottom-content">
+                    <div className="postBottomLeft">
+                      <Link
+                        className="custom-card-link"
+                        onClick={() => likeHandler(p.id)}
+                      >
+                        <FontAwesomeIcon icon={faHeart} />
+                        <span className="postLikeCounter">
+                          {likeCurrent[p.id] || 0} lượt yêu thích
+                        </span>
+                      </Link>
+                    </div>
+                    <div
+                      className="postBottomRight"
+                      onClick={() => CommentHandler(p.id)}
+                    >
+                      <span className="postCommentText">
+                        {(comments[p.id] || []).length} bình luận
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    {user ? (
+                      <Form.Control
+                        as="textarea"
+                        aria-label="With textarea"
+                        value={content[p.id] || ""}
+                        onChange={(e) =>
+                          setContent({ ...content, [p.id]: e.target.value })
+                        }
+                        placeholder="Nội dung bình luận"
+                      />
+                    ) : (
+                      <p>Bạn cần đăng nhập để bình luận.</p>
+                    )}
+                    {user && (
+                      <Button
+                        onClick={() => addComment(p.id)}
+                        className="mt-2"
+                        variant="info"
+                      >
+                        Bình luận
+                      </Button>
+                    )}
+                  </div>
+                  <Link
+                    onClick={() => toggleCommentDisplay(p.id)}
+                    className={
+                      commentDisplayModes[p.id]
+                        ? "gray-link"
+                        : "gray-link underline-on-hover"
+                    }
+                  >
+                    {commentDisplayModes[p.id]
+                      ? "Hiển thị một phần bình luận"
+                      : "Hiển thị toàn bộ bình luận"}
+                  </Link>
+                  {
+                    <div className="commentList">
+                      <div>
+                        {Array.isArray(comments[p.id]) &&
+                        comments[p.id].length > 0 ? (
+                          comments[p.id]
+                            .slice(commentDisplayModes[p.id] ? undefined : -4)
+                            .reverse()
+                            .map((comment) => (
+                              <ListGroup.Item key={comment.id}>
+                                <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
+                                  <div className="comment-post">
+                                    <span
+                                      className="commentContent "
                                       style={{
-                                        width: "32px",
-                                        height: "32px",
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                        marginRight: "5px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        marginBottom: "10px",
                                       }}
-                                    />
-                                  </div>
-                                  <div className="comment-details">
-                                    <div className="comment-username">
-                                      {comment.user.username}
-                                    </div>
-                                    <div className="comment-content">
-                                      {comment.content}
-                                    </div>
-                                    <div className="comment-time pt-1 flex flex-row gap-2 items-center">
-                                      {" "}
-                                      <p className="text-xs font-light">
-                                        {moment(comment.createDate).fromNow()}
-                                      </p>
-                                      <p
-                                        className="font-semibold text-sm cursor-pointer"
-                                        onClick={() => replyHandler(comment.id)}
-                                      >
-                                        Trả lời
-                                      </p>
-                                    </div>
-                                  </div>
-                                </span>
-                                {/* <Button
+                                    >
+                                      <div className="comment-avatar">
+                                        <img
+                                          src={comment.user.profile.avatar}
+                                          alt="avatar"
+                                          style={{
+                                            width: "32px",
+                                            height: "32px",
+                                            borderRadius: "50%",
+                                            objectFit: "cover",
+                                            marginRight: "5px",
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="comment-details">
+                                        <div className="comment-username">
+                                          {comment.user.username}
+                                        </div>
+                                        <div className="comment-content">
+                                          {comment.content}
+                                        </div>
+                                        <div className="comment-time pt-1 flex flex-row gap-2 items-center">
+                                          {" "}
+                                          <p className="text-xs font-light">
+                                            {moment(
+                                              comment.createDate
+                                            ).fromNow()}
+                                          </p>
+                                          <p
+                                            className="font-semibold text-sm cursor-pointer"
+                                            onClick={() =>
+                                              replyHandler(comment.id)
+                                            }
+                                          >
+                                            Trả lời
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </span>
+                                    {/* <Button
                                   variant="link"
                                   onClick={() => handleShowReplies(comment.id)}
                                 >
                                   Hiển thị phản hồi
                                 </Button> */}
-                              </div>
-                            </div>
+                                  </div>
+                                </div>
 
-                            {openReply === comment.id && (
-                              <>
-                                <Link
-                                  onClick={() => toggleReplyDisplay(comment.id)}
-                                  className={
-                                    replyDisplayModes[comment.id]
-                                      ? "gray-link"
-                                      : "gray-link underline-on-hover"
-                                  }
-                                  style={{ marginLeft: 50 }}
-                                >
-                                  {replyDisplayModes[comment.id]
-                                    ? "Hiển thị một phần phản hồi"
-                                    : "Hiển thị toàn bộ phản hồi"}
-                                </Link>
-                                {Array.isArray(replies[comment.id]) &&
-                                replies[comment.id].length > 0
-                                  ? replies[comment.id]
-                                      .slice(
+                                {openReply === comment.id && (
+                                  <>
+                                    <Link
+                                      onClick={() =>
+                                        toggleReplyDisplay(comment.id)
+                                      }
+                                      className={
                                         replyDisplayModes[comment.id]
-                                          ? undefined
-                                          : -2
-                                      )
-                                      // .reverse()
-                                      .map((reply) => (
-                                        <div key={reply.id} className="reply">
-                                          <span
-                                            className="replyContent"
-                                            style={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              marginBottom: "10px",
-                                            }}
-                                          >
-                                            <div className="reply-avatar">
-                                              <img
-                                                src={reply.user.profile.avatar}
-                                                alt="avatar"
+                                          ? "gray-link"
+                                          : "gray-link underline-on-hover"
+                                      }
+                                      style={{ marginLeft: 50 }}
+                                    >
+                                      {replyDisplayModes[comment.id]
+                                        ? "Hiển thị một phần phản hồi"
+                                        : "Hiển thị toàn bộ phản hồi"}
+                                    </Link>
+                                    {Array.isArray(replies[comment.id]) &&
+                                    replies[comment.id].length > 0
+                                      ? replies[comment.id]
+                                          .slice(
+                                            replyDisplayModes[comment.id]
+                                              ? undefined
+                                              : -2
+                                          )
+                                          // .reverse()
+                                          .map((reply) => (
+                                            <div
+                                              key={reply.id}
+                                              className="reply"
+                                            >
+                                              <span
+                                                className="replyContent"
                                                 style={{
-                                                  width: "32px",
-                                                  height: "32px",
-                                                  borderRadius: "50%",
-                                                  objectFit: "cover",
-                                                  marginRight: "5px",
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  marginBottom: "10px",
                                                 }}
-                                              />{" "}
+                                              >
+                                                <div className="reply-avatar">
+                                                  <img
+                                                    src={
+                                                      reply.user.profile.avatar
+                                                    }
+                                                    alt="avatar"
+                                                    style={{
+                                                      width: "32px",
+                                                      height: "32px",
+                                                      borderRadius: "50%",
+                                                      objectFit: "cover",
+                                                      marginRight: "5px",
+                                                    }}
+                                                  />{" "}
+                                                </div>
+                                                <div className="reply-details">
+                                                  <div className="reply-username">
+                                                    {reply.user.username}
+                                                  </div>
+                                                  <div className="reply-content">
+                                                    {reply.content}
+                                                  </div>
+                                                  <div className="reply-time">
+                                                    {" "}
+                                                    {moment(
+                                                      reply.createDate
+                                                    ).fromNow()}
+                                                  </div>
+                                                </div>
+                                              </span>
                                             </div>
-                                            <div className="reply-details">
-                                              <div className="reply-username">
-                                                {reply.user.username}
-                                              </div>
-                                              <div className="reply-content">
-                                                {reply.content}
-                                              </div>
-                                              <div className="reply-time">
-                                                {" "}
-                                                {moment(
-                                                  reply.createDate
-                                                ).fromNow()}
-                                              </div>
-                                            </div>
-                                          </span>
-                                        </div>
-                                      ))
-                                  : null}
-                                  {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
-                                  <Form.Control
-                                    as="textarea"
-                                    aria-label="With textarea"
-                                    value={replyContent[comment.id] || ""}
-                                    onChange={(e) =>
-                                      setReplyContent({
-                                        ...replyContent,
-                                        [comment.id]: e.target.value,
-                                      })
-                                    }
-                                    placeholder="Nội dung phản hồi"
-                                  />
+                                          ))
+                                      : null}
+                                    {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                                      <Form.Control
+                                        as="textarea"
+                                        aria-label="With textarea"
+                                        value={replyContent[comment.id] || ""}
+                                        onChange={(e) =>
+                                          setReplyContent({
+                                            ...replyContent,
+                                            [comment.id]: e.target.value,
+                                          })
+                                        }
+                                        placeholder="Nội dung phản hồi"
+                                      />
+                                    )}
+                                    {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                                      <Button
+                                        onClick={() =>
+                                          addReply(comment.id, p.id)
+                                        }
+                                        className="mt-2"
+                                        variant="info"
+                                      >
+                                        Thêm phản hồi
+                                      </Button>
+                                    )}
+                                  </>
                                 )}
-                                {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
-                                  <Button
-                                    onClick={() => addReply(comment.id, p.id)}
-                                    className="mt-2"
-                                    variant="info"
-                                  >
-                                    Thêm phản hồi
-                                  </Button>
-                                )}
+                              </ListGroup.Item>
+                            ))
+                        ) : (
+                          <div>Không có bình luận</div>
+                        )}
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            ))}
+        </div>
+      ) : (
+        <div>
+          {findPost
+            .slice()
+            .reverse()
+            .map((p) => (
+              <div className="post" key={p.id}>
+                <div className="postWrapper">
+                  <div className="postTop">
+                    <div className="postTopLeft">
+                      <img
+                        className="postProfileImg"
+                        src={p.user.profile.avatar}
+                        alt=""
+                      />
+                      <span className="postUsername">{p.user.username}</span>
+                      <span className="postDate">
+                        {" "}
+                        {moment(p.createDate).fromNow()}
+                      </span>
+                    </div>
+                    <div className="postTopRight">
+                      {user && (
+                        <Dropdown
+                          show={menuOpen[p.id]}
+                          onToggle={() => handleMenuToggle(p.id)}
+                        >
+                          <Dropdown.Toggle
+                            variant="link"
+                            className="btn-more-vert"
+                            style={{ border: "none", boxShadow: "none" }}
+                          >
+                            <FontAwesomeIcon icon={faListDots} />
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu>
+                            {user.username === p.user.username && (
+                              <>
+                                <Dropdown.Item
+                                  onClick={() => handleEditsPost(p)}
+                                >
+                                  Chỉnh sửa bài viết
+                                </Dropdown.Item>
+                                <Dropdown.Item
+                                  onClick={() => handleDeletePost(p.id)}
+                                >
+                                  Xóa bài viết
+                                </Dropdown.Item>
                               </>
                             )}
-                          </ListGroup.Item>
-                        ))
+
+                            {user.username !== p.user.username && (
+                              <Dropdown.Item
+                                onClick={() => handleReportPost(p.id)}
+                              >
+                                Báo cáo bài viết
+                              </Dropdown.Item>
+                            )}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      )}
+                    </div>
+                  </div>
+                  <div className="postCenter">
+                    <span className="postText">{p.content}</span>
+                  </div>
+                  <div className="postCenter">
+                    <span className="postText">
+                      <a href="#" style={{ textDecoration: "none" }}>
+                        {p.tags.map((tag) => (
+                          <span key={tag.id} className="postText link">
+                            #{tag.name}
+                          </span>
+                        ))}
+                      </a>
+                    </span>
+                  </div>
+                  <div className="postCenter">
+                    {p.images.length > 0 &&
+                      p.images.map((image, index) => (
+                        <img src={image.image} key={index} alt="image" />
+                      ))}
+                  </div>
+                  <div className="bottom-content">
+                    <div className="postBottomLeft">
+                      <Link
+                        className="custom-card-link"
+                        onClick={() => likeHandler(p.id)}
+                      >
+                        <FontAwesomeIcon icon={faHeart} />
+                        <span className="postLikeCounter">
+                          {likeCurrent[p.id] || 0} lượt yêu thích
+                        </span>
+                      </Link>
+                    </div>
+                    <div
+                      className="postBottomRight"
+                      onClick={() => CommentHandler(p.id)}
+                    >
+                      <span className="postCommentText">
+                        {(comments[p.id] || []).length} bình luận
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    {user ? (
+                      <Form.Control
+                        as="textarea"
+                        aria-label="With textarea"
+                        value={content[p.id] || ""}
+                        onChange={(e) =>
+                          setContent({ ...content, [p.id]: e.target.value })
+                        }
+                        placeholder="Nội dung bình luận"
+                      />
                     ) : (
-                      <div>Không có bình luận</div>
+                      <p>Bạn cần đăng nhập để bình luận.</p>
+                    )}
+                    {user && (
+                      <Button
+                        onClick={() => addComment(p.id)}
+                        className="mt-2"
+                        variant="info"
+                      >
+                        Bình luận
+                      </Button>
                     )}
                   </div>
+                  <Link
+                    onClick={() => toggleCommentDisplay(p.id)}
+                    className={
+                      commentDisplayModes[p.id]
+                        ? "gray-link"
+                        : "gray-link underline-on-hover"
+                    }
+                  >
+                    {commentDisplayModes[p.id]
+                      ? "Hiển thị một phần bình luận"
+                      : "Hiển thị toàn bộ bình luận"}
+                  </Link>
+                  {
+                    <div className="commentList">
+                      <div>
+                        {Array.isArray(comments[p.id]) &&
+                        comments[p.id].length > 0 ? (
+                          comments[p.id]
+                            .slice(commentDisplayModes[p.id] ? undefined : -4)
+                            .reverse()
+                            .map((comment) => (
+                              <ListGroup.Item key={comment.id}>
+                                <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
+                                  <div className="comment-post">
+                                    <span
+                                      className="commentContent "
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        marginBottom: "10px",
+                                      }}
+                                    >
+                                      <div className="comment-avatar">
+                                        <img
+                                          src={comment.user.profile.avatar}
+                                          alt="avatar"
+                                          style={{
+                                            width: "32px",
+                                            height: "32px",
+                                            borderRadius: "50%",
+                                            objectFit: "cover",
+                                            marginRight: "5px",
+                                          }}
+                                        />
+                                      </div>
+                                      <div className="comment-details">
+                                        <div className="comment-username">
+                                          {comment.user.username}
+                                        </div>
+                                        <div className="comment-content">
+                                          {comment.content}
+                                        </div>
+                                        <div className="comment-time pt-1 flex flex-row gap-2 items-center">
+                                          {" "}
+                                          <p className="text-xs font-light">
+                                            {moment(
+                                              comment.createDate
+                                            ).fromNow()}
+                                          </p>
+                                          <p
+                                            className="font-semibold text-sm cursor-pointer"
+                                            onClick={() =>
+                                              replyHandler(comment.id)
+                                            }
+                                          >
+                                            Trả lời
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </span>
+                                    {/* <Button
+                                variant="link"
+                                onClick={() => handleShowReplies(comment.id)}
+                              >
+                                Hiển thị phản hồi
+                              </Button> */}
+                                  </div>
+                                </div>
+
+                                {openReply === comment.id && (
+                                  <>
+                                    <Link
+                                      onClick={() =>
+                                        toggleReplyDisplay(comment.id)
+                                      }
+                                      className={
+                                        replyDisplayModes[comment.id]
+                                          ? "gray-link"
+                                          : "gray-link underline-on-hover"
+                                      }
+                                      style={{ marginLeft: 50 }}
+                                    >
+                                      {replyDisplayModes[comment.id]
+                                        ? "Hiển thị một phần phản hồi"
+                                        : "Hiển thị toàn bộ phản hồi"}
+                                    </Link>
+                                    {Array.isArray(replies[comment.id]) &&
+                                    replies[comment.id].length > 0
+                                      ? replies[comment.id]
+                                          .slice(
+                                            replyDisplayModes[comment.id]
+                                              ? undefined
+                                              : -2
+                                          )
+                                          // .reverse()
+                                          .map((reply) => (
+                                            <div
+                                              key={reply.id}
+                                              className="reply"
+                                            >
+                                              <span
+                                                className="replyContent"
+                                                style={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                <div className="reply-avatar">
+                                                  <img
+                                                    src={
+                                                      reply.user.profile.avatar
+                                                    }
+                                                    alt="avatar"
+                                                    style={{
+                                                      width: "32px",
+                                                      height: "32px",
+                                                      borderRadius: "50%",
+                                                      objectFit: "cover",
+                                                      marginRight: "5px",
+                                                    }}
+                                                  />{" "}
+                                                </div>
+                                                <div className="reply-details">
+                                                  <div className="reply-username">
+                                                    {reply.user.username}
+                                                  </div>
+                                                  <div className="reply-content">
+                                                    {reply.content}
+                                                  </div>
+                                                  <div className="reply-time">
+                                                    {" "}
+                                                    {moment(
+                                                      reply.createDate
+                                                    ).fromNow()}
+                                                  </div>
+                                                </div>
+                                              </span>
+                                            </div>
+                                          ))
+                                      : null}
+                                    {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
+                                      <Form.Control
+                                        as="textarea"
+                                        aria-label="With textarea"
+                                        value={replyContent[comment.id] || ""}
+                                        onChange={(e) =>
+                                          setReplyContent({
+                                            ...replyContent,
+                                            [comment.id]: e.target.value,
+                                          })
+                                        }
+                                        placeholder="Nội dung phản hồi"
+                                      />
+                                    )}
+                                    {user && ( // Hiển thị nút thêm phản hồi nếu người dùng đã đăng nhập
+                                      <Button
+                                        onClick={() =>
+                                          addReply(comment.id, p.id)
+                                        }
+                                        className="mt-2"
+                                        variant="info"
+                                      >
+                                        Thêm phản hồi
+                                      </Button>
+                                    )}
+                                  </>
+                                )}
+                              </ListGroup.Item>
+                            ))
+                        ) : (
+                          <div>Không có bình luận</div>
+                        )}
+                      </div>
+                    </div>
+                  }
                 </div>
-              }
-            </div>
-          </div>
-        ))}
+              </div>
+            ))}
+        </div>
+      )}
 
       <Modal show={reportModalOpen} onHide={() => setReportModalOpen(false)}>
         <Modal.Header closeButton>

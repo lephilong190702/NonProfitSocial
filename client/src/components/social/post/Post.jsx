@@ -259,7 +259,6 @@ const Post = () => {
           `${endpoints["post"]}${postId}`
         );
         console.log("Kết quả xóa bài viết:", response.data);
-        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -277,7 +276,6 @@ const Post = () => {
           endpoints["edit-comment"](commentId)
         );
         console.log("Kết quả xóa bình luận:", response.data);
-        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -295,7 +293,6 @@ const Post = () => {
           endpoints["edit-replies"](replyId)
         );
         console.log("Kết quả xóa bình luận:", response.data);
-        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -370,6 +367,7 @@ const Post = () => {
     }
   };
 
+
   const connectToWebSocket = () => {
     // const socket = new SockJS("http://34.124.235.184:80/api/ws");
     const socket = new SockJS("http://localhost:9090/api/ws");
@@ -415,6 +413,54 @@ const Post = () => {
                   : comment
               ),
             };
+          });
+        });
+
+        stompClient.subscribe("/topic/delete-post/", (message) => {
+          console.log("Received delete post message:", message.body);
+          const deletedPostId = JSON.parse(message.body);
+          console.log("deletedPostId: ", deletedPostId);
+
+          // Cập nhật state hoặc thực hiện các hành động tương ứng, ví dụ: xóa bài viết khỏi danh sách bài viết mà không cần reload trang
+          setPost(prevPosts => prevPosts.filter(post => post.id !== deletedPostId));
+        });
+
+
+        stompClient.subscribe("/topic/delete-comment-post/", (message) => {
+          console.log("Received delete comment post message:", message.body);
+          const deletedCommentId = JSON.parse(message.body);
+          console.log("deletedCommentId: ", deletedCommentId);
+
+          // Cập nhật state hoặc thực hiện các hành động tương ứng, ví dụ: xóa bài viết khỏi danh sách bài viết mà không cần reload trang
+          setComments((prevComments) => {
+            console.log("prevComments before update:", prevComments);
+            const updatedComments = {};
+            Object.keys(prevComments).forEach((postId) => {
+              updatedComments[postId] = prevComments[postId].filter(
+                (comment) => comment.id !== deletedCommentId
+              );
+            });
+            console.log("updatedComments:", updatedComments);
+            return updatedComments;
+          });
+        });
+
+
+        stompClient.subscribe("/topic/delete-reply-comment/", (message) => {
+          console.log("Received delete reply comment message:", message.body);
+          const deletedReplyCommentId = JSON.parse(message.body);
+          console.log("deletedReplyCommentId: ", deletedReplyCommentId);
+
+          // Update replies state by removing the deleted reply comment
+          setReplies((prevReplies) => {
+            // Lặp qua tất cả các commentId và loại bỏ reply comment có replyId tương ứng
+            const updatedReplies = {};
+            Object.keys(prevReplies).forEach((commentId) => {
+              updatedReplies[commentId] = prevReplies[commentId].filter(
+                (reply) => reply.id !== deletedReplyCommentId
+              );
+            });
+            return updatedReplies;
           });
         });
 
@@ -477,27 +523,6 @@ const Post = () => {
         });
 
         setLikeCurrent(totalLikes);
-
-        // res.data.forEach((p) => {
-        //   const postTopic = `/topic/posts/${p.id}`;
-        //   stompClient.subscribe(postTopic, (message) => {
-        //     console.log("Received message for post update:", message.body);
-        //     const updatedPost = JSON.parse(message.body);
-        //     setPost((current) => {
-        //       const index = current.findIndex(
-        //         (post) => post.id === updatedPost.id
-        //       );
-        //       if (index !== -1) {
-        //         return [
-        //           ...current.slice(0, index),
-        //           updatedPost,
-        //           ...current.slice(index + 1),
-        //         ];
-        //       }
-        //       return current;
-        //     });
-        //   });
-        // });
       } catch (error) {
         console.error(error);
       }
@@ -678,7 +703,7 @@ const Post = () => {
                     <div className="commentList">
                       <div>
                         {Array.isArray(comments[p.id]) &&
-                        comments[p.id].length > 0 ? (
+                          comments[p.id].length > 0 ? (
                           comments[p.id]
                             .slice(commentDisplayModes[p.id] ? undefined : -4)
                             .reverse()
@@ -804,104 +829,104 @@ const Post = () => {
                                         : "Hiển thị toàn bộ phản hồi"}
                                     </Link>
                                     {Array.isArray(replies[comment.id]) &&
-                                    replies[comment.id].length > 0
+                                      replies[comment.id].length > 0
                                       ? replies[comment.id]
-                                          .slice(
-                                            replyDisplayModes[comment.id]
-                                              ? undefined
-                                              : -2
-                                          )
-                                          // .reverse()
-                                          .map((reply) => (
-                                            <div
-                                              key={reply.id}
-                                              className="reply"
+                                        .slice(
+                                          replyDisplayModes[comment.id]
+                                            ? undefined
+                                            : -2
+                                        )
+                                        // .reverse()
+                                        .map((reply) => (
+                                          <div
+                                            key={reply.id}
+                                            className="reply"
+                                          >
+                                            <span
+                                              className="replyContent"
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                marginBottom: "10px",
+                                              }}
                                             >
-                                              <span
-                                                className="replyContent"
-                                                style={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  marginBottom: "10px",
-                                                }}
-                                              >
-                                                <div className="reply-avatar">
-                                                  <img
-                                                    src={
-                                                      reply.user.profile.avatar
-                                                    }
-                                                    alt="avatar"
-                                                    style={{
-                                                      width: "32px",
-                                                      height: "32px",
-                                                      borderRadius: "50%",
-                                                      objectFit: "cover",
-                                                      marginRight: "5px",
-                                                    }}
-                                                  />{" "}
-                                                </div>
-                                                <div className="reply-details">
-                                                  <div className="reply-username">
-                                                    {reply.user.username}
-                                                  </div>
-                                                  <div className="reply-content">
-                                                    {reply.content}
-                                                  </div>
-                                                  <div className="reply-time">
-                                                    {" "}
-                                                    {moment(
-                                                      reply.createDate
-                                                    ).fromNow()}
-                                                  </div>
-                                                </div>
-                                              </span>
-                                              <Dropdown
-                                                className="replyContent"
-                                                style={{
-                                                  position: "absolute",
-                                                  // top: 0,
-                                                  right: 0,
-                                                  display: "flex",
-                                                  marginBottom: "10px",
-                                                }}
-                                                show={replyOpen[reply.id]}
-                                                onToggle={() =>
-                                                  handleReplyToggle(
-                                                    reply.id
-                                                  )
-                                                }
-                                              >
-                                                <Dropdown.Toggle
-                                                  variant="link"
-                                                  className="btn-more-vert"
+                                              <div className="reply-avatar">
+                                                <img
+                                                  src={
+                                                    reply.user.profile.avatar
+                                                  }
+                                                  alt="avatar"
                                                   style={{
-                                                    border: "none",
-                                                    boxShadow: "none",
+                                                    width: "32px",
+                                                    height: "32px",
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                    marginRight: "5px",
                                                   }}
+                                                />{" "}
+                                              </div>
+                                              <div className="reply-details">
+                                                <div className="reply-username">
+                                                  {reply.user.username}
+                                                </div>
+                                                <div className="reply-content">
+                                                  {reply.content}
+                                                </div>
+                                                <div className="reply-time">
+                                                  {" "}
+                                                  {moment(
+                                                    reply.createDate
+                                                  ).fromNow()}
+                                                </div>
+                                              </div>
+                                            </span>
+                                            <Dropdown
+                                              className="replyContent"
+                                              style={{
+                                                position: "absolute",
+                                                // top: 0,
+                                                right: 0,
+                                                display: "flex",
+                                                marginBottom: "10px",
+                                              }}
+                                              show={replyOpen[reply.id]}
+                                              onToggle={() =>
+                                                handleReplyToggle(
+                                                  reply.id
+                                                )
+                                              }
+                                            >
+                                              <Dropdown.Toggle
+                                                variant="link"
+                                                className="btn-more-vert"
+                                                style={{
+                                                  border: "none",
+                                                  boxShadow: "none",
+                                                }}
+                                              >
+                                                {/* <FontAwesomeIcon icon={faList} /> */}
+                                              </Dropdown.Toggle>
+                                              <Dropdown.Menu>
+                                                <Dropdown.Item
+                                                  onClick={() =>
+                                                    handleEditReply(reply)
+                                                  }
                                                 >
-                                                  {/* <FontAwesomeIcon icon={faList} /> */}
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                  <Dropdown.Item
-                                                    onClick={() =>
-                                                      handleEditReply(reply)
-                                                    }
-                                                  >
-                                                    Chỉnh sửa phản hồi
-                                                  </Dropdown.Item>
-                                                  <Dropdown.Item
-                                                    onClick={() =>
-                                                      handleDeleteReply(
-                                                        reply.id
-                                                      )
-                                                    }
-                                                  >
-                                                    Xóa phản hồi
-                                                  </Dropdown.Item>
-                                                </Dropdown.Menu>
-                                              </Dropdown>
-                                            </div>
-                                          ))
+                                                  Chỉnh sửa phản hồi
+                                                </Dropdown.Item>
+                                                <Dropdown.Item
+                                                  onClick={() =>
+                                                    handleDeleteReply(
+                                                      reply.id
+                                                    )
+                                                  }
+                                                >
+                                                  Xóa phản hồi
+                                                </Dropdown.Item>
+                                              </Dropdown.Menu>
+                                            </Dropdown>
+                                          </div>
+                                        ))
                                       : null}
                                     {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
                                       <Form.Control
@@ -1085,7 +1110,7 @@ const Post = () => {
                     <div className="commentList">
                       <div>
                         {Array.isArray(comments[p.id]) &&
-                        comments[p.id].length > 0 ? (
+                          comments[p.id].length > 0 ? (
                           comments[p.id]
                             .slice(commentDisplayModes[p.id] ? undefined : -4)
                             .reverse()
@@ -1168,59 +1193,59 @@ const Post = () => {
                                         : "Hiển thị toàn bộ phản hồi"}
                                     </Link>
                                     {Array.isArray(replies[comment.id]) &&
-                                    replies[comment.id].length > 0
+                                      replies[comment.id].length > 0
                                       ? replies[comment.id]
-                                          .slice(
-                                            replyDisplayModes[comment.id]
-                                              ? undefined
-                                              : -2
-                                          )
-                                          // .reverse()
-                                          .map((reply) => (
-                                            <div
-                                              key={reply.id}
-                                              className="reply"
+                                        .slice(
+                                          replyDisplayModes[comment.id]
+                                            ? undefined
+                                            : -2
+                                        )
+                                        // .reverse()
+                                        .map((reply) => (
+                                          <div
+                                            key={reply.id}
+                                            className="reply"
+                                          >
+                                            <span
+                                              className="replyContent"
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                marginBottom: "10px",
+                                              }}
                                             >
-                                              <span
-                                                className="replyContent"
-                                                style={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                  marginBottom: "10px",
-                                                }}
-                                              >
-                                                <div className="reply-avatar">
-                                                  <img
-                                                    src={
-                                                      reply.user.profile.avatar
-                                                    }
-                                                    alt="avatar"
-                                                    style={{
-                                                      width: "32px",
-                                                      height: "32px",
-                                                      borderRadius: "50%",
-                                                      objectFit: "cover",
-                                                      marginRight: "5px",
-                                                    }}
-                                                  />{" "}
+                                              <div className="reply-avatar">
+                                                <img
+                                                  src={
+                                                    reply.user.profile.avatar
+                                                  }
+                                                  alt="avatar"
+                                                  style={{
+                                                    width: "32px",
+                                                    height: "32px",
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                    marginRight: "5px",
+                                                  }}
+                                                />{" "}
+                                              </div>
+                                              <div className="reply-details">
+                                                <div className="reply-username">
+                                                  {reply.user.username}
                                                 </div>
-                                                <div className="reply-details">
-                                                  <div className="reply-username">
-                                                    {reply.user.username}
-                                                  </div>
-                                                  <div className="reply-content">
-                                                    {reply.content}
-                                                  </div>
-                                                  <div className="reply-time">
-                                                    {" "}
-                                                    {moment(
-                                                      reply.createDate
-                                                    ).fromNow()}
-                                                  </div>
+                                                <div className="reply-content">
+                                                  {reply.content}
                                                 </div>
-                                              </span>
-                                            </div>
-                                          ))
+                                                <div className="reply-time">
+                                                  {" "}
+                                                  {moment(
+                                                    reply.createDate
+                                                  ).fromNow()}
+                                                </div>
+                                              </div>
+                                            </span>
+                                          </div>
+                                        ))
                                       : null}
                                     {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
                                       <Form.Control

@@ -11,10 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.CommentPostDTO;
+import com.csn.charity.model.Notification;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserCommentPost;
 import com.csn.charity.repository.CommentPostRepository;
+import com.csn.charity.repository.NotificationRepository;
 import com.csn.charity.repository.PostRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.CommentPostService;
@@ -27,6 +29,8 @@ public class CommentPostServiceImpl implements CommentPostService {
     private UserRepository userRepository;
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public UserCommentPost createComment(CommentPostDTO commentPostDTO) {
@@ -54,6 +58,13 @@ public class CommentPostServiceImpl implements CommentPostService {
         userCommentPost.setPost(post);
         userCommentPost.setContent(commentPostDTO.getContent());
 
+        Notification notification = new Notification();
+        notification.setPost(post);
+        notification.setStatus(false);
+        notification.setUser(post.getUser());
+        notification.setCreateDate(new Date());
+        notification.setDescription("Người dùng " + user.getProfile().getFirstName() +  user.getProfile().getLastName() + " vừa bình luận bài viết của bạn !!!");
+        notificationRepository.save(notification);
         return commentPostRepository.save(userCommentPost);
     }
 

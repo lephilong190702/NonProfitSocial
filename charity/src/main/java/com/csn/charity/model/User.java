@@ -117,6 +117,10 @@ public class User implements Serializable {
     @JsonIgnore
     private List<UserJoinRoom> userRooms = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Notification> notifications = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(name = "user_event", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "event_id"))
     @JsonIgnore

@@ -94,7 +94,7 @@ public class SpringSecurityConfig {
                                 "/api/contributions/{projectId}", "/api/forgot-password/", "/api/set-password/",
                                 "/api/{projectId}/addresses/", "/api/addresses/", "/api/rooms/{roomCode}", "/api/rooms/{roomCode}/users", "/ws/**",
                                 "/api/confirm-account/**", "/api/check-admin-role/{userId}", "/api/ws/**","/api/submitOrder/{projectId}","/api/vnpay-payment",
-                                "/api/public-posts/")
+                                "/api/public-posts/", "/api/notifications/{userId}")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/check-employee-role/{userId}").hasRole("EMPLOYEE")

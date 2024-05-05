@@ -10,18 +10,6 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [user] = useContext(UserContext);
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      try {
-        const response = await ApiConfig.get(endpoints["post"]);
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error loading posts:", error);
-      }
-    }
-
-    loadPosts();
-  }, []);
 
   return (
     <div className="feed">

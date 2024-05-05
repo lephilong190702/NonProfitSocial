@@ -3,6 +3,7 @@ package com.csn.charity.service.interfaces;
 import java.util.List;
 
 import com.csn.charity.dto.PostDTO;
+import com.csn.charity.model.New;
 import com.csn.charity.model.Post;
 
 public interface PostService {
@@ -21,4 +22,6 @@ public interface PostService {
 
     void activePost(Long id);
     void denyPost(Long id);
+
+    List<Post> search(String kw);
 }

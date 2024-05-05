@@ -50,6 +50,12 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/posts/search")
+    @CrossOrigin
+    public ResponseEntity<List<Post>> searchPosts(@RequestParam("kw") String kw) {
+        return ResponseEntity.ok(postService.search(kw));
+    }
+
     @GetMapping("/public-posts/")
     @CrossOrigin
     public ResponseEntity<?> getAvailablePost() {

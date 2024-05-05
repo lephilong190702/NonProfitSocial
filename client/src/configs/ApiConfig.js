@@ -24,6 +24,7 @@ export const endpoints = {
     "add-comment": `${SERVER_CONTEXT}/api/news-comment/`,
     "skill": `${SERVER_CONTEXT}/api/skills/`,
     "post": `${SERVER_CONTEXT}/api/posts/`,
+    "search-post": `${SERVER_CONTEXT}/api/posts/search`,
     "public-posts": `${SERVER_CONTEXT}/api/public-posts/`,
     "private-posts": `${SERVER_CONTEXT}/api/private-posts/`,
     "active-post":(postId) => `${SERVER_CONTEXT}/api/post/${postId}`,

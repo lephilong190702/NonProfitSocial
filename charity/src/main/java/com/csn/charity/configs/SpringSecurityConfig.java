@@ -81,7 +81,8 @@ public class SpringSecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/register/", "/api/login/").permitAll()
-                        .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/projects/{id}", "/api/pcategories/", "/api/news/search", "/api/projects/search",
+                        .requestMatchers("/api/news/", "/api/ncategories/", "/api/projects/", "/api/projects/{id}", "/api/pcategories/",
+                                "/api/news/search", "/api/projects/search", "/api/posts/search",
                                 "/api/posts/","/api/posts/{postId}", "/api/post/{postId}/comments/",
                                 "/api/post-comment/{parentId}/replies/",
                                 "/api/news-comment/{parentId}/replies/",

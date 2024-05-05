@@ -198,4 +198,9 @@ public class PostServiceImpl implements PostService {
         post.setStatus(false);
         this.postRepository.save(post);
     }
+
+    @Override
+    public List<Post> search(String kw) {
+        return postRepository.search(kw);
+    }
 }

@@ -12,6 +12,7 @@ const HomePage = () => {
   const [q] = useSearchParams();
   const [kw, setKw] = useState(false);
   const [news, setNews] = useState(null);
+  const [project, setProject] = useState(null);
 
 
   const sliderUrls = [
@@ -38,6 +39,9 @@ const HomePage = () => {
     const loadNews = async () => {
       try {
         let e = endpoints.news;
+        let p = endpoints.project;
+
+        console.log(p);
 
         const cateId = q.get("cateId");
         if (cateId !== null) e = `${e}ncategories/${cateId}/`;
@@ -45,6 +49,7 @@ const HomePage = () => {
           const kw = q.get("kw");
           if (kw !== null){
             e = `${e}search?kw=${kw}`;
+            p = `${p}search?kw=${kw}`;
             setKw(true);
           }
           else setKw(false);
@@ -53,7 +58,9 @@ const HomePage = () => {
         console.log(e);
 
         const res = await ApiConfig.get(e);
+        const res2 = await ApiConfig.get(p);
         setNews(res.data);
+        setProject(res2.data);
       } catch (ex) {
         console.error(ex);
       }
@@ -81,7 +88,7 @@ const HomePage = () => {
       </div>
 
     ) : (
-      <SearchPage news={news} />
+      <SearchPage news={news} project={project} />
     )}
     </>
   );

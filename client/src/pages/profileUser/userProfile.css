@@ -57,4 +57,10 @@
     text-align: center;
   }
   
-  
+  .main-content container-fluid {
+    text-align: center;
+}
+  .card label,
+  .card span {
+    margin-bottom: 25px;
+}

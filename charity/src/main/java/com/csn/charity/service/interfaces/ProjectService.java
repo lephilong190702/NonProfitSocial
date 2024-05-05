@@ -20,4 +20,6 @@ public interface ProjectService {
     Long countProjectByCategory(Long categoryId);
 
     List<Project> getProjectsByCategory(Long categoryId);
+
+    List<Project> search(String kw);
 }

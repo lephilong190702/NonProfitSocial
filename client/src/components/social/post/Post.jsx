@@ -383,10 +383,6 @@ const Post = () => {
           const postId = post.id;
           loadCommentsByPostId(postId);
           console.log(post.comments);
-          post.comments.map((commentId) => {
-            loadRepliesByCommentId(commentId.id);
-          });
-          // console.log(loadCommentsByPostId);
         });
 
         const reactionsPromises = res.data.map((p) => {

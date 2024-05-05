@@ -17,4 +17,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Long countProjectsByCategoryId(@Param("categoryId") Long categoryId);
 
     List<Project> findByCategory(ProjectCategory category);
+
+    @Query("SELECT p FROM Project p WHERE p.title LIKE CONCAT('%',:kw, '%') Or p.content LIKE CONCAT('%', :kw, '%')")
+    List<Project> search(String kw);
 }

@@ -70,7 +70,7 @@ public class CommentPostServiceImpl implements CommentPostService {
     }
 
     @Override
-    public UserCommentPost updateComment(Long id, CommentPostDTO commentPostDTO) {
+    public UserCommentPost updateComment(Long id, UserCommentPost uCommentPost) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("Unauthorized access");
@@ -89,7 +89,7 @@ public class CommentPostServiceImpl implements CommentPostService {
             throw new SecurityException("Bạn không có quyền cập nhật bình luận này");
         }
 
-        userCommentPost.setContent(commentPostDTO.getContent());
+        userCommentPost.setContent(uCommentPost.getContent());
         return commentPostRepository.save(userCommentPost);
     }
 
@@ -181,5 +181,52 @@ public class CommentPostServiceImpl implements CommentPostService {
     public UserCommentPost getCommentById(Long id) {
         return this.commentPostRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+    }
+
+    @Override
+    public UserCommentPost updateReplyCommentPost(Long id, UserCommentPost reply) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
+        UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        if (!userCommentPost.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền cập nhật bình luận này");
+        }
+
+        userCommentPost.setContent(reply.getContent());
+        return commentPostRepository.save(userCommentPost);
+    }
+
+    @Override
+    public void deleteReplyCommentPost(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+
+        UserCommentPost userCommentPost = this.commentPostRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bình luận với ID: " + id));
+
+        if (!userCommentPost.getUser().equals(user)) {
+            throw new SecurityException("Bạn không có quyền xóa bình luận này");
+        }
+
+        this.commentPostRepository.delete(userCommentPost);
     }
 }

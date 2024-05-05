@@ -173,11 +173,11 @@ public class PostRestController {
     @PutMapping("/post-comment/{id}")
     @CrossOrigin
     public ResponseEntity<String> updatePostComment(@PathVariable(value = "id") Long id,
-            @RequestBody CommentPostDTO commentPostDTO) {
+            @RequestBody UserCommentPost uCommentPost) {
         try {
-            this.commentPostService.updateComment(id, commentPostDTO);
-            UserCommentPost updatedComment = this.commentPostService.getCommentById(id);
-            messagingTemplate.convertAndSend("/topic/comments/" + updatedComment.getPost().getId(), updatedComment);
+            this.commentPostService.updateComment(id, uCommentPost);
+            // UserCommentPost updatedComment = this.commentPostService.getCommentById(id);
+            // messagingTemplate.convertAndSend("/topic/comments/" + updatedComment.getPost().getId(), updatedComment);
             return ResponseEntity.ok("Bình luận đã được cập nhật thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -220,6 +220,35 @@ public class PostRestController {
             UserCommentPost addedReply = commentPostService.addReplyCommentPost(parentId, reply);
             messagingTemplate.convertAndSend("/topic/reply-comments/", addedReply);
             return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @PutMapping("/post-comment/replies/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> updateReplyPostComment(@PathVariable(value = "id") Long id,
+            @RequestBody UserCommentPost userCommentPost) {
+        try {
+            this.commentPostService.updateReplyCommentPost(id, userCommentPost);
+            // UserCommentPost updatedComment = this.commentPostService.getCommentById(id);
+            // messagingTemplate.convertAndSend("/topic/comments/" + updatedComment.getPost().getId(), updatedComment);
+            return ResponseEntity.ok("Bình luận phản hồi đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @DeleteMapping("/post-comment/replies/{id}")
+    @CrossOrigin
+    public ResponseEntity<String> deleteReplyComment(@PathVariable Long id) {
+        try {
+            this.commentPostService.deleteReplyCommentPost(id);
+            // UserCommentPost deletedComment = this.commentPostService.getCommentById(id);
+            // messagingTemplate.convertAndSend("/topic/comments/" + deletedComment.getPost().getId(), deletedComment);
+            return ResponseEntity.ok("Bình luận phản hồi đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

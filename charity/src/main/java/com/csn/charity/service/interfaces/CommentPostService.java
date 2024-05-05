@@ -18,5 +18,10 @@ public interface CommentPostService {
 
     List<UserCommentPost> getAllReplyComments(Long parentId);
 
-    UserCommentPost updateComment(Long id, CommentPostDTO commentPostDTO);
+    UserCommentPost updateComment(Long id, UserCommentPost uCommentPost);
+
+    UserCommentPost updateReplyCommentPost(Long id, UserCommentPost reply);
+
+    void deleteReplyCommentPost(Long id);
+
 }

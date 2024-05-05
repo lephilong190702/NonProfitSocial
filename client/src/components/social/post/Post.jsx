@@ -248,7 +248,7 @@ const Post = () => {
     }
 
     try {
-      const response = await ApiConfig.post(endpoints["post-comment"], {
+      const response = await authApi().post(endpoints["post-comment"], {
         postId: postId,
         content: content[postId],
       });
@@ -336,7 +336,7 @@ const Post = () => {
         const res2 = await ApiConfig.get(p);
         setFindPost(res2.data);
 
-        let res = await authApi().get(endpoints["public-posts"]);
+        let res = await ApiConfig.get(endpoints["public-posts"]);
         console.log(res.data);
         setPost(res.data);
 

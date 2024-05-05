@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./post.css";
 import { MoreVert } from "@material-ui/icons";
-import { authApi, endpoints } from "../../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import {
   Button,
   Form,
@@ -207,7 +207,7 @@ const Post = () => {
 
   const loadRepliesByCommentId = async (commentId) => {
     try {
-      const response = await authApi().get(
+      const response = await ApiConfig.get(
         endpoints["replies-post"](commentId)
       );
       setReplies((prevReplies) => ({
@@ -244,7 +244,7 @@ const Post = () => {
     }
 
     try {
-      const response = await authApi().post(endpoints["post-comment"], {
+      const response = await ApiConfig.post(endpoints["post-comment"], {
         postId: postId,
         content: content[postId],
       });
@@ -259,7 +259,7 @@ const Post = () => {
 
   const loadCommentsByPostId = async (postId) => {
     try {
-      const response = await authApi().get(endpoints["comment-post"](postId));
+      const response = await ApiConfig.get(endpoints["comment-post"](postId));
       setComments((prevComments) => ({
         ...prevComments,
         [postId]: response.data,
@@ -375,7 +375,7 @@ const Post = () => {
   useEffect(() => {
     const loadPosts = async () => {
       try {
-        let res = await authApi().get(endpoints["public-posts"]);
+        let res = await ApiConfig.get(endpoints["public-posts"]);
         console.log(res.data);
         setPost(res.data);
 
@@ -391,7 +391,7 @@ const Post = () => {
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
-          return authApi()
+          return ApiConfig
             .get(endpoints["react-post"](postId))
             .then((response) => response.data); // Lấy dữ liệu từ response
         });
@@ -438,7 +438,7 @@ const Post = () => {
     return () => {
       stompClient.disconnect();
     };
-  }, [editedPostContent]);
+  }, []);
 
   const handleMenuToggle = (postId) => {
     setMenuOpen((prevState) => ({

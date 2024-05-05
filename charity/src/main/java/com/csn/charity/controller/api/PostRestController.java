@@ -140,6 +140,7 @@ public class PostRestController {
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         try {
             postService.deletePost(id);
+            messagingTemplate.convertAndSend("/topic/delete-post/", id);
             return ResponseEntity.ok("Bài viết đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -189,6 +190,7 @@ public class PostRestController {
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         try {
             this.commentPostService.deleteCommentPost(id);
+            messagingTemplate.convertAndSend("/topic/delete-comment-post/", id);
             return ResponseEntity.ok("Bình luận đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -243,8 +245,7 @@ public class PostRestController {
     public ResponseEntity<String> deleteReplyComment(@PathVariable Long id) {
         try {
             this.commentPostService.deleteReplyCommentPost(id);
-            // UserCommentPost deletedComment = this.commentPostService.getCommentById(id);
-            // messagingTemplate.convertAndSend("/topic/comments/" + deletedComment.getPost().getId(), deletedComment);
+            messagingTemplate.convertAndSend("/topic/delete-reply-comment/", id);
             return ResponseEntity.ok("Bình luận phản hồi đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

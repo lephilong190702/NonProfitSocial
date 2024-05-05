@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import com.csn.charity.dto.CommentNewsDTO;
@@ -23,6 +24,8 @@ public class NewsRestController {
     private NewsCategoryService newsCategoryService;
     @Autowired
     private CommentNewsService commentNewsService;
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @GetMapping("/news/")
     @CrossOrigin
@@ -73,6 +76,7 @@ public class NewsRestController {
     public ResponseEntity<?> createComment(@RequestBody CommentNewsDTO commentNewsDTO) {
         try {
             UserCommentNew userCommentNew = this.commentNewsService.createComment(commentNewsDTO);
+            messagingTemplate.convertAndSend("/topic/news", userCommentNew);
             return new ResponseEntity<>(userCommentNew, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -120,6 +124,7 @@ public class NewsRestController {
             @RequestBody UserCommentNew reply) {
         try {
             UserCommentNew addedReply = commentNewsService.addReplyCommentNew(parentId, reply);
+            messagingTemplate.convertAndSend("/topic/reply-news-comments/", addedReply);
             return new ResponseEntity<>(addedReply, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

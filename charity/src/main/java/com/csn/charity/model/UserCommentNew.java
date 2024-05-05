@@ -53,6 +53,5 @@ public class UserCommentNew implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "new_id")
-    @JsonIgnore
     private New news;
 }

@@ -190,8 +190,8 @@ public class PostRestController {
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         try {
             this.commentPostService.deleteCommentPost(id);
-            // UserCommentPost deletedComment = this.commentPostService.getCommentById(id);
-            // messagingTemplate.convertAndSend("/topic/comments/" + deletedComment.getPost().getId(), deletedComment);
+//            UserCommentPost deletedComment = this.commentPostService.getCommentById(id);
+//            messagingTemplate.convertAndSend("/topic/comments/" + deletedComment.getPost().getId(), deletedComment);
             return ResponseEntity.ok("Bình luận đã được xóa thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -230,9 +230,8 @@ public class PostRestController {
     public ResponseEntity<String> updateReplyPostComment(@PathVariable(value = "id") Long id,
             @RequestBody UserCommentPost userCommentPost) {
         try {
-            this.commentPostService.updateReplyCommentPost(id, userCommentPost);
-            // UserCommentPost updatedComment = this.commentPostService.getCommentById(id);
-            // messagingTemplate.convertAndSend("/topic/comments/" + updatedComment.getPost().getId(), updatedComment);
+            UserCommentPost updatedReplyComment = this.commentPostService.updateReplyCommentPost(id, userCommentPost);
+            messagingTemplate.convertAndSend("/topic/update-reply-comments/", updatedReplyComment);
             return ResponseEntity.ok("Bình luận phản hồi đã được cập nhật thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

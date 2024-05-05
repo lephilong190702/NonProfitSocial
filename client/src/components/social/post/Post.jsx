@@ -54,11 +54,16 @@ const Post = () => {
   const [findPost, setFindPost] = useState([]);
 
   const [commentOpen, setCommentOpen] = useState({});
-  const [commentNow, setCommentNow] = useState('');
+  const [commentNow, setCommentNow] = useState("");
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [editCommentModalOpen, setEditCommentModalOpen] = useState(false);
   const [editedCommentContent, setEditedCommentContent] = useState("");
 
+  const [replyOpen, setReplyOpen] = useState({});
+  const [replyNow, setReplyNow] = useState("");
+  const [editedReplyId, setEditedReplyId] = useState(null);
+  const [editReplyModalOpen, setEditReplyModalOpen] = useState(false);
+  const [editedReplyContent, setEditedReplyContent] = useState("");
 
 
   const [edit, setEdit] = useState({
@@ -163,6 +168,12 @@ const Post = () => {
     setEditCommentModalOpen(true);
   };
 
+  const handleEditReply = (reply) => {
+    setReplyNow(reply.content);
+    setEditedReplyId(reply.id);
+    setEditReplyModalOpen(true);
+  };
+
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -203,15 +214,35 @@ const Post = () => {
 
   const editComment = async (commentId) => {
     try {
-
-      const response = await authApi().put(endpoints["edit-comment"](commentId), {
-        content: editedCommentContent,
-      });
+      const response = await authApi().put(
+        endpoints["edit-comment"](commentId),
+        {
+          content: editedCommentContent,
+        }
+      );
 
       console.log("Kết quả chỉnh sửa bài viết:", response.content);
 
       setEditCommentModalOpen(false);
       setEditedCommentId(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const editReply = async (replyId) => {
+    try {
+      const response = await authApi().put(
+        endpoints["edit-replies"](replyId),
+        {
+          content: editedReplyContent,
+        }
+      );
+
+      console.log("Kết quả chỉnh sửa bài viết:", response.content);
+
+      setEditReplyModalOpen(false);
+      setEditedReplyId(null);
     } catch (error) {
       console.error(error);
     }
@@ -244,6 +275,24 @@ const Post = () => {
       try {
         const response = await authApi().delete(
           endpoints["edit-comment"](commentId)
+        );
+        console.log("Kết quả xóa bình luận:", response.data);
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleDeleteReply = async (replyId) => {
+    const shouldDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa bình luận này này?"
+    );
+
+    if (shouldDelete) {
+      try {
+        const response = await authApi().delete(
+          endpoints["edit-replies"](replyId)
         );
         console.log("Kết quả xóa bình luận:", response.data);
         window.location.reload();
@@ -474,6 +523,13 @@ const Post = () => {
     setCommentOpen((prevState) => ({
       ...prevState,
       [commentId]: !prevState[commentId],
+    }));
+  };
+
+  const handleReplyToggle = (replyId) => {
+    setReplyOpen((prevState) => ({
+      ...prevState,
+      [replyId]: !prevState[replyId],
     }));
   };
 
@@ -713,12 +769,16 @@ const Post = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                       <Dropdown.Item
-                                        onClick={() => handleEditComment(comment)}
+                                        onClick={() =>
+                                          handleEditComment(comment)
+                                        }
                                       >
                                         Chỉnh sửa bình luận
                                       </Dropdown.Item>
                                       <Dropdown.Item
-                                        onClick={() => handleDeleteComment(comment.id)}
+                                        onClick={() =>
+                                          handleDeleteComment(comment.id)
+                                        }
                                       >
                                         Xóa bình luận
                                       </Dropdown.Item>
@@ -795,6 +855,51 @@ const Post = () => {
                                                   </div>
                                                 </div>
                                               </span>
+                                              <Dropdown
+                                                className="replyContent"
+                                                style={{
+                                                  position: "absolute",
+                                                  // top: 0,
+                                                  right: 0,
+                                                  display: "flex",
+                                                  marginBottom: "10px",
+                                                }}
+                                                show={replyOpen[reply.id]}
+                                                onToggle={() =>
+                                                  handleReplyToggle(
+                                                    reply.id
+                                                  )
+                                                }
+                                              >
+                                                <Dropdown.Toggle
+                                                  variant="link"
+                                                  className="btn-more-vert"
+                                                  style={{
+                                                    border: "none",
+                                                    boxShadow: "none",
+                                                  }}
+                                                >
+                                                  {/* <FontAwesomeIcon icon={faList} /> */}
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                  <Dropdown.Item
+                                                    onClick={() =>
+                                                      handleEditReply(reply)
+                                                    }
+                                                  >
+                                                    Chỉnh sửa phản hồi
+                                                  </Dropdown.Item>
+                                                  <Dropdown.Item
+                                                    onClick={() =>
+                                                      handleDeleteReply(
+                                                        reply.id
+                                                      )
+                                                    }
+                                                  >
+                                                    Xóa phản hồi
+                                                  </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                              </Dropdown>
                                             </div>
                                           ))
                                       : null}
@@ -1241,7 +1346,7 @@ const Post = () => {
         onHide={() => setEditCommentModalOpen(false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Chỉnh sửa bài viết</Modal.Title>
+          <Modal.Title>Chỉnh sửa bình luận</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
@@ -1252,7 +1357,6 @@ const Post = () => {
               defaultValue={commentNow}
               onChange={(e) => setEditedCommentContent(e.target.value)}
             />
-            
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
@@ -1266,6 +1370,41 @@ const Post = () => {
             variant="primary"
             // onClick={() => editComment(editedCommentId)}
             onClick={() => editComment(editedCommentId)}
+          >
+            Lưu chỉnh sửa
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={editReplyModalOpen}
+        onHide={() => setEditReplyModalOpen(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Chỉnh sửa phản hồi</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Nội dung</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={4}
+              defaultValue={replyNow}
+              onChange={(e) => setEditedReplyContent(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setEditReplyModalOpen(false)}
+          >
+            Hủy
+          </Button>
+          <Button
+            variant="primary"
+            // onClick={() => editComment(editedCommentId)}
+            onClick={() => editReply(editedReplyId)}
           >
             Lưu chỉnh sửa
           </Button>

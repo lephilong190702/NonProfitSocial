@@ -41,6 +41,7 @@ export const endpoints = {
     "userId": (userId) => `${SERVER_CONTEXT}/api/users/${userId}`,
     "chat": (userId) => `${SERVER_CONTEXT}/api/chat/${userId}`,
     "replies-post": (parentId) => `${SERVER_CONTEXT}/api/post-comment/${parentId}/replies/`,
+    "edit-replies": (replyId) => `${SERVER_CONTEXT}/api/post-comment/replies/${replyId}`,
     "comment-post": (postId) => `${SERVER_CONTEXT}/api/post/${postId}/comments/`,
     "statistic": `${SERVER_CONTEXT}/api/export/`,
     "contributor-post": (postId) => `${SERVER_CONTEXT}/api/contributions/${postId}`,

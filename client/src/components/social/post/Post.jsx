@@ -1385,7 +1385,6 @@ const Post = () => {
           </Button>
           <Button
             variant="primary"
-            // onClick={() => editComment(editedCommentId)}
             onClick={() => editReply(editedReplyId)}
           >
             Lưu chỉnh sửa

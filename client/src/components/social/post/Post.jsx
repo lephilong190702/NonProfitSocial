@@ -475,6 +475,24 @@ const Post = () => {
             [commentId]: [...(current[commentId] || []), newReplyComment],
           }));
         });
+
+
+        stompClient.subscribe("/topic/update-reply-comments/", (message) => {
+          console.log("Received message:", message.body);
+          const newUpdateReplyComment = JSON.parse(message.body);
+          console.log("newUpdateReplyComment", newUpdateReplyComment);
+          const commentId = newUpdateReplyComment.comment.id;
+          console.log("commentId", commentId);
+          setReplies((prevReplies) => {
+            return {
+              ...prevReplies,
+              [commentId]: prevReplies[commentId].map((reply) =>
+                reply.id === newUpdateReplyComment.id ? newUpdateReplyComment : reply
+              ),
+            };
+          });
+        });
+
       },
       (error) => {
         console.error("Websocket connection error:", error);

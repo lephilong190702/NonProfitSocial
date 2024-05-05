@@ -235,6 +235,24 @@ const Post = () => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    const shouldDelete = window.confirm(
+      "Bạn có chắc chắn muốn xóa bình luận này này?"
+    );
+
+    if (shouldDelete) {
+      try {
+        const response = await authApi().delete(
+          endpoints["edit-comment"](commentId)
+        );
+        console.log("Kết quả xóa bình luận:", response.data);
+        window.location.reload();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const handleShowReplies = (commentId) => {
     loadRepliesByCommentId(commentId);
   };
@@ -682,7 +700,7 @@ const Post = () => {
                                         Chỉnh sửa bình luận
                                       </Dropdown.Item>
                                       <Dropdown.Item
-                                        onClick={() => handleDeletePost(p.id)}
+                                        onClick={() => handleDeleteComment(comment.id)}
                                       >
                                         Xóa bình luận
                                       </Dropdown.Item>

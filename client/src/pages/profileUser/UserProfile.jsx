@@ -113,12 +113,25 @@ const UserProfile = () => {
                       <span>
                         <div className="row">
                           <div className="col-md-4">
-                            <span className="display: inline-block; overflow: hidden; border-radius: 50%; border: 2px solid black; width: 250px; height: 250px;">
+                            <span style={{
+                              display: 'inline-block',
+                              overflow: 'hidden',
+                              borderRadius: '50%',
+                              border: '2px solid black',
+                              width: '250px',
+                              height: '250px',
+                              marginTop: '20px'
+                            }}>
                               <img
                                 src={user.profile.avatar}
                                 width="250"
                                 height="250"
-                                className="object-fit: cover; width: 100%; height: 100%;"
+                                style={{
+                                  objectFit: 'cover',
+                                  width: '100%',
+                                  height: '100%',
+                                  borderRadius: '50%'
+                                }}
                               />
                             </span>
                           </div>

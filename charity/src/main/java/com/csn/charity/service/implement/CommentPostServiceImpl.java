@@ -133,7 +133,7 @@ public class CommentPostServiceImpl implements CommentPostService {
             UserCommentPost parentComment = parentCommentOptional.get();
 
             reply.setComment(parentComment);
-            reply.setPost(parentComment.getPost());
+//            reply.setPost(parentComment.getPost());
             reply.setCreateDate(new Date());
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -13,6 +13,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import ReplyBox from "../reply/ReplyBox";
 import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, PinterestShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
+import Client from "stompjs";
+import SockJS from "sockjs-client";
 
 const NewsDetails = () => {
   const [user] = useContext(UserContext);
@@ -27,20 +29,67 @@ const NewsDetails = () => {
   const [isReply, setIsReply] = useState(false);
   const currentPageUrl = window.location.href;
 
+
+  const loadComments = async (newsId) => {
+    try {
+      let { data } = await ApiConfig.get(endpoints["comments"](newsId));
+      console.log("COMMENT " + data);
+      setComments(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   useEffect(() => {
     const loadNewsDetail = async () => {
       let { data } = await ApiConfig.get(endpoints["details"](newsId));
       setNews(data);
     };
 
-    const loadComments = async () => {
-      let { data } = await authApi().get(endpoints["comments"](newsId));
-      setComments(data);
-    };
 
     loadNewsDetail();
+    loadComments(newsId);
+    const stompClient = connectToWebSocket();
+
     loadComments();
+
+    return () => {
+      stompClient.disconnect();
+    };
   }, [newsId]);
+
+  const connectToWebSocket = () => {
+    // const socket = new SockJS("http://34.124.235.184:80/api/ws");
+    const socket = new SockJS("http://localhost:9090/api/ws");
+    const stompClient = Client.over(socket);
+
+    console.log("Connecting to websocket server...");
+
+    stompClient.connect({}, () => {
+      stompClient.subscribe("/topic/news", (message) => {
+        console.log("Received message:", message.body);
+        const newsComment = JSON.parse(message.body);
+        console.log("newsComment", newsComment);
+        setComments((current) => [...current, newsComment]);
+      });
+
+      // stompClient.subscribe("/topic/reply-news-comments/", (message) => {
+      //   console.log("Received message:", message.body);
+      //   const newReplyComment = JSON.parse(message.body);
+      //   console.log("newReplyComment", newReplyComment);
+      //   const commentId = newReplyComment.comment.id;
+      //   console.log("commentId", commentId);
+      //   setComments(newReplyComment);
+      // });
+    },
+      (error) => {
+        console.error("Websocket connection error:", error);
+      }
+    );
+
+    return stompClient;
+  };
 
   const checkCondition = () => {
     if (content.trim() === "") {
@@ -58,8 +107,7 @@ const NewsDetails = () => {
         newsId: news.id,
       });
 
-      setComments((prevState) => [...prevState, data]);
-
+      loadComments(newsId)
       setContent("");
     };
 

@@ -30,7 +30,7 @@ const ReplyBox = ({ comment, addReply, value, onChange, user }) => {
 
   return (
     <>
-      <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
+      <div className="flex flex-col gap-3 border-t-[1px] border-[#E1E1E1] ">
         {/* <ListGroup.Item key={comment.id}> */}
         <div className="comment">
           <div className="comment-avatar">
@@ -56,32 +56,9 @@ const ReplyBox = ({ comment, addReply, value, onChange, user }) => {
                 {moment(comment.createDate).fromNow()}
               </p>
             </div>
-            {openReply === comment.id && (
-              <div className="reply-news-box">
-                {user !== null ? (
-                  <>
-                    <div className="reply-news-box">
-                      <textarea
-                        className="w-full h-[145px] font-medium text-sm  px-4 py-4 border-[1px] border-[#E1E1E1] rounded-md placeholder:text-[#A7A7A7]"
-                        placeholder="Nhập gì đó..."
-                        value={value}
-                        onChange={onChange}
-                      />
-                      <button
-                        onClick={handleAddReply}
-                        className="float-right font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-12 py-2  hover:bg-[#1775ee] hover:text-[#fff] hover:shadow-md hover:shadow-[#1775ee]"
-                      >
-                        Gửi
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-danger">Vui lòng đăng nhập để bình luận</p>
-                )}
-              </div>
-            )}
           </div>
         </div>
+        
         {/* </ListGroup.Item> */}
       </div>
       {comment.replies &&
@@ -110,6 +87,30 @@ const ReplyBox = ({ comment, addReply, value, onChange, user }) => {
             </div>
           </div>
         ))}
+        {openReply === comment.id && (
+          <div className="reply-news-box">
+            {user !== null ? (
+              <>
+                <div className="reply-news-box flex flex-col">
+                  <textarea
+                    className="w-50 h-[145px] font-medium text-sm  px-4 py-4 border-[1px] border-[#E1E1E1] rounded-md placeholder:text-[#A7A7A7]"
+                    placeholder="Nhập gì đó..."
+                    value={value}
+                    onChange={onChange}
+                  />
+                  <button
+                    onClick={handleAddReply}
+                    className="w-20 float-right font-semibold text-[#fff] bg-[#38b6ff] shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2 hover:bg-[#1775ee] hover:text-[#fff] hover:shadow-md hover:shadow-[#1775ee]"
+                  >
+                    Gửi
+                  </button>
+                </div>
+              </>
+            ) : (
+              <p className="text-danger">Vui lòng đăng nhập để bình luận</p>
+            )}
+          </div>
+        )}
     </>
   );
 };

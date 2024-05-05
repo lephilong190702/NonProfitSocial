@@ -21,6 +21,7 @@ const NewsDetails = () => {
   const { newsId } = useParams();
   const [news, setNews] = useState(null);
   const [comments, setComments] = useState([]);
+  const [reply, setReply] = useState([]);
   const [content, setContent] = useState("");
   const [replyContent, setReplyContent] = useState("");
 
@@ -39,6 +40,15 @@ const NewsDetails = () => {
       console.error(error);
     }
   };
+
+  const loadReply = async (commentId) => {
+    try {
+      const res = await ApiConfig.get(endpoints["replies"](commentId));
+      setReply(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   useEffect(() => {
@@ -107,7 +117,7 @@ const NewsDetails = () => {
         newsId: news.id,
       });
 
-      loadComments(newsId)
+      loadComments(newsId);
       setContent("");
     };
 
@@ -121,15 +131,19 @@ const NewsDetails = () => {
         newsId: news.id,
       });
 
-      const updatedComments = comments.map((c) => {
-        if (c.id === parentId) {
-          c.replies = c.replies || [];
-          c.replies.push(data);
-        }
-        return c;
-      });
+      // const updatedComments = comments.map((c) => {
+      //   if (c.id === parentId) {
+      //     c.replies = c.replies || [];
+      //     c.replies.push(data);
+      //   }
+      //   return c;
+      // });
 
-      setComments(updatedComments);
+      // console.log(updatedComments);
+
+      loadReply(parentId);
+      // setComments(updatedComments);
+      loadComments(newsId);
       setReplyContent("");
     };
 

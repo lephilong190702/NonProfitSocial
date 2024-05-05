@@ -9,7 +9,7 @@ export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
     "news": `${SERVER_CONTEXT}/api/news/`,
     "search": `${SERVER_CONTEXT}/api/news/search`,
-    "newsId": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
+    "reply-news": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,
     "projectCategory": `${SERVER_CONTEXT}/api/pcategories/`,
     "login": `${SERVER_CONTEXT}/api/login/`,

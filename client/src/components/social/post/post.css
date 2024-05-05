@@ -117,6 +117,11 @@
   color: #808080;
   font-style: italic;
 }
+
+.comment .comment-list {
+  flex: 2;
+}
+
 .full-width {
   width: 100%;
 }
@@ -314,6 +319,13 @@ p {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+  /* position: relative; */
+}
+
+.comment-post .faList {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .gray-link {

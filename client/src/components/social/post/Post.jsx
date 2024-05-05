@@ -13,7 +13,7 @@ import {
 import { UserContext } from "../../../App";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faListDots } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faList, faListDots } from "@fortawesome/free-solid-svg-icons";
 import Client from "stompjs";
 import SockJS from "sockjs-client";
 import { Link, useSearchParams } from "react-router-dom";
@@ -52,6 +52,14 @@ const Post = () => {
   const [kw, setKw] = useState(false);
   const [q] = useSearchParams();
   const [findPost, setFindPost] = useState([]);
+
+  const [commentOpen, setCommentOpen] = useState({});
+  const [commentNow, setCommentNow] = useState('');
+  const [editedCommentId, setEditedCommentId] = useState(null);
+  const [editCommentModalOpen, setEditCommentModalOpen] = useState(false);
+  const [editedCommentContent, setEditedCommentContent] = useState("");
+
+
 
   const [edit, setEdit] = useState({
     content: "",
@@ -149,6 +157,12 @@ const Post = () => {
     setEditPostModalOpen(true);
   };
 
+  const handleEditComment = (comment) => {
+    setCommentNow(comment.content);
+    setEditedCommentId(comment.id);
+    setEditCommentModalOpen(true);
+  };
+
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -182,6 +196,22 @@ const Post = () => {
 
       setEditPostModalOpen(false);
       setEditedPostId(null);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const editComment = async (commentId) => {
+    try {
+
+      const response = await authApi().put(endpoints["edit-comment"](commentId), {
+        content: editedCommentContent,
+      });
+
+      console.log("Kết quả chỉnh sửa bài viết:", response.content);
+
+      setEditCommentModalOpen(false);
+      setEditedCommentId(null);
     } catch (error) {
       console.error(error);
     }
@@ -348,9 +378,9 @@ const Post = () => {
 
         const reactionsPromises = res.data.map((p) => {
           const postId = p.id;
-          return ApiConfig
-            .get(endpoints["react-post"](postId))
-            .then((response) => response.data); // Lấy dữ liệu từ response
+          return ApiConfig.get(endpoints["react-post"](postId)).then(
+            (response) => response.data
+          ); // Lấy dữ liệu từ response
         });
 
         const reactionsData = await Promise.all(reactionsPromises);
@@ -401,6 +431,13 @@ const Post = () => {
     setMenuOpen((prevState) => ({
       ...prevState,
       [postId]: !prevState[postId],
+    }));
+  };
+
+  const handleCommentToggle = (commentId) => {
+    setCommentOpen((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId],
     }));
   };
 
@@ -555,8 +592,11 @@ const Post = () => {
                             .reverse()
                             .map((comment) => (
                               <ListGroup.Item key={comment.id}>
-                                <div className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] ">
-                                  <div className="comment-post">
+                                <div
+                                  className="flex flex-row gap-3 border-t-[1px] border-[#E1E1E1] "
+                                  style={{ position: "relative" }}
+                                >
+                                  <div className="comment-post flex flex-row">
                                     <span
                                       className="commentContent "
                                       style={{
@@ -603,6 +643,7 @@ const Post = () => {
                                         </div>
                                       </div>
                                     </span>
+
                                     {/* <Button
                                   variant="link"
                                   onClick={() => handleShowReplies(comment.id)}
@@ -610,6 +651,43 @@ const Post = () => {
                                   Hiển thị phản hồi
                                 </Button> */}
                                   </div>
+                                  <Dropdown
+                                    className="commentContent"
+                                    style={{
+                                      position: "absolute",
+                                      top: 0,
+                                      right: 0,
+                                      display: "flex",
+                                      marginBottom: "10px",
+                                    }}
+                                    show={commentOpen[comment.id]}
+                                    onToggle={() =>
+                                      handleCommentToggle(comment.id)
+                                    }
+                                  >
+                                    <Dropdown.Toggle
+                                      variant="link"
+                                      className="btn-more-vert"
+                                      style={{
+                                        border: "none",
+                                        boxShadow: "none",
+                                      }}
+                                    >
+                                      {/* <FontAwesomeIcon icon={faList} /> */}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item
+                                        onClick={() => handleEditComment(comment)}
+                                      >
+                                        Chỉnh sửa bình luận
+                                      </Dropdown.Item>
+                                      <Dropdown.Item
+                                        onClick={() => handleDeletePost(p.id)}
+                                      >
+                                        Xóa bình luận
+                                      </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
                                 </div>
 
                                 {openReply === comment.id && (
@@ -919,14 +997,16 @@ const Post = () => {
                                           </p>
                                         </div>
                                       </div>
+                                      <div className="comment-list">
+                                        <FontAwesomeIcon
+                                          icon={faList}
+                                          className=""
+                                        />
+                                        <p>hello</p>
+                                      </div>
                                     </span>
-                                    {/* <Button
-                                variant="link"
-                                onClick={() => handleShowReplies(comment.id)}
-                              >
-                                Hiển thị phản hồi
-                              </Button> */}
                                   </div>
+                                  <FontAwesomeIcon icon={faList} className="" />
                                 </div>
 
                                 {openReply === comment.id && (
@@ -1114,6 +1194,42 @@ const Post = () => {
           <Button
             variant="primary"
             onClick={() => handleEditPost(editedPostId)}
+          >
+            Lưu chỉnh sửa
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        show={editCommentModalOpen}
+        onHide={() => setEditCommentModalOpen(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Chỉnh sửa bài viết</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>Nội dung</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={4}
+              defaultValue={commentNow}
+              onChange={(e) => setEditedCommentContent(e.target.value)}
+            />
+            
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setEditCommentModalOpen(false)}
+          >
+            Hủy
+          </Button>
+          <Button
+            variant="primary"
+            // onClick={() => editComment(editedCommentId)}
+            onClick={() => editComment(editedCommentId)}
           >
             Lưu chỉnh sửa
           </Button>

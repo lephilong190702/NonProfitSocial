@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import com.csn.charity.model.*;
 import com.csn.charity.repository.*;
+
+import org.checkerframework.checker.units.qual.t;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -235,5 +237,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> search(String kw) {
         return postRepository.search(kw);
+    }
+
+
+    @Override
+    public List<Post> getPostsByTags(Long id) {
+        Tag tag = this.tagRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tag với ID: " + id));
+        
+        return this.postRepository.findByTags(tag);
     }
 }

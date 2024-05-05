@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.csn.charity.dto.PostDTO;
 import com.csn.charity.model.New;
+import com.csn.charity.model.Notification;
 import com.csn.charity.model.Post;
+import com.csn.charity.model.Tag;
 
 public interface PostService {
     Post createPost(PostDTO postDTO);
@@ -18,10 +20,15 @@ public interface PostService {
     Post getPostById(Long id);
 
     List<Post> getAvailablePosts();
+
     List<Post> getUnAvailablePosts();
 
     void activePost(Long id);
+
     void denyPost(Long id);
 
     List<Post> search(String kw);
+
+    List<Post> getPostsByTags(Long id);
+
 }

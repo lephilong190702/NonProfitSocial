@@ -400,6 +400,24 @@ const Post = () => {
           }));
         });
 
+        stompClient.subscribe("/topic/update-comments/", (message) => {
+          console.log("Received message:", message.body);
+          const updateComment = JSON.parse(message.body);
+          console.log("updateComment: ", updateComment);
+          const postId = updateComment.post.id;
+          console.log("postId", postId);
+          setComments((prevComments) => {
+            return {
+              ...prevComments,
+              [postId]: prevComments[postId].map((comment) =>
+                comment.id === updateComment.id
+                  ? { ...comment, content: updateComment.content }
+                  : comment
+              ),
+            };
+          });
+        });
+
         stompClient.subscribe("/topic/reply-comments/", (message) => {
           console.log("Received message:", message.body);
           const newReplyComment = JSON.parse(message.body);

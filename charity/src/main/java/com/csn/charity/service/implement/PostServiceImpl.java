@@ -13,6 +13,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -33,6 +34,8 @@ public class PostServiceImpl implements PostService {
     private Cloudinary cloudinary;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public Post createPost(PostDTO postDTO) {
@@ -106,7 +109,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post updatePost(Long id, PostDTO postDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null ||!authentication.isAuthenticated()) {
             throw new SecurityException("Không đủ quyền truy cập!!!");
         }
 
@@ -117,29 +120,50 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = this.postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+               .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
 
         if (!post.getUser().equals(user)) {
             throw new SecurityException("Bạn không có quyền cập nhật bài viết này!!");
         }
 
         post.setContent(postDTO.getContent());
-        List<Tag> postHashtags = new ArrayList<>();
-        if (postDTO.getHashtags() != null && !postDTO.getHashtags().isEmpty()) {
-            postDTO.getHashtags().forEach(hashtagName -> {
-                Tag existingHashtag = tagRepository.findByName(hashtagName);
-                if (existingHashtag == null) {
-                    existingHashtag = new Tag();
-                    existingHashtag.setName(hashtagName);
-                    existingHashtag = tagRepository.save(existingHashtag);
-                }
-                postHashtags.add(existingHashtag);
-            });
-        }
-        post.setTags(postHashtags);
-        return this.postRepository.save(post);
+        post.setStatus(false);
 
+        // Clear old images
+        post.getImages().clear();
+        postImageRepository.deleteAll(post.getImages());
+
+        // Add new images
+        if (postDTO.getFiles() != null && !postDTO.getFiles().isEmpty()) {
+            List<PostImage> images = new ArrayList<>();
+            try {
+                postDTO.getFiles().forEach(file -> {
+                    if (!file.isEmpty()) {
+                        try {
+                            Map res = this.cloudinary.uploader().upload(file.getBytes(),
+                                    ObjectUtils.asMap("resource_type", "auto"));
+
+                            String imageUrl = res.get("secure_url").toString();
+                            System.out.println("Image URL: " + imageUrl);
+                            PostImage img = new PostImage();
+                            img.setImage(imageUrl);
+                            img.setPost(post);
+                            postRepository.save(post);
+                            images.add(img);
+                            postImageRepository.save(img);
+                        } catch (IOException ex) {
+                            Logger.getLogger(ProjectServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
+                post.setImages(images);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return this.postRepository.save(post);
     }
+
 
     @Override
     public void deletePost(Long id) {
@@ -161,12 +185,11 @@ public class PostServiceImpl implements PostService {
 
         if (user.getRoles().contains(userRole) || post.getUser().equals(user)) {
             this.postRepository.delete(post);
-        }
-        else {
+        } else {
             throw new SecurityException("Bạn không có quyền xóa bài viết này");
         }
 
-//        this.postRepository.delete(post);
+        // this.postRepository.delete(post);
     }
 
     @Override
@@ -186,12 +209,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void activePost (Long id){
+    public void activePost(Long id) {
         Post post = this.postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
         post.setStatus(true);
         this.postRepository.save(post);
+
+        Notification notification = new Notification();
+        notification.setPost(post);
+        notification.setStatus(false);
+        notification.setUser(post.getUser());
+        notification.setCreateDate(new Date());
+        notification.setDescription("Bài viết của bạn đã được duyệt !!!");
+        notificationRepository.save(notification);
     }
+
     @Override
     public void denyPost(Long id) {
         Post post = this.postRepository.findById(id)

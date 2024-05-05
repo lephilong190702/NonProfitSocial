@@ -63,7 +63,8 @@ public class CommentPostServiceImpl implements CommentPostService {
         notification.setStatus(false);
         notification.setUser(post.getUser());
         notification.setCreateDate(new Date());
-        notification.setDescription("Người dùng " + user.getProfile().getFirstName() +  user.getProfile().getLastName() + " vừa bình luận bài viết của bạn !!!");
+        notification.setDescription("Người dùng " + user.getProfile().getFirstName() + " "
+                + user.getProfile().getLastName() + " vừa bình luận bài viết của bạn !!!");
         notificationRepository.save(notification);
         return commentPostRepository.save(userCommentPost);
     }
@@ -132,6 +133,7 @@ public class CommentPostServiceImpl implements CommentPostService {
             UserCommentPost parentComment = parentCommentOptional.get();
 
             reply.setComment(parentComment);
+            reply.setPost(parentComment.getPost());
             reply.setCreateDate(new Date());
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -147,6 +149,15 @@ public class CommentPostServiceImpl implements CommentPostService {
             reply.setUser(user);
 
             parentComment.getReplies().add(reply);
+
+            Notification notification = new Notification();
+            notification.setPost(parentComment.getPost());
+            notification.setStatus(false);
+            notification.setUser(parentComment.getPost().getUser());
+            notification.setCreateDate(new Date());
+            notification.setDescription("Người dùng " + user.getProfile().getFirstName() + " "
+                    + user.getProfile().getLastName() + " vừa phản hồi bình luận bài viết của bạn !!!");
+            notificationRepository.save(notification);
 
             return commentPostRepository.save(reply);
         } else {

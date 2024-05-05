@@ -16,6 +16,7 @@ import com.csn.charity.service.interfaces.NotificationService;
 public class NotificationRestController {
     @Autowired
     private NotificationService notificationService;
+
     @GetMapping("/notifications/{userId}")
     @CrossOrigin
     public ResponseEntity<?> getNotificationByUser(@PathVariable Long userId) {

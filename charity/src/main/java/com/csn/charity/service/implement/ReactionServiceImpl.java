@@ -10,10 +10,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.UserReactPostDTO;
+import com.csn.charity.model.Notification;
 import com.csn.charity.model.Post;
 import com.csn.charity.model.ReactionType;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserReactPost;
+import com.csn.charity.repository.NotificationRepository;
 import com.csn.charity.repository.PostRepository;
 import com.csn.charity.repository.ReactionRepository;
 import com.csn.charity.repository.UserRepository;
@@ -27,6 +29,8 @@ public class ReactionServiceImpl implements ReactionService {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public UserReactPost addReactPost(UserReactPostDTO userReactPostDTO) {
@@ -52,6 +56,16 @@ public class ReactionServiceImpl implements ReactionService {
         userReactPost.setPost(post);
         userReactPost.setCreateDate(new Date());
         userReactPost.setReaction(reactionType);
+
+        
+
+        Notification notification = new Notification();
+        notification.setPost(post);
+        notification.setStatus(false);
+        notification.setUser(post.getUser());
+        notification.setCreateDate(new Date());
+        notification.setDescription("Người dùng " + user.getProfile().getFirstName() + " " +  user.getProfile().getLastName() + " vừa " + reactionType +  " bài viết của bạn !!!");
+        notificationRepository.save(notification);
 
         return this.reactionRepository.save(userReactPost);
     }

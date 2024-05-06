@@ -7,7 +7,7 @@ pipeline {
 	environment {
 		PROJECT_ID = 'nonprofit-social-421415'
         CLUSTER_NAME = 'nonprofit-cluster'
-        LOCATION = 'asia-southeast1'
+        LOCATION = 'asia-southeast1-a'
         CREDENTIALS_ID = 'kubernetes'	
 	}
 	

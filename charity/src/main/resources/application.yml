@@ -11,7 +11,7 @@ spring:
     # Local 
     url: jdbc:mysql://localhost:3306/charitydb
     username: root
-    password: TanDat1410
+    password: Long1907@
   jpa:
     show-sql: true
     properties:

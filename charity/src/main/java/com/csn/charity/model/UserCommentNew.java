@@ -40,11 +40,11 @@ public class UserCommentNew implements Serializable {
     private Date createDate;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserCommentNew> replies = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "reply_news")
-    @JsonIgnore
     private UserCommentNew comment;
 
     @ManyToOne

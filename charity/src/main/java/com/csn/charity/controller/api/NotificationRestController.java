@@ -29,6 +29,7 @@ public class NotificationRestController {
     }
 
     @PutMapping("/mark-as-read/{userId}")
+    @CrossOrigin
     public ResponseEntity<String> markAllNotificationsAsRead(@PathVariable Long userId) {
         try {
             notificationService.markAllNotificationsAsRead(userId);

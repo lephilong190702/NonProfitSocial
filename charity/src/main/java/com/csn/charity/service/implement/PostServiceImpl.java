@@ -241,9 +241,8 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<Post> getPostsByTags(Long id) {
-        Tag tag = this.tagRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tag với ID: " + id));
+    public List<Post> getPostsByTags(String name) {
+        Tag tag = this.tagRepository.findByName(name);
         
         return this.postRepository.findByTags(tag);
     }

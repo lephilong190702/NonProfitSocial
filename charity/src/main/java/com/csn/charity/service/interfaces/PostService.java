@@ -29,6 +29,6 @@ public interface PostService {
 
     List<Post> search(String kw);
 
-    List<Post> getPostsByTags(Long id);
+    List<Post> getPostsByTags(String name);
 
 }

@@ -148,11 +148,11 @@ public class PostRestController {
 
     }
 
-    @GetMapping("/tags/{id}")
+    @GetMapping("/tags/{name}")
     @CrossOrigin
-    public ResponseEntity<?> getPostByTag(@PathVariable Long id) {
+    public ResponseEntity<?> getPostByTag(@PathVariable String name) {
         try {
-            return new ResponseEntity<>(this.postService.getPostsByTags(id), HttpStatus.OK);
+            return new ResponseEntity<>(this.postService.getPostsByTags(name), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

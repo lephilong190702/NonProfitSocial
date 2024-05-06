@@ -471,7 +471,6 @@ const Post = () => {
           }));
         });
 
-
         stompClient.subscribe("/topic/update-reply-comments/", (message) => {
           console.log("Received message:", message.body);
           const newUpdateReplyComment = JSON.parse(message.body);
@@ -482,12 +481,13 @@ const Post = () => {
             return {
               ...prevReplies,
               [commentId]: prevReplies[commentId].map((reply) =>
-                reply.id === newUpdateReplyComment.id ? newUpdateReplyComment : reply
+                reply.id === newUpdateReplyComment.id
+                  ? newUpdateReplyComment
+                  : reply
               ),
             };
           });
         });
-
       },
       (error) => {
         console.error("Websocket connection error:", error);
@@ -640,13 +640,15 @@ const Post = () => {
                   </div>
                   <div className="postCenter">
                     <span className="postText">
-                      <a href="#" style={{ textDecoration: "none" }}>
-                        {p.tags.map((tag) => (
-                          <span key={tag.id} className="postText link">
-                            #{tag.name}
-                          </span>
-                        ))}
-                      </a>
+                      {p.tags.map((tag) => (
+                        <Link
+                          to={`/tag/?name=${tag.name}`}
+                          style={{ textDecoration: "none" }}
+                          key={tag.id}
+                        >
+                          <span className="postText link">#{tag.name}</span>
+                        </Link>
+                      ))}
                     </span>
                   </div>
                   <div className="postCenter">

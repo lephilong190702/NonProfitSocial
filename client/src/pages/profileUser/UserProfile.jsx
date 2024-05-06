@@ -66,6 +66,9 @@ const UserProfile = () => {
 
         setSuccessMessage("Cập nhật hồ sơ thành công");
 
+        updateUserContext(profileData.data);
+        
+
         setTimeout(() => {
           setSuccessMessage("");
           nav("/");
@@ -76,6 +79,11 @@ const UserProfile = () => {
     };
 
     process();
+  };
+
+  const updateUserContext = (newProfileData) => {
+    // Dispatch action to update user context
+    dispatch({ type: "UPDATE_USER", payload: newProfileData });
   };
 
   const isValidPhoneNumber = (phoneNumber) => {

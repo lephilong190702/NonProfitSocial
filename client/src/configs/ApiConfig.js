@@ -54,6 +54,9 @@ export const endpoints = {
     "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`,
     "check-admin-role": (userId) => `${SERVER_CONTEXT}/api/check-admin-role/${userId}`,
     "check-employee-role": (userId) => `${SERVER_CONTEXT}/api/check-employee-role/${userId}`,
+    "tag": `${SERVER_CONTEXT}/api/tags/`,
+    // "tags": (name) => `${SERVER_CONTEXT}/api/tags/${name}`,
+
 }
 
 export const authApi = () => {

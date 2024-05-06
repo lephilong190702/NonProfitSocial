@@ -25,5 +25,18 @@ public class NotificationServiceImpl implements NotificationService{
         
         return this.notificationRepository.findByUser(user);
     }
+    @Override
+    public void markAllNotificationsAsRead(Long userId) {
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy người dùng với ID: " + userId));
+
+        List<Notification> notifications = notificationRepository.findByUser(user);
+        
+        // Đánh dấu tất cả các thông báo thành đã đọc
+        for (Notification notification : notifications) {
+            notification.setStatus(true);
+            notificationRepository.save(notification);
+        }
+    }
     
 }

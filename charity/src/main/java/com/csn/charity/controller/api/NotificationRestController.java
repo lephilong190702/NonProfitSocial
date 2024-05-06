@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,16 @@ public class NotificationRestController {
         try {
             return new ResponseEntity<>(this.notificationService.getNotificationByUser(userId), HttpStatus.OK);
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/mark-as-read/{userId}")
+    public ResponseEntity<String> markAllNotificationsAsRead(@PathVariable Long userId) {
+        try {
+            notificationService.markAllNotificationsAsRead(userId);
+            return ResponseEntity.ok("Tất cả các thông báo đã được đánh dấu là đã đọc.");
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

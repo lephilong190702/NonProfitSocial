@@ -9,4 +9,6 @@ import com.csn.charity.model.UserContributeProject;
 
 public interface NotificationService {
     List<Notification> getNotificationByUser(Long id);
+
+    void markAllNotificationsAsRead(Long userId);
 }

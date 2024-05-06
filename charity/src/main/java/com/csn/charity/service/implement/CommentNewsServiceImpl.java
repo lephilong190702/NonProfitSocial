@@ -82,10 +82,10 @@ public class CommentNewsServiceImpl implements CommentNewsService {
 
     @Override
     public List<UserCommentNew> getCommentByNews(Long id) {
-        this.newsRepository.findById(id)
+        New new1 = this.newsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
 
-        List<UserCommentNew> commentNews = this.commentNewsRepository.findByNewsId(id);
+        List<UserCommentNew> commentNews = this.commentNewsRepository.findByNews(new1);
 
         return commentNews;
 

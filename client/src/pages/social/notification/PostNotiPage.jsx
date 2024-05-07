@@ -15,6 +15,7 @@ import SockJS from "sockjs-client";
 import Client from "stompjs";
 import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import moment from "moment";
+import Topbar from "../../../components/social/topbar/Topbar";
 
 const PostNotiPage = () => {
     const [q] = useSearchParams();
@@ -521,14 +522,14 @@ const PostNotiPage = () => {
             console.log(res2.data.comments);
         //   });
   
-          const reactionsPromises = res2.data((p) => {
+          // const reactionsPromises = res2.data((p) => {
             const postId2 = res2.data.id;
-            return ApiConfig.get(endpoints["react-post"](postId2)).then(
+            const res = ApiConfig.get(endpoints["react-post"](postId2)).then(
               (response) => response.data
             );
-          });
+          // });
   
-          const reactionsData = await Promise.all(reactionsPromises);
+          const reactionsData = await Promise.all(res);
   
           const totalLikes = {};
           reactionsData.forEach((data, index) => {
@@ -577,6 +578,7 @@ const PostNotiPage = () => {
 
   return (
     <>
+    <Topbar />
         {p && (
             <div
             className="post w-50 items-center"

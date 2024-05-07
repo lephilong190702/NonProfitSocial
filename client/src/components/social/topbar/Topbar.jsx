@@ -3,11 +3,12 @@ import "./topbar.css";
 import { Chat, Notifications, Person, Search } from "@material-ui/icons";
 import { Nav } from "react-bootstrap";
 import { UserContext } from "../../../App";
-import { authApi, endpoints } from "../../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
+import { auth } from "../../../configs/Firebase";
 
 const Topbar = () => {
   const [user] = useContext(UserContext);
@@ -19,6 +20,7 @@ const Topbar = () => {
   const [kw, setKw] = useState("");
 
   const [notification, setNotification] = useState([]);
+  const [noti, setNoti] = useState();
 
   const nav = useNavigate();
 
@@ -38,7 +40,13 @@ const Topbar = () => {
     nav(`/social/?kw=${kw}`);
   };
 
+  const readNoti = async () => {
+    const res = await authApi().put(endpoints["read-noti"](user.id))
+    setNoti(0);
+  }
+
   const toggleDropdown = () => {
+    readNoti();
     setShowDropdown(!showDropdown);
   };
 
@@ -46,6 +54,42 @@ const Topbar = () => {
     try {
       const res = await authApi().get(endpoints["notification"](user.id));
       setNotification(res.data);
+
+      let currentNotificationCount = 0;
+
+      const notiCurrent = res.data.map((n) => {
+        // Kiểm tra điều kiện và tăng currentNotificationCount nếu cần
+        if (n.status === false) {
+          currentNotificationCount++;
+        }
+
+        // Trả về giá trị của n, bạn có thể làm gì đó với n ở đây nếu cần
+        // return n;
+      });
+
+      console.log("Số lượng thông báo hiện tại:", currentNotificationCount);
+      setNoti(currentNotificationCount);
+
+      const notiPromises = res.data.map((p) => {
+        // const userId = p.userId;
+        return ApiConfig.get(endpoints["notification"](user.id)).then(
+          (response) => response.data
+        );
+      });
+
+      console.log(notiPromises);
+
+      const reactionsData = await Promise.all(notiPromises);
+
+      const totalNoti = {};
+      reactionsData.forEach((data, index) => {
+        const userId = res.data[index].id;
+        totalNoti[userId] = data.length;
+      });
+
+      console.log(totalNoti);
+
+      setNoti(totalNoti.length);
     } catch (error) {
       console.log(error);
     }
@@ -62,6 +106,7 @@ const Topbar = () => {
     };
     notifications();
     loadUserById();
+
     const handleScroll = () => {
       if (window.scrollY > 1000) {
         setScrolled(true);
@@ -142,12 +187,16 @@ const Topbar = () => {
           <div className="topbarIcons">
             <div className="topbarIconItem ml-1" onClick={toggleDropdown}>
               <Notifications />
-              <span className="topbarIconBadge">1</span>
+              <span className="topbarIconBadge">{noti}</span>
               {showDropdown && (
                 <div className="dropdownContent">
                   <div className="notificationContainer">
                     {notification.map((n, index) => (
-                      <Link to={`/noti/?id=${n.post.id}`}  key={index} className="notificationItem nav-link mt-2">
+                      <Link
+                        to={`/noti/?id=${n.post.id}`}
+                        key={index}
+                        className="notificationItem nav-link mt-2"
+                      >
                         <span className={n.status ? "" : "grayBackground"}>
                           {n.description} <br />{" "}
                           {moment(n.createDate).fromNow()}

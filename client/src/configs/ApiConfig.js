@@ -57,6 +57,7 @@ export const endpoints = {
     "tag": `${SERVER_CONTEXT}/api/tags/`,
     // "tags": (name) => `${SERVER_CONTEXT}/api/tags/${name}`,
     "notification": (userId) => `${SERVER_CONTEXT}/api/notifications/${userId}`,
+    "read-noti": (userId) => `${SERVER_CONTEXT}/api/mark-as-read/${userId}`,
 
 }
 

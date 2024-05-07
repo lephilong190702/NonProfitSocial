@@ -12,6 +12,7 @@ const UserProfile = () => {
   const [avatarSrc, setAvatarSrc] = useState(null);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [avt, setAvt] = useState("");
 
   const nav = useNavigate();
 
@@ -20,6 +21,12 @@ const UserProfile = () => {
     lastName: user.profile.lastName,
     phone: user.profile.phone,
   });
+
+  const [profileCurrent, setProfileCurrent] = useState({
+    firstName: "",
+    lastName: "",
+    phone: ""
+  })
 
   const avatar = useRef(user.profile.avatar);
 
@@ -92,6 +99,20 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
+    const userCurrent = async () => {
+      const res = await authApi().get(endpoints["current-user"]);
+      setAvt(res.data.profile.avatar);
+      setProfileCurrent({
+        firstName: res.data.profile.firstName,
+        lastName: res.data.profile.lastName,
+        phone: res.data.profile.phone
+      });
+      console.log(res.data.profile.firstName);
+      console.log(user);
+      console.log(avatar);
+    }
+
+    userCurrent();
     loadAvatar();
   }, []);
 
@@ -131,7 +152,7 @@ const UserProfile = () => {
                               marginTop: '20px'
                             }}>
                               <img
-                                src={user.profile.avatar}
+                                src={avt}
                                 width="250"
                                 height="250"
                                 style={{
@@ -174,7 +195,7 @@ const UserProfile = () => {
                                         type="text"
                                         onChange={(e) => change(e, "firstName")}
                                         placeholder="Tên"
-                                        defaultValue={user.profile.firstName}
+                                        defaultValue={profileCurrent.firstName}
                                         required
                                         className="form-control"
                                       />{" "}
@@ -196,7 +217,7 @@ const UserProfile = () => {
                                         type="text"
                                         onChange={(e) => change(e, "lastName")}
                                         placeholder="Họ và chữ lót"
-                                        defaultValue={user.profile.lastName}
+                                        defaultValue={profileCurrent.lastName}
                                         required
                                         className="form-control"
                                       />{" "}
@@ -218,7 +239,7 @@ const UserProfile = () => {
                                         type="number"
                                         onChange={(e) => change(e, "phone")}
                                         placeholder="Điện thoại"
-                                        defaultValue={user.profile.phone}
+                                        defaultValue={profileCurrent.phone}
                                         className="form-control"
                                       />
                                       {!isPhoneNumberValid && (

@@ -401,7 +401,7 @@ const CustomNavbar = () => {
                                 className="group-hover:text-[#007fff]"
                                 fixedWidth
                               />
-                              <div class="flex justify-center items-center text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
+                              <div className="flex justify-center items-center text-xs pl-1 md:text-sm font-semibold text-[#000] group-hover:text-[#007fff]">
                                 Đăng Nhập
                               </div>
 

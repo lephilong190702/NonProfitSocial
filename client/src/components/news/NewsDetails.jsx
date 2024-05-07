@@ -62,7 +62,7 @@ const NewsDetails = () => {
     loadComments(newsId);
     const stompClient = connectToWebSocket();
 
-    loadComments();
+    // loadComments();
 
     return () => {
       stompClient.disconnect();
@@ -277,6 +277,7 @@ const NewsDetails = () => {
                 .map((comment) => (
                   <ReplyBox
                     key={comment.id}
+                    newsId={newsId}
                     user={user}
                     comment={comment}
                     addReply={addReply}

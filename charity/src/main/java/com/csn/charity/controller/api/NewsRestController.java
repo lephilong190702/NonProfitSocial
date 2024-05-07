@@ -98,6 +98,7 @@ public class NewsRestController {
     }
 
     @DeleteMapping("/news-comment/{id}")
+    @CrossOrigin
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         try {
             commentNewsService.deleteCommentNews(id);

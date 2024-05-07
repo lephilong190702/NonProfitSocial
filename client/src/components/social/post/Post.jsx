@@ -776,12 +776,6 @@ const Post = () => {
                                       </div>
                                     </span>
 
-                                    {/* <Button
-                                  variant="link"
-                                  onClick={() => handleShowReplies(comment.id)}
-                                >
-                                  Hiển thị phản hồi
-                                </Button> */}
                                   </div>
                                   <Dropdown
                                     className="commentContent"

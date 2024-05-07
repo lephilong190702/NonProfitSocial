@@ -86,6 +86,7 @@ public class SpringSecurityConfig {
                                 "/api/posts/","/api/posts/{postId}", "/api/post/{postId}/comments/",
                                 "/api/post-comment/{parentId}/replies/",
                                 "/api/news-comment/{parentId}/replies/",
+                                "/api/news-comment/{id}",
                                 "/api/news/{newsId}", "/api/skills/",
                                 "/api/news/{newsId}/comments/", "/api/firebase/", "/api/reaction/{postId}",
                                 "/api/firebase/{username}", "/api/facebook/", "/api/google/",

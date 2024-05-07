@@ -1,10 +1,8 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: basic-ingress
+  name: basic
 spec:
-  defaultBackend:
-    service:
-      name: charity
-      port:
-        number: 9090
+  backend:
+    serviceName: server-service
+    servicePort: 80

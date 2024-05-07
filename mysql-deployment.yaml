@@ -11,10 +11,7 @@ spec:
       app: mysql
       tier: database
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-    type: RollingUpdate
+    type: Recreate
   template:
     metadata:
       labels:
@@ -55,3 +52,4 @@ spec:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+      command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']

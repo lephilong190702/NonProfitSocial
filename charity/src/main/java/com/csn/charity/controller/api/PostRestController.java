@@ -265,7 +265,7 @@ public class PostRestController {
     public ResponseEntity<String> createReactionPost(@RequestBody UserReactPostDTO userReactPostDTO) {
         UserReactPost userReactPost = reactionService.addReactPost(userReactPostDTO);
         if (userReactPost != null) {
-            messagingTemplate.convertAndSend("/topic/reactions/" + userReactPost.getPost().getId(), userReactPost);
+            messagingTemplate.convertAndSend("/topic/reactions/", userReactPost);
             return ResponseEntity.ok("Thêm reaction thành công");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Thêm reaction thất bại.");
@@ -277,7 +277,6 @@ public class PostRestController {
     public ResponseEntity<?> getReactionByPost(@PathVariable Long postId) {
         try {
             List<UserReactPost> reactPosts = reactionService.getReactionByPost(postId);
-            messagingTemplate.convertAndSend("/topic/reactions/" + postId, reactPosts);
             return new ResponseEntity<>(reactPosts, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

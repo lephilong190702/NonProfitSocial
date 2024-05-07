@@ -130,7 +130,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "users")
     public List<User> findAllUsers() {
         return this.userRepository.findAll();
     }

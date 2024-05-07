@@ -420,7 +420,7 @@ const TagPage = () => {
           console.log("deletedPostId: ", deletedPostId);
 
           // Cập nhật state hoặc thực hiện các hành động tương ứng, ví dụ: xóa bài viết khỏi danh sách bài viết mà không cần reload trang
-          setPost((prevPosts) =>
+          setPosts((prevPosts) =>
             prevPosts.filter((post) => post.id !== deletedPostId)
           );
         });
@@ -522,11 +522,11 @@ const TagPage = () => {
           console.log(post.comments);
         });
 
-        const reactionsPromises = res.data.map((p) => {
+        const reactionsPromises = res2.data.map((p) => {
           const postId = p.id;
           return ApiConfig.get(endpoints["react-post"](postId)).then(
             (response) => response.data
-          ); // Lấy dữ liệu từ response
+          );
         });
 
         const reactionsData = await Promise.all(reactionsPromises);

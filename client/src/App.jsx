@@ -26,6 +26,7 @@ import AcceptPost from './pages/social/accepted_post/AcceptPost';
 import Result from './pages/payment/Result';
 // import Result from './pages/social/tag/TagPage';
 import TagPage from './pages/social/tag/TagPage';
+import PostNotiPage from './pages/social/notification/PostNotiPage';
 export const UserContext = createContext();
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
           <Route path='/accept_post' element={<AcceptPost />} />
           <Route path='/result' element={<Result />} />
           <Route path='/tag' element={<TagPage />} />
+          <Route path='/noti' element={<PostNotiPage />} />
 
         </Routes>
         <Footer />

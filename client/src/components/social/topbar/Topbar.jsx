@@ -7,6 +7,7 @@ import { authApi, endpoints } from "../../../configs/ApiConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 const Topbar = () => {
   const [user] = useContext(UserContext);
@@ -16,6 +17,8 @@ const Topbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [toggleSearch, setToggleSearch] = useState(false);
   const [kw, setKw] = useState("");
+
+  const [notification, setNotification] = useState([]);
 
   const nav = useNavigate();
 
@@ -38,7 +41,15 @@ const Topbar = () => {
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
-  
+
+  const notifications = async () => {
+    try {
+      const res = await authApi().get(endpoints["notification"](user.id));
+      setNotification(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const loadUserById = async () => {
@@ -49,6 +60,8 @@ const Topbar = () => {
         console.log(error);
       }
     };
+    notifications();
+    loadUserById();
     const handleScroll = () => {
       if (window.scrollY > 1000) {
         setScrolled(true);
@@ -57,11 +70,10 @@ const Topbar = () => {
       }
     };
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-    
-    loadUserById();
   }, []);
 
   return (
@@ -94,7 +106,9 @@ const Topbar = () => {
             <div className="-z-100 ">
               <div
                 className={`group ${
-                  scrolled ? "top-[170px] left-[100%]" : "top-[170px] left-[100%]"
+                  scrolled
+                    ? "top-[170px] left-[100%]"
+                    : "top-[170px] left-[100%]"
                 } flex flex-col left-0 absolute  w-60  bg-white z-100 text-black`}
               >
                 <div className="flex items-center max-w-screen-2xl border-b-2 border-[#38b6ff]">
@@ -119,29 +133,36 @@ const Topbar = () => {
               </div>
             </div>
           ) : (
-            <p></p>
+            <></>
           )}
-          {/* <input
-            placeholder="Search for something"
-            className="searchInput"
-          ></input> */}
         </div>
-      </div>
-
-      <div className="topbarRight">
-        <div className="topbarLinks"></div>
-        <div className="topbarIcons">
-          <div className="topbarIconItem ml-1">
-            <Notifications />
-            <span className="topbarIconBadge">1</span>
-            {showDropdown && (
-              <div className="dropdownContent">
-                {/* Thêm nội dung cho dropdown ở đây */}
-              </div>
-            )}
+        <br />
+        <div className="topbarRight">
+          <div className="topbarLinks"></div>
+          <div className="topbarIcons">
+            <div className="topbarIconItem ml-1" onClick={toggleDropdown}>
+              <Notifications />
+              <span className="topbarIconBadge">1</span>
+              {showDropdown && (
+                <div className="dropdownContent">
+                  <div className="notificationContainer">
+                    {notification.map((n, index) => (
+                      <Link to={`/noti/?id=${n.post.id}`}  key={index} className="notificationItem nav-link mt-2">
+                        <span className={n.status ? "" : "grayBackground"}>
+                          {n.description} <br />{" "}
+                          {moment(n.createDate).fromNow()}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
+
+      <div className="topbarRight"></div>
     </div>
   );
 };

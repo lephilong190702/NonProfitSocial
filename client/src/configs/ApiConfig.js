@@ -2,8 +2,8 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-// const SERVER = "http://localhost:9090" 
-const SERVER="http://35.198.252.23:80"
+const SERVER = "http://localhost:9090" 
+// const SERVER="http://35.198.252.23:80"
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
@@ -56,6 +56,7 @@ export const endpoints = {
     "check-employee-role": (userId) => `${SERVER_CONTEXT}/api/check-employee-role/${userId}`,
     "tag": `${SERVER_CONTEXT}/api/tags/`,
     // "tags": (name) => `${SERVER_CONTEXT}/api/tags/${name}`,
+    "notification": (userId) => `${SERVER_CONTEXT}/api/notifications/${userId}`,
 
 }
 

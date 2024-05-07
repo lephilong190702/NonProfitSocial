@@ -101,3 +101,43 @@
   object-fit: cover;
   cursor: pointer;
 }
+
+.dropdownContent {
+  position: absolute;
+  top: -50px;
+  left: 50px;
+  right: 0; 
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1;
+  padding: 8px 0;
+  min-width: 500px;
+  flex-direction: column;
+}
+
+
+.dropdownContent span {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  font-size: 14px;
+}
+
+.dropdownContent span:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.notificationContainer {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.notificationItem {
+  padding: 5px;
+}
+
+.grayBackground {
+  background-color: #f3f3f3a4;
+}

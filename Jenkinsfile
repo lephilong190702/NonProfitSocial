@@ -1,42 +1,23 @@
 pipeline {
     agent any
-	tools {
-		maven 'Maven'
-	}
-	
-	environment {
-		PROJECT_ID = 'nonprofit-social-421415'
-        CLUSTER_NAME = 'nonprofit-cluster'
-        LOCATION = 'asia-southeast1-a'
-        CREDENTIALS_ID = 'kubernetes'	
-	}
-	
+    tools {
+        maven "Maven"
+    }
+    
+    environment {
+        registryName = "nonprofit"
+        registryCredential = 'ACR'
+        registryUrl = 'nonprofit.azurecr.io'
+        dockerImage=""
+    }
+
     stages {
-	    stage('Scm Checkout') {
-		    steps {
-			    checkout scm
-		    }
-	    }
-	    
-        stage('Deploy Mysql to K8s') {
-            steps{
-                echo "Deployment started ..."
-                sh 'ls -ltr'
-                sh 'pwd'
-                echo "Start deployment of mysql-storage.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-storage.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of mysql-config.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-config.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of mysql-secret.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-secret.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of mysql-deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of mysql-service.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'mysql-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Deployment MySQL Finished ..."
+        stage('Checkout ') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/lephilong190702/NonProfitSocial.git']]);
             }
         }
-
+        
         stage('Build') {
 		    steps {
                 sh 'cd charity/ && mvn --version'
@@ -44,7 +25,7 @@ pipeline {
 			    sh 'cd charity/ && mvn clean install -DskipTests'
 		    }
 	    }
-
+        
         stage('Build Docker Image') {
 		    steps {
 			    script {
@@ -53,7 +34,7 @@ pipeline {
 			    }
 		    }
 	    }
-
+        
         stage("Push Docker Image") {
 		    steps {
 			    script {
@@ -68,33 +49,42 @@ pipeline {
 		    }
 	    }
 
-        stage('Deploy Spring Boot to K8s') {
-            steps{
-                echo "Deployment started ..."
-                sh 'ls -ltr'
-                sh 'pwd'
-                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' server-deployment.yaml"
-                echo "Start deployment of server-deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'server-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of server-service.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'server-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
         
-                echo "Deployment Server Finished ..."
+        stage ("Deploy MySQL to K8S") {
+            steps {
+                echo "Deployment MySQL started ..."
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                sh "kubectl apply -f mysql-storage.yaml"
+                sh "kubectl apply -f mysql-secret.yaml"
+                sh "kubectl apply -f mysql-config.yaml"
+                sh "kubectl apply -f mysql-deployment.yaml"
+                sh "kubectl apply -f mysql-service.yaml"
+                echo "Deployment MySQL Finished ..."
+                }
             }
         }
-
-        stage('Deploy ReactJS to K8s') {
-            steps{
-                echo "Deployment started ..."
-                sh 'ls -ltr'
-                sh 'pwd'
-                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' client-deployment.yaml"
-                echo "Start deployment of client-deployment.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'client-deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
-                echo "Start deployment of client-service.yaml"
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'client-service.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
         
-                echo "Deployment Client Finished ..."
+        stage ("Deploy SpringBoot to K8S") {
+            steps {
+                echo "Deployment SpringBoot started ..."
+                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' server-deployment.yaml"
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                sh "kubectl apply -f server-deployment.yaml"
+                sh "kubectl apply -f server-service.yaml"
+                echo "Deployment SpringBoot Finished ..."
+                }
+            }
+        }
+        
+        stage ("Deploy ReactJS to K8S") {
+            steps {
+                echo "Deployment ReactJS started ..."
+                sh "sed -i 's/tagversion/${env.BUILD_ID}/g' client-deployment.yaml"
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                sh "kubectl apply -f client-deployment.yaml"
+                sh "kubectl apply -f client-service.yaml"
+                echo "Deployment ReactJS Finished ..."
+                }
             }
         }
     }

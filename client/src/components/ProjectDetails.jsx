@@ -45,7 +45,7 @@ const ProjectDetails = () => {
 
   const [success, setSuccess] = useState("");
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [orderInfo, setOrderInfo] = useState("");
 
   const currentPageUrl = window.location.href;
@@ -132,6 +132,25 @@ const ProjectDetails = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (selectedProjectId === null) {
+      console.error("Chưa chọn dự án để đóng góp.");
+      return;
+    }
+
+    if (amount === null) {
+      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
+
+    const donationAmount = parseFloat(amount);
+    console.log(donationAmount);
+    if (donationAmount > 1000000000 || donationAmount < 10000) {
+      setErrorMessage(
+        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+      );
+      console.log(errorMessage);
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append('amount', amount);

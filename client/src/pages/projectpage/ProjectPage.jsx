@@ -33,7 +33,7 @@ const ProjectPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [orderInfo, setOrderInfo] = useState("");
 
   const projectsPerPage = 4;
@@ -65,25 +65,25 @@ const ProjectPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // if (selectedProjectId === null) {
-    //   console.error("Chưa chọn dự án để đóng góp.");
-    //   return;
-    // }
+    if (selectedProjectId === null) {
+      console.error("Chưa chọn dự án để đóng góp.");
+      return;
+    }
 
-    // if (!pay.donateAmount.trim()) {
-    //   setErrorMessage("Vui lòng nhập số tiền đóng góp.");
-    //   return;
-    // }
+    if (amount === null) {
+      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+      return;
+    }
 
-    // const donationAmount = parseFloat(pay.donateAmount);
-    // console.log(donationAmount);
-    // if (donationAmount > 1000000000 || donationAmount < 10000) {
-    //   setErrorMessage(
-    //     "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
-    //   );
-    //   console.log(errorMessage);
-    //   return;
-    // }
+    const donationAmount = parseFloat(amount);
+    console.log(donationAmount);
+    if (donationAmount > 1000000000 || donationAmount < 10000) {
+      setErrorMessage(
+        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+      );
+      console.log(errorMessage);
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("amount", amount);

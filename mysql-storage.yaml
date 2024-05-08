@@ -1,35 +1,13 @@
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mysql-pv
-  labels:
-    app: mysql-pv
-    tier: database
-    type: local-storage
-spec:
-  storageClassName: local-storage
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  claimRef:
-    namespace: default
-    name: mysql-pv-claim
-  gcePersistentDisk:
-    pdName: local-storage
-    fsType: ext4
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: mysql-pv-claim # name of PVC essential for identifying the storage data
   labels:
-    app: mysql-pv-claim
+    app: mysql
     tier: database
 spec:
-  storageClassName: local-storage
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteOnce   #This specifies the mode of the claim that we are trying to create.
   resources:
     requests:
-      storage: 4Gi
+      storage: 10Gi    #This will tell kubernetes about the amount of space we are trying to claim.

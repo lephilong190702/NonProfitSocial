@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Result = () => {
+const Error = () => {
   return (
     <div className="main-content container-fluid" layout:fragment="content">
-        <h1 className="form-heading">QUYÊN GÓP THÀNH CÔNG</h1>
+        <h1 className="form-heading">QUYÊN GÓP THẤT BẠI</h1>
     </div>
   )
 }
 
-export default Result
+export default Error

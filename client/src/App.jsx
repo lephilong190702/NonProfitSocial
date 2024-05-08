@@ -27,6 +27,7 @@ import Result from './pages/payment/Result';
 // import Result from './pages/social/tag/TagPage';
 import TagPage from './pages/social/tag/TagPage';
 import PostNotiPage from './pages/social/notification/PostNotiPage';
+import Error from './pages/payment/Error';
 export const UserContext = createContext();
 
 const App = () => {
@@ -56,6 +57,7 @@ const App = () => {
           <Route path="/livestream/:roomId" element={<RoomPage />} />
           <Route path='/accept_post' element={<AcceptPost />} />
           <Route path='/result' element={<Result />} />
+          <Route path='/error' element={<Error />} />
           <Route path='/tag' element={<TagPage />} />
           <Route path='/noti' element={<PostNotiPage />} />
 

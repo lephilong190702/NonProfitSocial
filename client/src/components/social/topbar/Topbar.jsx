@@ -58,12 +58,10 @@ const Topbar = () => {
       let currentNotificationCount = 0;
 
       const notiCurrent = res.data.map((n) => {
-        // Kiểm tra điều kiện và tăng currentNotificationCount nếu cần
         if (n.status === false) {
           currentNotificationCount++;
         }
 
-        // Trả về giá trị của n, bạn có thể làm gì đó với n ở đây nếu cần
         // return n;
       });
 
@@ -191,7 +189,7 @@ const Topbar = () => {
               {showDropdown && (
                 <div className="dropdownContent">
                   <div className="notificationContainer">
-                    {notification.map((n, index) => (
+                    {notification.slice().reverse().map((n, index) => (
                       <Link
                         to={`/noti/?id=${n.post.id}`}
                         key={index}

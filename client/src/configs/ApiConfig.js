@@ -3,7 +3,7 @@ import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
 // const SERVER = "http://localhost:9090" 
-const SERVER="http://4.145.182.74:80"
+const SERVER="http://20.247.198.172:80"
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,

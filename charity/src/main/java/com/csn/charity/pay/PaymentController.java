@@ -97,7 +97,7 @@ public class PaymentController {
 
             // Redirect to client-side URL
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://34.143.225.79/result"));
+            headers.setLocation(URI.create("http://20.247.198.182/result"));
 
             try {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -112,7 +112,7 @@ public class PaymentController {
         } else {
             // Redirect to error page or handle error scenario
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://34.143.225.79/error"));
+            headers.setLocation(URI.create("http://20.247.198.182/error"));
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         }
     }

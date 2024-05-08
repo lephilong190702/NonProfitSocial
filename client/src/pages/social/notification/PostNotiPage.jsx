@@ -367,8 +367,8 @@ const PostNotiPage = () => {
     };
   
     const connectToWebSocket = () => {
-      // const socket = new SockJS("http://34.124.235.184:80/api/ws");
-      const socket = new SockJS("http://localhost:9090/api/ws");
+      const socket = new SockJS("http://35.185.189.57:80/api/ws");
+      // const socket = new SockJS("http://localhost:9090/api/ws");
       const stompClient = Client.over(socket);
   
       console.log("Connecting to websocket server...");

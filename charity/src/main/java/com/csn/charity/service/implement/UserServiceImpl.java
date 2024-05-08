@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://35.198.252.23:80/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                    + "http://35.185.189.57:80/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
             mailService.sendMailRegister(mailMessage);
         } catch (MailException e) {
             System.out.println("Error sending email: " + e.getMessage());
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
         mimeMessageHelper.setText(
                 """
                         <div>
-                          <a href="http://34.142.144.227:80/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+                          <a href="http://34.143.225.79:80/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
                         </div>
                         """
                         .formatted(email),

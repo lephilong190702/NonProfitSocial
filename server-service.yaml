@@ -8,5 +8,5 @@ spec:
     app: charity
   ports:
     - protocol: "TCP"
-      port: 9090
+      port: 80
       targetPort: 9090

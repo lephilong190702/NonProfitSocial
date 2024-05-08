@@ -11,7 +11,7 @@ spring:
     # Local 
     # url: jdbc:mysql://localhost:3306/charitydb
     # username: root
-    # password: TanDat1410
+    # password: Long1907@
   jpa:
     show-sql: true
     properties:
@@ -36,14 +36,14 @@ spring:
           auth: true
           starttls:
             enable: true
-  cache:
-    type: REDIS
-    redis:
-      time-to-live: 60000
-      cache-null-values: true
-  data:
-    redis:
-      host: localhost
-      port: 6379
+  # cache:
+  #   type: REDIS
+  #   redis:
+  #     time-to-live: 60000
+  #     cache-null-values: true
+  # data:
+  #   redis:
+  #     host: localhost
+  #     port: 6379
 
 

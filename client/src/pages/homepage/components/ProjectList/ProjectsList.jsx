@@ -41,25 +41,15 @@ const ProjectsList = () => {
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
   const url = new URL(currentURL);
-  const vnpAmount = url.searchParams.get("vnp_Amount");
-  const vnpBankCode = urlParams.get("vnp_BankCode");
-  const vnpBankTranNo = urlParams.get("vnp_BankTranNo");
-  const vnpCardType = urlParams.get("vnp_CardType");
-  const vnpOrderInfo = urlParams.get("vnp_OrderInfo");
-  const vnpPayDate = urlParams.get("vnp_PayDate");
-  const vnpResponseCode = urlParams.get("vnp_ResponseCode");
-  const vnpTmnCode = urlParams.get("vnp_TmnCode");
-  const vnpTransactionNo = urlParams.get("vnp_TransactionNo");
-  const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
-  const vnpTxnRef = urlParams.get("vnp_TxnRef");
-  const vnpSecureHash = urlParams.get("vnp_SecureHash");
+  
   const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
   const [displayedProjects, setDisplayedProjects] = useState(4);
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [orderInfo, setOrderInfo] = useState("");
 
   useEffect(() => {
-    console.log("vnpAmount: ", vnpAmount);
     const savedProjectId = localStorage.getItem("selectedProjectId");
 
     const loadProject = async () => {
@@ -81,83 +71,39 @@ const ProjectsList = () => {
       }
     };
 
-    // const handleLoadMore = () => {
-    //   setDisplayedProjects((prev) => prev + 4);
-    // };
-
-    // const openModal = (projectId, projectTitle) => {
-    //   localStorage.setItem("selectedProjectId", projectId);
-    //   setSelectedProjectId(projectId);
-    //   setSelectedProjectTitle(projectTitle);
-    //   setShowModal(true);
-    // };
-
-    // const closeModal = () => {
-    //   setSelectedProjectId(null);
-    //   setShowModal(false);
-    // };
-
-    const payment = async () => {
-      const form = new FormData();
-      form.append("vnp_Amount", vnpAmount);
-      form.append("vnp_BankCode", vnpBankCode);
-      form.append("vnp_BankTranNo", vnpBankTranNo);
-      form.append("vnp_CardType", vnpCardType);
-      form.append("vnp_OrderInfo", vnpOrderInfo);
-      form.append("vnp_PayDate", vnpPayDate);
-      form.append("vnp_ResponseCode", vnpResponseCode);
-      form.append("vnp_SecureHash", vnpSecureHash);
-      form.append("vnp_TmnCode", vnpTmnCode);
-      form.append("vnp_TransactionNo", vnpTransactionNo);
-      form.append("vnp_TransactionStatus", vnpTransactionStatus);
-      form.append("vnp_TxnRef", vnpTxnRef);
-
-      let e = await authApi().post(
-        endpoints["callback"](savedProjectId),
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-    };
-
-    if (urlParams.has("vnp_PayDate")) {
-      payment();
-    }
+  
 
     loadProject();
   }, [q]);
 
-  const handlePayment = async () => {
-    if (selectedProjectId === null) {
-      console.error("Chưa chọn dự án để đóng góp.");
-      return;
-    }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // if (selectedProjectId === null) {
+    //   console.error("Chưa chọn dự án để đóng góp.");
+    //   return;
+    // }
 
-    if (!pay.donateAmount.trim()) {
-      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
-      return;
-    }
+    // if (!pay.donateAmount.trim()) {
+    //   setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+    //   return;
+    // }
 
-    const donationAmount = parseFloat(pay.donateAmount);
-    console.log(donationAmount);
-    if (donationAmount > 1000000000 || donationAmount < 10000) {
-      setErrorMessage(
-        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
-      );
-      console.log(errorMessage);
-      return;
-    }
-
+    // const donationAmount = parseFloat(pay.donateAmount);
+    // console.log(donationAmount);
+    // if (donationAmount > 1000000000 || donationAmount < 10000) {
+    //   setErrorMessage(
+    //     "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+    //   );
+    //   console.log(errorMessage);
+    //   return;
+    // }
     try {
       const formData = new FormData();
-      formData.append("projectId", selectedProjectId);
-      formData.append("donateAmount", pay.donateAmount);
-      formData.append("note", pay.note);
-      let res = await authApi().post(
-        endpoints["vn-pay"](selectedProjectId),
+      formData.append("amount", amount);
+      formData.append("orderInfo", orderInfo);
+
+      const response = await authApi().post(
+        endpoints["donate"](selectedProjectId),
         formData,
         {
           headers: {
@@ -165,17 +111,12 @@ const ProjectsList = () => {
           },
         }
       );
+      const vnpayUrl = response.data;
+      window.location.href = vnpayUrl;
 
-      const redirectUrl = res.data;
-      console.log(res.data);
-
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-      } else {
-        console.error("Không có đường dẫn trả về từ server.");
-      }
+      console.log("VNPAY" + vnpayUrl);
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting order:", error);
     }
   };
 
@@ -319,9 +260,9 @@ const ProjectsList = () => {
                   type="number"
                   className="border p-2"
                   placeholder="Nhập số tiền đóng góp"
-                  value={pay.donateAmount}
+                  // value={pay.donateAmount}
                   onChange={(e) => {
-                    setPay({ ...pay, donateAmount: e.target.value });
+                    setAmount(e.target.value);
                     setErrorMessage("");
                   }}
                 />
@@ -335,53 +276,18 @@ const ProjectsList = () => {
                 <InputBase
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
-                  value={pay.note}
-                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+                  // value={pay.note}
+                  onChange={(e) => setOrderInfo(e.target.value)}
                 />
               </div>
             </div>
           </Box>
-          {/* <div>
-            <p>Số tiền đóng góp</p>
-            <Input placeholder="Nhập số tiền đóng góp" className=""></Input>
-          </div>
-          <div className="mt-3">
-            <p>Ghi chú</p>
-            <Input placeholder="Nhập ghi chú (tuỳ chọn)" className=""></Input>
-          </div> */}
-          {/*  <Form style={{ padding: 0 }} className="absolute left-5">
-            <Form.Group className="" controlId="donateAmount">
-              <Form.Label>Số tiền đóng góp</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Nhập số tiền đóng góp"
-                value={pay.donateAmount}
-                onChange={(e) => {
-                  setPay({ ...pay, donateAmount: e.target.value });
-                  setErrorMessage("");
-                }}
-              />
-              {errorMessage && (
-                <Form.Text className="text-danger">{errorMessage}</Form.Text>
-              )}
-            </Form.Group>
-            <Form.Group controlId="note">
-              <Form.Label>Ghi chú</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Nhập ghi chú (tuỳ chọn)"
-                value={pay.note}
-                onChange={(e) => setPay({ ...pay, note: e.target.value })}
-              />
-            </Form.Group>
-          </Form>*/}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handlePayment}>
+          <Button variant="primary" onClick={handleSubmit}>
             Xác nhận đóng góp
           </Button>
         </Modal.Footer>

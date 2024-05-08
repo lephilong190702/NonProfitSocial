@@ -29,27 +29,16 @@ const ProjectPage = () => {
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
   const url = new URL(currentURL);
-  const vnpAmount = url.searchParams.get("vnp_Amount");
-  const vnpBankCode = urlParams.get("vnp_BankCode");
-  const vnpBankTranNo = urlParams.get("vnp_BankTranNo");
-  const vnpCardType = urlParams.get("vnp_CardType");
-  const vnpOrderInfo = urlParams.get("vnp_OrderInfo");
-  const vnpPayDate = urlParams.get("vnp_PayDate");
-  const vnpResponseCode = urlParams.get("vnp_ResponseCode");
-  const vnpTmnCode = urlParams.get("vnp_TmnCode");
-  const vnpTransactionNo = urlParams.get("vnp_TransactionNo");
-  const vnpTransactionStatus = urlParams.get("vnp_TransactionStatus");
-  const vnpTxnRef = urlParams.get("vnp_TxnRef");
-  const vnpSecureHash = urlParams.get("vnp_SecureHash");
   const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [orderInfo, setOrderInfo] = useState("");
 
   const projectsPerPage = 4;
 
   useEffect(() => {
-    console.log("vnpAmount: ", vnpAmount);
     const savedProjectId = localStorage.getItem("selectedProjectId");
 
     const loadProject = async () => {
@@ -71,71 +60,37 @@ const ProjectPage = () => {
       }
     };
 
-    const payment = async () => {
-      const form = new FormData();
-      form.append("vnp_Amount", vnpAmount);
-      form.append("vnp_BankCode", vnpBankCode);
-      form.append("vnp_BankTranNo", vnpBankTranNo);
-      form.append("vnp_CardType", vnpCardType);
-      form.append("vnp_OrderInfo", vnpOrderInfo);
-      form.append("vnp_PayDate", vnpPayDate);
-      form.append("vnp_ResponseCode", vnpResponseCode);
-      form.append("vnp_SecureHash", vnpSecureHash);
-      form.append("vnp_TmnCode", vnpTmnCode);
-      form.append("vnp_TransactionNo", vnpTransactionNo);
-      form.append("vnp_TransactionStatus", vnpTransactionStatus);
-      form.append("vnp_TxnRef", vnpTxnRef);
-
-      let e = await authApi().post(
-        endpoints["callback"](savedProjectId),
-        form,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-    };
-
-    if (urlParams.has("vnp_PayDate")) {
-      payment();
-    }
-
     loadProject();
   }, [q]);
 
-  const handlePayment = async () => {
-    if (selectedProjectId === null) {
-      console.error("Chưa chọn dự án để đóng góp.");
-      return;
-    }
-    
-    if (!pay.donateAmount.trim()) {
-      setErrorMessage("Vui lòng nhập số tiền đóng góp.");
-      return;
-    }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // if (selectedProjectId === null) {
+    //   console.error("Chưa chọn dự án để đóng góp.");
+    //   return;
+    // }
 
-    const donationAmount = parseFloat(pay.donateAmount);
-    console.log(donationAmount);
-    if (
-      donationAmount > 1000000000 ||
-      donationAmount < 10000
-    ) {
-      setErrorMessage(
-        "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
-      );
-      console.log(errorMessage);
-      return;
-    }
+    // if (!pay.donateAmount.trim()) {
+    //   setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+    //   return;
+    // }
 
+    // const donationAmount = parseFloat(pay.donateAmount);
+    // console.log(donationAmount);
+    // if (donationAmount > 1000000000 || donationAmount < 10000) {
+    //   setErrorMessage(
+    //     "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+    //   );
+    //   console.log(errorMessage);
+    //   return;
+    // }
     try {
-      setErrorMessage("");
       const formData = new FormData();
-      formData.append("projectId", selectedProjectId);
-      formData.append("donateAmount", pay.donateAmount);
-      formData.append("note", pay.note);
-      let res = await authApi().post(
-        endpoints["vn-pay"](selectedProjectId),
+      formData.append("amount", amount);
+      formData.append("orderInfo", orderInfo);
+
+      const response = await authApi().post(
+        endpoints["donate"](selectedProjectId),
         formData,
         {
           headers: {
@@ -143,19 +98,67 @@ const ProjectPage = () => {
           },
         }
       );
+      const vnpayUrl = response.data;
+      window.location.href = vnpayUrl;
 
-      const redirectUrl = res.data;
-      console.log(res.data);
-
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
-      } else {
-        console.error("Không có đường dẫn trả về từ server.");
-      }
+      console.log("VNPAY" + vnpayUrl);
     } catch (error) {
-      console.error(error);
+      console.error("Error submitting order:", error);
     }
   };
+
+  // const handlePayment = async () => {
+  //   if (selectedProjectId === null) {
+  //     console.error("Chưa chọn dự án để đóng góp.");
+  //     return;
+  //   }
+    
+  //   if (!pay.donateAmount.trim()) {
+  //     setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+  //     return;
+  //   }
+
+  //   const donationAmount = parseFloat(pay.donateAmount);
+  //   console.log(donationAmount);
+  //   if (
+  //     donationAmount > 1000000000 ||
+  //     donationAmount < 10000
+  //   ) {
+  //     setErrorMessage(
+  //       "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+  //     );
+  //     console.log(errorMessage);
+  //     return;
+  //   }
+
+  //   try {
+  //     setErrorMessage("");
+  //     const formData = new FormData();
+  //     formData.append("projectId", selectedProjectId);
+  //     formData.append("donateAmount", pay.donateAmount);
+  //     formData.append("note", pay.note);
+  //     let res = await authApi().post(
+  //       endpoints["vn-pay"](selectedProjectId),
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //         },
+  //       }
+  //     );
+
+  //     const redirectUrl = res.data;
+  //     console.log(res.data);
+
+  //     if (redirectUrl) {
+  //       window.location.href = redirectUrl;
+  //     } else {
+  //       console.error("Không có đường dẫn trả về từ server.");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
@@ -306,9 +309,9 @@ const ProjectPage = () => {
                   type="number"
                   className="border p-2"
                   placeholder="Nhập số tiền đóng góp"
-                  value={pay.donateAmount}
+                  // value={pay.donateAmount}
                   onChange={(e) => {
-                    setPay({ ...pay, donateAmount: e.target.value });
+                    setAmount(e.target.value);
                     setErrorMessage("");
                   }}
                 />
@@ -322,8 +325,8 @@ const ProjectPage = () => {
                 <InputBase
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
-                  value={pay.note}
-                onChange={(e) => setPay({ ...pay, note: e.target.value })}
+                  // value={pay.note}
+                  onChange={(e) => setOrderInfo(e.target.value)}
                 />
               </div>
             </div>
@@ -333,7 +336,7 @@ const ProjectPage = () => {
           <Button variant="secondary" onClick={closeModal}>
             Đóng
           </Button>
-          <Button variant="primary" onClick={handlePayment}>
+          <Button variant="primary" onClick={handleSubmit}>
             Xác nhận đóng góp
           </Button>
         </Modal.Footer>

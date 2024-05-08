@@ -368,6 +368,7 @@ const ProjectDetails = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
       <Modal show={showModelAddress} onHide={closeModalAddress}>
         <Modal.Header closeButton>
           <div className="text-xl text-center font-bold">

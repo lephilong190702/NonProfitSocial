@@ -16,7 +16,7 @@ spec:
   - host: nonprofitdemo.southeastasia.cloudapp.azure.com
     http:
       paths:
-      - path: /server(/|$)(.*)
+      - path: /admin(/|$)(.*)
         pathType: Prefix
         backend:
           service:

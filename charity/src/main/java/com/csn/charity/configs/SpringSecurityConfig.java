@@ -58,10 +58,10 @@ public class SpringSecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .formLogin(
                         form -> form
-                                .loginPage("/login")
+                                .loginPage("/admin/login")
                                 .usernameParameter("username")
                                 .passwordParameter("password")
-                                .loginProcessingUrl("/login")
+                                .loginProcessingUrl("/admin/login")
                                 .defaultSuccessUrl("/")
                                 .failureUrl("/login?error")
                                 .permitAll())

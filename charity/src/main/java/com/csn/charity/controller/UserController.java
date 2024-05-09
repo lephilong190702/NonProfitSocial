@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     private UserRoleService userRoleService;
 
-    @GetMapping("/")
+    @GetMapping("/admin")
     public String getContribute(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
@@ -44,7 +44,7 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public String getUser(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
@@ -55,7 +55,7 @@ public class UserController {
         return "pages/users";
     }
 
-    @GetMapping("/userRole")
+    @GetMapping("/admin/userRole")
     public String getUserRole(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
@@ -73,14 +73,14 @@ public class UserController {
         return "pages/users";
     }
 
-    @GetMapping("/register")
+    @GetMapping("/admin/register")
     public String showRegistrationForm(Model model) {
         UserDTO user = new UserDTO();
         model.addAttribute("user", user);
         return "register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/admin/register")
     public String registration(@Validated @ModelAttribute("user") UserDTO userDto,
             BindingResult result,
             Model model) {
@@ -95,30 +95,30 @@ public class UserController {
 
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
-            return "/register";
+            return "/admin/register";
         }
 
         userService.addUser(userDto);
-        return "redirect:/login";
+        return "redirect:/admin/login";
     }
 
     @PostMapping("/admin/active/{id}")
     public String activateAccount(@PathVariable(value = "id") Long id) {
         this.userService.activateAccount(id);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @PostMapping("/admin/disable/{id}")
     public String disableAccount(@PathVariable(value = "id") Long id) {
         this.userService.disableAccount(id);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @PostMapping("/admin/user/{userId}/role/{roleId}")
     public String setRoleAccount(@PathVariable(value = "userId") Long userId,
                                  @PathVariable(value = "roleId") Long roleId) {
         this.userService.updateUserRole(userId, roleId);
-        return "redirect:/userRole";
+        return "redirect:/admin/userRole";
     }
 
 }

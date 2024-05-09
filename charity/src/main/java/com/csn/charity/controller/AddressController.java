@@ -21,14 +21,14 @@ public class AddressController {
     @Autowired
     private ProjectService projectService;
     
-    @GetMapping("/addresses")
+    @GetMapping("/admin/addresses")
     public String getAllAddress(Model model) {
         model.addAttribute("currentPage", "addresses");
         model.addAttribute("addresses", this.addressService.getAll());
         return "pages/addresses";
     }
 
-    @GetMapping("/address")
+    @GetMapping("/admin/pending_address")
     public String getPendingAddress(Model model) {
         model.addAttribute("address", this.addressService.getPendingAddress());
         return "pages/address";
@@ -74,7 +74,7 @@ public class AddressController {
             addressService.updateById(address.getId(), address);
         }
 
-        return "redirect:/addresses";
+        return "redirect:/admin/addresses";
     }
 
 //    @PostMapping

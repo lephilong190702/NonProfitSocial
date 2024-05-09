@@ -10,13 +10,13 @@
     <div id="sidebar" class='active' th:fragment="sidebar"><!--sidebar-->
         <div class="sidebar-wrapper active">
             <div class="sidebar-header">
-                <img src="assets/images/logo.svg" alt="" srcset="">
+                <img src="/admin/assets/images/logo.svg" alt="" srcset="">
             </div>
             <div class="sidebar-menu">
                 <ul class="menu">
                     <li class='sidebar-title'>Main Menu</li>
                     <li class="sidebar-item">
-                        <a th:href="@{/}" class='sidebar-link'>
+                        <a th:href="@{/admin}" class='sidebar-link'>
                             <i data-feather="home" width="20"></i>
                             <span>Dashboard</span>
                         </a>
@@ -24,19 +24,19 @@
 
                     <li class='sidebar-title'>QUẢN LÝ DỰ ÁN TỪ THIỆN</li>
                     <li class="sidebar-item">
-                        <a th:href="@{/pcategories}" class='sidebar-link'>
+                        <a th:href="@{/admin/pcategories}" class='sidebar-link'>
                             <i data-feather="briefcase" width="20"></i>
                             <span>Danh Mục</span>
                         </a>
-                        <a th:href="@{/projects}" class='sidebar-link'>
+                        <a th:href="@{/admin/projects}" class='sidebar-link'>
                             <i data-feather="briefcase" width="20"></i>
                             <span>Dự Án</span>
                         </a>
-                        <a th:href="@{/addresses}" class='sidebar-link'>
+                        <a th:href="@{/admin/addresses}" class='sidebar-link'>
                             <i data-feather="briefcase" width="20"></i>
                             <span>Địa Điểm</span>
                         </a>
-                        <a th:href="@{/address}" class='sidebar-link'>
+                        <a th:href="@{/admin/address}" class='sidebar-link'>
                             <i data-feather="briefcase" width="20"></i>
                             <span>Duyệt địa điểm</span>
                         </a>
@@ -44,11 +44,11 @@
 
                     <li class='sidebar-title'>QUẢN LÝ TIN TỨC TỪ THIỆN</li>
                     <li class="sidebar-item">
-                        <a th:href="@{/ncategories}" class='sidebar-link'>
+                        <a th:href="@{/admin/ncategories}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Danh Mục</span>
                         </a>
-                        <a th:href="@{/news}" class='sidebar-link'>
+                        <a th:href="@{/admin/news}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Tin Tức</span>
                         </a>
@@ -56,13 +56,13 @@
                     <div th:if="${hasAdminRole}">
                         <li class='sidebar-title'>QUẢN LÝ NGƯỜI DÙNG</li>
                         <li class="sidebar-item">
-                            <a th:href="@{/users}" class='sidebar-link'>
+                            <a th:href="@{/admin/users}" class='sidebar-link'>
                                 <i data-feather="file-text" width="20"></i>
                                 <span>Tài Khoản</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a th:href="@{/userRole}" class='sidebar-link'>
+                            <a th:href="@{/admin/userRole}" class='sidebar-link'>
                                 <i data-feather="file-text" width="20"></i>
                                 <span>Vai trò</span>
                             </a>
@@ -72,11 +72,11 @@
 
                     <li class='sidebar-title'>QUẢN LÝ TÌNH NGUYỆN</li>
                     <li class="sidebar-item">
-                        <a th:href="@{/volunteers}" class='sidebar-link'>
+                        <a th:href="@{/admin/volunteers}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Tình Nguyện Viên</span>
                         </a>
-                        <a th:href="@{/skills}" class='sidebar-link'>
+                        <a th:href="@{/admin/skills}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Kỹ Năng</span>
                         </a>
@@ -84,13 +84,13 @@
 
                     <li class='sidebar-title'>QUẢN LÝ MẠNG XÃ HỘI</li>
                     <li class="sidebar-item">
-                        <a th:href="@{/reports}" class='sidebar-link'>
+                        <a th:href="@{/admin/reports}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Báo Cáo</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a th:href="@{/export}" class='sidebar-link'>
+                        <a th:href="@{/admin/export}" class='sidebar-link'>
                             <i data-feather="file-text" width="20"></i>
                             <span>Sao Kê</span>
                         </a>

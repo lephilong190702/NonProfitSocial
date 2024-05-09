@@ -88,12 +88,12 @@
                                     </div>
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-start">
-                                            <a th:href="@{/skip/{id}(id=${r.id})}" class="btn btn-primary me-1 mb-1" 
+                                            <a th:href="@{/admin/skip/{id}(id=${r.id})}" class="btn btn-primary me-1 mb-1" 
                                             onclick="return confirm('Bạn có chắc chắn muốn bỏ qua báo cáo này không?')"
                                             >BỎ QUA</a>
                                         </div>
                                         <div class="col-6 d-flex justify-content-end">
-                                            <a th:href="@{/resolve/{id}(id=${r.id})}"
+                                            <a th:href="@{/admin/resolve/{id}(id=${r.id})}"
                                                 class="btn btn-primary me-1 mb-1"
                                                 onclick="return confirm('Bạn có chắc chắn muốn xử lý báo cáo này không?')">XỬ LÝ</a>
                                         </div>

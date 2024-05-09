@@ -30,7 +30,7 @@ public class ProjectCategoryController {
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping("/pcategories")
+    @GetMapping("/admin/pcategories")
     public String listProjectCategories(Model model) {
         List<ProjectCategory> projectCategories = projectCategoryService.getAll();
 
@@ -67,6 +67,6 @@ public class ProjectCategoryController {
         else
             projectCategoryService.update(projectCategory.getId(), projectCategory);
 
-        return "redirect:/pcategories";
+        return "redirect:/admin/pcategories";
     }
 }

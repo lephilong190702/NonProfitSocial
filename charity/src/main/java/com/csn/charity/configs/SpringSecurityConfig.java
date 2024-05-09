@@ -48,11 +48,11 @@ public class SpringSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
+                        .requestMatchers("/admin/register", "/css/**", "/images/**", "/js/**",
                                 "/error", "/admin/login", "/oauth2/**", "/showMap")
                         .permitAll()
-                        .requestMatchers("/", "/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
-                        .requestMatchers("/users/**").hasRole("SUPERADMIN")
+                        .requestMatchers("/admin", "/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
+                        .requestMatchers("/admin/users/**").hasRole("SUPERADMIN")
                         .anyRequest()
                         .authenticated())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -62,11 +62,11 @@ public class SpringSecurityConfig {
                                 .usernameParameter("username")
                                 .passwordParameter("password")
                                 .loginProcessingUrl("/admin/login")
-                                .defaultSuccessUrl("/")
-                                .failureUrl("/login?error")
+                                .defaultSuccessUrl("/admin")
+                                .failureUrl("/admin/login?error")
                                 .permitAll())
-                .logout(logout -> logout.logoutSuccessUrl("/"))
-                .exceptionHandling(handling -> handling.accessDeniedPage("/login?accessDenied"))
+                .logout(logout -> logout.logoutSuccessUrl("/admin"))
+                .exceptionHandling(handling -> handling.accessDeniedPage("/admin/login?accessDenied"))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

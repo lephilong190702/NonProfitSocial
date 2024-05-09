@@ -27,14 +27,14 @@ public class ProjectController {
     @Autowired
     private ProjectCategoryService projectCategoryService;
 
-    @GetMapping("/projects")
+    @GetMapping("/admin/projects")
     public String index(Model model) {
         model.addAttribute("currentPage", "projects");
         model.addAttribute("projects", projectService.getAll());
         return "pages/index";
     }
 
-    @GetMapping("/projects/search")
+    @GetMapping("/admin/projects/search")
     public String search(@RequestParam("kw") String kw, Model model) {
         if (kw != null && !kw.isEmpty()) {
             List<Project> projects = projectService.findByName(kw);
@@ -81,7 +81,7 @@ public class ProjectController {
         } else
             projectService.update(project.getId(), project);
 
-        return "redirect:/projects";
+        return "redirect:/admin/projects";
 
     }
 

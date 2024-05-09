@@ -16,28 +16,28 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @GetMapping("/reports")
+    @GetMapping("/admin/reports")
     public String getReport(Model model) {
         model.addAttribute("reports", this.reportService.getReportPost());
         return "pages/reports";
     }
 
-    @GetMapping("/reports/{id}")
+    @GetMapping("/admin/reports/{id}")
     public String detail(Model model, @PathVariable(value = "id") Long id) {
         UserReportPost userReportPost = this.reportService.getById(id);
         model.addAttribute("report", userReportPost);
         return "pages/report";
     }
 
-    @RequestMapping(value = "/resolve/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/admin/resolve/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String resolve(@PathVariable(value = "id") Long id) {
         this.reportService.resolvedReport(id);
-        return "redirect:/reports";
+        return "redirect:/admin/reports";
     }
 
-    @RequestMapping(value = "/skip/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = "/admin/skip/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String skip(@PathVariable(value = "id") Long id) {
         this.reportService.skipReport(id);
-        return "redirect:/reports";
+        return "redirect:/admin/reports";
     }
 }

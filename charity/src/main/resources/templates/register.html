@@ -22,11 +22,11 @@
                     <div class="card pt-4">
                         <div class="card-body">
                             <div class="text-center mb-5">
-                                <img th:src="@{/images/favicon.svg}" height="48" class='mb-4'>
+                                <img th:src="@{/admin/images/favicon.svg}" height="48" class='mb-4'>
                                 <h3>Sign Up</h3>
                                 <p>Please fill the form to register.</p>
                             </div>
-                            <form th:action="@{/register}" method="post" th:object="${user}" role="form">
+                            <form th:action="@{/admin/register}" method="post" th:object="${user}" role="form">
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="form-group">
@@ -53,7 +53,7 @@
                                     </div>
                                 </diV>
 
-                                <a th:href="@{/login}">Have an account? Login</a>
+                                <a th:href="@{/admin/login}">Have an account? Login</a>
                                 <div class="clearfix">
                                     <button class="btn btn-primary float-end" type="submit">Submit</button>
                                 </div>

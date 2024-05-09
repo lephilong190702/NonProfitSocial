@@ -24,7 +24,7 @@ public class NewsCategoryController {
     private NewsService newsService;
 
 
-    @GetMapping("/ncategories")
+    @GetMapping("/admin/ncategories")
     public String listProjectCategories(Model model) {
         List<NewCategory> newCategories = this.newsCategoryService.getAll();
         Map<Long, Long> count = newCategories.stream()
@@ -56,6 +56,6 @@ public class NewsCategoryController {
         else
             newsCategoryService.update(newCategory.getId(), newCategory);
 
-        return "redirect:/ncategories";
+        return "redirect:/admin/ncategories";
     }
 }

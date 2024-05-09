@@ -19,7 +19,7 @@ public class SkillController {
     @Autowired
     private SkillService skillService;
 
-    @GetMapping("/skills")
+    @GetMapping("/admin/skills")
     public String getSkill(Model model) {
         model.addAttribute("skills", this.skillService.getAll());
         return "pages/skills";
@@ -47,6 +47,6 @@ public class SkillController {
             this.skillService.add(skill);
         else
             this.skillService.update(skill.getId(), skill);
-        return "redirect:/skills";
+        return "redirect:/admin/skills";
     }
 }

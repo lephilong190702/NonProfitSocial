@@ -19,25 +19,25 @@ public class VolunteerController {
     private DonateService donateService;
 
 
-    @GetMapping("/volunteers")
+    @GetMapping("/admin/volunteers")
     public String getVolunteer(Model model) {
         model.addAttribute("volunteers", this.volunteerService.getPendingVolunteer());
         return "pages/volunteers";
     }
 
-    @GetMapping("/contributions")
+    @GetMapping("/admin/contributions")
     public String getContribute(Model model) {
         model.addAttribute("contributions", this.donateService.getAllContribute());
         return "pages/landing_page";
     }
 
-    @GetMapping("/export")
+    @GetMapping("/admin/export")
     public String getContribution(Model model) {
         model.addAttribute("contributions", this.donateService.getAllContribute());
         return "pages/exportexcel";
     }
 
-    @GetMapping("/stats")
+    @GetMapping("/admin/stats")
     public String stats() {
         return "pages/test";
     }
@@ -45,7 +45,7 @@ public class VolunteerController {
     @RequestMapping(value = "/admin/accept/volunteer/{volunteerId}", method = { RequestMethod.GET, RequestMethod.POST })
     public String approveAddress(@PathVariable Long volunteerId) {
         volunteerService.acceptVolunteer(volunteerId);
-        return "redirect:/volunteers";
+        return "redirect:/admin/volunteers";
     }
 
 }

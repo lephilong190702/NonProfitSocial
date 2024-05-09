@@ -29,14 +29,14 @@ public class NewsController {
     @Autowired
     private NewsCategoryService newsCategoryService;
 
-    @GetMapping("/news")
+    @GetMapping("/admin/news")
     public String index(Model model) {
         model.addAttribute("currentPage", "news");
         model.addAttribute("news", this.newsService.getAll());
         return "pages/news";
     }
 
-    @GetMapping("/news/search")
+    @GetMapping("/admin/news/search")
     public String search(@RequestParam("kw") String kw, Model model) {
         if (kw != null && !kw.isEmpty()) {
             List<New> news = newsService.findByName(kw);
@@ -85,6 +85,6 @@ public class NewsController {
         else
             newsService.update(anew.getId(), anew);
 
-        return "redirect:/news";
+        return "redirect:/admin/news";
     }
 }

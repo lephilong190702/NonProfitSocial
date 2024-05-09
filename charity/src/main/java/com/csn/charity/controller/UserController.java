@@ -39,7 +39,7 @@ public class UserController {
         return "pages/landing_page";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/admin/login")
     public String login() {
         return "login";
     }

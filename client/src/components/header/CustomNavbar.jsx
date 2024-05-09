@@ -19,6 +19,7 @@ import {
   faSearch,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import './navbar.css'
 
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
@@ -220,8 +221,8 @@ const CustomNavbar = () => {
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
                         className={`group ${
-                          !user ? "top-[130px]" : "top-[138px]"
-                        }  duration-500 h-0 overflow-hidden group-hover:h-[100px] absolute bg-white z-20 text-black duration-800`}
+                          !user ? "top-[145px]" : "top-[138px]"
+                        }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-white z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">
@@ -232,7 +233,7 @@ const CustomNavbar = () => {
                                   return (
                                     <Link
                                       to={h}
-                                      className="dropdown-item"
+                                      className="news-link"
                                       key={c.id}
                                     >
                                       {c.name}
@@ -275,8 +276,8 @@ const CustomNavbar = () => {
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
                         className={`group ${
-                          !user ? "top-[130px]" : "top-[138px]"
-                        }  duration-500 h-0 overflow-hidden group-hover:h-[100px] absolute bg-white z-20 text-black duration-800`}
+                          !user ? "top-[145px]" : "top-[138px]"
+                        }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-white z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">
@@ -287,7 +288,7 @@ const CustomNavbar = () => {
                                   return (
                                     <Link
                                       to={h}
-                                      className="dropdown-item"
+                                      className="news-link"
                                       key={c.id}
                                     >
                                       {c.name}

@@ -49,7 +49,7 @@ public class SpringSecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/register", "/css/**", "/images/**", "/js/**",
-                                "/error", "/login", "/oauth2/**", "/showMap")
+                                "/error", "/admin/login", "/oauth2/**", "/showMap")
                         .permitAll()
                         .requestMatchers("/", "/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                         .requestMatchers("/users/**").hasRole("SUPERADMIN")

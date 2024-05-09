@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://20.247.198.172:80/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
+                    + "https://nonprofit.southeastasia.cloudapp.azure.com/api/confirm-account?token=" + confirmationToken.getConfirmationToken());
             mailService.sendMailRegister(mailMessage);
         } catch (MailException e) {
             System.out.println("Error sending email: " + e.getMessage());
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
         mimeMessageHelper.setText(
                 """
                         <div>
-                          <a href="http://20.247.198.182:80/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
+                          <a href="https://nonprofit.southeastasia.cloudapp.azure.com/resetPassword?email=%s" target="_blank">Nhấn link để đặt lại mật khẩu</a>
                         </div>
                         """
                         .formatted(email),

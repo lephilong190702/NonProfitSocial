@@ -15,8 +15,8 @@ const RoomPage = () => {
       const response = await authApi().post(endpoints["join-room"](roomId));
       console.log("Joined chat room:", response.data);
 
-      const appID = 439406758;
-      const serverSecret = "b842dda547baa838f621b89f16df73d9";
+      const appID = 1870455799;
+      const serverSecret = "2fe9470862f0165a65d7f9a4ae8acdf9";
       const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
         appID,
         serverSecret,

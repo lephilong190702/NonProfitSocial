@@ -97,7 +97,7 @@ public class PaymentController {
 
             // Redirect to client-side URL
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://20.247.198.182/result"));
+            headers.setLocation(URI.create("https://nonprofit.southeastasia.cloudapp.azure.com/result"));
 
             try {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -112,7 +112,7 @@ public class PaymentController {
         } else {
             // Redirect to error page or handle error scenario
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("http://20.247.198.182/error"));
+            headers.setLocation(URI.create("https://nonprofit.southeastasia.cloudapp.azure.com/error"));
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         }
     }

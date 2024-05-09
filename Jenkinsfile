@@ -54,11 +54,11 @@ pipeline {
             steps {
                 echo "Deployment MySQL started ..."
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                sh "kubectl apply -f mysql-storage.yaml"
-                sh "kubectl apply -f mysql-secret.yaml"
-                sh "kubectl apply -f mysql-config.yaml"
-                sh "kubectl apply -f mysql-deployment.yaml"
-                sh "kubectl apply -f mysql-service.yaml"
+                sh "kubectl apply -f mysql-storage.yaml -n public-ingress"
+                sh "kubectl apply -f mysql-secret.yaml -n public-ingress"
+                sh "kubectl apply -f mysql-config.yaml -n public-ingress"
+                sh "kubectl apply -f mysql-deployment.yaml -n public-ingress"
+                sh "kubectl apply -f mysql-service.yaml -n public-ingress"
                 echo "Deployment MySQL Finished ..."
                 }
             }
@@ -69,8 +69,8 @@ pipeline {
                 echo "Deployment SpringBoot started ..."
                 sh "sed -i 's/tagversion/${env.BUILD_ID}/g' server-deployment.yaml"
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                sh "kubectl apply -f server-deployment.yaml"
-                sh "kubectl apply -f server-service.yaml"
+                sh "kubectl apply -f server-deployment.yaml -n public-ingress"
+                sh "kubectl apply -f server-service.yaml -n public-ingress"
                 echo "Deployment SpringBoot Finished ..."
                 }
             }
@@ -81,8 +81,8 @@ pipeline {
                 echo "Deployment ReactJS started ..."
                 sh "sed -i 's/tagversion/${env.BUILD_ID}/g' client-deployment.yaml"
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                sh "kubectl apply -f client-deployment.yaml"
-                sh "kubectl apply -f client-service.yaml"
+                sh "kubectl apply -f client-deployment.yaml -n public-ingress"
+                sh "kubectl apply -f client-service.yaml -n public-ingress"
                 echo "Deployment ReactJS Finished ..."
                 }
             }

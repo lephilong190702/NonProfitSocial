@@ -43,7 +43,7 @@ public class AddressController {
     @RequestMapping(value = "/admin/deny/{addressId}", method = { RequestMethod.GET, RequestMethod.POST })
     public String denyAddress(@PathVariable Long addressId) {
         addressService.rejectAddress(addressId);
-        return "redirect:/admin/pending_address";
+        return "redirect:/admin/address";
     }
 
     @GetMapping("/admin/address")

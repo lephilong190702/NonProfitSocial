@@ -37,13 +37,13 @@ public class AddressController {
     @RequestMapping(value = "/admin/accept/{addressId}", method = { RequestMethod.GET, RequestMethod.POST })
     public String approveAddress(@PathVariable Long addressId) {
         addressService.acceptAddress(addressId);
-        return "redirect:/address"; 
+        return "redirect:/admin/address"; 
     }
 
     @RequestMapping(value = "/admin/deny/{addressId}", method = { RequestMethod.GET, RequestMethod.POST })
     public String denyAddress(@PathVariable Long addressId) {
         addressService.rejectAddress(addressId);
-        return "redirect:/address";
+        return "redirect:/admin/address";
     }
 
     @GetMapping("/admin/address")

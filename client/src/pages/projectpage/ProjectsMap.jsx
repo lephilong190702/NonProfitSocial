@@ -30,7 +30,7 @@ const ProjectsMap = () => {
   }, []);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyBE0gDXlRaS_WWteASOzcIFafyUpLQHtvc",
+    googleMapsApiKey: "AIzaSyDnmVdmH7y9Y6-qfko-S14zq6dFsLGwvlY",
     libraries,
   });
 

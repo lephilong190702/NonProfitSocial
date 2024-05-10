@@ -28,6 +28,7 @@ import Result from './pages/payment/Result';
 import TagPage from './pages/social/tag/TagPage';
 import PostNotiPage from './pages/social/notification/PostNotiPage';
 import Error from './pages/payment/Error';
+import CICD from './pages/CICD';
 export const UserContext = createContext();
 
 const App = () => {
@@ -60,6 +61,7 @@ const App = () => {
           <Route path='/error' element={<Error />} />
           <Route path='/tag' element={<TagPage />} />
           <Route path='/noti' element={<PostNotiPage />} />
+          <Route path='/testCICD' element={<CICD />} />
 
         </Routes>
         <Footer />

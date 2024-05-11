@@ -2,8 +2,8 @@ import axios from "axios";
 import cookie from "react-cookies";
 
 const SERVER_CONTEXT = ""
-// const SERVER = "http://localhost:9090" 
-const SERVER="https://nonprofit.southeastasia.cloudapp.azure.com"
+const SERVER = "http://localhost:9090" 
+// const SERVER="https://nonprofit.southeastasia.cloudapp.azure.com"
 
 export const endpoints = {
     "newsCategory": `${SERVER_CONTEXT}/api/ncategories/`,
@@ -31,6 +31,8 @@ export const endpoints = {
     "private-posts": `${SERVER_CONTEXT}/api/private-posts/`,
     "active-post":(postId) => `${SERVER_CONTEXT}/api/post/${postId}`,
     "delete-post":(postId) => `${SERVER_CONTEXT}/api/posts/${postId}`,
+    "update-post":(postId) => `${SERVER_CONTEXT}/api/posts/${postId}`,
+    "post-image":(postId) => `${SERVER_CONTEXT}/api/post/images/${postId}`,
     "react": `${SERVER_CONTEXT}/api/reaction/`,
     "react-post": (postId) => `${SERVER_CONTEXT}/api/reaction/${postId}`,
     "post-comment": `${SERVER_CONTEXT}/api/post-comment/`,

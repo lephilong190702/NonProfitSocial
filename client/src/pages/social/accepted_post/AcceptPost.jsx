@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { authApi, endpoints } from "../../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import moment from "moment";
 import { Button, Dropdown } from "react-bootstrap";
 import { UserContext } from "../../../App";
+import Topbar from "../../../components/social/topbar/Topbar";
 
 const AcceptPost = () => {
   const [post, setPost] = useState([]);
   const [user] = useContext(UserContext);
   const [approvedPosts, setApprovedPosts] = useState([]);
+
+  const [imagePost, setImagePost] = useState([]);
+  const [choosePost, setChoosePost] = useState("");
 
   const activePost = async (postId) => {
     try {
@@ -31,11 +35,25 @@ const AcceptPost = () => {
     }
   }
 
+  const loadImagesByPost = async (postId) => {
+    try {
+      const res = await ApiConfig.get(endpoints["post-image"](postId));
+      setImagePost((prevImage) => ({
+        ...prevImage,
+        [postId]: res.data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
         let res = await authApi().get(endpoints["private-posts"]);
         setPost(res.data);
+
+        res.data.map((p) => loadImagesByPost(p.id));
       } catch (error) {
         console.log(error);
       }
@@ -45,6 +63,7 @@ const AcceptPost = () => {
   }, []);
   return (
     <>
+    <Topbar />
       {post
         .filter((p) => !approvedPosts.includes(p.id))
         .slice()
@@ -70,8 +89,8 @@ const AcceptPost = () => {
                 <span className="postText">{p.content}</span>
               </div>
               <div className="postCenter">
-                {p.images.length > 0 &&
-                  p.images.map((image, index) => (
+                {imagePost[p.id] && imagePost[p.id].length > 0 &&
+                  imagePost[p.id].map((image, index) => (
                     <img src={image.image} key={index} alt="image" />
                   ))}
               </div>

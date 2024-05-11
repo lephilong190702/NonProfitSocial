@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./post.css";
 import { MoreVert } from "@material-ui/icons";
 import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
@@ -43,7 +43,7 @@ const Post = () => {
   const [openComment, setOpenComment] = useState(null);
   const [openReply, setOpenReply] = useState(null);
 
-  const [image, setImage] = useState([]);
+  // const [image, setImage] = useState([]);
   const [editedImages, setEditedImages] = useState([]);
 
   const [commentDisplayModes, setCommentDisplayModes] = useState({});
@@ -65,10 +65,14 @@ const Post = () => {
   const [editReplyModalOpen, setEditReplyModalOpen] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState("");
 
+  const [imagePost, setImagePost] = useState([]);
+  const [choosePost, setChoosePost] = useState("");
+
+  const images = useRef();
+
   const [edit, setEdit] = useState({
     content: "",
-    tags: [],
-    image: [],
+    files: [],
   });
 
   const toggleCommentDisplay = (postId) => {
@@ -154,10 +158,12 @@ const Post = () => {
   };
 
   const handleEditsPost = (post) => {
-    setImage(post.images);
+    // setImagePost(post.images);
+    setChoosePost(post.id);
+    setImagePost(loadImagesByPost(post.id));
     setContentNow(post.content);
     setEditedPostId(post.id);
-    setEditedImages(post.images);
+    setEditedImages(loadImagesByPost(post.id));
     setEditPostModalOpen(true);
   };
 
@@ -173,36 +179,38 @@ const Post = () => {
     setEditReplyModalOpen(true);
   };
 
-  const handleImageChange = (e, index) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newImage = { image: reader.result };
-      const updatedImages = [...editedImages];
-      updatedImages[index] = newImage;
-      setEditedImages(updatedImages);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = async (event) => {
+    const selectedImages = event.target.files;
+    const imageArray = Array.from(selectedImages);
+    console.log(imageArray);
+    setEdit((current) => ({
+      ...current,
+      files: current.files.concat(imageArray),
+    }));
   };
 
   const handleEditPost = async (postId) => {
     try {
-      const updatedPostImages = image.map((image, index) => {
-        if (editedImages[index]) {
-          return editedImages[index];
-        } else {
-          return image;
+
+      const formData = new FormData();
+      formData.append("content", editedPostContent);
+      edit.files.forEach((image, index) => {
+        formData.append(`files[${index}]`, image);
+      });
+
+      if (edit.files.length > 0)
+        for (let i = 0; i < edit.files.length; i++) {
+          formData.append("files", edit.files[i]);
         }
-      });
 
-      const response = await authApi().put(`${endpoints["post"]}${postId}`, {
-        content: editedPostContent,
-        image: updatedPostImages,
-      });
+      console.log(editedPostContent);
 
-      console.log("Kết quả chỉnh sửa bài viết:", response.content);
+      const response = await authApi().put(
+        endpoints["update-post"](postId),
+        formData
+      );
+
+      console.log("Kết quả chỉnh sửa bài viết:", response.data);
 
       setEditPostModalOpen(false);
       setEditedPostId(null);
@@ -295,10 +303,6 @@ const Post = () => {
     }
   };
 
-  const handleShowReplies = (commentId) => {
-    loadRepliesByCommentId(commentId);
-  };
-
   const loadRepliesByCommentId = async (commentId) => {
     try {
       const response = await ApiConfig.get(
@@ -363,8 +367,22 @@ const Post = () => {
     }
   };
 
+  const loadImagesByPost = async (postId) => {
+    try {
+      const res = await ApiConfig.get(endpoints["post-image"](postId));
+      setImagePost((prevImage) => ({
+        ...prevImage,
+        [postId]: res.data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const connectToWebSocket = () => {
-    const socket = new SockJS("https://nonprofit.southeastasia.cloudapp.azure.com/api/ws");
+    const socket = new SockJS(
+      "https://nonprofit.southeastasia.cloudapp.azure.com/api/ws"
+    );
     // const socket = new SockJS("http://localhost:9090/api/ws");
     const stompClient = Client.over(socket);
 
@@ -373,14 +391,6 @@ const Post = () => {
     stompClient.connect(
       {},
       () => {
-        // console.log("Websocket connection established.");
-
-        // stompClient.subscribe("/topic/posts", (message) => {
-        //   console.log("Received message:", message.body);
-        //   const newPost = JSON.parse(message.body);
-        //   setPost((current) => [...current, newPost]);
-        // });
-
         stompClient.subscribe("/topic/comments/", (message) => {
           console.log("Received message:", message.body);
           const newComment = JSON.parse(message.body);
@@ -513,6 +523,8 @@ const Post = () => {
         let res = await ApiConfig.get(endpoints["public-posts"]);
         console.log(res.data);
         setPost(res.data);
+
+        res.data.map((p) => loadImagesByPost(p.id));
 
         const commentPromises = res.data.map((post) => {
           const postId = post.id;
@@ -652,8 +664,9 @@ const Post = () => {
                     </span>
                   </div>
                   <div className="postCenter">
-                    {p.images.length > 0 &&
-                      p.images.map((image, index) => (
+                    {imagePost[p.id] &&
+                      imagePost[p.id].length > 0 &&
+                      imagePost[p.id].map((image, index) => (
                         <img src={image.image} key={index} alt="image" />
                       ))}
                   </div>
@@ -775,7 +788,6 @@ const Post = () => {
                                         </div>
                                       </div>
                                     </span>
-
                                   </div>
                                   <Dropdown
                                     className="commentContent"
@@ -1051,8 +1063,8 @@ const Post = () => {
                     </span>
                   </div>
                   <div className="postCenter">
-                    {p.images.length > 0 &&
-                      p.images.map((image, index) => (
+                    {imagePost[p.id] && imagePost[p.id].length > 0 &&
+                      imagePost[p.id].map((image, index) => (
                         <img src={image.image} key={index} alt="image" />
                       ))}
                   </div>
@@ -1431,16 +1443,19 @@ const Post = () => {
               defaultValue={contentNow}
               onChange={(e) => setEditedPostContent(e.target.value)}
             />
-            {image.map((image, index) => (
-              <div key={index}>
-                <img src={image.image} alt="image" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, index)}
-                />
-              </div>
-            ))}
+            {imagePost[choosePost] &&
+              imagePost[choosePost].map((image, index) => (
+                <div>
+                  <img src={image.image} alt="image" />
+                </div>
+              ))}
+            <input
+              type="file"
+              // accept="image/*"
+              ref={images}
+              multiple
+              onChange={(e) => handleImageChange(e)}
+            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

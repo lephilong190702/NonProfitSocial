@@ -163,10 +163,12 @@ const PostNotiPage = () => {
   };
 
   const handleEditsPost = (post) => {
-    setImage(post.images);
+    // setImagePost(post.images);
+    setChoosePost(post.id);
+    setImagePost(loadImagesByPost(post.id));
     setContentNow(post.content);
     setEditedPostId(post.id);
-    setEditedImages(post.images);
+    setEditedImages(loadImagesByPost(post.id));
     setEditPostModalOpen(true);
   };
 
@@ -182,36 +184,38 @@ const PostNotiPage = () => {
     setEditReplyModalOpen(true);
   };
 
-  const handleImageChange = (e, index) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newImage = { image: reader.result };
-      const updatedImages = [...editedImages];
-      updatedImages[index] = newImage;
-      setEditedImages(updatedImages);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = async (event) => {
+    const selectedImages = event.target.files;
+    const imageArray = Array.from(selectedImages);
+    console.log(imageArray);
+    setEdit((current) => ({
+      ...current,
+      files: current.files.concat(imageArray),
+    }));
   };
 
   const handleEditPost = async (postId) => {
     try {
-      const updatedPostImages = image.map((image, index) => {
-        if (editedImages[index]) {
-          return editedImages[index];
-        } else {
-          return image;
+
+      const formData = new FormData();
+      formData.append("content", editedPostContent);
+      edit.files.forEach((image, index) => {
+        formData.append(`files[${index}]`, image);
+      });
+
+      if (edit.files.length > 0)
+        for (let i = 0; i < edit.files.length; i++) {
+          formData.append("files", edit.files[i]);
         }
-      });
 
-      const response = await authApi().put(`${endpoints["post"]}${postId}`, {
-        content: editedPostContent,
-        image: updatedPostImages,
-      });
+      console.log(editedPostContent);
 
-      console.log("Kết quả chỉnh sửa bài viết:", response.content);
+      const response = await authApi().put(
+        endpoints["update-post"](postId),
+        formData
+      );
+
+      console.log("Kết quả chỉnh sửa bài viết:", response.data);
 
       setEditPostModalOpen(false);
       setEditedPostId(null);

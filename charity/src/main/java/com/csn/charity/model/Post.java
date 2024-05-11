@@ -54,6 +54,7 @@ public class Post implements Serializable {
     @JoinTable(name = "post_tag", 
                 joinColumns = @JoinColumn(name = "post_id"), 
                 inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JsonIgnore
     private List<Tag> tags = new ArrayList<>();
 
     @ManyToOne
@@ -61,6 +62,7 @@ public class Post implements Serializable {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<PostImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -72,6 +74,7 @@ public class Post implements Serializable {
     private List<Notification> notifications = new ArrayList<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserReactPost> reacts = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)

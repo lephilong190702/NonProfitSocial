@@ -8,6 +8,7 @@ const AcceptPost = () => {
   const [post, setPost] = useState([]);
   const [user] = useContext(UserContext);
   const [approvedPosts, setApprovedPosts] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const activePost = async (postId) => {
     try {
@@ -31,11 +32,28 @@ const AcceptPost = () => {
     }
   }
 
+  const loadTagsByPost = async (postId) => {
+    try {
+      const { data } = await ApiConfig.get(
+        endpoints["post-tags"](postId)
+      );
+      setTags((prevTags) => ({
+        ...prevTags,
+        [postId]: data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
         let res = await authApi().get(endpoints["private-posts"]);
         setPost(res.data);
+        console.log("POST" + res.data);
+        res.data.forEach((p) => loadTagsByPost(p.id));
+
       } catch (error) {
         console.log(error);
       }
@@ -68,6 +86,19 @@ const AcceptPost = () => {
               </div>
               <div className="postCenter">
                 <span className="postText">{p.content}</span>
+              </div>
+              <div className="postCenter">
+                <span className="postText">
+                  {tags[p.id] && tags[p.id].map((tag) => (
+                    <Link
+                      to={`/tag/?name=${tag.name}`}
+                      style={{ textDecoration: "none" }}
+                      key={tag.id}
+                    >
+                      <span className="postText link">#{tag.name}</span>
+                    </Link>
+                  ))}
+                </span>
               </div>
               <div className="postCenter">
                 {p.images.length > 0 &&

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { authApi, endpoints } from "../../../configs/ApiConfig";
+import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import moment from "moment";
 import { Button, Dropdown } from "react-bootstrap";
 import { UserContext } from "../../../App";
+import { Link } from "react-router-dom";
 
 const AcceptPost = () => {
   const [post, setPost] = useState([]);
@@ -37,6 +38,8 @@ const AcceptPost = () => {
       const { data } = await ApiConfig.get(
         endpoints["post-tags"](postId)
       );
+
+      console.log("TAG"+ tags);
       setTags((prevTags) => ({
         ...prevTags,
         [postId]: data,

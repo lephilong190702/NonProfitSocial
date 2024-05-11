@@ -111,7 +111,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post updatePost(Long id, PostDTO postDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null ||!authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("Không đủ quyền truy cập!!!");
         }
 
@@ -122,7 +122,7 @@ public class PostServiceImpl implements PostService {
         }
 
         Post post = this.postRepository.findById(id)
-               .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy bài viết với ID: " + id));
 
         if (!post.getUser().equals(user)) {
             throw new SecurityException("Bạn không có quyền cập nhật bài viết này!!");
@@ -132,40 +132,45 @@ public class PostServiceImpl implements PostService {
         post.setStatus(false);
 
         // Clear old images
+        List<PostImage> oldImages = this.postImageRepository.findByPost(post);
+        System.out.println("OLD IMAGES:" + oldImages);
         post.getImages().clear();
-        postImageRepository.deleteAll(post.getImages());
+        postImageRepository.deleteAll(oldImages);
 
-        // Add new images
-        if (postDTO.getFiles() != null && !postDTO.getFiles().isEmpty()) {
-            List<PostImage> images = new ArrayList<>();
-            try {
-                postDTO.getFiles().forEach(file -> {
-                    if (!file.isEmpty()) {
-                        try {
-                            Map res = this.cloudinary.uploader().upload(file.getBytes(),
-                                    ObjectUtils.asMap("resource_type", "auto"));
+        List<PostImage> newImages = post.getImages();
+        System.out.println("NEW IMAGES:" + newImages);
 
-                            String imageUrl = res.get("secure_url").toString();
-                            System.out.println("Image URL: " + imageUrl);
-                            PostImage img = new PostImage();
-                            img.setImage(imageUrl);
-                            img.setPost(post);
-                            postRepository.save(post);
-                            images.add(img);
-                            postImageRepository.save(img);
-                        } catch (IOException ex) {
-                            Logger.getLogger(ProjectServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        if (post.getImages().isEmpty()) {
+            if (postDTO.getFiles() != null && !postDTO.getFiles().isEmpty()) {
+                List<PostImage> images = new ArrayList<>();
+                try {
+                    postDTO.getFiles().forEach(file -> {
+                        if (!file.isEmpty()) {
+                            try {
+                                Map res = this.cloudinary.uploader().upload(file.getBytes(),
+                                        ObjectUtils.asMap("resource_type", "auto"));
+
+                                String imageUrl = res.get("secure_url").toString();
+                                System.out.println("Image URL: " + imageUrl);
+                                PostImage img = new PostImage();
+                                img.setImage(imageUrl);
+                                img.setPost(post);
+                                postRepository.save(post);
+                                images.add(img);
+                                postImageRepository.save(img);
+                            } catch (IOException ex) {
+                                Logger.getLogger(ProjectServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                });
-                post.setImages(images);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                    });
+                    post.setImages(images);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
         return this.postRepository.save(post);
     }
-
 
     @Override
     public void deletePost(Long id) {
@@ -239,11 +244,17 @@ public class PostServiceImpl implements PostService {
         return postRepository.search(kw);
     }
 
-
     @Override
     public List<Post> getPostsByTags(String name) {
         Tag tag = this.tagRepository.findByName(name);
-        
+
         return this.postRepository.findByTags(tag);
+    }
+
+    @Override
+    public List<PostImage> getImagesByPost(Long id) {
+        Post post = this.postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        return this.postImageRepository.findByPost(post);
     }
 }

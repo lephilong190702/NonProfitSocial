@@ -33,6 +33,5 @@ public class ProjectImage implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "project_id")
-    @JsonIgnore
     private Project project;
 }

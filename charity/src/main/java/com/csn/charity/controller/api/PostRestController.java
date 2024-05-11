@@ -112,8 +112,15 @@ public class PostRestController {
     @PutMapping("/posts/{id}")
     @CrossOrigin
     public ResponseEntity<String> updatePost(@PathVariable(value = "id") Long id,
-            @RequestBody PostDTO postDTO) {
+            @RequestParam(value = "content", required = false) String content,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @RequestParam(value = "tags", required = false) List<String> tags) {
         try {
+            PostDTO postDTO = new PostDTO();
+            postDTO.setContent(content);
+            postDTO.setFiles(files);
+            postDTO.setHashtags(tags);
+
             this.postService.updatePost(id, postDTO);
             Post updatedPost = this.postService.getPostById(id);
             messagingTemplate.convertAndSend("/topic/posts/" + id, updatedPost);
@@ -156,6 +163,28 @@ public class PostRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/post/images/{id}")
+    @CrossOrigin
+    public ResponseEntity<?> getImagesByPost(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(postService.getImagesByPost(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("/post/tags/{id}")
+    @CrossOrigin
+    public ResponseEntity<?> getProjectByCategory(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(tagService.getTagsByPost(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @PostMapping("/post-comment/")

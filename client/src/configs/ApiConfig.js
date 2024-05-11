@@ -12,6 +12,7 @@ export const endpoints = {
     "reply-news": (newsId) => `${SERVER_CONTEXT}/api/ncategories/${newsId}/news/`,
     "project": `${SERVER_CONTEXT}/api/projects/`,
     "projectCategory": `${SERVER_CONTEXT}/api/pcategories/`,
+    "images": (projectId) => `${SERVER_CONTEXT}/api/projects/images/${projectId}`,
     "login": `${SERVER_CONTEXT}/api/login/`,
     "current-user": `${SERVER_CONTEXT}/api/current-user/`,
     "profile": `${SERVER_CONTEXT}/api/profile/`,
@@ -59,6 +60,8 @@ export const endpoints = {
     // "tags": (name) => `${SERVER_CONTEXT}/api/tags/${name}`,
     "notification": (userId) => `${SERVER_CONTEXT}/api/notifications/${userId}`,
     "read-noti": (userId) => `${SERVER_CONTEXT}/api/mark-as-read/${userId}`,
+    "post-tags": (projectId) => `${SERVER_CONTEXT}/api/post/tags/${projectId}`,
+    "post-images": (projectId) => `${SERVER_CONTEXT}/api/post/images/${projectId}`,
 
 }
 

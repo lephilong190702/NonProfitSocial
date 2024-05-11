@@ -73,4 +73,15 @@ public class ProjectRestController {
         
     }
 
+    @GetMapping("/projects/images/{id}")
+    @CrossOrigin
+    public ResponseEntity<?> getImagesByCategory(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(projectService.getImagesByProject(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        
+    }
+
 }

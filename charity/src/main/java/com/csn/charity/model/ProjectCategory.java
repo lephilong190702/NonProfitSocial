@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,5 +39,6 @@ public class ProjectCategory implements Serializable{
     private String name;
 
     @OneToMany(mappedBy = "category",  cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Project> projects = new ArrayList<>();
 }

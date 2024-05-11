@@ -71,20 +71,6 @@ const CustomNavbar = () => {
       };
     };
 
-    //   useEffect(() => {
-    //     const handleScroll = () => {
-    //         if (window.scrollY > 1000) {
-    //             setScrolled(true);
-    //         } else {
-    //             setScrolled(false);
-    //         }
-    //     };
-    //     window.addEventListener('scroll', handleScroll);
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, []);
-
     const loadProjects = async () => {
       try {
         let res = await ApiConfig.get(endpoints["projectCategory"]);

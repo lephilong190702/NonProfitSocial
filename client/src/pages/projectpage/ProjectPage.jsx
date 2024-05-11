@@ -35,6 +35,7 @@ const ProjectPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [amount, setAmount] = useState(null);
   const [orderInfo, setOrderInfo] = useState("");
+  const [images, setImages] = useState([]);
 
   const projectsPerPage = 4;
 
@@ -55,8 +56,23 @@ const ProjectPage = () => {
 
         let res = await ApiConfig.get(e);
         setProject(res.data);
+        res.data.forEach((p) => loadProjectImages(p.id));
       } catch (ex) {
         console.error(ex);
+      }
+    };
+
+    const loadProjectImages = async (projectId) => {
+      try {
+        const { data } = await ApiConfig.get(
+          endpoints["images"](projectId)
+        );
+        setImages((prevImages) => ({
+          ...prevImages,
+          [projectId]: data, 
+        }));
+      } catch (error) {
+        console.log(error);
       }
     };
 
@@ -107,59 +123,7 @@ const ProjectPage = () => {
     }
   };
 
-  // const handlePayment = async () => {
-  //   if (selectedProjectId === null) {
-  //     console.error("Chưa chọn dự án để đóng góp.");
-  //     return;
-  //   }
-    
-  //   if (!pay.donateAmount.trim()) {
-  //     setErrorMessage("Vui lòng nhập số tiền đóng góp.");
-  //     return;
-  //   }
-
-  //   const donationAmount = parseFloat(pay.donateAmount);
-  //   console.log(donationAmount);
-  //   if (
-  //     donationAmount > 1000000000 ||
-  //     donationAmount < 10000
-  //   ) {
-  //     setErrorMessage(
-  //       "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
-  //     );
-  //     console.log(errorMessage);
-  //     return;
-  //   }
-
-  //   try {
-  //     setErrorMessage("");
-  //     const formData = new FormData();
-  //     formData.append("projectId", selectedProjectId);
-  //     formData.append("donateAmount", pay.donateAmount);
-  //     formData.append("note", pay.note);
-  //     let res = await authApi().post(
-  //       endpoints["vn-pay"](selectedProjectId),
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     );
-
-  //     const redirectUrl = res.data;
-  //     console.log(res.data);
-
-  //     if (redirectUrl) {
-  //       window.location.href = redirectUrl;
-  //     } else {
-  //       console.error("Không có đường dẫn trả về từ server.");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
+  
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
@@ -222,7 +186,9 @@ const ProjectPage = () => {
                   <Card.Img
                     variant="top"
                     src={
-                      p.images && p.images.length > 0 ? p.images[0].image : ""
+                      images[p.id] && images[p.id].length > 0
+                        ? images[p.id][0].image // Sử dụng hình ảnh đầu tiên theo projectId từ đối tượng images
+                        : "" // Nếu không có hình ảnh, sử dụng một giá trị rỗng
                     }
                     className="card-img"
                   />

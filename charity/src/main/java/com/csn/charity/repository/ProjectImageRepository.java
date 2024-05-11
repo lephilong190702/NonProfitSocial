@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectImage;
+import java.util.List;
+
 
 public interface ProjectImageRepository extends JpaRepository<ProjectImage, Long> {
     @Modifying
@@ -14,4 +17,5 @@ public interface ProjectImageRepository extends JpaRepository<ProjectImage, Long
     @Query("DELETE FROM ProjectImage p WHERE p.project.id = :projectId")
     void deleteByProjectId(@Param("projectId") Long projectId);
 
+    List<ProjectImage> findByProject(Project project);
 }

@@ -38,6 +38,7 @@ const ProjectDetails = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [address, setAddress] = useState([]);
+  const [images, setImages] = useState([]);
 
   const [errorLat, setErrorLat] = useState("");
   const [errorLng, setErrorLng] = useState("");
@@ -87,9 +88,21 @@ const ProjectDetails = () => {
       }
     };
 
+    const loadProjectImages = async () => {
+      try {
+        const { data } = await ApiConfig.get(
+          endpoints["images"](projectId)
+        );
+        setImages(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     loadAddressProject();
     loadContributor();
     loadProject();
+    loadProjectImages();
   }, [projectId]);
 
   const handleAddressProject = async () => {
@@ -212,9 +225,9 @@ const ProjectDetails = () => {
                 <div className="basis-2/3 flex flex-row gap-7 select-none">
                   <div className="flex flex-col h-full">
                     <div className="flex flex-col h-full w-full">
-                      {project.images.length > 0 && (
+                      {images.length > 0 && (
                         <div className="image-container">
-                          {project.images.map((image, index) => (
+                          {images.map((image, index) => (
                             <img
                               src={image.image}
                               key={index}

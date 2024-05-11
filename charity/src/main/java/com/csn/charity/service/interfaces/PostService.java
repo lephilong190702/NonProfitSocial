@@ -6,6 +6,7 @@ import com.csn.charity.dto.PostDTO;
 import com.csn.charity.model.New;
 import com.csn.charity.model.Notification;
 import com.csn.charity.model.Post;
+import com.csn.charity.model.PostImage;
 import com.csn.charity.model.Tag;
 
 public interface PostService {
@@ -31,4 +32,5 @@ public interface PostService {
 
     List<Post> getPostsByTags(String name);
 
+    List<PostImage> getImagesByPost(Long id);
 }

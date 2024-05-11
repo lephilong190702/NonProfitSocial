@@ -42,7 +42,8 @@ export default function NewsList() {
         let e = endpoints.news;
 
         const cateId = q.get("cateId");
-        if (cateId !== null) e = `${e}ncategories/${cateId}/`;
+        if (cateId !== null)
+           e = `${e}ncategories/${cateId}/`;
         else {
           const kw = q.get("kw");
           if (kw !== null) e = `${e}search?kw=${kw}`;
@@ -124,19 +125,6 @@ export default function NewsList() {
               </div>
             );
           })}
-          {/* {productBestSeller.map((category, index) => (
-            <div className="px-2" key={index}>
-              <News
-                id={1}
-                url={category.url}
-                name={category.name}
-                skinType={category.skinType}
-                price={category.price}
-                totalStars={category.totalStars}
-                totalRates={category.totalRates}
-              />
-            </div>
-          ))} */}
         </Slider>
       </div>
     </div>

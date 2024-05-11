@@ -41,13 +41,14 @@ const ProjectsList = () => {
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
   const url = new URL(currentURL);
-  
+
   const [selectedProjectTitle, setSelectedProjectTitle] = useState("");
   const [displayedProjects, setDisplayedProjects] = useState(4);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [amount, setAmount] = useState(null);
   const [orderInfo, setOrderInfo] = useState("");
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     const savedProjectId = localStorage.getItem("selectedProjectId");
@@ -65,13 +66,29 @@ const ProjectsList = () => {
         }
 
         let res = await ApiConfig.get(e);
+        console.log("PROJECT: " + res.data)
         setProject(res.data);
+
+        res.data.forEach((p) => loadProjectImages(p.id));
       } catch (ex) {
         console.error(ex);
       }
     };
 
-  
+
+    const loadProjectImages = async (projectId) => {
+      try {
+        const { data } = await ApiConfig.get(
+          endpoints["images"](projectId)
+        );
+        setImages((prevImages) => ({
+          ...prevImages,
+          [projectId]: data, 
+        }));
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     loadProject();
   }, [q]);
@@ -172,7 +189,9 @@ const ProjectsList = () => {
                   <Card.Img
                     variant="top"
                     src={
-                      p.images && p.images.length > 0 ? p.images[0].image : ""
+                      images[p.id] && images[p.id].length > 0
+                        ? images[p.id][0].image // Sử dụng hình ảnh đầu tiên theo projectId từ đối tượng images
+                        : "" // Nếu không có hình ảnh, sử dụng một giá trị rỗng
                     }
                     className="card-img"
                   />

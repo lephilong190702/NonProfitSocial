@@ -3,6 +3,7 @@ package com.csn.charity.service.interfaces;
 import java.util.List;
 
 import com.csn.charity.model.Project;
+import com.csn.charity.model.ProjectImage;
 
 public interface ProjectService {
     List<Project> getAll();
@@ -22,4 +23,6 @@ public interface ProjectService {
     List<Project> getProjectsByCategory(Long categoryId);
 
     List<Project> search(String kw);
+
+    List<ProjectImage> getImagesByProject(Long id);
 }

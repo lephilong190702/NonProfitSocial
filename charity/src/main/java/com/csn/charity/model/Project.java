@@ -73,16 +73,18 @@ public class Project implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private ProjectCategory category;
      
     @OneToMany(mappedBy = "project" )
+    @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
     
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ProjectImage> images = new ArrayList<>();
     
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<UserVolunteerProject> volunteers = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")
@@ -90,5 +92,6 @@ public class Project implements Serializable{
     private List<UserRatingProject> ratings = new ArrayList<>();
 
     @OneToMany(mappedBy = "project")
+    @JsonIgnore
     private List<Address> addresses = new ArrayList<>();
 }

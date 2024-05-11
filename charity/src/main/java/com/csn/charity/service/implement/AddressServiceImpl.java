@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class AddressServiceImpl implements AddressService  {
     private HistoryRepository historyRepository;
 
     @Override
+    @Cacheable(value = "addressByProject", key ="#projectId")
     public List<Address> getAddressesByProject(Long projectId) {
         Project project = this.projectRepository.findById(projectId)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + projectId));
@@ -39,11 +41,13 @@ public class AddressServiceImpl implements AddressService  {
     }
 
     @Override
+    @Cacheable(value = "addresses")
     public List<Address> getAll() {
         return this.addressRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "address", key ="#id")
     public Address getById(Long id) {
         return this.addressRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy địa chỉ với ID: " + id));

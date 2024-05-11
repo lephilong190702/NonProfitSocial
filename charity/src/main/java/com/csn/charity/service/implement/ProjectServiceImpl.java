@@ -34,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectCategoryRepository projectCategoryRepository;
 
     @Override
-    // @Cacheable(value="projects")
+    @Cacheable(value="projects")
     public List<Project> getAll() {
         return this.projectRepository.findAll();
     }
@@ -125,6 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Cacheable(value="projects", key = "#id")
     public Project get(Long id) {
         return this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
@@ -141,6 +142,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Cacheable(value = "projectByCategory", key = "#categoryId")
     public List<Project> getProjectsByCategory(Long categoryId) {
         ProjectCategory projectCategory = this.projectCategoryRepository.findById(categoryId)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + categoryId));
@@ -150,6 +152,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> search(String kw) {
         return projectRepository.search(kw);
+    }
+
+    @Override
+    @Cacheable(value = "projectImages", key = "#id")
+    public List<ProjectImage> getImagesByProject(Long id) {
+        Project project = this.projectRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+        return this.projectImageRepository.findByProject(project);
     }
 
 }

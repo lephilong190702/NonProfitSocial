@@ -3,6 +3,7 @@ package com.csn.charity.service.implement;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.model.ProjectCategory;
@@ -20,11 +21,13 @@ public class ProjectCategorySericeImpl implements ProjectCategoryService {
     }
 
     @Override
+    @Cacheable(value = "projectCategories")
     public List<ProjectCategory> getAll() {
         return this.projectCategoryRepository.findAll();
     }
 
     @Override
+    @Cacheable(value = "projectCategory", key = "#id")
     public ProjectCategory get(Long id) {
         return this.projectCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));

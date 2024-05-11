@@ -4,11 +4,13 @@ import moment from "moment";
 import { Button, Dropdown } from "react-bootstrap";
 import { UserContext } from "../../../App";
 import Topbar from "../../../components/social/topbar/Topbar";
+import { Link } from "react-router-dom";
 
 const AcceptPost = () => {
   const [post, setPost] = useState([]);
   const [user] = useContext(UserContext);
   const [approvedPosts, setApprovedPosts] = useState([]);
+  const [tags, setTags] = useState([]);
 
   const [imagePost, setImagePost] = useState([]);
   const [choosePost, setChoosePost] = useState("");
@@ -47,6 +49,22 @@ const AcceptPost = () => {
     }
   };
 
+  const loadTagsByPost = async (postId) => {
+    try {
+      const { data } = await ApiConfig.get(
+        endpoints["post-tags"](postId)
+      );
+
+      console.log("TAG"+ tags);
+      setTags((prevTags) => ({
+        ...prevTags,
+        [postId]: data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const loadPosts = async () => {
       try {
@@ -54,6 +72,9 @@ const AcceptPost = () => {
         setPost(res.data);
 
         res.data.map((p) => loadImagesByPost(p.id));
+        console.log("POST" + res.data);
+        res.data.forEach((p) => loadTagsByPost(p.id));
+
       } catch (error) {
         console.log(error);
       }
@@ -87,6 +108,19 @@ const AcceptPost = () => {
               </div>
               <div className="postCenter">
                 <span className="postText">{p.content}</span>
+              </div>
+              <div className="postCenter">
+                <span className="postText">
+                  {tags[p.id] && tags[p.id].map((tag) => (
+                    <Link
+                      to={`/tag/?name=${tag.name}`}
+                      style={{ textDecoration: "none" }}
+                      key={tag.id}
+                    >
+                      <span className="postText link">#{tag.name}</span>
+                    </Link>
+                  ))}
+                </span>
               </div>
               <div className="postCenter">
                 {imagePost[p.id] && imagePost[p.id].length > 0 &&

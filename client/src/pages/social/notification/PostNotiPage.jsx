@@ -518,6 +518,20 @@ const PostNotiPage = () => {
     }
   };
 
+  const loadTagsByPost = async (postId) => {
+    try {
+      const { data } = await ApiConfig.get(
+        endpoints["post-tags"](postId)
+      );
+      setTags((prevTags) => ({
+        ...prevTags,
+        [postId]: data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const loadTag = async () => {
       try {
@@ -533,6 +547,9 @@ const PostNotiPage = () => {
         const res2 = await ApiConfig.get(p);
         console.log(res2.data);
         setPosts(res2.data);
+
+        loadTagsByPost(res2.data.id);
+
 
         //   const commentPromises = res2.data.map((post) => {
         const postId1 = res2.data.id;
@@ -658,7 +675,7 @@ const PostNotiPage = () => {
             </div>
             <div className="postCenter">
               <span className="postText">
-                {p.tags.map((tag) => (
+                {tags[p.id] && tags[p.id].map((tag) => (
                   <Link
                     to={`/tag/?name=${tag.name}`}
                     style={{ textDecoration: "none" }}

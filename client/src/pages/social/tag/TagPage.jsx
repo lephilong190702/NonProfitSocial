@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ApiConfig, { authApi, endpoints } from "../../../configs/ApiConfig";
 import { UserContext } from "../../../App";
@@ -67,10 +67,14 @@ const TagPage = () => {
   const [editReplyModalOpen, setEditReplyModalOpen] = useState(false);
   const [editedReplyContent, setEditedReplyContent] = useState("");
 
+  const [imagePost, setImagePost] = useState([]);
+  const [choosePost, setChoosePost] = useState("");
+
+  const images = useRef();
+
   const [edit, setEdit] = useState({
     content: "",
-    tags: [],
-    image: [],
+    files: [],
   });
 
   let name = q.get("name");
@@ -158,10 +162,12 @@ const TagPage = () => {
   };
 
   const handleEditsPost = (post) => {
-    setImage(post.images);
+    // setImagePost(post.images);
+    setChoosePost(post.id);
+    setImagePost(loadImagesByPost(post.id));
     setContentNow(post.content);
     setEditedPostId(post.id);
-    setEditedImages(post.images);
+    setEditedImages(loadImagesByPost(post.id));
     setEditPostModalOpen(true);
   };
 
@@ -177,36 +183,37 @@ const TagPage = () => {
     setEditReplyModalOpen(true);
   };
 
-  const handleImageChange = (e, index) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newImage = { image: reader.result };
-      const updatedImages = [...editedImages];
-      updatedImages[index] = newImage;
-      setEditedImages(updatedImages);
-    };
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = async (event) => {
+    const selectedImages = event.target.files;
+    const imageArray = Array.from(selectedImages);
+    console.log(imageArray);
+    setEdit((current) => ({
+      ...current,
+      files: current.files.concat(imageArray),
+    }));
   };
 
   const handleEditPost = async (postId) => {
     try {
-      const updatedPostImages = image.map((image, index) => {
-        if (editedImages[index]) {
-          return editedImages[index];
-        } else {
-          return image;
+      const formData = new FormData();
+      formData.append("content", editedPostContent);
+      edit.files.forEach((image, index) => {
+        formData.append(`files[${index}]`, image);
+      });
+
+      if (edit.files.length > 0)
+        for (let i = 0; i < edit.files.length; i++) {
+          formData.append("files", edit.files[i]);
         }
-      });
 
-      const response = await authApi().put(`${endpoints["post"]}${postId}`, {
-        content: editedPostContent,
-        image: updatedPostImages,
-      });
+      console.log(editedPostContent);
 
-      console.log("Kết quả chỉnh sửa bài viết:", response.content);
+      const response = await authApi().put(
+        endpoints["update-post"](postId),
+        formData
+      );
+
+      console.log("Kết quả chỉnh sửa bài viết:", response.data);
 
       setEditPostModalOpen(false);
       setEditedPostId(null);
@@ -367,8 +374,22 @@ const TagPage = () => {
     }
   };
 
+  const loadImagesByPost = async (postId) => {
+    try {
+      const res = await ApiConfig.get(endpoints["post-image"](postId));
+      setImagePost((prevImage) => ({
+        ...prevImage,
+        [postId]: res.data,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const connectToWebSocket = () => {
-    const socket = new SockJS("https://nonprofit.southeastasia.cloudapp.azure.com/api/ws");
+    const socket = new SockJS(
+      "https://nonprofit.southeastasia.cloudapp.azure.com/api/ws"
+    );
     // const socket = new SockJS("http://localhost:9090/api/ws");
     const stompClient = Client.over(socket);
 
@@ -503,9 +524,7 @@ const TagPage = () => {
 
   const loadTagsByPost = async (postId) => {
     try {
-      const { data } = await ApiConfig.get(
-        endpoints["post-tags"](postId)
-      );
+      const { data } = await ApiConfig.get(endpoints["post-tags"](postId));
       setTags((prevTags) => ({
         ...prevTags,
         [postId]: data,
@@ -533,6 +552,7 @@ const TagPage = () => {
 
         res2.data.forEach((p) => loadTagsByPost(p.id));
 
+        res2.data.map((p) => loadImagesByPost(p.id));
 
         const commentPromises = res2.data.map((post) => {
           const postId = post.id;
@@ -660,20 +680,22 @@ const TagPage = () => {
               </div>
               <div className="postCenter">
                 <span className="postText">
-                  {tags[p.id] && tags[p.id].map((tag) => (
-                    <Link
-                      to={`/tag/?name=${tag.name}`}
-                      style={{ textDecoration: "none" }}
-                      key={tag.id}
-                    >
-                      <span className="postText link">#{tag.name}</span>
-                    </Link>
-                  ))}
+                  {tags[p.id] &&
+                    tags[p.id].map((tag) => (
+                      <Link
+                        to={`/tag/?name=${tag.name}`}
+                        style={{ textDecoration: "none" }}
+                        key={tag.id}
+                      >
+                        <span className="postText link">#{tag.name}</span>
+                      </Link>
+                    ))}
                 </span>
               </div>
               <div className="postCenter">
-                {p.images.length > 0 &&
-                  p.images.map((image, index) => (
+                {imagePost[p.id] &&
+                  imagePost[p.id].length > 0 &&
+                  imagePost[p.id].map((image, index) => (
                     <img src={image.image} key={index} alt="image" />
                   ))}
               </div>
@@ -738,7 +760,7 @@ const TagPage = () => {
                 <div className="commentList">
                   <div>
                     {Array.isArray(comments[p.id]) &&
-                      comments[p.id].length > 0 ? (
+                    comments[p.id].length > 0 ? (
                       comments[p.id]
                         .slice(commentDisplayModes[p.id] ? undefined : -4)
                         .reverse()
@@ -854,95 +876,95 @@ const TagPage = () => {
                                     : "Hiển thị toàn bộ phản hồi"}
                                 </Link>
                                 {Array.isArray(replies[comment.id]) &&
-                                  replies[comment.id].length > 0
+                                replies[comment.id].length > 0
                                   ? replies[comment.id]
-                                    .slice(
-                                      replyDisplayModes[comment.id]
-                                        ? undefined
-                                        : -2
-                                    )
-                                    // .reverse()
-                                    .map((reply) => (
-                                      <div key={reply.id} className="reply">
-                                        <span
-                                          className="replyContent"
-                                          style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          <div className="reply-avatar">
-                                            <img
-                                              src={reply.user.profile.avatar}
-                                              alt="avatar"
-                                              style={{
-                                                width: "32px",
-                                                height: "32px",
-                                                borderRadius: "50%",
-                                                objectFit: "cover",
-                                                marginRight: "5px",
-                                              }}
-                                            />{" "}
-                                          </div>
-                                          <div className="reply-details">
-                                            <div className="reply-username">
-                                              {reply.user.username}
-                                            </div>
-                                            <div className="reply-content">
-                                              {reply.content}
-                                            </div>
-                                            <div className="reply-time">
-                                              {" "}
-                                              {moment(
-                                                reply.createDate
-                                              ).fromNow()}
-                                            </div>
-                                          </div>
-                                        </span>
-                                        <Dropdown
-                                          className="replyContent"
-                                          style={{
-                                            position: "absolute",
-                                            // top: 0,
-                                            right: 0,
-                                            display: "flex",
-                                            marginBottom: "10px",
-                                          }}
-                                          show={replyOpen[reply.id]}
-                                          onToggle={() =>
-                                            handleReplyToggle(reply.id)
-                                          }
-                                        >
-                                          <Dropdown.Toggle
-                                            variant="link"
-                                            className="btn-more-vert"
+                                      .slice(
+                                        replyDisplayModes[comment.id]
+                                          ? undefined
+                                          : -2
+                                      )
+                                      // .reverse()
+                                      .map((reply) => (
+                                        <div key={reply.id} className="reply">
+                                          <span
+                                            className="replyContent"
                                             style={{
-                                              border: "none",
-                                              boxShadow: "none",
+                                              display: "flex",
+                                              alignItems: "center",
+                                              marginBottom: "10px",
                                             }}
                                           >
-                                            {/* <FontAwesomeIcon icon={faList} /> */}
-                                          </Dropdown.Toggle>
-                                          <Dropdown.Menu>
-                                            <Dropdown.Item
-                                              onClick={() =>
-                                                handleEditReply(reply)
-                                              }
+                                            <div className="reply-avatar">
+                                              <img
+                                                src={reply.user.profile.avatar}
+                                                alt="avatar"
+                                                style={{
+                                                  width: "32px",
+                                                  height: "32px",
+                                                  borderRadius: "50%",
+                                                  objectFit: "cover",
+                                                  marginRight: "5px",
+                                                }}
+                                              />{" "}
+                                            </div>
+                                            <div className="reply-details">
+                                              <div className="reply-username">
+                                                {reply.user.username}
+                                              </div>
+                                              <div className="reply-content">
+                                                {reply.content}
+                                              </div>
+                                              <div className="reply-time">
+                                                {" "}
+                                                {moment(
+                                                  reply.createDate
+                                                ).fromNow()}
+                                              </div>
+                                            </div>
+                                          </span>
+                                          <Dropdown
+                                            className="replyContent"
+                                            style={{
+                                              position: "absolute",
+                                              // top: 0,
+                                              right: 0,
+                                              display: "flex",
+                                              marginBottom: "10px",
+                                            }}
+                                            show={replyOpen[reply.id]}
+                                            onToggle={() =>
+                                              handleReplyToggle(reply.id)
+                                            }
+                                          >
+                                            <Dropdown.Toggle
+                                              variant="link"
+                                              className="btn-more-vert"
+                                              style={{
+                                                border: "none",
+                                                boxShadow: "none",
+                                              }}
                                             >
-                                              Chỉnh sửa phản hồi
-                                            </Dropdown.Item>
-                                            <Dropdown.Item
-                                              onClick={() =>
-                                                handleDeleteReply(reply.id)
-                                              }
-                                            >
-                                              Xóa phản hồi
-                                            </Dropdown.Item>
-                                          </Dropdown.Menu>
-                                        </Dropdown>
-                                      </div>
-                                    ))
+                                              {/* <FontAwesomeIcon icon={faList} /> */}
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                              <Dropdown.Item
+                                                onClick={() =>
+                                                  handleEditReply(reply)
+                                                }
+                                              >
+                                                Chỉnh sửa phản hồi
+                                              </Dropdown.Item>
+                                              <Dropdown.Item
+                                                onClick={() =>
+                                                  handleDeleteReply(reply.id)
+                                                }
+                                              >
+                                                Xóa phản hồi
+                                              </Dropdown.Item>
+                                            </Dropdown.Menu>
+                                          </Dropdown>
+                                        </div>
+                                      ))
                                   : null}
                                 {user && ( // Kiểm tra xem người dùng đã đăng nhập hay chưa
                                   <Form.Control
@@ -1031,16 +1053,19 @@ const TagPage = () => {
               defaultValue={contentNow}
               onChange={(e) => setEditedPostContent(e.target.value)}
             />
-            {image.map((image, index) => (
-              <div key={index}>
-                <img src={image.image} alt="image" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageChange(e, index)}
-                />
-              </div>
-            ))}
+            {imagePost[choosePost] &&
+              imagePost[choosePost].map((image, index) => (
+                <div>
+                  <img src={image.image} alt="image" />
+                </div>
+              ))}
+            <input
+              type="file"
+              // accept="image/*"
+              ref={images}
+              multiple
+              onChange={(e) => handleImageChange(e)}
+            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>

@@ -377,7 +377,7 @@ const PostNotiPage = () => {
   };
 
   const connectToWebSocket = () => {
-    const socket = new SockJS("http://20.247.198.172:80/api/ws");
+    const socket = new SockJS("https://nonprofit.southeastasia.cloudapp.azure.com/api/ws");
     // const socket = new SockJS("http://localhost:9090/api/ws");
     const stompClient = Client.over(socket);
 

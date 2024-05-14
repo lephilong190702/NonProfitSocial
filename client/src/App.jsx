@@ -29,6 +29,7 @@ import TagPage from './pages/social/tag/TagPage';
 import PostNotiPage from './pages/social/notification/PostNotiPage';
 import Error from './pages/payment/Error';
 import CICD from './pages/CICD';
+import UploadProject from './pages/projectpage/UploadProject';
 export const UserContext = createContext();
 
 const App = () => {
@@ -62,7 +63,7 @@ const App = () => {
           <Route path='/tag' element={<TagPage />} />
           <Route path='/noti' element={<PostNotiPage />} />
           <Route path='/testCICD' element={<CICD />} />
-
+          <Route path='/upload-project' element={<UploadProject />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -64,6 +64,7 @@ export const endpoints = {
     "read-noti": (userId) => `${SERVER_CONTEXT}/api/mark-as-read/${userId}`,
     "post-tags": (projectId) => `${SERVER_CONTEXT}/api/post/tags/${projectId}`,
     "post-images": (projectId) => `${SERVER_CONTEXT}/api/post/images/${projectId}`,
+    "upload-project": `${SERVER_CONTEXT}/api/upload-project/`,
 
 }
 

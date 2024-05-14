@@ -312,7 +312,13 @@ const CustomNavbar = () => {
                       </li>
                     </div>
                   )}
-
+                  <div>
+                    <li className="top-menu-item group">
+                      <Link to="/upload-project" className="nav-link">
+                        GỬI DỰ ÁN
+                      </Link>
+                    </li>
+                  </div>
                   <div className="hidden md:flex items-center justify-between  font-bold">
                     {/* <div> */}
                       <li className="flex flex-row select-none ">

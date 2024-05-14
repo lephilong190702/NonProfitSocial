@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Charity Website</title>
+    <style>
+        .main-content.container-fluid {
+            text-align: center;
+        }
+
+        .image-container {
+            margin-top: 10px; /* Add margin-top to image container */
+        }
+
+        .image-container img {
+            max-width: 500px; /* Set maximum width for images */
+            height: auto; /* Auto-adjust height based on width */
+            margin: 15px; /* Add margin-right to images */
+            
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 18px;
+        }
+
+        .form-group label {
+            flex: 0 0 200px; /* Set a fixed width for labels */
+            max-width: 200px; /* Ensure the maximum width for labels */
+            text-align: right; /* Align text to the right */
+            padding-right: 10px; /* Add some padding to the right */
+            margin-bottom: 0; /* Remove the bottom margin */
+        }
+
+        .form-group .form-control-icon {
+            flex: 1;
+        }
+
+        .form-control-icon span {
+            margin-top: 5px; /* Add margin-top to span */
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">DUYỆT DỰ ÁN TỪ THIỆN</h1>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-content">
+                    <div class="card-body">
+                        <form class="form form-horizontal">
+                            <div class="form-body">
+                                <div th:each="p:${pending}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group has-icon-left">
+                                                <label>DỰ ÁN: </label>
+                                                <div class="position-relative form-control-icon">
+                                                    <span th:text="${p.title}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-icon-left">
+                                                <label>Được gửi bởi:</label>
+                                                <div class="position-relative form-control-icon">
+                                                    <span th:text="${p.user.username}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-icon-left">
+                                                <label>Số tiền đã quyên góp được: </label>
+                                                <div class="position-relative form-control-icon">
+                                                    <span th:text="${p.contributedAmount}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-icon-left">
+                                                <label>Số tiền cần quyên góp: </label>
+                                                <div class="position-relative form-control-icon">
+                                                    <span th:text="${p.totalAmount}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-icon-left">
+                                                <label>Thời gian gửi dự án: </label>
+                                                <div class="position-relative form-control-icon">
+                                                    <span th:text="${p.dateSend}"></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group has-icon-left">
+                                                <label>Nội dung dự án: </label>
+                                            </div>
+                                            <div>
+                                                <span th:text="${p.content}"></span>
+                                            </div>
+                                            <div class="image-container">
+                                                <div th:each="image : ${images}">
+                                                    <img th:src="${image.image}" alt="Project Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="position-relative form-control-icon">
+                                            <a th:href="@{/admin/deny-project/{id}(id=${p.id})}" class="btn btn-danger me-1 mb-1" 
+                                                                onclick="return confirm('Bạn có chắc chắn muốn từ chối dự án này không?')"
+                                                                >TỪ CHỐI</a>
+                                            <a th:href="@{/admin/accept-project/{id}(id=${p.id})}" class="btn btn-success me-1 mb-1" 
+                                                                onclick="return confirm('Bạn có chắc chắn muốn duyệt dự án này không?')"
+                                                                >DUYỆT</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        
+    </div>
+</body>
+
+</html>

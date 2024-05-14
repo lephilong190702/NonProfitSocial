@@ -8,10 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.csn.charity.dto.ProjectDTO;
 import com.csn.charity.model.New;
 import com.csn.charity.model.Project;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
@@ -35,6 +39,18 @@ public class ProjectRestController {
         }
     }
 
+    @PostMapping("/upload-project/")
+    @CrossOrigin
+    public ResponseEntity<?> addProject(@RequestPart("files") List<MultipartFile> files,
+            @RequestPart(value = "projectDTO", required = false) ProjectDTO projectDTO) {
+        try {
+            Project sendedProject = projectService.sendProject(projectDTO, files);
+            return new ResponseEntity<>(sendedProject, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/projects/search")
     @CrossOrigin
     public ResponseEntity<List<Project>> searchNews(@RequestParam("kw") String kw) {
@@ -49,7 +65,7 @@ public class ProjectRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
+
     }
 
     @GetMapping("/pcategories/")
@@ -70,7 +86,7 @@ public class ProjectRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
+
     }
 
     @GetMapping("/projects/images/{id}")
@@ -81,7 +97,7 @@ public class ProjectRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        
+
     }
 
 }

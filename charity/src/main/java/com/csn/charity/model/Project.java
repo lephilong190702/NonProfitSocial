@@ -35,7 +35,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "project")
-public class Project implements Serializable{
+public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -68,21 +68,31 @@ public class Project implements Serializable{
     @Column(name = "status")
     private Boolean status;
 
+    @Column(name = "pending")
+    private Boolean pending;
+
+    @Column(name = "dateSend")
+    private Date dateSend;
+
     @Transient
     private List<MultipartFile> files;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ProjectCategory category;
-     
-    @OneToMany(mappedBy = "project" )
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "project")
     @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
-    
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ProjectImage> images = new ArrayList<>();
-    
+
     @OneToMany(mappedBy = "project")
     @JsonIgnore
     private List<UserVolunteerProject> volunteers = new ArrayList<>();

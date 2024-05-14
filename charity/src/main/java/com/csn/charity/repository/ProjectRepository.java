@@ -20,4 +20,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query("SELECT p FROM Project p WHERE p.title LIKE CONCAT('%',:kw, '%') Or p.content LIKE CONCAT('%', :kw, '%')")
     List<Project> search(String kw);
+
+    List<Project> findByPending(Boolean pending);
 }

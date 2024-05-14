@@ -2,6 +2,9 @@ package com.csn.charity.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.csn.charity.dto.ProjectDTO;
 import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectImage;
 
@@ -24,5 +27,13 @@ public interface ProjectService {
 
     List<Project> search(String kw);
 
+    List<Project> getPendingProject();
+
     List<ProjectImage> getImagesByProject(Long id);
+
+    Project sendProject(ProjectDTO projectDTO, List<MultipartFile> files);
+
+    void acceptProject(Long projectId);
+
+    void denyProject(Long projectId);
 }

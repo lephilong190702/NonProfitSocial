@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectCategory;
+import com.csn.charity.model.ProjectImage;
+import com.csn.charity.model.UserReportPost;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
 
@@ -89,4 +93,32 @@ public class ProjectController {
     public String index() {
         return "pages/test";
     }
+
+    @GetMapping("/admin/pending-project")
+    public String getPedingProject(Model model) {
+        model.addAttribute("pendings", this.projectService.getPendingProject());
+        return "pages/pending_projects";
+    }
+
+    @GetMapping("/admin/pending-project/{id}")
+    public String detail(Model model, @PathVariable(value = "id") Long id) {
+        List<ProjectImage> projectImage = this.projectService.getImagesByProject(id);
+        model.addAttribute("images", projectImage);
+        Project project = this.projectService.get(id);
+        model.addAttribute("pending", project);
+        return "pages/pending_project";
+    }
+
+    @RequestMapping(value = "/admin/accept-project/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String acceptProject(@PathVariable(value = "id") Long id) {
+        this.projectService.acceptProject(id);
+        return "redirect:/admin/pending-project";
+    }
+
+    @RequestMapping(value = "/admin/deny-project/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String denyProject(@PathVariable(value = "id") Long id) {
+        this.projectService.denyProject(id);
+        return "redirect:/admin/pending-projects";
+    }
+
 }

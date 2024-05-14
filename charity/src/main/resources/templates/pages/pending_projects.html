@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPORT</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">DUYỆT DỰ ÁN TỪ THIỆN</h1>
+        <div class="container my-2 mt-5">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>DỰ ÁN</th>
+                            <th>TIỀN ĐÃ GÓP</th>
+                            <th>TIỀN CẦN GÓP</th>
+                            <th>CHỨC NĂNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p:${pendings}">
+                            <td th:text="${p.id}"></td>
+                            <td th:text="${p.title}"></td>
+                            <td th:text="${p.contributedAmount}"></td>
+                            <td th:text="${p.totalAmount}"></td>
+                            <td>
+                                <a class="btn btn-primary" th:href="@{/admin/pending-project/{id}(id=${p.id})}">XỬ LÝ</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

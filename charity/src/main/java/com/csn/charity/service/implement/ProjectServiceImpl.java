@@ -3,23 +3,34 @@ package com.csn.charity.service.implement;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.csn.charity.dto.ProjectDTO;
+import com.csn.charity.model.Post;
 import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
+import com.csn.charity.model.User;
+import com.csn.charity.model.UserReportPost;
 import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
+import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.ProjectService;
 
 @Service
@@ -32,11 +43,12 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectImageRepository projectImageRepository;
     @Autowired
     private ProjectCategoryRepository projectCategoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    @Cacheable(value="projects")
     public List<Project> getAll() {
-        return this.projectRepository.findAll();
+        return this.projectRepository.findByPending(false);
     }
 
     @Override
@@ -66,6 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
                 project.setImages(images);
                 project.setContributedAmount(new BigDecimal(0));
                 project.setStatus(true);
+                project.setDateSend(new Date());
+                project.setPending(false);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -125,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Cacheable(value="projects", key = "#id")
+    @Cacheable(value = "projects", key = "#id")
     public Project get(Long id) {
         return this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
@@ -145,7 +159,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Cacheable(value = "projectByCategory", key = "#categoryId")
     public List<Project> getProjectsByCategory(Long categoryId) {
         ProjectCategory projectCategory = this.projectCategoryRepository.findById(categoryId)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + categoryId));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + categoryId));
         return this.projectRepository.findByCategory(projectCategory);
     }
 
@@ -158,8 +172,82 @@ public class ProjectServiceImpl implements ProjectService {
     @Cacheable(value = "projectImages", key = "#id")
     public List<ProjectImage> getImagesByProject(Long id) {
         Project project = this.projectRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
         return this.projectImageRepository.findByProject(project);
+    }
+
+    @Override
+    public Project sendProject(ProjectDTO projectDTO, List<MultipartFile> files) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Không đủ quyền truy cập!!!");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng!!");
+        }
+
+        Project project = new Project();
+        project.setTitle(projectDTO.getTitle());
+        project.setContent(projectDTO.getContent());
+        project.setAddress(projectDTO.getAddress());
+        project.setTotalAmount(projectDTO.getTotalAmount());
+        project.setStartDate(projectDTO.getStartDate());
+        project.setEndDate(projectDTO.getEndDate());
+
+       
+        if (files != null && !files.isEmpty()) {
+            List<ProjectImage> images = new ArrayList<>();
+            try {
+                for (MultipartFile file : files) {
+                    if (!file.isEmpty()) {
+                        Map res = this.cloudinary.uploader().upload(file.getBytes(),
+                                ObjectUtils.asMap("resource_type", "auto"));
+
+                        String imageUrl = res.get("secure_url").toString();
+                        System.out.println("Image URL: " + imageUrl);
+                        ProjectImage img = new ProjectImage();
+                        img.setImage(imageUrl);
+                        img.setProject(project);
+                        projectRepository.save(project);
+                        images.add(img);
+                        projectImageRepository.save(img);
+                    }
+                }
+                project.setImages(images);
+                project.setStatus(true);
+                project.setUser(user);
+                project.setPending(true);
+                project.setDateSend(new Date());
+            } catch (IOException ex) {
+                Logger.getLogger(ProjectServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return projectRepository.save(project);
+    }
+
+    @Override
+    public List<Project> getPendingProject() {
+        return projectRepository.findByPending(true);
+    }
+
+    @Override
+    public void acceptProject(Long projectId) {
+        Project project = this.projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
+        
+        project.setPending(false);
+        this.projectRepository.save(project);
+    }
+
+    @Override
+    public void denyProject(Long projectId) {
+        Project project = this.projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
+        this.projectRepository.delete(project);
     }
 
 }

@@ -36,5 +36,21 @@ public class MailServiceImpl implements MailService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void sendUploadProjectEmail(String email) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        try {
+            helper.setTo(email);
+            helper.setSubject("Email xác nhận gửi dự án thành công");
+            helper.setText("Chúc mừng dự án của bạn đã hợp lệ, vui lòng lên website để thấy dự án của bạn !");
+
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
 }

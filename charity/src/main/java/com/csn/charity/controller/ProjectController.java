@@ -20,6 +20,7 @@ import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
 import com.csn.charity.model.UserReportPost;
+import com.csn.charity.service.interfaces.MailService;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;
 
@@ -27,6 +28,7 @@ import com.csn.charity.service.interfaces.ProjectService;
 public class ProjectController {
     @Autowired
     private ProjectService projectService;
+    
 
     @Autowired
     private ProjectCategoryService projectCategoryService;

@@ -31,6 +31,7 @@ import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
 import com.csn.charity.repository.UserRepository;
+import com.csn.charity.service.interfaces.MailService;
 import com.csn.charity.service.interfaces.ProjectService;
 
 @Service
@@ -45,6 +46,8 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectCategoryRepository projectCategoryRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private MailService mailService;
 
     @Override
     public List<Project> getAll() {
@@ -197,7 +200,6 @@ public class ProjectServiceImpl implements ProjectService {
         project.setStartDate(projectDTO.getStartDate());
         project.setEndDate(projectDTO.getEndDate());
 
-       
         if (files != null && !files.isEmpty()) {
             List<ProjectImage> images = new ArrayList<>();
             try {
@@ -238,9 +240,20 @@ public class ProjectServiceImpl implements ProjectService {
     public void acceptProject(Long projectId) {
         Project project = this.projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
-        
         project.setPending(false);
         this.projectRepository.save(project);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("Unauthorized access");
+        }
+
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new NoSuchElementException("Không tìm thấy người dùng");
+        }
+        if (user.getEmail() != null)
+            mailService.sendUploadProjectEmail(user.getEmail());
     }
 
     @Override

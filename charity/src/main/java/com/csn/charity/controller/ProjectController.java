@@ -120,7 +120,7 @@ public class ProjectController {
     @RequestMapping(value = "/admin/deny-project/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String denyProject(@PathVariable(value = "id") Long id) {
         this.projectService.denyProject(id);
-        return "redirect:/admin/pending-projects";
+        return "redirect:/admin/pending-project";
     }
 
 }

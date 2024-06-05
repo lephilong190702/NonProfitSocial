@@ -43,8 +43,8 @@ spring:
       cache-null-values: true
   data:
     redis:
-      host: 10.0.206.75
-      # host: localhost
+      # host: 10.0.206.75
+      host: localhost
       port: 6379
 
 

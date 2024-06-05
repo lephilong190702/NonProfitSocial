@@ -49,13 +49,11 @@ public class DonateServiceImpl implements DonateService {
     }
 
     @Override
-    @Cacheable(value = "contributes")
     public List<UserContributeProject> getAllContribute() {
         return this.donateRepository.findAll();
     }
 
     @Override
-    @Cacheable(value = "contributesByProject", key = "#id")
     public List<UserContributeProject> getContributionByProject(Long id) {
         Project project = this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));

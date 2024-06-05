@@ -65,7 +65,7 @@ public class SpringSecurityConfig {
                                 .defaultSuccessUrl("/admin")
                                 .failureUrl("/admin/login?error")
                                 .permitAll())
-                .logout(logout -> logout.logoutSuccessUrl("/admin"))
+                .logout(logout -> logout.logoutSuccessUrl("/admin/login"))
                 .exceptionHandling(handling -> handling.accessDeniedPage("/admin/login?accessDenied"))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

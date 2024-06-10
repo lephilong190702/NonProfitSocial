@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.dto.ProjectDTO;
-import com.csn.charity.model.New;
 import com.csn.charity.model.Project;
 import com.csn.charity.service.interfaces.ProjectCategoryService;
 import com.csn.charity.service.interfaces.ProjectService;

@@ -2,6 +2,7 @@ package com.csn.charity.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -33,8 +34,11 @@ public class UserContributeProject implements Serializable {
     @Column(name = "donate_amount", nullable = false)
     private BigDecimal donateAmount;
 
+    @Column(name = "donate_item", nullable = false)
+    private String donateItem;
+
     @Column(name = "donate_date", nullable = false)
-    private Date donateDate;
+    private LocalDate donateDate;
 
     @Column(name = "note")
     private String note;
@@ -47,4 +51,8 @@ public class UserContributeProject implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ContributionCategory category;
 }

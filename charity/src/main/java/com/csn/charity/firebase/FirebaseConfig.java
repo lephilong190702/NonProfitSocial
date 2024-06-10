@@ -1,6 +1,5 @@
 package com.csn.charity.firebase;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 import javax.annotation.PostConstruct;

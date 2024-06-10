@@ -1,6 +1,8 @@
 package com.csn.charity.service.implement;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.dto.StatDTO;
+import com.csn.charity.model.UserContributeProject;
 import com.csn.charity.repository.DonateRepository;
 import com.csn.charity.service.interfaces.StatService;
 
@@ -49,5 +52,43 @@ public class StatServiceImpl implements StatService {
             statDTOs.add(statDTO);
         }
         return statDTOs;
+    }
+
+    @Override
+    public List<UserContributeProject> getMonthlyContributions(int month, int year) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
+        return donateRepository.findByDonateDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<UserContributeProject> getQuarterlyContributions(int quarter, int year) {
+        int startMonth = (quarter - 1) * 3 + 1;
+        LocalDate startDate = LocalDate.of(year, startMonth, 1);
+        LocalDate endDate = startDate.plusMonths(2).with(TemporalAdjusters.lastDayOfMonth());
+        return donateRepository.findByDonateDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<UserContributeProject> getYearlyContributions(int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        return donateRepository.findByDonateDateBetween(startDate, endDate);
+    }    
+
+
+    @Override
+    public List<Integer> getMonthlyWithData() {
+        return donateRepository.findDistinctMonths();
+    }
+
+    @Override
+    public List<Integer> getQuarterlyWithData() {
+        return donateRepository.findDistinctQuarters();
+    }
+
+    @Override
+    public List<Integer> getYearlyWithData() {
+        return donateRepository.findDistinctYears();
     }
 }

@@ -1,12 +1,14 @@
 package com.csn.charity.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.csn.charity.model.ContributionCategory;
 import com.csn.charity.model.Project;
 import com.csn.charity.model.UserContributeProject;
 
@@ -22,4 +24,18 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
     List<Object[]> getTotalDonationByYear();
 
     List<UserContributeProject> findByProject(Project project);
+
+    List<UserContributeProject> findByCategory(ContributionCategory category);
+
+    List<UserContributeProject> findByDonateDateBetween(LocalDate startDate, LocalDate endDate);
+
+    @Query("SELECT DISTINCT MONTH(d.donateDate) FROM UserContributeProject d")
+    List<Integer> findDistinctMonths();
+
+    @Query("SELECT DISTINCT QUARTER(d.donateDate) FROM UserContributeProject d")
+    List<Integer> findDistinctQuarters();
+    
+    @Query("SELECT DISTINCT YEAR(d.donateDate) FROM UserContributeProject d")
+    List<Integer> findDistinctYears();
+
 }

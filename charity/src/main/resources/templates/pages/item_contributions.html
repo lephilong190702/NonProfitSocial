@@ -5,29 +5,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donation Statistics</title>
+    <title>Quyên Góp Hiện Vật</title>
 </head>
 
 <body>
     <div class="main-content container-fluid" layout:fragment="content">
         <div class="card-body px-0 pb-0">
-            <h1 class="text-center text-info">SAO KÊ QUYÊN GÓP TỪ THIỆN</h1>
+            <h1 class="text-center text-info">QUYÊN GÓP HIỆN VẬT</h1>
             <div class="table-responsive mt-5">
                 <table class='table mb-0' id="table1">
                     <thead>
                         <tr>
                             <th>DỰ ÁN</th>
                             <th>TÀI KHOẢN QUYÊN GÓP</th>
-                            <th>SỐ TIỀN QUYÊN GÓP</th>
+                            <th>QUYÊN GÓP HIỆN VẬT</th>
                             <th>NGÀY QUYÊN GÓP</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="c:${contributions}">
-                            <td th:text="${c.project.title}"></td>
-                            <td th:text="${c.user.username}"></td>
-                            <td th:text="${c.donateAmount}"></td>
-                            <td th:text="${c.donateDate}"></td>
+                        <tr th:each="i:${items}">
+                            <td th:text="${i.project.title}"></td>
+                            <td th:text="${i.user.username}"></td>
+                            <td th:text="${i.donateItem}"></td>
+                            <td th:text="${i.donateDate}"></td>
                         </tr>
                     </tbody>
                 </table>

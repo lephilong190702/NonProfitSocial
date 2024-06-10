@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,12 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.ProjectDTO;
-import com.csn.charity.model.Post;
 import com.csn.charity.model.Project;
 import com.csn.charity.model.ProjectCategory;
 import com.csn.charity.model.ProjectImage;
 import com.csn.charity.model.User;
-import com.csn.charity.model.UserReportPost;
 import com.csn.charity.repository.ProjectCategoryRepository;
 import com.csn.charity.repository.ProjectImageRepository;
 import com.csn.charity.repository.ProjectRepository;
@@ -142,7 +139,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Cacheable(value = "projects", key = "#id")
     public Project get(Long id) {
         return this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
@@ -159,7 +155,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Cacheable(value = "projectByCategory", key = "#categoryId")
+    // @Cacheable(value = "projectByCategory", key = "#categoryId")
     public List<Project> getProjectsByCategory(Long categoryId) {
         ProjectCategory projectCategory = this.projectCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + categoryId));
@@ -172,7 +168,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Cacheable(value = "projectImages", key = "#id")
+    // @Cacheable(value = "projectImages", key = "#id")
     public List<ProjectImage> getImagesByProject(Long id) {
         Project project = this.projectRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));

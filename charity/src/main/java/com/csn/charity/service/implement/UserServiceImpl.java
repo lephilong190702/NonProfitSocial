@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import com.csn.charity.model.*;
 import com.csn.charity.repository.ConfirmationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;

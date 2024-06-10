@@ -2,7 +2,7 @@ package com.csn.charity.repository;
 
 import java.util.List;
 
-import com.csn.charity.model.New;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.csn.charity.model.Post;

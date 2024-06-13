@@ -11,9 +11,20 @@ import {
   faFacebookMessenger,
   faPinterest,
 } from "@fortawesome/free-brands-svg-icons";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import "./projectDetail.css";
 import GoogleMapProject from "./googleMap/GoogleMapProject";
-import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, PinterestShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
+import {
+  FacebookIcon,
+  FacebookMessengerIcon,
+  FacebookMessengerShareButton,
+  FacebookShareButton,
+  PinterestShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
 
 const ProjectDetails = () => {
   const [user] = useContext(UserContext);
@@ -52,7 +63,6 @@ const ProjectDetails = () => {
   const currentPageUrl = window.location.href;
 
   useEffect(() => {
-
     const loadProject = async () => {
       try {
         const { data } = await ApiConfig.get(
@@ -90,9 +100,7 @@ const ProjectDetails = () => {
 
     const loadProjectImages = async () => {
       try {
-        const { data } = await ApiConfig.get(
-          endpoints["images"](projectId)
-        );
+        const { data } = await ApiConfig.get(endpoints["images"](projectId));
         setImages(data);
       } catch (error) {
         console.log(error);
@@ -109,7 +117,7 @@ const ProjectDetails = () => {
     const data = {
       latitude: addressRecommended.latitude,
       longitude: addressRecommended.longitude,
-      name: addressRecommended.name
+      name: addressRecommended.name,
     };
 
     if (!addressRecommended.latitude.trim()) {
@@ -126,11 +134,15 @@ const ProjectDetails = () => {
     }
 
     try {
-      const res = await authApi().post(endpoints["post-address"](selectedProjectId), data, {
-        headers: {
-          'Content-Type': 'application/json'
+      const res = await authApi().post(
+        endpoints["post-address"](selectedProjectId),
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
       setSuccess("Gửi địa chỉ thành công");
       setTimeout(() => {
@@ -141,7 +153,7 @@ const ProjectDetails = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -166,20 +178,24 @@ const ProjectDetails = () => {
     }
     try {
       const formData = new FormData();
-      formData.append('amount', amount);
-      formData.append('orderInfo', orderInfo);
+      formData.append("amount", amount);
+      formData.append("orderInfo", orderInfo);
 
-      const response = await authApi().post(endpoints["donate"](projectId), formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const response = await authApi().post(
+        endpoints["donate"](projectId),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
       const vnpayUrl = response.data;
       window.location.href = vnpayUrl;
 
-      console.log("VNPAY" + vnpayUrl)
+      console.log("VNPAY" + vnpayUrl);
     } catch (error) {
-      console.error('Error submitting order:', error);
+      console.error("Error submitting order:", error);
     }
   };
 
@@ -207,13 +223,23 @@ const ProjectDetails = () => {
     setShowModalAddress(false);
   };
 
+  const handleValueChange = (e) => {
+    const inputValue = e.target.value;
+    const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+    if (isNaN(numericValue)) {
+      setErrorMessage("Vui lòng nhập một số hợp lệ");
+      setAmount(inputValue);
+    } else {
+      setErrorMessage("");
+      setAmount(numericValue);
+    }
+  };
+
   if (project === null) {
     return <MySpinner />;
   } else if (project.length === 0) {
     return <p>No project data available.</p>;
   }
-
-
 
   return (
     <>
@@ -254,22 +280,21 @@ const ProjectDetails = () => {
                           </TwitterShareButton>
                           <TelegramShareButton url={currentPageUrl}>
                             <TelegramIcon className="text-[29px] cursor-pointer" />
-                          </TelegramShareButton >
-
+                          </TelegramShareButton>
                         </div>
                         <div className="flex flex-row gap-4 cursor-pointer">
                           <div className="w-full font-semibold text-[#F16D9A] text-[14px] hover:text-[#EE5287]">
                             <div fixedWidth className="pr-1 text-[16px]">
                               {project.startDate
                                 ? moment(project.startDate).format(
-                                  "DD/MM/YYYY HH:mm"
-                                )
+                                    "DD/MM/YYYY HH:mm"
+                                  )
                                 : "Không có ngày bắt đầu"}{" "}
                               - <br />
                               {project.endDate
                                 ? moment(project.endDate).format(
-                                  "DD/MM/YYYY HH:mm"
-                                )
+                                    "DD/MM/YYYY HH:mm"
+                                  )
                                 : "Không có ngày kết thúc"}
                             </div>
                           </div>
@@ -324,14 +349,16 @@ const ProjectDetails = () => {
             </ul>
           </div>
         </Col>
-        <Button
-          onClick={() => openModal(project.id, project.title)}
-          className="card-link donate-link"
-          style={{ marginRight: "5px" }}
-          variant="primary"
-        >
-          Đóng góp
-        </Button>
+        {user && (
+          <Button
+            onClick={() => openModal(project.id, project.title)}
+            className="card-link donate-link"
+            style={{ marginRight: "5px" }}
+            variant="primary"
+          >
+            Đóng góp
+          </Button>
+        )}
       </Row>
 
       <hr />
@@ -355,7 +382,7 @@ const ProjectDetails = () => {
             style={{ padding: 0 }}
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              "& .MuiTextField-root": { m: 1, width: "100%" },
             }}
             noValidate
             autoComplete="off"
@@ -363,16 +390,14 @@ const ProjectDetails = () => {
             <div className="flex flex-col w-full">
               <div className="flex flex-col">
                 <Typography className="flex">Số tiền đóng góp</Typography>
-                <InputBase
+                <CurrencyTextField
                   required
-                  type="number"
-                  className="border p-2"
+                  variant="standard"
+                  className=" p-2 w-70sh ml-90"
                   placeholder="Nhập số tiền đóng góp"
-                  // value={pay.donateAmount}
-                  onChange={(e) => {
-                    setAmount(e.target.value);
-                    setErrorMessage("");
-                  }}
+                  currencySymbol="VNĐ"
+                  sx={{ marginLeft: "0px" }}
+                  onChange={handleValueChange}
                 />
                 {errorMessage && (
                   <Form.Text className="text-danger">{errorMessage}</Form.Text>
@@ -384,6 +409,7 @@ const ProjectDetails = () => {
                 <InputBase
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
+                  sx={{ marginLeft: "5px" }}
                   // value={pay.note}
                   onChange={(e) => setOrderInfo(e.target.value)}
                 />
@@ -400,7 +426,7 @@ const ProjectDetails = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      
+
       <Modal show={showModelAddress} onHide={closeModalAddress}>
         <Modal.Header closeButton>
           <div className="text-xl text-center font-bold">
@@ -429,7 +455,10 @@ const ProjectDetails = () => {
                   variant="standard"
                   value={addressRecommended.latitude}
                   onChange={(e) => {
-                    setAddressRecommended({ ...addressRecommended, latitude: e.target.value });
+                    setAddressRecommended({
+                      ...addressRecommended,
+                      latitude: e.target.value,
+                    });
                     setErrorLat("");
                   }}
                 />
@@ -449,7 +478,10 @@ const ProjectDetails = () => {
                   variant="standard"
                   value={addressRecommended.longitude}
                   onChange={(e) => {
-                    setAddressRecommended({ ...addressRecommended, longitude: e.target.value });
+                    setAddressRecommended({
+                      ...addressRecommended,
+                      longitude: e.target.value,
+                    });
                     setErrorLng("");
                   }}
                 />
@@ -457,8 +489,6 @@ const ProjectDetails = () => {
                   <Form.Text className="text-danger">{errorLng}</Form.Text>
                 )}
               </div>
-
-
             </div>
 
             <div className="flex flex-col w-full">
@@ -469,7 +499,10 @@ const ProjectDetails = () => {
                   placeholder="Nhập ghi chú (tuỳ chọn)"
                   value={addressRecommended.name}
                   onChange={(e) => {
-                    setAddressRecommended({ ...addressRecommended, name: e.target.value });
+                    setAddressRecommended({
+                      ...addressRecommended,
+                      name: e.target.value,
+                    });
                     setErrorName("");
                   }}
                 />
@@ -488,9 +521,7 @@ const ProjectDetails = () => {
             Xác nhận thông tin
           </Button>
         </Modal.Footer>
-        {success && (
-          <div className="alert alert-success">{success}</div>
-        )}
+        {success && <div className="alert alert-success">{success}</div>}
       </Modal>
     </>
   );

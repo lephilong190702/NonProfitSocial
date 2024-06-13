@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 // import ApiConfig, { authApi, endpoints } from "../../../../configs/ApiConfig";
 // import MySpinner from "../../../../layout/MySpinner";
@@ -26,9 +26,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import { SpaceBar } from "@material-ui/icons";
+import { UserContext } from "../../../../App";
 
 const ProjectsList = () => {
+  const [user] = useContext(UserContext);
   const [project, setProject] = useState(null);
   const [pay, setPay] = useState({
     projectId: "",
@@ -66,7 +69,7 @@ const ProjectsList = () => {
         }
 
         let res = await ApiConfig.get(e);
-        console.log("PROJECT: " + res.data)
+        console.log("PROJECT: " + res.data);
         setProject(res.data);
 
         res.data.forEach((p) => loadProjectImages(p.id));
@@ -75,15 +78,12 @@ const ProjectsList = () => {
       }
     };
 
-
     const loadProjectImages = async (projectId) => {
       try {
-        const { data } = await ApiConfig.get(
-          endpoints["images"](projectId)
-        );
+        const { data } = await ApiConfig.get(endpoints["images"](projectId));
         setImages((prevImages) => ({
           ...prevImages,
-          [projectId]: data, 
+          [projectId]: data,
         }));
       } catch (error) {
         console.log(error);
@@ -153,6 +153,18 @@ const ProjectsList = () => {
     setShowModal(false);
   };
 
+  const handleValueChange = (e) => {
+    const inputValue = e.target.value;
+    const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+    if (isNaN(numericValue)) {
+      setErrorMessage("Vui lòng nhập một số hợp lệ");
+      setAmount(inputValue);
+    } else {
+      setErrorMessage("");
+      setAmount(numericValue);
+    }
+  };
+
   if (project === null) return <MySpinner />;
   if (project.length === 0)
     return (
@@ -208,8 +220,34 @@ const ProjectsList = () => {
                       now={(p.contributedAmount / p.totalAmount) * 100}
                     />
                     <hr />
+
                     <div className="basis-1/4 flex flex-row justify-between pb-3">
                       <div className="py-1 pr-3">
+                        {user && (
+                          <>
+                            {p.contributedAmount < p.totalAmount && (
+                              <Link
+                                onClick={() => openModal(p.id, p.title)}
+                                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                                style={{ marginRight: "5px" }}
+                                variant="primary"
+                              >
+                                Đóng góp
+                              </Link>
+                            )}
+                            {p.contributedAmount >= p.totalAmount && (
+                              <Link
+                                // onClick={() => openModal(p.id, p.title)}
+                                to={url}
+                                className="custom-card-link font-semibold text-[#fff] bg-[#86bb86]  shadow-md shadow-[#86bb86] text-[13px] border-2 px-1 py-2  hover:bg-[#49B949] hover:text-[#fff] hover:shadow-md hover:shadow-[#49B949]"
+                                style={{ marginRight: "5px" }}
+                                variant="primary"
+                              >
+                                ĐÃ HOÀN THÀNH
+                              </Link>
+                            )}
+                          </>
+                        )}
                         {p.contributedAmount < p.totalAmount && (
                           <Link
                             onClick={() => openModal(p.id, p.title)}
@@ -266,7 +304,7 @@ const ProjectsList = () => {
             style={{ padding: 0 }}
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              "& .MuiTextField-root": { m: 1, width: "100%" },
             }}
             noValidate
             autoComplete="off"
@@ -274,16 +312,14 @@ const ProjectsList = () => {
             <div className="flex flex-col w-full">
               <div className="flex flex-col">
                 <Typography className="flex">Số tiền đóng góp</Typography>
-                <InputBase
+                <CurrencyTextField
                   required
-                  type="number"
-                  className="border p-2"
+                  variant="standard"
+                  className=" p-2 w-70sh ml-90"
                   placeholder="Nhập số tiền đóng góp"
-                  // value={pay.donateAmount}
-                  onChange={(e) => {
-                    setAmount(e.target.value);
-                    setErrorMessage("");
-                  }}
+                  currencySymbol="VNĐ"
+                  sx={{ marginLeft: "0px" }}
+                  onChange={handleValueChange}
                 />
                 {errorMessage && (
                   <Form.Text className="text-danger">{errorMessage}</Form.Text>
@@ -295,6 +331,7 @@ const ProjectsList = () => {
                 <InputBase
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
+                  sx={{ marginLeft: "5px" }}
                   // value={pay.note}
                   onChange={(e) => setOrderInfo(e.target.value)}
                 />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ApiConfig, { authApi, endpoints } from "../../configs/ApiConfig";
 import MySpinner from "../../layout/MySpinner";
@@ -14,9 +14,12 @@ import {
   ProgressBar,
   Pagination,
 } from "react-bootstrap";
+import CurrencyTextField from "@unicef/material-ui-currency-textfield";
 import { Box, InputBase, Typography } from "@mui/material";
+import { UserContext } from "../../App";
 
 const ProjectPage = () => {
+  const [user] = useContext(UserContext);
   const [project, setProject] = useState([]);
   const [pay, setPay] = useState({
     projectId: "",
@@ -64,12 +67,10 @@ const ProjectPage = () => {
 
     const loadProjectImages = async (projectId) => {
       try {
-        const { data } = await ApiConfig.get(
-          endpoints["images"](projectId)
-        );
+        const { data } = await ApiConfig.get(endpoints["images"](projectId));
         setImages((prevImages) => ({
           ...prevImages,
-          [projectId]: data, 
+          [projectId]: data,
         }));
       } catch (error) {
         console.log(error);
@@ -123,7 +124,6 @@ const ProjectPage = () => {
     }
   };
 
-  
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
@@ -149,6 +149,18 @@ const ProjectPage = () => {
   for (let i = 1; i <= Math.ceil(project.length / projectsPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  const handleValueChange = (e) => {
+    const inputValue = e.target.value;
+    const numericValue = parseFloat(inputValue.replace(/,/g, ""));
+    if (isNaN(numericValue)) {
+      setErrorMessage("Vui lòng nhập một số hợp lệ");
+      setAmount(inputValue);
+    } else {
+      setErrorMessage("");
+      setAmount(numericValue);
+    }
+  };
 
   if (project === null) return <MySpinner />;
   if (project.length === 0)
@@ -205,18 +217,20 @@ const ProjectPage = () => {
                       now={(p.contributedAmount / p.totalAmount) * 100}
                     />
                     <hr />
-                    <div className="basis-1/4 flex flex-row justify-between pb-3">
-                      <div className="py-1 pr-3">
-                        <Link
-                          onClick={() => openModal(p.id, p.title)}
-                          className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-                          style={{ marginRight: "5px" }}
-                          variant="primary"
-                        >
-                          Đóng góp
-                        </Link>
+                    {user && (
+                      <div className="basis-1/4 flex flex-row justify-between pb-3">
+                        <div className="py-1 pr-3">
+                          <Link
+                            onClick={() => openModal(p.id, p.title)}
+                            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                            style={{ marginRight: "5px" }}
+                            variant="primary"
+                          >
+                            Đóng góp
+                          </Link>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </Card.Body>
                 </Link>
               </Card>
@@ -245,9 +259,7 @@ const ProjectPage = () => {
           disabled={currentPage === Math.ceil(project.length / projectsPerPage)}
         />
         <Pagination.Last
-          onClick={() =>
-            paginate(Math.ceil(project.length / projectsPerPage))
-          }
+          onClick={() => paginate(Math.ceil(project.length / projectsPerPage))}
         />
       </Pagination>
 
@@ -262,7 +274,7 @@ const ProjectPage = () => {
             style={{ padding: 0 }}
             component="form"
             sx={{
-              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              "& .MuiTextField-root": { m: 1, width: "100%" },
             }}
             noValidate
             autoComplete="off"
@@ -270,16 +282,14 @@ const ProjectPage = () => {
             <div className="flex flex-col w-full">
               <div className="flex flex-col">
                 <Typography className="flex">Số tiền đóng góp</Typography>
-                <InputBase
+                <CurrencyTextField
                   required
-                  type="number"
-                  className="border p-2"
+                  variant="standard"
+                  className=" p-2 w-70sh ml-90"
                   placeholder="Nhập số tiền đóng góp"
-                  // value={pay.donateAmount}
-                  onChange={(e) => {
-                    setAmount(e.target.value);
-                    setErrorMessage("");
-                  }}
+                  currencySymbol="VNĐ"
+                  sx={{ marginLeft: "0px" }}
+                  onChange={handleValueChange}
                 />
                 {errorMessage && (
                   <Form.Text className="text-danger">{errorMessage}</Form.Text>
@@ -291,6 +301,7 @@ const ProjectPage = () => {
                 <InputBase
                   className="border p-2"
                   placeholder="Nhập ghi chú (tuỳ chọn)"
+                  sx={{ marginLeft: "5px" }}
                   // value={pay.note}
                   onChange={(e) => setOrderInfo(e.target.value)}
                 />

@@ -21,13 +21,11 @@ public class ProjectCategorySericeImpl implements ProjectCategoryService {
     }
 
     @Override
-    @Cacheable(value = "projectCategories")
     public List<ProjectCategory> getAll() {
         return this.projectCategoryRepository.findAll();
     }
 
     @Override
-    @Cacheable(value = "projectCategory", key = "#id")
     public ProjectCategory get(Long id) {
         return this.projectCategoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại với ID: " + id));

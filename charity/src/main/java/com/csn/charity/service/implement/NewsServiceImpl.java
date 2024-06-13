@@ -29,13 +29,13 @@ public class NewsServiceImpl implements NewsService {
     private NewsCategoryRepository newsCategoryRepository;
 
     @Override
-    @Cacheable(value = "news")
+    // @Cacheable(value = "news")
     public List<New> getAll() {
         return this.newsRepository.findAll();
     }
 
     @Override
-    @Cacheable(value = "new", key = "#id")
+    // @Cacheable(value = "new", key = "#id")
     public New get(Long id) {
         return this.newsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + id));
@@ -101,7 +101,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    @Cacheable(value = "newByCategory", key = "#categoryId")
+    // @Cacheable(value = "newByCategory", key = "#categoryId")
     public List<New> getNewsByCategory(Long categoryId) {
         NewCategory newCategory = this.newsCategoryRepository.findById(categoryId)
         .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy tin tức với ID: " + categoryId));

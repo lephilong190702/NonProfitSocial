@@ -10,4 +10,6 @@ public interface DonateService {
     List<UserContributeProject> getAllContribute();
 
     List<UserContributeProject> getContributionByProject(Long id);
+
+    List<UserContributeProject> getContributionByCategory(Long id);
 }

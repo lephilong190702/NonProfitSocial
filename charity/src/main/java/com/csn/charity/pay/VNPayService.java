@@ -1,11 +1,8 @@
 package com.csn.charity.pay;
 
-import com.csn.charity.model.ConfirmationToken;
 import com.csn.charity.repository.ConfirmationTokenRepository;
 import com.csn.charity.service.implement.MailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.model.User;
@@ -13,7 +10,6 @@ import com.csn.charity.model.User;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;

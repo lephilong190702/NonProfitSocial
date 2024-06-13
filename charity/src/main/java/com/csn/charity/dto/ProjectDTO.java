@@ -2,9 +2,7 @@ package com.csn.charity.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

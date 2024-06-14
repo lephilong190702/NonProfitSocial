@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/dashboard}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANSPORT</title>
+</head>
+
+<body>
+    <div class="main-content container-fluid" layout:fragment="content">
+        <h1 class="text-info text-center">XÉT DUYỆT VẬN CHUYỂN QUYÊN GÓP HIỆN VẬT</h1>
+        <div class="container my-2 mt-5">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr>
+                            <th>MÃ VẬN CHUYỂN</th>
+                            <th>DỰ ÁN</th>
+                            <th>NGƯỜI QUYÊN GÓP</th>
+                            <th>VẬT QUYÊN GÓP</th>
+                            <th>ĐỊA CHỈ</th>
+                            <th>TRẠNG THÁI</th>
+                            <th>NGƯỜI VẬN CHUYỂN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="t:${transport}">
+                            <td th:text="${t.id}"></td>
+                            <td th:text="${t.project.title}"></td>
+                            <td th:text="${t.user.username}"></td>
+                            <td th:text="${t.donateItem}"></td>
+                            <td th:text="${t.address}"></td>
+                            <td th:text="${t.status}"></td>
+                            <td>
+                                <form class="user-role-form" method="post">
+                                    <input type="hidden" name="transportId" th:value="${t.id}" />
+                                    <div class="d-flex flex-column">
+                                        <select class="form-control user-role-select mb-2">
+                                            <option th:if="${t.shipper != null}" th:text="${t.shipper.username}"
+                                                selected></option>
+                                            <option th:unless="${t.shipper != null}" selected></option>
+
+                                            <option th:each="s : ${shippers}" th:value="${s.id}"
+                                                th:text="${s.username}"></option>
+                                        </select>
+                                        <button class="btn btn-primary save-button" type="submit" disabled>Save</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    document.querySelectorAll('.user-role-select').forEach(function (select) {
+        select.addEventListener('change', function () {
+            var shipperId = this.value;
+            var form = this.closest('.user-role-form');
+            var saveButton = form.querySelector('.save-button');
+            if (shipperId !== '') {
+                saveButton.disabled = false;
+                form.setAttribute('action', '/admin/pending-transport/' + form.querySelector('input[name="transportId"]').value + '/shipper/' + shipperId);
+            } else {
+                saveButton.disabled = true;
+            }
+        });
+    });
+</script>

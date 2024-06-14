@@ -33,7 +33,7 @@
                                 <td th:text="${u.email}"></td>
                                 <td th:text="${u.status != null ? (u.status ? 'Active' : 'Disabled') : 'N/A'}"></td>
                                 <td>
-                                    <form class="user-role-form" action="/admin/userRoles" method="post">
+                                    <form class="user-role-form"  method="post">
                                         <input type="hidden" name="userId" th:value="${u.id}" />
                                         <div class="d-flex">
                                             <select class="form-control user-role-select">

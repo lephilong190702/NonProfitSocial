@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.csn.charity.model.UserContributeProject;
 import com.csn.charity.service.interfaces.DonateService;
 import com.csn.charity.service.interfaces.StatService;
+import com.csn.charity.service.interfaces.UserService;
 import com.csn.charity.service.interfaces.VolunteerService;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +29,8 @@ public class VolunteerController {
     private DonateService donateService;
     @Autowired
     private StatService statService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/admin/volunteers")
     public String getVolunteer(Model model) {
@@ -84,5 +90,43 @@ public class VolunteerController {
         volunteerService.acceptVolunteer(volunteerId);
         return "redirect:/admin/volunteers";
     }
+
+    @GetMapping("/admin/pending-transport")
+    public String getPendingTransport(Model model) {
+        model.addAttribute("transport", this.donateService.getContributionByStatus());
+        model.addAttribute("shippers", this.userService.getAllShipper());
+        return "pages/pending_transport";
+    }
+
+    @GetMapping("/admin/transport")
+    public String getTransport(Model model) {
+        model.addAttribute("transport", this.donateService.getTransportByStatus());
+        model.addAttribute("shippers", this.userService.getAllShipper());
+        return "pages/transport";
+    }
+
+    @PostMapping("/admin/pending-transport/{transportId}/shipper/{shipperId}")
+    public String setPendingShipper(@PathVariable(value = "transportId") Long transportId,
+            @PathVariable(value = "shipperId") Long shipperId) {
+        this.donateService.updateTransport(transportId, shipperId);
+        return "redirect:/admin/pending-transport";
+    }
+
+    @PostMapping("/admin/transport/{transportId}/shipper/{shipperId}")
+    public String setShipper(@PathVariable(value = "transportId") Long transportId,
+            @PathVariable(value = "shipperId") Long shipperId) {
+        this.donateService.updateTransport(transportId, shipperId);
+        return "redirect:/admin/transport";
+    }
+
+    // @GetMapping("/admin/userRole")
+    // public String getUserRole(Model model) {
+    // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    // boolean hasAdminRole = auth != null && auth.getAuthorities().stream()
+    // .anyMatch(role -> role.getAuthority().equals("ROLE_SUPERADMIN"));
+    // model.addAttribute("users", this.userService.findAllUsers());
+    // model.addAttribute("userRoles", this.userService.getAllShipper());
+    // return "pages/userRole";
+    // }
 
 }

@@ -156,4 +156,12 @@ public class DonateServiceImpl implements DonateService {
         return this.donateRepository.findByStatus("TRANSPORT");
     }
 
+    @Override
+    public List<UserContributeProject> getTransportByShipper(Long userId) {
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy shipper với ID: " + userId));
+
+        return this.donateRepository.findByShipper(user);
+    }
+
 }

@@ -103,6 +103,7 @@ public class SpringSecurityConfig {
                                 "/api/export/", "/api/monthly/", "/api/quarterly/", "/api/yearly/")
                         .permitAll()
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
+                        .requestMatchers("/api/transport/{shipperId}").hasRole("SHIPPER")
                         .requestMatchers("/api/check-employee-role/{userId}").hasRole("EMPLOYEE")
                         .anyRequest()
                         .authenticated())

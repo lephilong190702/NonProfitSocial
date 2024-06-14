@@ -91,6 +91,16 @@ public class VolunteerRestController {
         }
     }
 
+    @GetMapping("/transport/{shipperId}")
+    @CrossOrigin
+    public ResponseEntity<?> getTransportByShipper(@PathVariable Long shipperId) {
+        try {
+            return new ResponseEntity<>(this.donateService.getTransportByShipper(shipperId), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // @PostMapping("{projectId}/donate/")
     // public ResponseEntity<UserContributeProject> donate(@PathVariable(value =
     // "projectId") Long projectId, @RequestParam("donateAmount") BigDecimal

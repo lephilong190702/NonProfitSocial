@@ -20,4 +20,6 @@ public interface DonateService {
     List<UserContributeProject> getContributionByStatus();
 
     List<UserContributeProject> getTransportByStatus();
+
+    List<UserContributeProject> getTransportByShipper(Long userId);
 }

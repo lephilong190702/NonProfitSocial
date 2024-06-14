@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.csn.charity.model.ContributionCategory;
 import com.csn.charity.model.Project;
+import com.csn.charity.model.User;
 import com.csn.charity.model.UserContributeProject;
 
 public interface DonateRepository extends JpaRepository<UserContributeProject, Long> {
@@ -30,6 +31,8 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
     List<UserContributeProject> findByDonateDateBetween(LocalDate startDate, LocalDate endDate);
 
     List<UserContributeProject> findByStatus(String status);
+
+    List<UserContributeProject> findByShipper(User shipper);
 
     @Query("SELECT DISTINCT MONTH(d.donateDate) FROM UserContributeProject d")
     List<Integer> findDistinctMonths();

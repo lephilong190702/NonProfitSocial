@@ -40,6 +40,10 @@ public class DonateServiceImpl implements DonateService {
             this.projectRepository.save(project);
 
             userContributeProject.setProject(project);
+            Long category = 1L;
+            ContributionCategory contributionCategory = this.contributionCategoryRepository.findById(category)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy thể loại quyên góp với ID: " + category));
+            userContributeProject.setCategory(contributionCategory);
 
             Date date = new Date();
 

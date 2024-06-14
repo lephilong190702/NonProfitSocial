@@ -243,12 +243,15 @@ const CustomNavbar = () => {
 
                   <div>
                     <li className="top-menu-item group">
-                      <Nav.Link
+                      {/* <Nav.Link
                         href="#financial_report"
                         onClick={exportFinancialReport}
                       >
                         BÁO CÁO TÀI CHÍNH
-                      </Nav.Link>
+                      </Nav.Link> */}
+                      <Link to="/statistic" className="nav-link">
+                        BÁO CÁO TÀI CHÍNH
+                      </Link>
                     </li>
                   </div>
 

@@ -1,13 +1,18 @@
 import React from "react";
 import ApiConfig, { endpoints } from "../../configs/ApiConfig";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { saveAs } from "file-saver";
+import { Button } from "react-bootstrap";
+import "./statistic.css";
 
 const Statistic = () => {
-  const exportFinancialReport = async () => {
+  const [q] = useSearchParams();
+  const [yearParams, setYearParams] = useSearchParams();
+  const exportFinancialReport = async (year) => {
     try {
-        let e = endpoints.statistic;
-        e = `${e}?period=yearly&year=2023`
+      let e = endpoints.statistic;
+      // const year = q.get("year");
+      if (year !== null) e = `${e}?period=yearly&year=${year}`;
       const response = await ApiConfig.get(e, {
         responseType: "arraybuffer",
       });
@@ -20,12 +25,35 @@ const Statistic = () => {
       console.error(error);
     }
   };
+
+  const handleButtonClick = (year) => {
+    setYearParams({ year });
+    exportFinancialReport(year);
+  };
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 2023;
+
   return (
-    <div>
-      <Link href="#financial_report" onClick={exportFinancialReport}>
-        BÁO CÁO TÀI CHÍNH
-      </Link>
-    </div>
+    <>
+      <h1 className="form-heading">BÁO CÁO TÀI CHÍNH NĂM</h1>
+      <div className="container-stat">
+        <div className="button-container-stat">
+          {Array.from({ length: currentYear - startYear + 1 }, (_, index) => {
+            const year = startYear + index;
+            return (
+              <Button
+                key={year}
+                className="year-stat-button"
+                onClick={() => handleButtonClick(year)}
+              >
+                Năm {year}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 };
 

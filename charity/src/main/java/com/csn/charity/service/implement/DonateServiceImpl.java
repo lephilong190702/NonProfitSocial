@@ -1,26 +1,37 @@
 package com.csn.charity.service.implement;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.model.ContributionCategory;
 import com.csn.charity.model.Project;
+import com.csn.charity.model.ProjectImage;
+import com.csn.charity.model.TransportImage;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserContributeProject;
 import com.csn.charity.model.UserRole;
 import com.csn.charity.repository.ContributionCategoryRepository;
 import com.csn.charity.repository.DonateRepository;
 import com.csn.charity.repository.ProjectRepository;
+import com.csn.charity.repository.TransportImageRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.DonateService;
 
@@ -34,6 +45,10 @@ public class DonateServiceImpl implements DonateService {
     private ContributionCategoryRepository contributionCategoryRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TransportImageRepository transportImageRepository;
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public UserContributeProject donate(Long projectId, UserContributeProject userContributeProject) {
@@ -162,6 +177,48 @@ public class DonateServiceImpl implements DonateService {
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy shipper với ID: " + userId));
 
         return this.donateRepository.findByShipper(user);
+    }
+
+    @Override
+    public void shipperUpdateTransport(Long transportId, List<MultipartFile> files) {
+        Optional<UserContributeProject> contributeOptional = this.donateRepository.findById(transportId);
+        if (contributeOptional.isPresent()) {
+            UserContributeProject userContributeProject = contributeOptional.get();
+            if (files != null && !files.isEmpty()) {
+                List<TransportImage> images = new ArrayList<>();
+                try {
+                    files.forEach(file -> {
+                        if (!file.isEmpty()) {
+                            try {
+                                Map res = this.cloudinary.uploader().upload(file.getBytes(),
+                                        ObjectUtils.asMap("resource_type", "auto"));
+
+                                String imageUrl = res.get("secure_url").toString();
+                                System.out.println("Image URL: " + imageUrl);
+                                TransportImage img = new TransportImage();
+                                img.setImage(imageUrl);
+                                img.setUserContributeProject(userContributeProject);
+                                donateRepository.save(userContributeProject);
+                                images.add(img);
+                                transportImageRepository.save(img);
+                            } catch (IOException ex) {
+                                Logger.getLogger(ProjectServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    });
+                    userContributeProject.setImages(images);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            userContributeProject.setStatus("SUCCESSFUL");
+            this.donateRepository.save(userContributeProject);
+        }
+    }
+
+    @Override
+    public List<UserContributeProject> getContributionItemsByStatus() {
+        return this.donateRepository.findByStatus("SUCCESSFUL");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.csn.charity.controller.api;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.csn.charity.dto.PostDTO;
 import com.csn.charity.dto.VolunteerRequestDTO;
+import com.csn.charity.model.Post;
 import com.csn.charity.model.User;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.DonateService;
@@ -96,6 +103,18 @@ public class VolunteerRestController {
     public ResponseEntity<?> getTransportByShipper(@PathVariable Long shipperId) {
         try {
             return new ResponseEntity<>(this.donateService.getTransportByShipper(shipperId), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/transport/{transportId}")
+    @CrossOrigin
+    public ResponseEntity<?> updateTransport(@PathVariable(value = "transportId") Long transportId,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+        try {
+            this.donateService.shipperUpdateTransport(transportId, files);
+            return ResponseEntity.ok("Đơn hàng đã được nhận thành công.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

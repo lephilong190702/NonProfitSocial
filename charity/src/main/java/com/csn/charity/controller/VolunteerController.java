@@ -75,8 +75,7 @@ public class VolunteerController {
 
     @GetMapping("/admin/item-contributions")
     public String getItemContribution(Model model) {
-        Long category = 2L;
-        model.addAttribute("items", this.donateService.getContributionByCategory(category));
+        model.addAttribute("items", this.donateService.getContributionItemsByStatus());
         return "pages/item_contributions";
     }
 

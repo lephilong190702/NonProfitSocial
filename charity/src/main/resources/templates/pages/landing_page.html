@@ -53,6 +53,7 @@
                                             <th>DỰ ÁN</th>
                                             <th>TÀI KHOẢN QUYÊN GÓP</th>
                                             <th>SỐ TIỀN QUYÊN GÓP</th>
+                                            <th>HIỆN VẬT QUYÊN GÓP</th>
                                             <th>NGÀY QUYÊN GÓP</th>                    
                                         </tr>
                                     </thead>
@@ -61,6 +62,7 @@
                                             <td th:text="${c.project.title}"></td>
                                             <td th:text="${c.user.username}"></td>
                                             <td th:text="${c.donateAmount}"></td>
+                                            <td th:text="${c.donateItem}"></td>
                                             <td th:text="${c.donateDate}"></td>                                  
                                         </tr>
                                     </tbody>

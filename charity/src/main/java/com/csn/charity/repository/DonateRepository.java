@@ -29,6 +29,8 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
 
     List<UserContributeProject> findByDonateDateBetween(LocalDate startDate, LocalDate endDate);
 
+    List<UserContributeProject> findByStatus(String status);
+
     @Query("SELECT DISTINCT MONTH(d.donateDate) FROM UserContributeProject d")
     List<Integer> findDistinctMonths();
 

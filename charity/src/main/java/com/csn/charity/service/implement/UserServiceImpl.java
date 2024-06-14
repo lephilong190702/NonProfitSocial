@@ -257,4 +257,10 @@ public class UserServiceImpl implements UserService {
         return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_EMPLOYEE"));
     }
 
+    @Override
+    public List<User> getAllShipper() {
+        UserRole userRole = roleRepository.findByName("ROLE_SHIPPER");
+        return this.userRepository.findByRoles(userRole);
+    }
+
 }

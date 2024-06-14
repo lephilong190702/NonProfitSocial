@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.AuthenticationType;
 import com.csn.charity.model.User;
+import com.csn.charity.model.UserRole;
 
 public interface UserService extends UserDetailsService {
     Long addUser(UserDTO userDto);
@@ -38,5 +39,7 @@ public interface UserService extends UserDetailsService {
     boolean isAdmin(Long userId);
 
     boolean isEmployee(Long userId);
+
+    List<User> getAllShipper();
 
 }

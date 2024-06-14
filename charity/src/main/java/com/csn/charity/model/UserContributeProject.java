@@ -43,6 +43,12 @@ public class UserContributeProject implements Serializable {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "status")
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "project_id")
     @JsonIgnore
@@ -51,6 +57,10 @@ public class UserContributeProject implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "shipper_id")
+    private User shipper;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

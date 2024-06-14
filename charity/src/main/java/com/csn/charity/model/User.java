@@ -70,6 +70,10 @@ public class User implements Serializable {
     @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "shipper")
+    @JsonIgnore
+    private List<UserContributeProject> transport = new ArrayList<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<UserCommentNew> commentNews = new ArrayList<>();

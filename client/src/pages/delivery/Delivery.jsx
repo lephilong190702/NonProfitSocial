@@ -18,7 +18,8 @@ const Delivery = () => {
   const [user] = useContext(UserContext);
   const [orders, setOrders] = useState(null);
   const [ordersId, setOrderId] = useState(null);
-  const [cusName, setCusName] = useState("");
+  const [cusLastName, setCusLastName] = useState("");
+  const [cusFirstName, setCusFirstName] = useState("");
   const [cusPhone, setCusPhone] = useState(null);
   const [cusAddress, setCusAddress] = useState(null);
   const [cusOrders, setCusOrders] = useState(null);
@@ -55,7 +56,8 @@ const Delivery = () => {
   const openDetailModal = (orders) => {
     setShowDetailModal(true);
     setOrderId(orders.id);
-    setCusName(orders.user.profile.lastName);
+    setCusLastName(orders.user.profile.lastName);
+    setCusFirstName(orders.user.profile.firstName);
     setCusPhone(orders.user.profile.phone);
     setCusAddress(orders.address);
     setCusOrders(orders.donateItem);
@@ -63,12 +65,6 @@ const Delivery = () => {
 
   const closeDetailModal = () => {
     setShowDetailModal(false);
-  };
-
-  const loadOrders = async () => {
-    const res = await authApi().get(endpoints["transport"](user.id));
-    setOrders(res.data);
-    console.log(res.data);
   };
 
   const handleImageUpload = (event) => {
@@ -97,7 +93,10 @@ const Delivery = () => {
         }
 
       try {
-        const res = await authApi().put(endpoints["transport"](ordersId), formData);
+        const res = await authApi().put(
+          endpoints["transport"](ordersId),
+          formData
+        );
         console.log(res.data);
       } catch (error) {
         console.log(error);
@@ -106,6 +105,12 @@ const Delivery = () => {
     process();
   };
   useEffect(() => {
+    const loadOrders = async () => {
+      const res = await authApi().get(endpoints["transport"](user.id));
+      setOrders(res.data);
+      console.log(res.data);
+    };
+
     loadOrders();
   }, []);
 
@@ -131,7 +136,7 @@ const Delivery = () => {
                   <StyledTableCell component="th" scope="row">
                     {orders.id}
                   </StyledTableCell>
-                  <StyledTableCell>{orders.user.username}</StyledTableCell>
+                  <StyledTableCell>{orders.user.profile.lastName} {orders.user.profile.firstName}</StyledTableCell>
                   <StyledTableCell>{orders.donateItem}</StyledTableCell>
                   <StyledTableCell>
                     <Link onClick={() => openDetailModal(orders)}>
@@ -167,7 +172,7 @@ const Delivery = () => {
                     <label className="d-flex align-items-center">
                       Tên người nhận:
                     </label>
-                    <Typography>{cusName}</Typography>
+                    <Typography>{cusLastName} {cusFirstName}</Typography>
                   </div>
                   <div className="form-group">
                     <label className="d-flex align-items-center">

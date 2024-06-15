@@ -239,7 +239,7 @@ const ProjectDetails = () => {
     try {
       const formData = new FormData();
       formData.append("donateItem", donateItem);
-      formData.append("addressDelivery", addressDelivery);
+      formData.append("address", addressDelivery);
       formData.append("orderInfo", orderInfo);
 
       const response = await authApi().post(
@@ -309,6 +309,11 @@ const ProjectDetails = () => {
       setAmount(numericValue);
     }
   };
+
+  const formatter = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
 
   if (project === null) {
     return <MySpinner />;
@@ -417,7 +422,7 @@ const ProjectDetails = () => {
                       marginRight: "5px",
                     }}
                   />
-                  {c.user.username} - {c.donateAmount} -{" "}
+                  {c.user.username} - {formatter.format(c.donateAmount)} -{" "}
                   {moment(c.donateDate).format("DD/MM/YYYY HH:mm")}
                 </li>
               ))}

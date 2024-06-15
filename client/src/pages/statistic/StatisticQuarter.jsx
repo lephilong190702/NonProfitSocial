@@ -33,22 +33,18 @@ const StatisticQuarter = () => {
   const startYear = 2021;
   const quarters = [];
 
-  // Tạo danh sách các quý từ năm 2021 đến năm hiện tại
   for (let year = startYear; year <= currentYear; year++) {
     for (let quarter = 1; quarter <= 4; quarter++) {
       quarters.push({ year, quarter });
     }
   }
 
-  // Tính toán phân trang
   const indexOfLastQuarter = currentPage * itemsPerPage;
   const indexOfFirstQuarter = indexOfLastQuarter - itemsPerPage;
   const displayedQuarters = quarters.reverse().slice(indexOfFirstQuarter, indexOfLastQuarter);
 
-  // Hàm xử lý chuyển trang
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Tính số lượng trang
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(quarters.length / itemsPerPage); i++) {
     pageNumbers.push(i);

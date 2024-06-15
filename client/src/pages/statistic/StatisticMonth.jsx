@@ -47,7 +47,6 @@ const StatisticMonth = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Tính số lượng trang
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(months.length / itemsPerPage); i++) {
     pageNumbers.push(i);

@@ -1,6 +1,8 @@
 package com.csn.charity.service.interfaces;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.csn.charity.model.New;
 
@@ -22,4 +24,6 @@ public interface NewsService {
     List<New> getNewsByCategory(Long categoryId);
 
     List<New> search(String kw);
+
+    List<Map<String, String>> getNewsItems() throws IOException;
 }

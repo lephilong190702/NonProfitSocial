@@ -176,7 +176,7 @@ public class DonateServiceImpl implements DonateService {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy shipper với ID: " + userId));
 
-        return this.donateRepository.findByShipper(user);
+        return this.donateRepository.findByShipperAndStatus(user, "TRANSPORT");
     }
 
     @Override

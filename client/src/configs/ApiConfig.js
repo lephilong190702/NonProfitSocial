@@ -67,8 +67,8 @@ export const endpoints = {
     "post-images": (projectId) => `${SERVER_CONTEXT}/api/post/images/${projectId}`,
     "upload-project": `${SERVER_CONTEXT}/api/upload-project/`,
     "donate-item": (projectId) => `${SERVER_CONTEXT}/api/donateItem/${projectId}`,
-    "transport": (shipperId) => `${SERVER_CONTEXT}/api/transport/${shipperId}`
-
+    "transport": (shipperId) => `${SERVER_CONTEXT}/api/transport/${shipperId}`,
+    "other-news": `${SERVER_CONTEXT}/api/other-news/`
 }
 
 export const authApi = () => {

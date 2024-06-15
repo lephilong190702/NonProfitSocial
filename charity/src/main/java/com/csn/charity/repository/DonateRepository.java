@@ -32,7 +32,7 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
 
     List<UserContributeProject> findByStatus(String status);
 
-    List<UserContributeProject> findByShipper(User shipper);
+    List<UserContributeProject> findByShipperAndStatus(User shipper, String status);
 
     @Query("SELECT DISTINCT MONTH(d.donateDate) FROM UserContributeProject d")
     List<Integer> findDistinctMonths();

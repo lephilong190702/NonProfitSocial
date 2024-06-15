@@ -34,6 +34,7 @@ import Statistic from './pages/statistic/Statistic';
 import StatisticMonth from './pages/statistic/StatisticMonth';
 import StatisticQuarter from './pages/statistic/StatisticQuarter';
 import Delivery from './pages/delivery/Delivery';
+import OutsideNews from './pages/OutsideNews';
 export const UserContext = createContext();
 
 const App = () => {
@@ -67,6 +68,7 @@ const App = () => {
           <Route path='/tag' element={<TagPage />} />
           <Route path='/noti' element={<PostNotiPage />} />
           <Route path='/testCICD' element={<CICD />} />
+          <Route path='/outside-news' element={<OutsideNews />} />
           <Route path='/upload-project' element={<UploadProject />} />
           <Route path='/statistic' element={<Statistic />} />
           <Route path='/statistic-mon' element={<StatisticMonth />} />

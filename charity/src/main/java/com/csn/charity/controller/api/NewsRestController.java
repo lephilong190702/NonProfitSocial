@@ -1,6 +1,8 @@
 package com.csn.charity.controller.api;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -138,5 +140,11 @@ public class NewsRestController {
     public ResponseEntity<List<UserCommentNew>> getAllRepliesComment(@PathVariable Long parentId) {
         List<UserCommentNew> replies = commentNewsService.getAllReplyComments(parentId);
         return new ResponseEntity<>(replies, HttpStatus.OK);
+    }
+
+    @GetMapping("/other-news/")
+    @CrossOrigin
+    public List<?> getNews() throws IOException {
+        return this.newsService.getNewsItems();
     }
 }

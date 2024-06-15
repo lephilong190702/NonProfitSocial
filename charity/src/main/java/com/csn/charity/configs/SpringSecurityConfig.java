@@ -105,6 +105,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/admin/adminProfile").hasRole("ADMIN")
                         .requestMatchers("/api/transport/{shipperId}").hasRole("SHIPPER")
                         .requestMatchers("/api/check-employee-role/{userId}").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/check-shipper-role/{userId}").hasRole("SHIPPER")
                         .anyRequest()
                         .authenticated())
                 .authenticationProvider(authenticationProvider())

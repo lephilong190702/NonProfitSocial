@@ -51,8 +51,9 @@ const StatisticQuarter = () => {
   }
 
   return (
+    <>
+    <h1 className="form-heading">BÁO CÁO TÀI CHÍNH QUÝ</h1>
     <div className="container-stat">
-      <h2>Statistic by Quarter</h2>
       <div className="button-container-stat">
         {displayedQuarters.map(({ year, quarter }) => (
           <Button key={`${year}-${quarter}`} onClick={() => exportFinancialReport(year, quarter)}>
@@ -68,6 +69,7 @@ const StatisticQuarter = () => {
         ))}
       </Pagination>
     </div>
+    </>
   );
 };
 

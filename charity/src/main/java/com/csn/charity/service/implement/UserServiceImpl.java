@@ -256,6 +256,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_EMPLOYEE"));
     }
+    @Override
+    public boolean isShipper(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user.getRoles().stream().anyMatch(r -> r.getName().equals("ROLE_SHIPPER"));
+    }
 
     @Override
     public List<User> getAllShipper() {

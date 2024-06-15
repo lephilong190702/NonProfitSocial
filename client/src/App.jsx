@@ -33,6 +33,7 @@ import UploadProject from './pages/projectpage/UploadProject';
 import Statistic from './pages/statistic/Statistic';
 import StatisticMonth from './pages/statistic/StatisticMonth';
 import StatisticQuarter from './pages/statistic/StatisticQuarter';
+import Delivery from './pages/delivery/Delivery';
 export const UserContext = createContext();
 
 const App = () => {
@@ -70,6 +71,7 @@ const App = () => {
           <Route path='/statistic' element={<Statistic />} />
           <Route path='/statistic-mon' element={<StatisticMonth />} />
           <Route path='/statistic-quar' element={<StatisticQuarter />} />
+          <Route path='/delivery' element={<Delivery />} />
         </Routes>
         <Footer />
       </BrowserRouter>

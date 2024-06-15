@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
@@ -40,6 +40,7 @@ const ProjectDetails = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [showModelAddress, setShowModalAddress] = useState(false);
+  const [showDonateItemModal, setShowDonateItemModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
@@ -58,7 +59,12 @@ const ProjectDetails = () => {
   const [success, setSuccess] = useState("");
 
   const [amount, setAmount] = useState(null);
+  const [donateItem, setDonateItem] = useState(null);
+  const [addressDelivery, setAddressDelivery] = useState(null);
   const [orderInfo, setOrderInfo] = useState("");
+
+  const [errDonateItem, setErrDonateItem] = useState(null);
+  const [errAddressDelivery, setErrAddressDelivery] = useState(null);
 
   const currentPageUrl = window.location.href;
 
@@ -199,12 +205,76 @@ const ProjectDetails = () => {
     }
   };
 
+  const handleSubmitDonateItem = async (event) => {
+    event.preventDefault();
+    if (selectedProjectId === null) {
+      console.error("Chưa chọn dự án để đóng góp.");
+      return;
+    }
+
+    // if (amount === null) {
+    //   setErrorMessage("Vui lòng nhập số tiền đóng góp.");
+    //   return;
+    // }
+
+    if (donateItem === null) {
+      setErrDonateItem("Vui lòng nhập hiện vật cần đóng góp.");
+      return;
+    }
+
+    if (addressDelivery === null) {
+      setErrAddressDelivery("Vui lòng nhập địa chỉ cần giao hàng.");
+      return;
+    }
+
+    // const donationAmount = parseFloat(amount);
+    // console.log(donationAmount);
+    // if (donationAmount > 1000000000 || donationAmount < 10000) {
+    //   setErrorMessage(
+    //     "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
+    //   );
+    //   console.log(errorMessage);
+    //   return;
+    // }
+    try {
+      const formData = new FormData();
+      formData.append("donateItem", donateItem);
+      formData.append("addressDelivery", addressDelivery);
+      formData.append("orderInfo", orderInfo);
+
+      const response = await authApi().post(
+        endpoints["donate-item"](projectId),
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setSuccess("Gửi địa chỉ thành công");
+      setTimeout(() => {
+        setSuccess("");
+        nav("/");
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
+  };
+
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
     setSelectedProjectTitle(projectTitle);
     setShowModal(true);
   };
+
+  const openDonateItemModal = (projectId, projectTitle) => {
+    localStorage.setItem("selectedProjectId", projectId);
+    setSelectedProjectId(projectId);
+    setSelectedProjectTitle(projectTitle);
+    setShowDonateItemModal(true);
+  }
 
   const openProposeAddress = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
@@ -216,6 +286,11 @@ const ProjectDetails = () => {
   const closeModal = () => {
     setSelectedProjectId(null);
     setShowModal(false);
+  };
+
+  const closeDonateItemModal = () => {
+    setSelectedProjectId(null);
+    setShowDonateItemModal(false);
   };
 
   const closeModalAddress = () => {
@@ -350,14 +425,24 @@ const ProjectDetails = () => {
           </div>
         </Col>
         {user && (
-          <Button
+          <div className="flex flex-row justify-center">
+          <button
             onClick={() => openModal(project.id, project.title)}
-            className="card-link donate-link"
-            style={{ marginRight: "5px" }}
+            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+            style={{ marginRight: "5px", height: "50px" }}
             variant="primary"
           >
-            Đóng góp
-          </Button>
+            Đóng góp hiện kim
+          </button>
+          <button
+            onClick={() => openDonateItemModal(project.id, project.title)}
+            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+            style={{ marginRight: "5px", height: "50px" }}
+            variant="primary"
+          >
+            Đóng góp hiện vật
+          </button>
+          </div>
         )}
       </Row>
 
@@ -422,6 +507,80 @@ const ProjectDetails = () => {
             Đóng
           </Button>
           <Button variant="primary" onClick={handleSubmit}>
+            Xác nhận đóng góp
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showDonateItemModal} onHide={closeDonateItemModal}>
+        <Modal.Header closeButton>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "100%" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="flex">Hiện vật cần đóng góp</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Vui lòng nhập hiện vật cần quyên góp"
+                  sx={{ marginLeft: "5px" }}
+                  // value={pay.note}
+                  onChange={(e) => {
+                    setDonateItem(e.target.value);
+                    setErrDonateItem("")
+                  }}
+                />
+                {errDonateItem && (
+                  <Form.Text className="text-danger">{errDonateItem}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="flex">Địa chỉ giao hàng</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Vui lòng nhập địa chỉ giao hàng"
+                  sx={{ marginLeft: "5px" }}
+                  // value={pay.note}
+                  onChange={(e) => {
+                    setAddressDelivery(e.target.value);
+                    setErrAddressDelivery("")
+                  }}
+                />
+                {errAddressDelivery && (
+                  <Form.Text className="text-danger">{errAddressDelivery}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="mt-2">Ghi chú</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  sx={{ marginLeft: "5px" }}
+                  // value={pay.note}
+                  onChange={(e) => setOrderInfo(e.target.value)}
+                />
+              </div>
+            </div>
+          </Box>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeDonateItemModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleSubmitDonateItem}>
             Xác nhận đóng góp
           </Button>
         </Modal.Footer>

@@ -40,6 +40,8 @@ public interface UserService extends UserDetailsService {
 
     boolean isEmployee(Long userId);
 
+    boolean isShipper(Long userId);
+
     List<User> getAllShipper();
 
 }

@@ -52,6 +52,8 @@ const StatisticMonth = () => {
     pageNumbers.push(i);
   }
   return (
+    <>
+    <h1 className="form-heading">BÁO CÁO TÀI CHÍNH THÁNG</h1>
     <div className="container-stat">
       <div className="button-container-stat">
       {displayedMonths.map((item, index) => (
@@ -92,6 +94,7 @@ const StatisticMonth = () => {
           <Pagination.Last onClick={() => paginate(Math.ceil(months.length / itemsPerPage))} />
         </Pagination>
     </div>
+    </>
   );
 };
 

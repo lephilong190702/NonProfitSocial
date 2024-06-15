@@ -58,6 +58,7 @@ export const endpoints = {
     "post-address": (projectId) => `${SERVER_CONTEXT}/api/${projectId}/address/`,
     "check-admin-role": (userId) => `${SERVER_CONTEXT}/api/check-admin-role/${userId}`,
     "check-employee-role": (userId) => `${SERVER_CONTEXT}/api/check-employee-role/${userId}`,
+    "check-shipper-role": (userId) => `${SERVER_CONTEXT}/api/check-shipper-role/${userId}`,
     "tag": `${SERVER_CONTEXT}/api/tags/`,
     // "tags": (name) => `${SERVER_CONTEXT}/api/tags/${name}`,
     "notification": (userId) => `${SERVER_CONTEXT}/api/notifications/${userId}`,
@@ -65,6 +66,8 @@ export const endpoints = {
     "post-tags": (projectId) => `${SERVER_CONTEXT}/api/post/tags/${projectId}`,
     "post-images": (projectId) => `${SERVER_CONTEXT}/api/post/images/${projectId}`,
     "upload-project": `${SERVER_CONTEXT}/api/upload-project/`,
+    "donate-item": (projectId) => `${SERVER_CONTEXT}/api/donateItem/${projectId}`,
+    "transport": (shipperId) => `${SERVER_CONTEXT}/api/transport/${shipperId}`
 
 }
 

@@ -167,4 +167,11 @@ public class AuthRestController {
         boolean isEmployee = userService.isEmployee(userId);
         return ResponseEntity.ok(isEmployee);
     }
+
+    @GetMapping("/check-shipper-role/{userId}")
+    @CrossOrigin
+    public ResponseEntity<Boolean> checkShipperRole(@PathVariable Long userId) {
+        boolean isEmployee = userService.isShipper(userId);
+        return ResponseEntity.ok(isEmployee);
+    }
 }

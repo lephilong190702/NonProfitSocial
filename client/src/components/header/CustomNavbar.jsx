@@ -24,6 +24,7 @@ import "./navbar.css";
 const CustomNavbar = () => {
   const [user, dispatch] = useContext(UserContext);
   const [employee, setEmployee] = useState(false);
+  const [shipper, setShipper] = useState(false);
 
   const [newsCategory, setNewsCategory] = useState([]);
   const [projectCategory, setProjectCategory] = useState([]);
@@ -97,6 +98,24 @@ const CustomNavbar = () => {
       }
     };
 
+    const isShipper = async () => {
+      try {
+        const response = await authApi().get(endpoints["current-user"]);
+        const userId = response.data.id;
+        const res = await authApi().get(
+          endpoints["check-shipper-role"](userId)
+        );
+        console.log(res.data);
+        if (res.data === true) {
+          setShipper(true);
+          // console.log(employee);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    isShipper();
     isEmployee();
     loadProjects();
     loadNews();
@@ -263,19 +282,6 @@ const CustomNavbar = () => {
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">
                             <div className="flex flex-col top-menu-text">
-                              {/* {projectCategory.length > 0 &&
-                                projectCategory.map((c) => {
-                                  let h = `/projects/?cateId=${c.id}`;
-                                  return (
-                                    <Link
-                                      to={h}
-                                      className="news-link"
-                                      key={c.id}
-                                    >
-                                      {c.name}
-                                    </Link>
-                                  );
-                                })} */}
                                 <Link to="/statistic" className="news-link">Báo cáo theo năm</Link>
                                 <Link to="/statistic-mon" className="news-link">Báo cáo theo tháng</Link>
                                 <Link to="/statistic-quar" className="news-link">Báo cáo theo quý</Link>
@@ -346,6 +352,16 @@ const CustomNavbar = () => {
                       </li>
                     </div>
                   )}
+                  {shipper && (
+                    <div>
+                      <li className="top-menu-item group">
+                        <Link to="/delivery" className="nav-link">
+                          VẬN CHUYỂN
+                        </Link>
+                      </li>
+                    </div>
+                  )}
+                  
                   <div>
                     <li className="top-menu-item group">
                       <Link to="/upload-project" className="nav-link">

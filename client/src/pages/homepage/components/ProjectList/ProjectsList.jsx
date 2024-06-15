@@ -165,6 +165,11 @@ const ProjectsList = () => {
     }
   };
 
+  const formatter = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
   if (project === null) return <MySpinner />;
   if (project.length === 0)
     return (
@@ -211,10 +216,10 @@ const ProjectsList = () => {
                     <Card.Title className="card-title">{title}</Card.Title>
                     <Card.Text className="card-text">{content}</Card.Text>
                     <Card.Footer>
-                      Số tiền đã quyên góp: {p.contributedAmount}
+                      Số tiền đã quyên góp: {formatter.format(p.contributedAmount)}
                     </Card.Footer>
                     <Card.Footer>
-                      Số tiền cần quyên góp: {p.totalAmount}
+                      Số tiền cần quyên góp: {formatter.format(p.totalAmount)}
                     </Card.Footer>
                     <ProgressBar
                       now={(p.contributedAmount / p.totalAmount) * 100}
@@ -248,7 +253,7 @@ const ProjectsList = () => {
                             )}
                           </>
                         )}
-                        {p.contributedAmount < p.totalAmount && (
+                        {/* {p.contributedAmount < p.totalAmount && (
                           <Link
                             onClick={() => openModal(p.id, p.title)}
                             className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
@@ -268,7 +273,7 @@ const ProjectsList = () => {
                           >
                             ĐÃ HOÀN THÀNH
                           </Link>
-                        )}
+                        )} */}
                       </div>
                     </div>
                     {/* <Link to={url} className="card-link">

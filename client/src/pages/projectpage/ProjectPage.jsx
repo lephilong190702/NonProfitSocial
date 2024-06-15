@@ -162,6 +162,11 @@ const ProjectPage = () => {
     }
   };
 
+  const formatter = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+
   if (project === null) return <MySpinner />;
   if (project.length === 0)
     return (
@@ -208,10 +213,10 @@ const ProjectPage = () => {
                     <Card.Title className="card-title">{title}</Card.Title>
                     <Card.Text className="card-text">{content}</Card.Text>
                     <Card.Footer>
-                      Số tiền đã quyên góp: {p.contributedAmount}
+                      Số tiền đã quyên góp: {formatter.format(p.contributedAmount)}
                     </Card.Footer>
                     <Card.Footer>
-                      Số tiền cần quyên góp: {p.totalAmount}
+                      Số tiền cần quyên góp: {formatter.format(p.totalAmount)}
                     </Card.Footer>
                     <ProgressBar
                       now={(p.contributedAmount / p.totalAmount) * 100}

@@ -1,6 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import ApiConfig, { authApi, endpoints } from "../configs/ApiConfig";
 import MySpinner from "../layout/MySpinner";
@@ -41,6 +46,7 @@ const ProjectDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModelAddress, setShowModalAddress] = useState(false);
   const [showDonateItemModal, setShowDonateItemModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const currentURL = window.location.href;
   const urlParams = new URLSearchParams(currentURL);
@@ -65,6 +71,14 @@ const ProjectDetails = () => {
 
   const [errDonateItem, setErrDonateItem] = useState(null);
   const [errAddressDelivery, setErrAddressDelivery] = useState(null);
+
+  const [feedbackName, setFeedbackName] = useState(null);
+  const [feedbackPhone, setFeedbackPhone] = useState(null);
+  const [feedback, setFeedback] = useState(null);
+
+  const [errFeedbackName, setErrFeedbackName] = useState(null);
+  const [errFeedbackPhone, setErrFeedbackPhone] = useState(null);
+  const [errFeedback, setErrFeedback] = useState(null);
 
   const currentPageUrl = window.location.href;
 
@@ -227,15 +241,6 @@ const ProjectDetails = () => {
       return;
     }
 
-    // const donationAmount = parseFloat(amount);
-    // console.log(donationAmount);
-    // if (donationAmount > 1000000000 || donationAmount < 10000) {
-    //   setErrorMessage(
-    //     "Số tiền đóng góp không được vượt quá 1 tỷ và thấp hơn 10000."
-    //   );
-    //   console.log(errorMessage);
-    //   return;
-    // }
     try {
       const formData = new FormData();
       formData.append("donateItem", donateItem);
@@ -262,6 +267,56 @@ const ProjectDetails = () => {
     }
   };
 
+  const handleSubmitFeedback = async (event) => {
+    event.preventDefault();
+    // if (selectedProjectId === null) {
+    //   console.error("Chưa chọn dự án để đóng góp.");
+    //   return;
+    // }
+
+
+    if (feedbackName === null) {
+      setErrFeedbackName("Vui lòng nhập tên người phản hồi.");
+      return;
+    }
+    
+    if (!isValidPhoneNumber(feedbackPhone)) {
+      setErrFeedbackPhone('Số điện thoại không hợp lệ. Vui lòng nhập lại.');
+      return;
+    }
+    
+    if (feedback === null) {
+      setErrFeedback("Vui lòng nhập nội dung cần phản hồi.");
+      return;
+    }
+
+
+    try {
+      const formData = new FormData();
+      formData.append("name", feedbackName);
+      formData.append("phone", feedbackPhone);
+      formData.append("feedback", feedback);
+
+      const response = await ApiConfig.post(
+        endpoints["feedback-project"](projectId),
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setSuccess("Gửi phản hồi thành công");
+      setTimeout(() => {
+        setSuccess("");
+        nav("/");
+      }, 2000);
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
+  };
+
   const openModal = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
     setSelectedProjectId(projectId);
@@ -274,7 +329,14 @@ const ProjectDetails = () => {
     setSelectedProjectId(projectId);
     setSelectedProjectTitle(projectTitle);
     setShowDonateItemModal(true);
-  }
+  };
+
+  const openFeedbackModal = (projectId, projectTitle) => {
+    localStorage.setItem("selectedProjectId", projectId);
+    setSelectedProjectId(projectId);
+    setSelectedProjectTitle(projectTitle);
+    setShowFeedbackModal(true);
+  };
 
   const openProposeAddress = (projectId, projectTitle) => {
     localStorage.setItem("selectedProjectId", projectId);
@@ -291,6 +353,11 @@ const ProjectDetails = () => {
   const closeDonateItemModal = () => {
     setSelectedProjectId(null);
     setShowDonateItemModal(false);
+  };
+
+  const closeFeedbackModal = () => {
+    setSelectedProjectId(null);
+    setShowFeedbackModal(false);
   };
 
   const closeModalAddress = () => {
@@ -310,10 +377,15 @@ const ProjectDetails = () => {
     }
   };
 
-  const formatter = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  const formatter = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
   });
+
+  const isValidPhoneNumber = (phoneNumber) => {
+    const vietnamPhoneNumberRegex = /^(0[1-9])+([0-9]{8})$/;
+    return vietnamPhoneNumberRegex.test(phoneNumber);
+  };
 
   if (project === null) {
     return <MySpinner />;
@@ -430,25 +502,37 @@ const ProjectDetails = () => {
           </div>
         </Col>
         {user && (
-          <div className="flex flex-row justify-center">
-          <button
-            onClick={() => openModal(project.id, project.title)}
-            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-            style={{ marginRight: "5px", height: "50px" }}
-            variant="primary"
-          >
-            Đóng góp hiện kim
-          </button>
-          <button
-            onClick={() => openDonateItemModal(project.id, project.title)}
-            className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-            style={{ marginRight: "5px", height: "50px" }}
-            variant="primary"
-          >
-            Đóng góp hiện vật
-          </button>
+          <div className="flex-col justify-center">
+            <div className="flex flex-row justify-center">
+              <button
+                onClick={() => openModal(project.id, project.title)}
+                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                style={{ marginRight: "5px", height: "50px" }}
+                variant="primary"
+              >
+                Đóng góp hiện kim
+              </button>
+              <button
+                onClick={() => openDonateItemModal(project.id, project.title)}
+                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                style={{ marginRight: "5px", height: "50px" }}
+                variant="primary"
+              >
+                Đóng góp hiện vật
+              </button>
+            </div>
           </div>
         )}
+        <div className="flex justify-center">
+          <Button
+            onClick={() => openFeedbackModal(project.id, project.title)}
+            className="justify-center custom-card-link font-semibold text-[#fff] bg-[#38b6ff] shadow-md shadow-[#38b6ff] text-[13px] border-2 px-2 py-1 hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+            style={{ marginRight: "5px", height: "50px" }}
+            variant="primary"
+          >
+            PHẢN HỒI VỀ DỰ ÁN
+          </Button>
+        </div>
       </Row>
 
       <hr />
@@ -543,7 +627,7 @@ const ProjectDetails = () => {
                   // value={pay.note}
                   onChange={(e) => {
                     setDonateItem(e.target.value);
-                    setErrDonateItem("")
+                    setErrDonateItem("");
                   }}
                 />
                 {errDonateItem && (
@@ -560,11 +644,13 @@ const ProjectDetails = () => {
                   // value={pay.note}
                   onChange={(e) => {
                     setAddressDelivery(e.target.value);
-                    setErrAddressDelivery("")
+                    setErrAddressDelivery("");
                   }}
                 />
                 {errAddressDelivery && (
-                  <Form.Text className="text-danger">{errAddressDelivery}</Form.Text>
+                  <Form.Text className="text-danger">
+                    {errAddressDelivery}
+                  </Form.Text>
                 )}
               </div>
 
@@ -586,6 +672,87 @@ const ProjectDetails = () => {
             Đóng
           </Button>
           <Button variant="primary" onClick={handleSubmitDonateItem}>
+            Xác nhận đóng góp
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showFeedbackModal} onHide={closeFeedbackModal}>
+        <Modal.Header closeButton>
+          <div className="text-xl text-center font-bold">
+            {selectedProjectTitle}
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <Box
+            style={{ padding: 0 }}
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "100%" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <div className="flex flex-col w-full">
+              <div className="flex flex-col">
+                <Typography className="flex">Tên người phản hồi</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Vui lòng nhập hiện vật cần quyên góp"
+                  sx={{ marginLeft: "5px" }}
+                  // value={pay.note}
+                  onChange={(e) => {
+                    setFeedbackName(e.target.value);
+                    setErrFeedbackName("");
+                  }}
+                />
+                {errFeedbackName && (
+                  <Form.Text className="text-danger">{errFeedbackName}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="flex">Số điện thoại người phản hồi</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Vui lòng nhập địa chỉ giao hàng"
+                  sx={{ marginLeft: "5px" }}
+                  type="number"
+                  // value={pay.note}
+                  onChange={(e) => {
+                    setFeedbackPhone(e.target.value);
+                    // setErrAddressDelivery("");
+                  }}
+                />
+                {errFeedbackPhone && (
+                  <Form.Text className="text-danger">{errFeedbackPhone}</Form.Text>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <Typography className="mt-2">Nội dung phản hồi</Typography>
+                <InputBase
+                  className="border p-2"
+                  placeholder="Nhập ghi chú (tuỳ chọn)"
+                  sx={{ marginLeft: "5px" }}
+                  // value={pay.note}
+                  onChange={(e) => {
+                    setFeedback(e.target.value);
+                    setErrFeedback("");
+                  }}
+                />
+                {errFeedback && (
+                  <Form.Text className="text-danger">{errFeedback}</Form.Text>
+                )}
+              </div>
+            </div>
+          </Box>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeFeedbackModal}>
+            Đóng
+          </Button>
+          <Button variant="primary" onClick={handleSubmitFeedback}>
             Xác nhận đóng góp
           </Button>
         </Modal.Footer>

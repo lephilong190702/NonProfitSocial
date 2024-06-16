@@ -147,6 +147,7 @@ const CustomNavbar = () => {
 
   const logout = () => {
     setEmployee(false);
+    setShipper(false);
 
     dispatch({
       type: "logout",
@@ -203,7 +204,7 @@ const CustomNavbar = () => {
                 />
               </a>
 
-              <div className="hidden ml-8  font-bold  w-full md:flex md:w-auto md:items-center md:justify-between md:order-1 ">
+              <div className="hidden  font-bold  w-full md:flex md:w-auto md:items-center md:justify-between md:order-1 ">
                 <ul className="flex justify-center items-center gap-8 mr-16 text-[14px]">
                   <div>
                     <li className="top-menu-item">
@@ -321,6 +322,7 @@ const CustomNavbar = () => {
                                     </Link>
                                   );
                                 })}
+                                <Link to="/outside-news" className="news-link">Tin tức khác</Link>
                             </div>
                           </div>
                         </div>

@@ -2,6 +2,7 @@ package com.csn.charity.controller;
 
 import java.util.List;
 
+import com.csn.charity.model.ProjectFeedback;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,6 +101,12 @@ public class ProjectController {
         return "pages/pending_projects";
     }
 
+    @GetMapping("/admin/pending-feedback")
+    public String getPendingFeedback(Model model) {
+        model.addAttribute("pending", this.projectService.getPendingFeedback());
+        return "pages/pending_feedback_project";
+    }
+
     @GetMapping("/admin/pending-project/{id}")
     public String detail(Model model, @PathVariable(value = "id") Long id) {
         List<ProjectImage> projectImage = this.projectService.getImagesByProject(id);
@@ -109,16 +116,35 @@ public class ProjectController {
         return "pages/pending_project";
     }
 
+    @GetMapping("/admin/pending-feedback/{id}")
+    public String feedbackDetail(Model model, @PathVariable(value = "id") Long id) {
+        ProjectFeedback projectFeedback = this.projectService.getFeedback(id);
+        model.addAttribute("pending", projectFeedback);
+        return "pages/feedback_project_detail";
+    }
+
     @RequestMapping(value = "/admin/accept-project/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String acceptProject(@PathVariable(value = "id") Long id) {
         this.projectService.acceptProject(id);
         return "redirect:/admin/pending-project";
     }
 
+    @RequestMapping(value = "/admin/accept-feedback/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String acceptFeedback(@PathVariable(value = "id") Long id) {
+        this.projectService.acceptFeedback(id);
+        return "redirect:/admin/pending-feedback";
+    }
+
     @RequestMapping(value = "/admin/deny-project/{id}", method = { RequestMethod.GET, RequestMethod.POST })
     public String denyProject(@PathVariable(value = "id") Long id) {
         this.projectService.denyProject(id);
         return "redirect:/admin/pending-project";
+    }
+
+    @RequestMapping(value = "/admin/deny-feedback/{id}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String denyFeedback(@PathVariable(value = "id") Long id) {
+        this.projectService.denyFeedback(id);
+        return "redirect:/admin/pending-feedback";
     }
 
 }

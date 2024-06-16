@@ -2,17 +2,12 @@ package com.csn.charity.controller.api;
 
 import java.util.List;
 
+import com.csn.charity.model.ProjectFeedback;
+import com.csn.charity.model.UserContributeProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.csn.charity.dto.ProjectDTO;
@@ -97,6 +92,18 @@ public class ProjectRestController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @PostMapping("/feedback/{projectId}")
+    @CrossOrigin
+    public ResponseEntity<?> feedbackProject(@PathVariable Long projectId,
+                                         @RequestBody ProjectFeedback projectFeedback) {
+        try {
+            ProjectFeedback feedback = this.projectService.feedbackProject(projectId, projectFeedback);
+            return new ResponseEntity<>(feedback, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

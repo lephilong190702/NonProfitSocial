@@ -10,6 +10,8 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.csn.charity.model.*;
+import com.csn.charity.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
@@ -20,14 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.csn.charity.dto.ProjectDTO;
-import com.csn.charity.model.Project;
-import com.csn.charity.model.ProjectCategory;
-import com.csn.charity.model.ProjectImage;
-import com.csn.charity.model.User;
-import com.csn.charity.repository.ProjectCategoryRepository;
-import com.csn.charity.repository.ProjectImageRepository;
-import com.csn.charity.repository.ProjectRepository;
-import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.MailService;
 import com.csn.charity.service.interfaces.ProjectService;
 
@@ -43,6 +37,8 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectCategoryRepository projectCategoryRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ProjectFeedbackRepository projectFeedbackRepository;
     @Autowired
     private MailService mailService;
 
@@ -257,6 +253,47 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = this.projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
         this.projectRepository.delete(project);
+    }
+
+    @Override
+    public ProjectFeedback feedbackProject(Long projectId, ProjectFeedback projectFeedback) {
+        Project project = this.projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + projectId));
+
+        projectFeedback.setProject(project);
+        projectFeedback.setName(projectFeedback.getName());
+        projectFeedback.setPhone(projectFeedback.getPhone());
+        projectFeedback.setFeedback(projectFeedback.getFeedback());
+        projectFeedback.setStatus("PENDING");
+
+        return this.projectFeedbackRepository.save(projectFeedback);
+    }
+
+    @Override
+    public List<ProjectFeedback> getPendingFeedback() {
+        return projectFeedbackRepository.findByStatus("PENDING");
+    }
+
+    @Override
+    public ProjectFeedback getFeedback(Long id) {
+        return this.projectFeedbackRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy dự án với ID: " + id));
+    }
+
+    @Override
+    public void acceptFeedback(Long projectId) {
+        ProjectFeedback projectFeedback = this.projectFeedbackRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phản hồi với ID: " + projectId));
+        projectFeedback.setStatus("PROCESSED");
+        this.projectFeedbackRepository.save(projectFeedback);
+    }
+
+    @Override
+    public void denyFeedback(Long projectId) {
+        ProjectFeedback projectFeedback = this.projectFeedbackRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phản hồi với ID: " + projectId));
+        projectFeedback.setStatus("DENIED");
+        this.projectFeedbackRepository.save(projectFeedback);
     }
 
 }

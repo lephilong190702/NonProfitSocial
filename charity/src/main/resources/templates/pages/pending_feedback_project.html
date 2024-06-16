@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/dashboard}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Charity Website</title>
+    <style>
+      .main-content.container-fluid {
+        text-align: center;
+      }
+
+      .image-container {
+        margin-top: 10px; /* Add margin-top to image container */
+      }
+
+      .image-container img {
+        max-width: 500px; /* Set maximum width for images */
+        height: auto; /* Auto-adjust height based on width */
+        margin: 15px; /* Add margin-right to images */
+      }
+
+      .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 18px;
+      }
+
+      .form-group label {
+        flex: 0 0 200px; /* Set a fixed width for labels */
+        max-width: 200px; /* Ensure the maximum width for labels */
+        text-align: right; /* Align text to the right */
+        padding-right: 10px; /* Add some padding to the right */
+        margin-bottom: 0; /* Remove the bottom margin */
+      }
+
+      .form-group .form-control-icon {
+        flex: 1;
+      }
+
+      .form-control-icon span {
+        margin-top: 5px; /* Add margin-top to span */
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="main-content container-fluid" layout:fragment="content">
+      <h1 class="text-info text-center">XỬ LÝ PHẢN HỒI DỰ ÁN</h1>
+      <div class="container my-2 mt-5">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>DỰ ÁN</th>
+                <th>TRẠNG THÁI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="p:${pending}">
+                <td th:text="${p.id}"></td>
+                <td th:text="${p.project.title}"></td>
+                <td th:text="${p.status}"></td>
+                <td>
+                  <a
+                    class="btn btn-primary"
+                    th:href="@{/admin/pending-feedback/{id}(id=${p.id})}"
+                    >XỬ LÝ</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

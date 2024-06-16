@@ -2,6 +2,7 @@ package com.csn.charity.repository;
 
 import java.util.List;
 
+import com.csn.charity.model.ProjectFeedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,4 +23,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> search(String kw);
 
     List<Project> findByPending(Boolean pending);
+
+//    List<ProjectFeedback> findByStatus(String status);
 }

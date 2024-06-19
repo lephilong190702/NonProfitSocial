@@ -99,9 +99,5 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project")
     @JsonIgnore
-    private List<UserRatingProject> ratings = new ArrayList<>();
-
-    @OneToMany(mappedBy = "project")
-    @JsonIgnore
     private List<Address> addresses = new ArrayList<>();
 }

@@ -173,22 +173,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerOAuthUser(String email, AuthenticationType type) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            User nUser = new User();
-            nUser.setEmail(email);
-            nUser.setAuthType(type);
-            nUser.setStatus(true);
-
-            Profile profile = new Profile();
-            nUser.setProfile(profile);
-
-            this.userRepository.save(nUser);
-        }
-    }
-
-    @Override
     public String forgotPassword(String email) {
         User user = this.userRepository.findByEmail(email);
         try {

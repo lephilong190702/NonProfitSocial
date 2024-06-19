@@ -8,7 +8,7 @@ INSERT INTO `user` (status, id, username, auth_type, email, password, enabled) V
 (1,5,'employee',NULL,'employee1410@gmail.com','$2a$10$wuBgSibOmg48Zonqf4xcUesVvUg8BZ.lVWTsB4TRZK9SatOBRxbKu',1);
 
 -- Role
-INSERT INTO `user_role` (id, name) VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER'),(3,'ROLE_SUPERADMIN'), (4,'ROLE_EMPLOYEE');
+INSERT INTO `user_role` (id, name) VALUES (1,'ROLE_ADMIN'),(2,'ROLE_USER'),(3,'ROLE_SUPERADMIN'), (4,'ROLE_EMPLOYEE'), (5, 'ROLE_SHIPPER');
 
 
 -- User_Role

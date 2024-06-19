@@ -62,10 +62,6 @@ public class User implements Serializable {
     @PrimaryKeyJoinColumn
     private Profile profile;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "auth_type")
-    private AuthenticationType authType;
-
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<UserContributeProject> contributions = new ArrayList<>();
@@ -97,10 +93,6 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<UserReportPost> reports = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<UserRatingProject> ratings = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore

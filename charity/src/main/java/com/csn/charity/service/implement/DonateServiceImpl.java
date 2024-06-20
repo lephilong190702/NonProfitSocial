@@ -73,7 +73,7 @@ public class DonateServiceImpl implements DonateService {
             // Convert java.util.Date to java.time.LocalDate
             LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             userContributeProject.setDonateDate(localDate);
-            ;
+            userContributeProject.setDonateItem("None");
             return this.donateRepository.save(userContributeProject);
         } else {
             throw new IllegalArgumentException("Số tiền quyên góp đã đủ, xin cảm ơn.");

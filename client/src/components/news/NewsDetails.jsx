@@ -2,19 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { useParams } from "react-router";
 import ApiConfig, { authApi, endpoints } from "../../configs/ApiConfig";
-import { Button, Col, Form, ListGroup, Row, Image } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import MySpinner from "../../layout/MySpinner";
 import moment from "moment";
 import "./comment.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookMessenger,
-  faPinterest,
-} from "@fortawesome/free-brands-svg-icons";
 import ReplyBox from "../reply/ReplyBox";
 import { FacebookIcon, FacebookMessengerIcon, FacebookMessengerShareButton, FacebookShareButton, PinterestShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton } from "react-share";
-import Client from "stompjs";
-import SockJS from "sockjs-client";
+
 
 const NewsDetails = () => {
   const [user] = useContext(UserContext);
@@ -60,46 +54,8 @@ const NewsDetails = () => {
 
     loadNewsDetail();
     loadComments(newsId);
-    const stompClient = connectToWebSocket();
-
-    // loadComments();
-
-    return () => {
-      stompClient.disconnect();
-    };
   }, [newsId]);
 
-  const connectToWebSocket = () => {
-    const socket = new SockJS("https://nonprofit.southeastasia.cloudapp.azure.com/api/ws");
-    // const socket = new SockJS("http://localhost:9090/api/ws");
-    const stompClient = Client.over(socket);
-
-    console.log("Connecting to websocket server...");
-
-    stompClient.connect({}, () => {
-      stompClient.subscribe("/topic/news", (message) => {
-        console.log("Received message:", message.body);
-        const newsComment = JSON.parse(message.body);
-        console.log("newsComment", newsComment);
-        setComments((current) => [...current, newsComment]);
-      });
-
-      // stompClient.subscribe("/topic/reply-news-comments/", (message) => {
-      //   console.log("Received message:", message.body);
-      //   const newReplyComment = JSON.parse(message.body);
-      //   console.log("newReplyComment", newReplyComment);
-      //   const commentId = newReplyComment.comment.id;
-      //   console.log("commentId", commentId);
-      //   setComments(newReplyComment);
-      // });
-    },
-      (error) => {
-        console.error("Websocket connection error:", error);
-      }
-    );
-
-    return stompClient;
-  };
 
   const checkCondition = () => {
     if (content.trim() === "") {
@@ -130,19 +86,7 @@ const NewsDetails = () => {
         content: replyContent,
         newsId: news.id,
       });
-
-      // const updatedComments = comments.map((c) => {
-      //   if (c.id === parentId) {
-      //     c.replies = c.replies || [];
-      //     c.replies.push(data);
-      //   }
-      //   return c;
-      // });
-
-      // console.log(updatedComments);
-
       loadReply(parentId);
-      // setComments(updatedComments);
       loadComments(newsId);
       setReplyContent("");
     };
@@ -153,14 +97,8 @@ const NewsDetails = () => {
   const openComment = () => {
     setIsComment(!isComment);
   };
-
-  const openReply = () => {
-    setIsReply(!isReply);
-  };
-
   if (news === null) return <MySpinner />;
 
-  let url = `/login?next=/registerVol/${newsId}`;
   return (
     <>
       <div>
@@ -249,7 +187,7 @@ const NewsDetails = () => {
                   <div className="w-full px-12 py-4">
                     {isCommentEmpty && (
                       <div className="text-sm text-[#f10000]">
-                        Vui lòng nhập đánh giá của bạn.
+                        Vui lòng nhập bình luận của bạn.
                       </div>
                     )}
                     <button

@@ -501,7 +501,7 @@ const ProjectDetails = () => {
             </ul>
           </div>
         </Col>
-        {user && (
+        {user ? (
           <div className="flex-col justify-center">
             <div className="flex flex-row justify-center">
               <button
@@ -522,6 +522,8 @@ const ProjectDetails = () => {
               </button>
             </div>
           </div>
+        ) : (
+          <Link className="flex justify-center" to="/login">Đăng nhập để quyên góp</Link>
         )}
         <div className="flex justify-center">
           <Button

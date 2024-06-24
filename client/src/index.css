@@ -6,12 +6,12 @@
     @apply hover:text-[#007fff] relative after:absolute after:bottom-0 after:left-0 after:bg-[#007fff] after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:ease-in-out
 }
 .top-menu-text {
-    @apply mb-3 text-[#007fff];
+    @apply mb-3 text-[#D8EFED];
     font-size: 15px;
   }
   
 .top-menu-text-links{
-    @apply hover:underline hover:text-[#0E740E] text-xs pb-3 font-medium
+    @apply hover:underline hover:text-[#D8EFED] text-xs pb-3 font-medium
 }
 
 .bottom-menu-item{

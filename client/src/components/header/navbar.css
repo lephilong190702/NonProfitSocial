@@ -1,9 +1,10 @@
 .news-link {
     text-decoration: none;
     font-weight: normal; 
+    color: white;
   }
 
 .news-link:hover {
-    background-color: rgb(152, 152, 152);
-    color: white;
+    background-color: #394048;
+    color: #B3473C;
   }

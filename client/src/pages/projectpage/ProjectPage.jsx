@@ -222,7 +222,7 @@ const ProjectPage = () => {
                       now={(p.contributedAmount / p.totalAmount) * 100}
                     />
                     <hr />
-                    {user && (
+                    {user ? (
                       <div className="basis-1/4 flex flex-row justify-between pb-3">
                         <div className="py-1 pr-3">
                           <Link
@@ -235,6 +235,8 @@ const ProjectPage = () => {
                           </Link>
                         </div>
                       </div>
+                    ) : (
+                      <Link to="/login">Đăng nhập để quyên góp</Link>
                     )}
                   </Card.Body>
                 </Link>

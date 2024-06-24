@@ -165,9 +165,9 @@ const ProjectsList = () => {
     }
   };
 
-  const formatter = new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
+  const formatter = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
   });
 
   if (project === null) return <MySpinner />;
@@ -216,7 +216,8 @@ const ProjectsList = () => {
                     <Card.Title className="card-title">{title}</Card.Title>
                     <Card.Text className="card-text">{content}</Card.Text>
                     <Card.Footer>
-                      Số tiền đã quyên góp: {formatter.format(p.contributedAmount)}
+                      Số tiền đã quyên góp:{" "}
+                      {formatter.format(p.contributedAmount)}
                     </Card.Footer>
                     <Card.Footer>
                       Số tiền cần quyên góp: {formatter.format(p.totalAmount)}
@@ -228,7 +229,7 @@ const ProjectsList = () => {
 
                     <div className="basis-1/4 flex flex-row justify-between pb-3">
                       <div className="py-1 pr-3">
-                        {user && (
+                        {user ? (
                           <>
                             {p.contributedAmount < p.totalAmount && (
                               <Link
@@ -252,6 +253,8 @@ const ProjectsList = () => {
                               </Link>
                             )}
                           </>
+                        ) : (
+                          <Link to="/login">Đăng nhập để quyên góp</Link>
                         )}
                         {/* {p.contributedAmount < p.totalAmount && (
                           <Link

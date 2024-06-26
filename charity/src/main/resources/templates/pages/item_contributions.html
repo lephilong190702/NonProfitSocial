@@ -5,25 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quyên Góp Hiện Vật</title>
+    <title>QUYÊN GÓP HIỆN VẬT</title>
 </head>
 
 <body>
     <div class="main-content container-fluid" layout:fragment="content">
         <div class="card-body px-0 pb-0">
             <h1 class="text-center text-info">QUYÊN GÓP HIỆN VẬT</h1>
-            <div class="table-responsive mt-5">
+            <div class="table-responsive mt-5" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
                 <table class='table mb-0' id="table1">
                     <thead>
                         <tr>
                             <th>DỰ ÁN</th>
                             <th>TÀI KHOẢN QUYÊN GÓP</th>
-                            <th>QUYÊN GÓP HIỆN VẬT</th>
+                            <th>SỐ TIỀN QUYÊN GÓP</th>
                             <th>NGÀY QUYÊN GÓP</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="i:${items}">
+                        <tr th:each="i : ${items}">
                             <td th:text="${i.project.title}"></td>
                             <td th:text="${i.user.username}"></td>
                             <td th:text="${i.donateItem}"></td>
@@ -33,8 +33,48 @@
                 </table>
             </div>
         </div>
-        <a th:href="@{/api/export/}" class="btn btn-primary mt-5">Xuất Excel</a>
+
+        <div class="mt-5">
+            <h2>BÁO CÁO HÀNG THÁNG</h2>
+            <div class="row">
+                <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
+                    <div th:each="month : ${#numbers.sequence(1, 12)}">
+                        <a th:href="@{/api/item-export/(period='monthly', year=${year}, month=${month})}"
+                            class="btn btn-primary mt-2 col-md-6" th:text="'Tháng ' + ${month} + ' năm ' + ${year}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quarterly Report Buttons -->
+        <div class="mt-5">
+            <h2>BÁO CÁO HÀNG QUÝ</h2>
+            <div class="row">
+                <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
+                    <div th:each="quarter : ${#numbers.sequence(1, 4)}">
+                        <a th:href="@{/api/item-export/(period='quarterly', year=${year}, quarter=${quarter})}"
+                            class="btn btn-primary mt-2 col-md-6" th:text="'Quý ' + ${quarter} + ' năm ' + ${year}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yearly Report Buttons -->
+        <div class="mt-5">
+            <h2>BÁO CÁO HÀNG NĂM</h2>
+            <div class="row">
+                <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
+                    <div>
+                        <a th:href="@{/api/item-export/(period='yearly', year=${year})}" class="btn btn-primary mt-2"
+                            th:text="'Năm ' + ${year}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
+
 </body>
 
 </html>

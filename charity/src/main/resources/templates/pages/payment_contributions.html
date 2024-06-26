@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quyên Góp Hiện Kim</title>
+    <title>QUYÊN GÓP HIỆN KIM</title>
 </head>
 
 <body>
@@ -26,7 +26,7 @@
                         <tr th:each="p : ${payment}">
                             <td th:text="${p.project.title}"></td>
                             <td th:text="${p.user.username}"></td>
-                            <td th:text="${p.donateAmount}"></td>
+                            <td th:text="${#numbers.formatDecimal(p.donateAmount, 0, 'COMMA', 0, 'POINT')}"></td>
                             <td th:text="${p.donateDate}"></td>
                         </tr>
                     </tbody>
@@ -35,40 +35,37 @@
         </div>
 
 
-        <!-- Monthly Report Buttons -->
-        <!-- Monthly Report Buttons -->
+
         <div class="mt-5">
             <h2>BÁO CÁO HÀNG THÁNG</h2>
             <div class="row">
                 <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
                     <div th:each="month : ${#numbers.sequence(1, 12)}">
-                        <a th:href="@{/api/export/(period='monthly', year=${year}, month=${month})}"
+                        <a th:href="@{/api/payment-export/(period='monthly', year=${year}, month=${month})}"
                             class="btn btn-primary mt-2 col-md-6" th:text="'Tháng ' + ${month} + ' năm ' + ${year}"></a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Quarterly Report Buttons -->
         <div class="mt-5">
             <h2>BÁO CÁO HÀNG QUÝ</h2>
             <div class="row">
                 <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
                     <div th:each="quarter : ${#numbers.sequence(1, 4)}">
-                        <a th:href="@{/api/export/(period='quarterly', year=${year}, quarter=${quarter})}"
+                        <a th:href="@{/api/payment-export/(period='quarterly', year=${year}, quarter=${quarter})}"
                             class="btn btn-primary mt-2 col-md-6" th:text="'Quý ' + ${quarter} + ' năm ' + ${year}"></a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Yearly Report Buttons -->
         <div class="mt-5">
             <h2>BÁO CÁO HÀNG NĂM</h2>
             <div class="row">
                 <div class="col-md-6" th:each="year : ${yearlyYearsWithData}">
                     <div>
-                        <a th:href="@{/api/export/(period='yearly', year=${year})}" class="btn btn-primary mt-2"
+                        <a th:href="@{/api/payment-export/(period='yearly', year=${year})}" class="btn btn-primary mt-2"
                             th:text="'Năm ' + ${year}"></a>
                     </div>
                 </div>

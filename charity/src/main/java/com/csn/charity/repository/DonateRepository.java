@@ -42,5 +42,4 @@ public interface DonateRepository extends JpaRepository<UserContributeProject, L
     
     @Query("SELECT DISTINCT YEAR(d.donateDate) FROM UserContributeProject d")
     List<Integer> findDistinctYears();
-
 }

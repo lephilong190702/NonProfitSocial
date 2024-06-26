@@ -30,104 +30,6 @@ public class StatRestController {
     @Autowired
     private StatService statService;
 
-    // @GetMapping("/export/")
-    // @CrossOrigin
-    // public void exportContributionsToExcel(HttpServletResponse response) throws
-    // IOException {
-    // response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    // List<UserContributeProject> contributions = donateService.getAllContribute();
-
-    // Workbook workbook = new XSSFWorkbook();
-    // Sheet sheet = workbook.createSheet("Contributions");
-
-    // // Tạo hàng tiêu đề
-    // Row headerRow = sheet.createRow(0);
-    // headerRow.createCell(0).setCellValue("DỰ ÁN");
-    // headerRow.createCell(1).setCellValue("TÀI KHOẢN QUYÊN GÓP");
-    // headerRow.createCell(2).setCellValue("SỐ TIỀN QUYÊN GÓP");
-    // headerRow.createCell(3).setCellValue("NGÀY QUYÊN GÓP");
-
-    // // Thêm dữ liệu từ contributions vào Excel
-    // int rowNum = 1;
-    // for (UserContributeProject contribution : contributions) {
-    // Row row = sheet.createRow(rowNum++);
-    // row.createCell(0).setCellValue(contribution.getProject().getTitle());
-    // row.createCell(1).setCellValue(contribution.getUser().getUsername());
-    // row.createCell(2).setCellValue(contribution.getDonateAmount().doubleValue());
-    // row.createCell(3).setCellValue(contribution.getDonateDate().toString());
-    // }
-
-    // // Ghi workbook vào HttpServletResponse
-    // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    // workbook.write(outputStream);
-    // workbook.close();
-
-    // // Ghi workbook từ ByteArrayOutputStream vào HttpServletResponse
-    // response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    // response.setHeader("Content-Disposition", "attachment;
-    // filename=contributions.xlsx");
-    // response.getOutputStream().write(outputStream.toByteArray());
-    // response.getOutputStream().flush();
-    // }
-
-    // @GetMapping("/export/")
-    // @CrossOrigin
-    // public void exportStatsToExcel(
-    // @RequestParam(name = "period") String period,
-    // @RequestParam(name = "year", required = false) Integer year,
-    // HttpServletResponse response) throws IOException {
-
-    // response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    // List<StatDTO> stats;
-
-    // if ("monthly".equals(period) && year != null) {
-    // stats = statService.getTotalDonationByMonth(year);
-    // } else if ("quarterly".equals(period) && year != null) {
-    // stats = statService.getTotalDonationByQuarter(year);
-    // } else if ("yearly".equals(period)) {
-    // stats = statService.getTotalDonationByYear();
-    // } else {
-    // throw new IllegalArgumentException("Invalid period specified");
-    // }
-
-    // Workbook workbook = new XSSFWorkbook();
-    // Sheet sheet = workbook.createSheet("Statistics");
-
-    // // Create header row
-    // Row headerRow = sheet.createRow(0);
-    // headerRow.createCell(0).setCellValue("YEAR");
-    // if ("monthly".equals(period)) {
-    // headerRow.createCell(1).setCellValue("MONTH");
-    // } else if ("quarterly".equals(period)) {
-    // headerRow.createCell(1).setCellValue("QUARTER");
-    // }
-    // headerRow.createCell(2).setCellValue("TOTAL DONATION");
-
-    // // Add data rows
-    // int rowNum = 1;
-    // for (StatDTO stat : stats) {
-    // Row row = sheet.createRow(rowNum++);
-    // row.createCell(0).setCellValue(stat.getYear());
-    // if ("monthly".equals(period)) {
-    // row.createCell(1).setCellValue(stat.getMonth());
-    // } else if ("quarterly".equals(period)) {
-    // row.createCell(1).setCellValue(stat.getQuarter());
-    // }
-    // row.createCell(2).setCellValue(stat.getTotalDonation().doubleValue());
-    // }
-
-    // // Write workbook to response
-    // ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    // workbook.write(outputStream);
-    // workbook.close();
-
-    // // Set response headers
-    // response.setHeader("Content-Disposition", "attachment;
-    // filename=donation_stats.xlsx");
-    // response.getOutputStream().write(outputStream.toByteArray());
-    // response.getOutputStream().flush();
-    // }
-
     @GetMapping("/export/")
     @CrossOrigin
     public void exportContributionsToExcel(
@@ -196,6 +98,146 @@ public class StatRestController {
         response.getOutputStream().flush();
     }
 
+    @GetMapping("/payment-export/")
+    @CrossOrigin
+    public void exportPaymentContributionsToExcel(
+            @RequestParam(name = "period", required = false) String period,
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "month", required = false) Integer month,
+            @RequestParam(name = "quarter", required = false) Integer quarter,
+            HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        List<UserContributeProject> contributions;
+
+        if ("monthly".equals(period) && year != null && month != null) {
+            contributions = statService.getMonthlyContributions(month, year);
+        } else if ("quarterly".equals(period) && year != null && quarter != null) {
+            contributions = statService.getQuarterlyContributions(quarter, year);
+        } else if ("yearly".equals(period) && year != null) {
+            contributions = statService.getYearlyContributions(year);
+        } else {
+            contributions = donateService.getAllContribute();
+        }
+
+        // Filter contributions with category = 1
+        Long category = 1L;
+        contributions = this.donateService.getContributionByCategory(category);
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Contributions");
+
+        CellStyle currencyStyle = workbook.createCellStyle();
+        DataFormat dataFormat = workbook.createDataFormat();
+        currencyStyle.setDataFormat(dataFormat.getFormat("#,##0"));
+
+        CellStyle dateStyle = workbook.createCellStyle();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("DỰ ÁN");
+        headerRow.createCell(1).setCellValue("TÀI KHOẢN QUYÊN GÓP");
+        headerRow.createCell(2).setCellValue("SỐ TIỀN QUYÊN GÓP");
+        headerRow.createCell(3).setCellValue("NGÀY QUYÊN GÓP");
+
+        headerRow.getCell(2).setCellStyle(currencyStyle);
+
+        // Add data rows
+        int rowNum = 1;
+        for (UserContributeProject contribution : contributions) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(contribution.getProject().getTitle());
+            row.createCell(1).setCellValue(contribution.getUser().getUsername());
+            Cell amountCell = row.createCell(2);
+            amountCell.setCellValue(contribution.getDonateAmount().doubleValue());
+            amountCell.setCellStyle(currencyStyle);
+            row.createCell(3).setCellValue(
+                    Date.from(contribution.getDonateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            row.getCell(3).setCellStyle(dateStyle);
+        }
+
+        // Write workbook to response
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        // Set response headers
+        response.setHeader("Content-Disposition", "attachment; filename=contributions.xlsx");
+        response.getOutputStream().write(outputStream.toByteArray());
+        response.getOutputStream().flush();
+    }
+
+    @GetMapping("/item-export/")
+    @CrossOrigin
+    public void exportItemContributionsToExcel(
+            @RequestParam(name = "period", required = false) String period,
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "month", required = false) Integer month,
+            @RequestParam(name = "quarter", required = false) Integer quarter,
+            HttpServletResponse response) throws IOException {
+
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        List<UserContributeProject> contributions;
+
+        if ("monthly".equals(period) && year != null && month != null) {
+            contributions = statService.getMonthlyContributions(month, year);
+        } else if ("quarterly".equals(period) && year != null && quarter != null) {
+            contributions = statService.getQuarterlyContributions(quarter, year);
+        } else if ("yearly".equals(period) && year != null) {
+            contributions = statService.getYearlyContributions(year);
+        } else {
+            contributions = donateService.getAllContribute();
+        }
+
+        // Filter contributions with category = 1
+        Long category = 2L;
+        contributions = this.donateService.getContributionByCategory(category);
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Contributions");
+
+        CellStyle currencyStyle = workbook.createCellStyle();
+        DataFormat dataFormat = workbook.createDataFormat();
+        currencyStyle.setDataFormat(dataFormat.getFormat("#,##0"));
+
+        CellStyle dateStyle = workbook.createCellStyle();
+        CreationHelper createHelper = workbook.getCreationHelper();
+        dateStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("DỰ ÁN");
+        headerRow.createCell(1).setCellValue("TÀI KHOẢN QUYÊN GÓP");
+        headerRow.createCell(2).setCellValue("HIỆN VẬT QUYÊN GÓP");
+        headerRow.createCell(3).setCellValue("NGÀY QUYÊN GÓP");
+
+        headerRow.getCell(2).setCellStyle(currencyStyle);
+
+        // Add data rows
+        int rowNum = 1;
+        for (UserContributeProject contribution : contributions) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(contribution.getProject().getTitle());
+            row.createCell(1).setCellValue(contribution.getUser().getUsername());
+            row.createCell(2).setCellValue(contribution.getDonateItem());
+            row.createCell(3).setCellValue(
+                    Date.from(contribution.getDonateDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            row.getCell(3).setCellStyle(dateStyle);
+        }
+
+        // Write workbook to response
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        // Set response headers
+        response.setHeader("Content-Disposition", "attachment; filename=contributions.xlsx");
+        response.getOutputStream().write(outputStream.toByteArray());
+        response.getOutputStream().flush();
+    }
+
     @GetMapping("/monthly/")
     public ResponseEntity<List<Integer>> getMonthlyReports() {
         List<Integer> monthlyData = statService.getMonthlyWithData();
@@ -214,4 +256,5 @@ public class StatRestController {
         return ResponseEntity.ok().body(yearlyData);
     }
 
+    
 }

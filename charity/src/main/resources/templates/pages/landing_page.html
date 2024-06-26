@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TRANG CHỦ</title>
 </head>
 
 <body>
@@ -61,7 +61,7 @@
                                         <tr th:each="c:${contributions}">
                                             <td th:text="${c.project.title}"></td>
                                             <td th:text="${c.user.username}"></td>
-                                            <td th:text="${c.donateAmount}"></td>
+                                            <td th:text="${#numbers.formatDecimal(c.donateAmount, 0, 'COMMA', 0, 'POINT')}"></td>
                                             <td th:text="${c.donateItem}"></td>
                                             <td th:text="${c.donateDate}"></td>                                  
                                         </tr>

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -219,6 +220,14 @@ public class DonateServiceImpl implements DonateService {
     @Override
     public List<UserContributeProject> getContributionItemsByStatus() {
         return this.donateRepository.findByStatus("SUCCESSFUL");
+    }
+
+    @Override
+    public UserContributeProject getContributionById(Long id) {
+        UserContributeProject userContributeProject = this.donateRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy đơn quyên góp với ID  " + id));
+
+        return userContributeProject;
     }
 
 }

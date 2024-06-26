@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Charity Website</title>
+    <title>QUẢN LÝ DỰ ÁN</title>
 </head>
 
 <body>
@@ -29,8 +29,8 @@
                         <tr th:each="p:${projects}">
                             <td th:text="${p.id}"></td>
                             <td th:text="${p.title}"></td>
-                            <td th:text="${p.contributedAmount}"></td>
-                            <td th:text="${p.totalAmount}"></td>
+                            <td th:text="${#numbers.formatDecimal(p.contributedAmount, 0, 'COMMA', 0, 'POINT')}"></td>
+                            <td th:text="${#numbers.formatDecimal(p.totalAmount, 0, 'COMMA', 0, 'POINT')}"></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/project/{id}(id=${p.id})}">Update</a>
                                 <a class="btn btn-danger" th:data-path="@{/admin/project/{id}(id=${p.id})}"

@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.csn.charity.dto.UserDTO;
 import com.csn.charity.model.User;
-import com.csn.charity.model.UserRole;
 
 public interface UserService extends UserDetailsService {
     Long addUser(UserDTO userDto);

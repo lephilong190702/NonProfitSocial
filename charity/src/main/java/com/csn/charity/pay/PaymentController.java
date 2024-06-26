@@ -90,27 +90,13 @@ public class PaymentController {
             userContributeProject.setUser(userDonate);
 
             donateService.donate(projectId, userContributeProject);
-            System.out.println("PROJECT ID: " + projectId);
-            System.out.println("USERNAME: " + username);
-            System.out.println("NOTE: " + note);
-            System.out.println("QUYÊN GÓP THÀNH CÔNG");
 
-            // Redirect to client-side URL
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create("https://nonprofit.southeastasia.cloudapp.azure.com/result"));
 
-            try {
-                SimpleMailMessage mailMessage = new SimpleMailMessage();
-                mailMessage.setTo(userDonate.getEmail());
-                mailMessage.setSubject("QUYÊN GÓP TỪ THIỆN!");
-                mailMessage.setText("BẠN ĐÃ QUYÊN GÓP THÀNH CÔNG!!!");
-                mailService.sendMailRegister(mailMessage);
-            } catch (MailException e) {
-                System.out.println("Error sending email: " + e.getMessage());
-            }
+            this.mailService.sendEmail(userDonate.getEmail());
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);
         } else {
-            // Redirect to error page or handle error scenario
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create("https://nonprofit.southeastasia.cloudapp.azure.com/error"));
             return new ResponseEntity<>("", headers, HttpStatus.FOUND);

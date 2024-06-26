@@ -42,10 +42,10 @@ public class Profile implements Serializable {
     @Column(name = "phone", length = 10)
     private String phone;
 
-    @Column(name = "address", length = 500)
+    @Column(name = "career", length = 500)
     private String carrer;
 
-    @Column(name = "address", length = 500)
+    @Column(name = "dob", length = 500)
     private Date dob;
 
     @Column(name = "address", length = 500)

@@ -1,6 +1,7 @@
 package com.csn.charity.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,15 @@ public class Profile implements Serializable {
 
     @Column(name = "phone", length = 10)
     private String phone;
+
+    @Column(name = "address", length = 500)
+    private String carrer;
+
+    @Column(name = "address", length = 500)
+    private Date dob;
+
+    @Column(name = "address", length = 500)
+    private String address;
 
     @Column(name = "avatar")
     private String avatar;

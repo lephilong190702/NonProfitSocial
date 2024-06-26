@@ -1,6 +1,7 @@
 package com.csn.charity.controller.api;
 
 import java.security.Principal;
+import java.sql.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -121,13 +122,19 @@ public class AuthRestController {
     public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
             @RequestPart(value = "firstName") String firstName,
             @RequestPart(value = "lastName") String lastName,
-            @RequestPart(value = "phone") String phone) throws InterruptedException, ExecutionException {
+            @RequestPart(value = "phone") String phone,
+            @RequestPart(value = "phone") String address,
+            @RequestPart(value = "phone") String career,
+            @RequestPart(value = "phone") Date dob) throws InterruptedException, ExecutionException {
 
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);
         profileDTO.setLastName(lastName);
         profileDTO.setPhone(phone);
         profileDTO.setFile(avatar);
+        profileDTO.setAddress(address);
+        profileDTO.setCareer(career);
+        profileDTO.setDob(dob);
         this.profileService.update(profileDTO);
         return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
     }

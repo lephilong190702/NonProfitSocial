@@ -20,12 +20,18 @@ const UserProfile = () => {
     firstName: user.profile.firstName,
     lastName: user.profile.lastName,
     phone: user.profile.phone,
+    address: user.profile.address,
+    dob: user.profile.dob,
+    career: user.profile.career,
   });
 
   const [profileCurrent, setProfileCurrent] = useState({
     firstName: "",
     lastName: "",
-    phone: ""
+    phone: "",
+    address: "",
+    dob: "",
+    career: "",
   })
 
   const avatar = useRef(user.profile.avatar);
@@ -59,6 +65,9 @@ const UserProfile = () => {
       userForm.append("firstName", profile.firstName);
       userForm.append("lastName", profile.lastName);
       userForm.append("phone", profile.phone);
+      userForm.append("address", profile.address);
+      userForm.append("career", profile.career);
+      userForm.append("dob", profile.dob);
       if (avatar.current.files[0] === undefined) {
         userForm.append("avatar", avatarSrc);
       } else {
@@ -105,7 +114,10 @@ const UserProfile = () => {
       setProfileCurrent({
         firstName: res.data.profile.firstName,
         lastName: res.data.profile.lastName,
-        phone: res.data.profile.phone
+        phone: res.data.profile.phone,
+        address: res.data.profile.address,
+        career: res.data.profile.career,
+        dob: res.data.profile.dob
       });
       console.log(res.data.profile.firstName);
       console.log(user);
@@ -183,6 +195,28 @@ const UserProfile = () => {
                               </div>
                               <div className="col-md-6">
                                 <Form.Label className="form-label">
+                                  Họ và tên đệm:
+                                </Form.Label>
+                              </div>
+                              <div className="col-md-6 mt-2">
+                                <div className="form-group has-icon-left">
+                                  <div className="position-relative">
+                                    <div className="form-control-icon">
+                                      <i data-feather="user"></i>
+                                      <Form.Control
+                                        type="text"
+                                        onChange={(e) => change(e, "lastName")}
+                                        placeholder="Nhập họ và tên đệm..."
+                                        defaultValue={profileCurrent.lastName}
+                                        required
+                                        className="form-control"
+                                      />{" "}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-6">
+                                <Form.Label className="form-label">
                                   Tên:
                                 </Form.Label>
                               </div>
@@ -194,7 +228,7 @@ const UserProfile = () => {
                                       <Form.Control
                                         type="text"
                                         onChange={(e) => change(e, "firstName")}
-                                        placeholder="Tên"
+                                        placeholder="Nhập tên..."
                                         defaultValue={profileCurrent.firstName}
                                         required
                                         className="form-control"
@@ -205,7 +239,7 @@ const UserProfile = () => {
                               </div>
                               <div className="col-md-6">
                                 <Form.Label className="form-label">
-                                  Họ và chữ lót:
+                                  Địa chỉ: 
                                 </Form.Label>
                               </div>
                               <div className="col-md-6 mt-2">
@@ -215,9 +249,9 @@ const UserProfile = () => {
                                       <i data-feather="user"></i>
                                       <Form.Control
                                         type="text"
-                                        onChange={(e) => change(e, "lastName")}
-                                        placeholder="Họ và chữ lót"
-                                        defaultValue={profileCurrent.lastName}
+                                        onChange={(e) => change(e, "address")}
+                                        placeholder="Nhập địa chỉ..."
+                                        defaultValue={profileCurrent.address}
                                         required
                                         className="form-control"
                                       />{" "}
@@ -225,6 +259,53 @@ const UserProfile = () => {
                                   </div>
                                 </div>
                               </div>
+
+                              <div className="col-md-6">
+                                <Form.Label className="form-label">
+                                  Công việc hiện tại:
+                                </Form.Label>
+                              </div>
+                              <div className="col-md-6 mt-2">
+                                <div className="form-group has-icon-left">
+                                  <div className="position-relative">
+                                    <div className="form-control-icon">
+                                      <i data-feather="user"></i>
+                                      <Form.Control
+                                        type="text"
+                                        onChange={(e) => change(e, "career")}
+                                        placeholder="Nhập công việc hiện tại..."
+                                        defaultValue={profileCurrent.career}
+                                        required
+                                        className="form-control"
+                                      />{" "}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="col-md-6">
+                                <Form.Label className="form-label">
+                                  Ngày tháng năm sinh: 
+                                </Form.Label>
+                              </div>
+                              <div className="col-md-6 mt-2">
+                                <div className="form-group has-icon-left">
+                                  <div className="position-relative">
+                                    <div className="form-control-icon">
+                                      <i data-feather="user"></i>
+                                      <Form.Control
+                                        type="date"
+                                        onChange={(e) => change(e, "dob")}
+                                        placeholder="Ngày tháng năm sinh"
+                                        defaultValue={profileCurrent.dob}
+                                        required
+                                        className="form-control"
+                                      />{" "}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
                               <div className="col-md-6">
                                 <Form.Label className="form-label">
                                   Số điện thoại:
@@ -238,7 +319,7 @@ const UserProfile = () => {
                                       <Form.Control
                                         type="number"
                                         onChange={(e) => change(e, "phone")}
-                                        placeholder="Điện thoại"
+                                        placeholder="Nhập số điện thoại..."
                                         defaultValue={profileCurrent.phone}
                                         className="form-control"
                                       />
@@ -294,86 +375,6 @@ const UserProfile = () => {
           </Form.Group>
         </Form>
       </div>
-      {/* <div className="profile-container">
-        <h1 className="form-heading">HỒ SƠ NGƯỜI DÙNG</h1>
-
-        <Form onSubmit={updateProfile}>
-          <div className="flex flex-row space-x-10">
-            <Form.Group className="form-group">
-              <Form.Label className="form-label">Tên:</Form.Label>
-              <Form.Control
-                type="text"
-                onChange={(e) => change(e, "firstName")}
-                placeholder="Tên"
-                defaultValue={user.profile.firstName}
-                required
-                className="form-control"
-              />
-            </Form.Group>
-            <Form.Group className="form-group">
-              <Form.Label className="form-label">Họ và chữ lót:</Form.Label>
-              <Form.Control
-                type="text"
-                onChange={(e) => change(e, "lastName")}
-                placeholder="Họ và chữ lót"
-                defaultValue={user.profile.lastName}
-                required
-                className="form-control"
-              />
-            </Form.Group>
-            <Form.Group className="form-group">
-              <Form.Label className="form-label">Điện thoại:</Form.Label>
-              <Form.Control
-                type="number"
-                onChange={(e) => change(e, "phone")}
-                placeholder="Điện thoại"
-                defaultValue={user.profile.phone}
-                className="form-control"
-              />
-              {!isPhoneNumberValid && (
-                <div className="text text-danger">
-                  Số điện thoại không hợp lệ
-                </div>
-              )}
-            </Form.Group>
-          </div>
-
-          <Form.Group className="form-group">
-            <Form.Label className="form-label">Ảnh đại diện</Form.Label>
-            <div className="flex flex-row space-x-4">
-              <Form.Control type="file" ref={avatar} className="form-control" />
-              <div className="">
-                <div
-                  className="rounded-full overflow-hidden"
-                  style={{ width: "70px", height: "70px" }}
-                >
-                  <img
-                    className="w-full h-full object-cover"
-                    src={user.profile.avatar}
-                    alt="avatar"
-                  />
-                </div>
-              </div>
-            </div>
-          </Form.Group>
-          <Form.Group className="form-group text-center">
-            {errorMessage && (
-              <div className="text text-danger">{errorMessage}</div>
-            )}
-            <button
-              variant="info"
-              type="submit"
-              className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-            >
-              Cập nhật hồ sơ
-            </button>
-          </Form.Group>
-        </Form>
-
-        {successMessage && (
-          <div className="alert alert-success">{successMessage}</div>
-        )}
-      </div> */}
     </>
   );
 };

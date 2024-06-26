@@ -116,7 +116,11 @@ const ReplyBox = ({ newsId, comment, addReply, value, onChange, user }) => {
             />
           </div>
           <div className="flex flex-col">
-            <div className="font-semibold">{comment.user.username}</div>
+            <div className="font-semibold">
+              <span>
+              {comment.user.profile.lastName} {comment.user.profile.firstName} 
+              </span>
+              </div>
             <div className="pt-1 text-sm font-light text-[#333333]">
               {comment.content}
             </div>

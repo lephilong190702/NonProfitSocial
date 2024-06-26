@@ -161,9 +161,8 @@ const CustomNavbar = () => {
   return (
     <>
       <div
-        className={`font-Montserrat w-full top-0 z-[1000] duration-500 ease-in-out ${
-          scrolled ? "bg-[#d6fcdf]" : "bg-white"
-        }`}
+        className={`font-Montserrat w-full top-0 z-[1000] duration-500 ease-in-out ${scrolled ? "bg-[#d6fcdf]" : "bg-white"
+          }`}
       >
         <div className="bg-[#d3d3d3] pl-[10px]">
           {scrolled ? (
@@ -205,7 +204,7 @@ const CustomNavbar = () => {
               </a>
 
               <div className="hidden  font-bold  w-full md:flex md:w-auto md:items-center md:justify-between md:order-1 ">
-                <ul className="flex justify-center items-center gap-8 mr-16 text-[14px]">
+                <ul className="flex justify-center items-center gap-8 mr-16 text-[15px]">
                   <div>
                     <li className="top-menu-item">
                       <Link to="/" className="nav-link top-menu-item">
@@ -226,9 +225,8 @@ const CustomNavbar = () => {
                       </li>
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
-                        className={`group ${
-                          !user ? "top-[145px]" : "top-[138px]"
-                        }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
+                        className={`group ${!user ? "top-[145px]" : "top-[138px]"
+                          }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">
@@ -254,46 +252,6 @@ const CustomNavbar = () => {
                   </div>
 
                   <div>
-                    <li className="top-menu-item group">
-                      <Link to="/livestream" className="nav-link">
-                        LIVESTREAM
-                      </Link>
-                    </li>
-                  </div>
-
-                  <div>
-                    <div className="group">
-                      <li className="top-menu-item group">
-                        {/* <Nav.Link
-                        href="#financial_report"
-                        onClick={exportFinancialReport}
-                      >
-                        BÁO CÁO TÀI CHÍNH
-                      </Nav.Link> */}
-                        <Link to="/statistic" className="nav-link">
-                          BÁO CÁO TÀI CHÍNH
-                        </Link>
-                      </li>
-                      <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
-                      <div
-                        className={`group ${
-                          !user ? "top-[145px]" : "top-[138px]"
-                        }  duration-500 h-0 overflow-hidden group-hover:h-[80px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
-                      >
-                        <div className="border-b-[1px] border-b-[#e6e1e1]">
-                          <div className="mx-1  pt-1">
-                            <div className="flex flex-col top-menu-text">
-                                <Link to="/statistic" className="news-link">Báo cáo theo năm</Link>
-                                <Link to="/statistic-mon" className="news-link">Báo cáo theo tháng</Link>
-                                <Link to="/statistic-quar" className="news-link">Báo cáo theo quý</Link>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
                     <div className="group">
                       <li className="top-menu-item">
                         <Link to="" className="nav-link top-menu-item">
@@ -302,9 +260,8 @@ const CustomNavbar = () => {
                       </li>
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
-                        className={`group ${
-                          !user ? "top-[145px]" : "top-[138px]"
-                        }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
+                        className={`group ${!user ? "top-[145px]" : "top-[138px]"
+                          }  duration-500 h-0 overflow-hidden group-hover:h-[115px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">
@@ -322,12 +279,44 @@ const CustomNavbar = () => {
                                     </Link>
                                   );
                                 })}
-                                <Link to="/outside-news" className="news-link">Tin tức khác</Link>
+                              <Link to="/outside-news" className="news-link">Tin tức khác</Link>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div>
+                    <div className="group">
+                      <li className="top-menu-item group">
+                        <Link to="/statistic" className="nav-link">
+                          BÁO CÁO TÀI CHÍNH
+                        </Link>
+                      </li>
+                      <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
+                      <div
+                        className={`group ${!user ? "top-[145px]" : "top-[138px]"
+                          }  duration-500 h-0 overflow-hidden group-hover:h-[80px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
+                      >
+                        <div className="border-b-[1px] border-b-[#e6e1e1]">
+                          <div className="mx-1  pt-1">
+                            <div className="flex flex-col top-menu-text">
+                              <Link to="/statistic" className="news-link">Báo cáo theo năm</Link>
+                              <Link to="/statistic-mon" className="news-link">Báo cáo theo tháng</Link>
+                              <Link to="/statistic-quar" className="news-link">Báo cáo theo quý</Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <li className="top-menu-item group">
+                      <Link to="/livestream" className="nav-link">
+                        LIVESTREAM
+                      </Link>
+                    </li>
                   </div>
 
                   <div>
@@ -363,7 +352,7 @@ const CustomNavbar = () => {
                       </li>
                     </div>
                   )}
-                  
+
                   <div>
                     <li className="top-menu-item group">
                       <Link to="/upload-project" className="nav-link">
@@ -396,11 +385,10 @@ const CustomNavbar = () => {
                       {toggleSearch ? (
                         <div className="-z-100 ">
                           <div
-                            className={`group ${
-                              scrolled
+                            className={`group ${scrolled
                                 ? "top-[110px]"
                                 : "top-[150px] left-[65%]"
-                            } flex flex-col left-0 absolute  w-30  bg-white z-20 text-black`}
+                              } flex flex-col left-0 absolute  w-30  bg-white z-20 text-black`}
                           >
                             <div className="flex items-center max-w-screen-2xl border-b-2 border-[#38b6ff]">
                               {/* <img src='./assets/bean.png' className='w-6 absolute top-4 left-[10]' /> */}
@@ -451,9 +439,8 @@ const CustomNavbar = () => {
                               </div>
 
                               <div
-                                className={`group ${
-                                  scrolled ? "top-[50%]" : "bottom-[-4%]"
-                                } hidden group-hover:block absolute top-[64%] right-[18%] w-32 h-5 bg-transparent  z-20 duration-300`}
+                                className={`group ${scrolled ? "top-[50%]" : "bottom-[-4%]"
+                                  } hidden group-hover:block absolute top-[64%] right-[18%] w-32 h-5 bg-transparent  z-20 duration-300`}
                               ></div>
                               {/* <div
                             className={`group ${
@@ -462,9 +449,8 @@ const CustomNavbar = () => {
                           ></div> */}
 
                               <div
-                                className={`group ${
-                                  scrolled ? "top-[50%]" : "bottom-[63.5%]"
-                                } hidden group-hover:block absolute right-[5%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
+                                className={`group ${scrolled ? "top-[50%]" : "bottom-[63.5%]"
+                                  } hidden group-hover:block absolute right-[5%] px-4 py-3 w-15 h-15 border-2 rounded-sm bg-white z-20 text-black duration-800`}
                               >
                                 <div className="flex flex-col gap-3 ">
                                   {/* <Link to='./login'> */}

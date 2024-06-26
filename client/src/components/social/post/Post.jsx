@@ -617,7 +617,7 @@ const Post = () => {
                         src={p.user.profile.avatar}
                         alt=""
                       />
-                      <span className="postUsername">{p.user.username}</span>
+                      <span className="postUsername">{p.user.profile.lastName} {p.user.profile.firstName}</span>
                       <span className="postDate">
                         {" "}
                         {moment(p.createDate).fromNow()}
@@ -782,7 +782,10 @@ const Post = () => {
                                       </div>
                                       <div className="comment-details">
                                         <div className="comment-username">
-                                          {comment.user.username}
+                                          <span>
+                                            {comment.user.profile.lastName} {comment.user.profile.firstName}
+                                          </span>
+                                          
                                         </div>
                                         <div className="comment-content">
                                           {comment.content}

@@ -274,22 +274,20 @@ const ProjectDetails = () => {
     //   return;
     // }
 
-
     if (feedbackName === null) {
       setErrFeedbackName("Vui lòng nhập tên người phản hồi.");
       return;
     }
-    
+
     if (!isValidPhoneNumber(feedbackPhone)) {
-      setErrFeedbackPhone('Số điện thoại không hợp lệ. Vui lòng nhập lại.');
+      setErrFeedbackPhone("Số điện thoại không hợp lệ. Vui lòng nhập lại.");
       return;
     }
-    
+
     if (feedback === null) {
       setErrFeedback("Vui lòng nhập nội dung cần phản hồi.");
       return;
     }
-
 
     try {
       const formData = new FormData();
@@ -477,28 +475,56 @@ const ProjectDetails = () => {
             </div>
             <hr />
             <h4>Danh sách các người đóng góp: </h4>
-            <ul>
-              {contributor.map((c) => (
-                <li
-                  key={c.id}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <img
-                    src={c.user.profile.avatar}
-                    alt="avatar"
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginRight: "5px",
-                    }}
-                  />
-                  {c.user.username} - {formatter.format(c.donateAmount)} -{" "}
-                  {moment(c.donateDate).format("DD/MM/YYYY HH:mm")}
-                </li>
-              ))}
-            </ul>
+            <div className="flex flex-row">
+              <ul>
+                {contributor
+                  .filter((c) => c.donateAmount !== 0)
+                  .map((c) => (
+                    <li
+                      key={c.id}
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img
+                        src={c.user.profile.avatar}
+                        alt="avatar"
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          marginRight: "5px",
+                        }}
+                      />
+                      {c.user.username} - {formatter.format(c.donateAmount)} -{" "}
+                      {moment(c.donateDate).format("DD/MM/YYYY HH:mm")}
+                    </li>
+                  ))}
+              </ul>
+              <ul className="">
+              {contributor
+                  .filter((c) => c.donateAmount == 0)
+                  .map((c) => (
+                    <li
+                      key={c.id}
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <img
+                        src={c.user.profile.avatar}
+                        alt="avatar"
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          marginRight: "5px",
+                        }}
+                      />
+                      {c.user.username} - {c.donateItem} -{" "}
+                      {moment(c.donateDate).format("DD/MM/YYYY")}
+                    </li>
+                  ))}
+              </ul>
+            </div>
           </div>
         </Col>
         {user ? (
@@ -523,7 +549,9 @@ const ProjectDetails = () => {
             </div>
           </div>
         ) : (
-          <Link className="flex justify-center" to="/login">Đăng nhập để quyên góp</Link>
+          <Link className="flex justify-center" to="/login">
+            Đăng nhập để quyên góp
+          </Link>
         )}
         <div className="flex justify-center">
           <Button
@@ -709,12 +737,16 @@ const ProjectDetails = () => {
                   }}
                 />
                 {errFeedbackName && (
-                  <Form.Text className="text-danger">{errFeedbackName}</Form.Text>
+                  <Form.Text className="text-danger">
+                    {errFeedbackName}
+                  </Form.Text>
                 )}
               </div>
 
               <div className="flex flex-col">
-                <Typography className="flex">Số điện thoại người phản hồi</Typography>
+                <Typography className="flex">
+                  Số điện thoại người phản hồi
+                </Typography>
                 <InputBase
                   className="border p-2"
                   placeholder="Vui lòng nhập địa chỉ giao hàng"
@@ -727,7 +759,9 @@ const ProjectDetails = () => {
                   }}
                 />
                 {errFeedbackPhone && (
-                  <Form.Text className="text-danger">{errFeedbackPhone}</Form.Text>
+                  <Form.Text className="text-danger">
+                    {errFeedbackPhone}
+                  </Form.Text>
                 )}
               </div>
 

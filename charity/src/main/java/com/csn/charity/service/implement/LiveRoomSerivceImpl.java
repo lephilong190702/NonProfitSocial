@@ -33,6 +33,7 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
     private UserJoinRoomRepository userJoinRoomRepository;
     @Autowired
     private MailService mailService;
+    
     @Value("$(lephilong02@gmail.com)")
     private String fromEmail;
 
@@ -76,7 +77,7 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
                 mailMessage.setSubject("LIVESTREAM DỰ ÁN TỪ THIỆN: " + liveRoom.getName());
                 mailMessage.setText("Phòng livestream đã được tạo, vui lòng tham gia để theo dõi trực tiếp quá trình từ thiện" + "\n" 
                 + "Link tham gia: https://nonprofit.southeastasia.cloudapp.azure.com/livestream/" + liveRoom.getRoomCode());
-                mailService.sendDonateItemEmail(mailMessage);
+                mailService.sendLivestreamEmail(mailMessage);
             } catch (MailException e) {
                 System.out.println("Error sending email: " + e.getMessage());
             }

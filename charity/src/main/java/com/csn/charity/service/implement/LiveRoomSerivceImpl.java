@@ -68,21 +68,6 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
         liveRoomRepository.save(liveRoom);
         userRepository.save(user);
 
-        List<User> allUsers = userRepository.findAll();
-        for (User u : allUsers) {
-            try {
-                SimpleMailMessage mailMessage = new SimpleMailMessage();
-                mailMessage.setFrom(fromEmail);
-                mailMessage.setTo(u.getEmail());
-                mailMessage.setSubject("LIVESTREAM DỰ ÁN TỪ THIỆN: " + liveRoom.getName());
-                mailMessage.setText("Phòng livestream đã được tạo, vui lòng tham gia để theo dõi trực tiếp quá trình từ thiện" + "\n" 
-                + "Link tham gia: https://nonprofit.southeastasia.cloudapp.azure.com/livestream/" + liveRoom.getRoomCode());
-                mailService.sendLivestreamEmail(mailMessage);
-            } catch (MailException e) {
-                System.out.println("Error sending email: " + e.getMessage());
-            }
-        }
-
         return liveRoom;
     }
 
@@ -139,6 +124,24 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
 
         return liveRoom;
 
+    }
+
+    @Override
+    public void sendMail(LiveRoom liveRoom) {
+        List<User> allUsers = userRepository.findAll();
+        for (User u : allUsers) {
+            try {
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setFrom(fromEmail);
+                mailMessage.setTo(u.getEmail());
+                mailMessage.setSubject("LIVESTREAM DỰ ÁN TỪ THIỆN: " + liveRoom.getName());
+                mailMessage.setText("Phòng livestream đã được tạo, vui lòng tham gia để theo dõi trực tiếp quá trình từ thiện" + "\n" 
+                + "Link tham gia: https://nonprofit.southeastasia.cloudapp.azure.com/livestream/" + liveRoom.getRoomCode());
+                mailService.sendLivestreamEmail(mailMessage);
+            } catch (MailException e) {
+                System.out.println("Error sending email: " + e.getMessage());
+            }
+        }
     }
 
 }

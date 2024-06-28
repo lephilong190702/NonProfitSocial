@@ -9,4 +9,6 @@ public interface LiveRoomService {
     UserJoinRoom joinRoom(String roomCode);
 
     LiveRoom getLiveRoomByRoomCode(String roomCode);
+
+    void sendMail(LiveRoom liveRoom);
 }

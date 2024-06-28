@@ -6,7 +6,7 @@ import { Header } from "../../components";
 import { Navigate } from "react-router";
 import { UserContext } from "../../App";
 import "./login.css";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEye,
@@ -23,6 +23,8 @@ const LoginPage = () => {
 
   const [isShow, setIsShow] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
+  const [q] = useSearchParams();
+
 
   const showPassword = () => {
     setIsShow(true);
@@ -72,7 +74,10 @@ const LoginPage = () => {
     process();
   };
 
-  if (user !== null) return <Navigate to="/" />;
+  if (user !== null) {
+    let next = q.get("next") || "/";
+    return <Navigate to={next} />
+  }
 
   return (
     <>

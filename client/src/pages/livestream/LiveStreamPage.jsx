@@ -56,11 +56,8 @@ const LiveStreamPage = () => {
   const handleJoinRoom = async (roomCode) => {
     try {
       const api = authApi();
-      const url = endpoints["join-room"](roomCode); // Call the function with roomCode
-      console.log(`URL: ${url}`); // log the URL
+      const url = endpoints["join-room"](roomCode);
       const response = await api.post(url, {});
-      console.log("Joined room:", response.data);
-      // navigate to the live streaming page
       navigate(`/livestream/${roomCode}`);
     } catch (error) {
       console.error(error);
@@ -74,7 +71,7 @@ const LiveStreamPage = () => {
         <h1 className="">Live Stream</h1>
          <p>
           Vui lòng{" "}
-          <Link to={"/login"} className="login-link">
+          <Link to={"/login?next=/livestream"} className="login-link">
             đăng nhập
           </Link>{" "}
           để xem trực tuyến các hoạt động tình nguyện{" "}

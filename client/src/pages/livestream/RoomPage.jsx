@@ -10,6 +10,8 @@ const RoomPage = () => {
 
   const [error, setError] = useState(null);
 
+  let url = `/login?next=/livestream/${roomId}`;
+
   const myMeeting = async () => {
     try {
       const response = await authApi().post(endpoints["join-room"](roomId));
@@ -56,7 +58,13 @@ const RoomPage = () => {
 
   return (
     <div className="room-page" style={{ width: '100vw', height: '100vh' }}>
-      {error && <div>Error: {error}</div>}
+      <p>
+        Vui lòng{" "}
+        <Link to={url} className="login-link">
+          đăng nhập
+        </Link>{" "}
+        để xem trực tuyến các hoạt động tình nguyện{" "}
+      </p>
       <div ref={meetingRef} />
     </div>
   );

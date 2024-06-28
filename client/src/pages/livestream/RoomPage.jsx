@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { authApi, endpoints } from "../../configs/ApiConfig";
 import { MeetingRoom } from "@material-ui/icons";
 

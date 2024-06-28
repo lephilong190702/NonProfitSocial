@@ -26,6 +26,7 @@ public class LiveStreamRestController {
     public ResponseEntity<?> createRoom(@RequestBody LiveRoom liveRoom) {
         try {
             LiveRoom room = this.liveRoomService.createRoom(liveRoom.getName());
+            this.liveRoomService.sendMail(liveRoom);
             return new ResponseEntity<>(room, HttpStatus.CREATED);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

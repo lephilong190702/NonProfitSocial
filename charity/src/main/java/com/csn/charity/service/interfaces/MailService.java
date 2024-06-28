@@ -4,6 +4,7 @@ import org.springframework.mail.SimpleMailMessage;
 
 public interface MailService {
     void sendEmail(String email);
+    void sendLivestreamEmail(SimpleMailMessage email);
     void sendDonateItemEmail(SimpleMailMessage email);
     void sendConfirmEmail(String email);
     void sendUploadProjectEmail(String email);

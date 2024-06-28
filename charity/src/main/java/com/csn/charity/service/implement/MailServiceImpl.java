@@ -121,5 +121,15 @@ public class MailServiceImpl implements MailService {
         }
         javaMailSender.send(email);
     }
+
+    @Override
+    public void sendLivestreamEmail(SimpleMailMessage email) {
+        try {
+            javaMailSender.send(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        javaMailSender.send(email);
+    }
     
 }

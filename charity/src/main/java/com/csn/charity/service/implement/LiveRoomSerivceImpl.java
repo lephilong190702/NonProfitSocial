@@ -6,6 +6,9 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import com.csn.charity.model.LiveRoom;
@@ -15,6 +18,8 @@ import com.csn.charity.repository.LiveRoomRepository;
 import com.csn.charity.repository.UserJoinRoomRepository;
 import com.csn.charity.repository.UserRepository;
 import com.csn.charity.service.interfaces.LiveRoomService;
+import com.csn.charity.service.interfaces.MailService;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -26,6 +31,10 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
     private LiveRoomRepository liveRoomRepository;
     @Autowired
     private UserJoinRoomRepository userJoinRoomRepository;
+    @Autowired
+    private MailService mailService;
+    @Value("$(lephilong02@gmail.com)")
+    private String fromEmail;
 
     @Override
     public LiveRoom createRoom(String name) {
@@ -57,6 +66,21 @@ public class LiveRoomSerivceImpl implements LiveRoomService {
 
         liveRoomRepository.save(liveRoom);
         userRepository.save(user);
+
+        List<User> allUsers = userRepository.findAll();
+        for (User u : allUsers) {
+            try {
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setFrom(fromEmail);
+                mailMessage.setTo(u.getEmail());
+                mailMessage.setSubject("LIVESTREAM DỰ ÁN TỪ THIỆN: " + liveRoom.getName());
+                mailMessage.setText("Phòng livestream đã được tạo, vui lòng tham gia để theo dõi trực tiếp quá trình từ thiện" + "\n" 
+                + "Link tham gia: https://nonprofit.southeastasia.cloudapp.azure.com/livestream/" + liveRoom.getRoomCode());
+                mailService.sendDonateItemEmail(mailMessage);
+            } catch (MailException e) {
+                System.out.println("Error sending email: " + e.getMessage());
+            }
+        }
 
         return liveRoom;
     }

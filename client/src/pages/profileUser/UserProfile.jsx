@@ -21,7 +21,6 @@ const UserProfile = () => {
     lastName: user.profile.lastName,
     phone: user.profile.phone,
     address: user.profile.address,
-    dob: user.profile.dob,
     career: user.profile.career,
   });
 
@@ -30,7 +29,6 @@ const UserProfile = () => {
     lastName: "",
     phone: "",
     address: "",
-    dob: "",
     career: "",
   })
 
@@ -61,20 +59,17 @@ const UserProfile = () => {
       }
       let userForm = new FormData();
 
-      console.log(avatar.current.file);
       userForm.append("firstName", profile.firstName);
       userForm.append("lastName", profile.lastName);
       userForm.append("phone", profile.phone);
       userForm.append("address", profile.address);
       userForm.append("career", profile.career);
-      userForm.append("dob", profile.dob);
       if (avatar.current.files[0] === undefined) {
         userForm.append("avatar", avatarSrc);
       } else {
         userForm.append("avatar", avatar.current.files[0]);
       }
 
-      console.log(avatar.current.files[0]);
       try {
         let profileData = await authApi().put(endpoints["profile"], userForm);
 
@@ -117,11 +112,8 @@ const UserProfile = () => {
         phone: res.data.profile.phone,
         address: res.data.profile.address,
         career: res.data.profile.career,
-        dob: res.data.profile.dob
       });
-      console.log(res.data.profile.firstName);
-      console.log(user);
-      console.log(avatar);
+      console.log(res.data);
     }
 
     userCurrent();
@@ -282,30 +274,6 @@ const UserProfile = () => {
                                   </div>
                                 </div>
                               </div>
-
-                              <div className="col-md-6">
-                                <Form.Label className="form-label">
-                                  Ngày tháng năm sinh: 
-                                </Form.Label>
-                              </div>
-                              <div className="col-md-6 mt-2">
-                                <div className="form-group has-icon-left">
-                                  <div className="position-relative">
-                                    <div className="form-control-icon">
-                                      <i data-feather="user"></i>
-                                      <Form.Control
-                                        type="date"
-                                        onChange={(e) => change(e, "dob")}
-                                        placeholder="Ngày tháng năm sinh"
-                                        defaultValue={profileCurrent.dob}
-                                        required
-                                        className="form-control"
-                                      />{" "}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
                               <div className="col-md-6">
                                 <Form.Label className="form-label">
                                   Số điện thoại:

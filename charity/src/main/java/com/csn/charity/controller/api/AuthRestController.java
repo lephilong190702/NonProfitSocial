@@ -19,6 +19,7 @@ import com.csn.charity.dto.AuthRequest;
 import com.csn.charity.dto.ProfileDTO;
 import com.csn.charity.dto.UserDTO;
 import com.csn.charity.firebase.FirebaseService;
+import com.csn.charity.model.LiveRoom;
 import com.csn.charity.model.User;
 import com.csn.charity.model.UserDoc;
 import com.csn.charity.service.interfaces.ProfileService;
@@ -119,24 +120,28 @@ public class AuthRestController {
 
     @PutMapping("/profile/")
     @CrossOrigin
-    public ResponseEntity<String> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
+    public ResponseEntity<?> updateProfile(@RequestPart(value = "avatar") MultipartFile avatar,
             @RequestPart(value = "firstName") String firstName,
             @RequestPart(value = "lastName") String lastName,
             @RequestPart(value = "phone") String phone,
-            @RequestPart(value = "phone") String address,
-            @RequestPart(value = "phone") String career,
-            @RequestPart(value = "phone") Date dob) throws InterruptedException, ExecutionException {
-
-        ProfileDTO profileDTO = new ProfileDTO();
-        profileDTO.setFirstName(firstName);
-        profileDTO.setLastName(lastName);
-        profileDTO.setPhone(phone);
-        profileDTO.setFile(avatar);
-        profileDTO.setAddress(address);
-        profileDTO.setCareer(career);
-        profileDTO.setDob(dob);
-        this.profileService.update(profileDTO);
-        return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
+            @RequestPart(value = "address") String address,
+            @RequestPart(value = "career") String career
+            // @RequestPart(value = "dob") Date dob
+            ){
+        try {
+            ProfileDTO profileDTO = new ProfileDTO();
+            profileDTO.setFirstName(firstName);
+            profileDTO.setLastName(lastName);
+            profileDTO.setPhone(phone);
+            profileDTO.setAddress(address);
+            profileDTO.setFile(avatar);
+            profileDTO.setCareer(career);
+            // profileDTO.setDob(dob);
+            this.profileService.update(profileDTO);
+            return new ResponseEntity<>("Cập nhật hồ sơ thành công", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/user/userProfile")

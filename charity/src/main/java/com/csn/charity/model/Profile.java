@@ -43,7 +43,7 @@ public class Profile implements Serializable {
     private String phone;
 
     @Column(name = "career", length = 500)
-    private String carrer;
+    private String career;
 
     @Column(name = "dob", length = 500)
     private Date dob;

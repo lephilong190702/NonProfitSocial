@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Modal } from "react-bootstrap";
 import { Box, Button, InputBase, Typography } from "@mui/material";
 // import { Link } from "@mui/material";
@@ -23,6 +23,9 @@ const Delivery = () => {
   const [cusPhone, setCusPhone] = useState(null);
   const [cusAddress, setCusAddress] = useState(null);
   const [cusOrders, setCusOrders] = useState(null);
+
+  const nav = useNavigate();
+
 
   const [image, setImage] = useState({
     files: [],
@@ -97,6 +100,9 @@ const Delivery = () => {
           endpoints["transport"](ordersId),
           formData
         );
+
+        setShowDetailModal(false);
+        nav("/delivery");
         console.log(res.data);
       } catch (error) {
         console.log(error);
@@ -112,7 +118,7 @@ const Delivery = () => {
     };
 
     loadOrders();
-  }, []);
+  }, [showDetailModal]);
 
   return (
     <>

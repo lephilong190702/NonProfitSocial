@@ -123,9 +123,9 @@ public class AuthRestController {
             @RequestPart(value = "firstName") String firstName,
             @RequestPart(value = "lastName") String lastName,
             @RequestPart(value = "phone") String phone,
-            @RequestPart(value = "phone") String address,
-            @RequestPart(value = "phone") String career,
-            @RequestPart(value = "phone") Date dob) throws InterruptedException, ExecutionException {
+            @RequestPart(value = "address") String address,
+            @RequestPart(value = "career") String career,
+            @RequestPart(value = "dob") Date dob) throws InterruptedException, ExecutionException {
 
         ProfileDTO profileDTO = new ProfileDTO();
         profileDTO.setFirstName(firstName);

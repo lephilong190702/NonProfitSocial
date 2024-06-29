@@ -56,7 +56,7 @@ public class ProfileServiceImpl implements ProfileService {
         p.setLastName(profileDTO.getLastName());
         p.setPhone(profileDTO.getPhone());
         p.setAddress(profileDTO.getAddress());
-        p.setCarrer(profileDTO.getCareer());
+        p.setCareer(profileDTO.getCareer());
         p.setDob(profileDTO.getDob());
 
         UserDoc userDoc = new UserDoc();

@@ -125,6 +125,7 @@ public class AuthRestController {
             @RequestPart(value = "lastName") String lastName,
             @RequestPart(value = "phone") String phone,
             @RequestPart(value = "address") String address,
+<<<<<<< HEAD
             @RequestPart(value = "career") String career
             // @RequestPart(value = "dob") Date dob
             ){
@@ -142,6 +143,21 @@ public class AuthRestController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+=======
+            @RequestPart(value = "career") String career,
+            @RequestPart(value = "dob") Date dob) throws InterruptedException, ExecutionException {
+
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setFirstName(firstName);
+        profileDTO.setLastName(lastName);
+        profileDTO.setPhone(phone);
+        profileDTO.setFile(avatar);
+        profileDTO.setAddress(address);
+        profileDTO.setCareer(career);
+        profileDTO.setDob(dob);
+        this.profileService.update(profileDTO);
+        return ResponseEntity.ok("Hồ sơ đã được cập nhật thành công.");
+>>>>>>> 6fbb4c39390903ad77a42e91fe3afc3d8a36ad44
     }
 
     @GetMapping("/user/userProfile")

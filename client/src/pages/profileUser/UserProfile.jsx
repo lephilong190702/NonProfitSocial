@@ -14,6 +14,8 @@ const UserProfile = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [avt, setAvt] = useState("");
 
+  const today = new Date().toISOString().split("T")[0];
+
   const nav = useNavigate();
 
   const [profile, setProfile] = useState({
@@ -70,6 +72,8 @@ const UserProfile = () => {
         userForm.append("avatar", avatar.current.files[0]);
       }
 
+      console.log(avatar.current.files[0]);
+      console.log(userForm);
       try {
         let profileData = await authApi().put(endpoints["profile"], userForm);
 
@@ -130,6 +134,8 @@ const UserProfile = () => {
       return { ...current, [field]: evt.target.value };
     });
   };
+
+  
 
   return (
     <>

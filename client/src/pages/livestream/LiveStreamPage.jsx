@@ -68,16 +68,15 @@ const LiveStreamPage = () => {
     <div className="live-stream">
       {user === null ? (
         <div className="form-heading">
-        <h1 className="">Live Stream</h1>
-         <p>
-          Vui lòng{" "}
-          <Link to={"/login?next=/livestream"} className="login-link">
-            đăng nhập
-          </Link>{" "}
-          để xem trực tuyến các hoạt động tình nguyện{" "}
-        </p>
+          <h1 className="">Live Stream</h1>
+          <p>
+            Vui lòng{" "}
+            <Link to={"/login?next=/livestream"} className="login-link">
+              đăng nhập
+            </Link>{" "}
+            để xem trực tuyến các hoạt động tình nguyện{" "}
+          </p>
         </div>
-       
       ) : (
         <>
           {isAdmin && ( // render the create room button only if the user is an admin
@@ -101,26 +100,28 @@ const LiveStreamPage = () => {
               </button>
             </form>
           )}
-          <div style={{ marginLeft: "100px" }}>
-            <label
-              style={{ fontWeight: "bold", fontSize: "13px", margin: "10px" }}
-            >
-              NHẬP MÃ PHÒNG
-            </label>
-            <Input
-              value={roomCode}
-              onChange={(event) => setRoomCode(event.target.value)}
-              type="text"
-              required
-              placeholder="Nhập mã phòng"
-            />
-            <button
-              className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-              onClick={() => handleJoinRoom(roomCode)}
-            >
-              Tham gia
-            </button>
-          </div>
+          {!isAdmin && (
+            <div style={{ marginLeft: "100px" }}>
+              <label
+                style={{ fontWeight: "bold", fontSize: "13px", margin: "10px" }}
+              >
+                NHẬP MÃ PHÒNG
+              </label>
+              <Input
+                value={roomCode}
+                onChange={(event) => setRoomCode(event.target.value)}
+                type="text"
+                required
+                placeholder="Nhập mã phòng"
+              />
+              <button
+                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
+                onClick={() => handleJoinRoom(roomCode)}
+              >
+                Tham gia
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

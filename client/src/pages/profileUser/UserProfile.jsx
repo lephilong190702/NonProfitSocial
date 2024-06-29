@@ -32,15 +32,20 @@ const UserProfile = () => {
     phone: "",
     address: "",
     career: "",
+    avatar: "",
   })
 
+  const avatarTemp = useRef(null);
   const avatar = useRef(user.profile.avatar);
 
   console.log(avatar);
 
-  const loadAvatar = async () => {
+
+  console.log(avatar);
+
+  const loadAvatar = async (avatar) => {
     try {
-      const response = await fetch(user.profile.avatar);
+      const response = await fetch(avatar);
       const blob = await response.blob();
 
       const imageFile = new File([blob], "avatar.jpg", { type: "image/jpeg" });
@@ -67,19 +72,22 @@ const UserProfile = () => {
       userForm.append("address", profile.address);
       userForm.append("career", profile.career);
       if (avatar.current.files[0] === undefined) {
+        // await loadAvatar();
         userForm.append("avatar", avatarSrc);
       } else {
         userForm.append("avatar", avatar.current.files[0]);
       }
 
-      console.log(avatar.current.files[0]);
-      console.log(userForm);
+      // console.log(avatar.current.files[0]);
+      console.log(avatarSrc);
       try {
         let profileData = await authApi().put(endpoints["profile"], userForm);
 
-        console.log(userForm);
+        console.log(avatar);
 
         setSuccessMessage("Cập nhật hồ sơ thành công");
+
+        dispatch({ type: 'UPDATE_USER', payload: profileData });
 
         updateUserContext(profileData.data);
         
@@ -106,8 +114,7 @@ const UserProfile = () => {
     return vietnamPhoneNumberRegex.test(phoneNumber);
   };
 
-  useEffect(() => {
-    const userCurrent = async () => {
+  const userCurrent = async () => {
       const res = await authApi().get(endpoints["current-user"]);
       setAvt(res.data.profile.avatar);
       setProfileCurrent({
@@ -117,12 +124,24 @@ const UserProfile = () => {
         address: res.data.profile.address,
         career: res.data.profile.career,
       });
+      setProfile({
+        firstName: res.data.profile.firstName,
+        lastName: res.data.profile.lastName,
+        phone: res.data.profile.phone,
+        address: res.data.profile.address,
+        career: res.data.profile.career,
+      })
+      // avatar.current = res.data.profile.avatar;
+      loadAvatar(res.data.profile.avatar)
       console.log(res.data);
     }
 
+  useEffect(() => {
+    
+
     userCurrent();
     loadAvatar();
-  }, []);
+  }, [user]);
 
   const change = (evt, field) => {
     if (field === "phone") {

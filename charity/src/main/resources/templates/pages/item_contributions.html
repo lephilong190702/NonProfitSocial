@@ -12,7 +12,7 @@
     <div class="main-content container-fluid" layout:fragment="content">
         <div class="card-body px-0 pb-0">
             <h1 class="text-center text-info">QUYÊN GÓP HIỆN VẬT</h1>
-            <div class="table-responsive mt-5" style="max-height: 400px; overflow-x: hidden; overflow-y: auto;">
+            <div class="table-responsive mt-5" style="max-height: 500px; overflow-x: hidden; overflow-y: auto;">
                 <table class='table mb-0' id="table1">
                     <thead>
                         <tr>
@@ -20,6 +20,7 @@
                             <th>TÀI KHOẢN QUYÊN GÓP</th>
                             <th>SỐ TIỀN QUYÊN GÓP</th>
                             <th>NGÀY QUYÊN GÓP</th>
+                            <th>HÌNH ẢNH</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,6 +29,9 @@
                             <td th:text="${i.user.username}"></td>
                             <td th:text="${i.donateItem}"></td>
                             <td th:text="${i.donateDate}"></td>
+                            <td th:each="image : ${i.images}">
+                                <img th:src="${image.image}" alt="Project Image" style="width: 100px; height: 100px;">
+                            </td>
                         </tr>
                     </tbody>
                 </table>

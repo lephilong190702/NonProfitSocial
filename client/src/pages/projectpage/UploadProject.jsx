@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { authApi, endpoints } from "../../configs/ApiConfig";
 import './UploadProject.css'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { UserContext } from "../../App";
 const UploadProject = () => {
@@ -17,6 +17,7 @@ const UploadProject = () => {
         "endDate": "",
         "categoryId": ""
     });
+    const navigate = useNavigate();
 
     const handleFileChange = (e) => {
         setFiles([...e.target.files]);
@@ -46,7 +47,7 @@ const UploadProject = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            if (res.status === 200) {
+            if (res.status === 201) {
                 setRegistrationSuccess(true);
             }
             console.log(res.data);
@@ -60,110 +61,114 @@ const UploadProject = () => {
 
     return (
         <>
-            <h3 className="text-center">Vui lòng nhập các thông tin đầy đủ kèm với các giấy tờ chứng minh hoàn cảnh một cách minh bạch để được hỗ trợ sớm nhất!!!</h3>
             <div className="resgisVolunContainer">
                 {registrationSuccess ? (
-                    <div className="success-message">Đăng ký thành công</div>
+                    <div className="success-message">Chúc mừng bạn đã gửi dự án thành công.</div>
                 ) : (
-                    <Form onSubmit={handleSubmit}>
-                        <h1 className="form-heading">GỬI DỰ ÁN TỪ THIỆN VỀ CHO CHƯƠNG TRÌNH</h1>
-                        {user === null ? (
-                            <p>
-                                Vui lòng{" "}
-                                <Link to={"/login"} className="login-link">
-                                    đăng nhập
-                                </Link>{" "}
-                                để gửi dự án{" "}
-                            </p>
-                        ) : (
-                            <>
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>Tên dự án</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="title"
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        style={{ width: "500px" }}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>Nội dung</Form.Label>
-                                    <Form.Control
-                                        as="textarea" 
-                                        rows={5}
-                                        type="text"
-                                        name="content"
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        style={{ width: "500px" }}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>Số tiền đã góp được</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="contributedAmount"
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        style={{ width: "500px" }}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>Số tiền cần quyên góp</Form.Label>
-                                    <Form.Control
-                                        type="number"
-                                        name="totalAmount"
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        style={{ width: "500px" }}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="formGridState">
-                                    <Form.Label>Ảnh minh chứng đính kèm</Form.Label>
-                                    <Form.Control
-                                        type="file" multiple
-                                        onChange={handleFileChange}
-                                        className="form-control"
-                                        style={{ width: "500px" }}
-                                        required
-                                    />
-                                </Form.Group>
+                    <div>
+                        <h3 className="text-center">Vui lòng nhập các thông tin đầy đủ kèm với các giấy tờ chứng minh hoàn cảnh một cách minh bạch để được hỗ trợ sớm nhất!!!</h3>
 
-                                <Row className="form-group">
-                                    <Form.Group as={Col} controlId="startDate">
-                                        <Form.Label>Ngày bắt đầu</Form.Label>
+                        <Form onSubmit={handleSubmit}>
+                            <h1 className="form-heading">GỬI DỰ ÁN TỪ THIỆN VỀ CHO CHƯƠNG TRÌNH</h1>
+                            {user === null ? (
+                                <p>
+                                    Vui lòng{" "}
+                                    <Link to={"/login"} className="login-link">
+                                        đăng nhập
+                                    </Link>{" "}
+                                    để gửi dự án{" "}
+                                </p>
+                            ) : (
+                                <>
+                                    <Form.Group as={Col} controlId="formGridState">
+                                        <Form.Label>Tên dự án</Form.Label>
                                         <Form.Control
-                                            type="date"
-                                            name="startDate"
+                                            type="text"
+                                            name="title"
                                             onChange={handleChange}
-                                            style={{ width: "250px" }}
                                             className="form-control"
+                                            style={{ width: "500px" }}
+                                            required
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="formGridState">
+                                        <Form.Label>Nội dung</Form.Label>
+                                        <Form.Control
+                                            as="textarea"
+                                            rows={5}
+                                            type="text"
+                                            name="content"
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            style={{ width: "500px" }}
+                                            required
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="formGridState">
+                                        <Form.Label>Số tiền đã góp được</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            name="contributedAmount"
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            style={{ width: "500px" }}
+                                            required
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="formGridState">
+                                        <Form.Label>Số tiền cần quyên góp</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            name="totalAmount"
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            style={{ width: "500px" }}
+                                            required
+                                        />
+                                    </Form.Group>
+                                    <Form.Group as={Col} controlId="formGridState">
+                                        <Form.Label>Ảnh minh chứng đính kèm</Form.Label>
+                                        <Form.Control
+                                            type="file" multiple
+                                            onChange={handleFileChange}
+                                            className="form-control"
+                                            style={{ width: "500px" }}
+                                            required
                                         />
                                     </Form.Group>
 
-                                    <Form.Group as={Col} controlId="endDate">
-                                        <Form.Label>Ngày kết thúc</Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            name="endDate"
-                                            onChange={handleChange}
-                                            style={{ width: "250px" }}
-                                            className="form-control"
-                                        />
-                                    </Form.Group>
-                                </Row>
+                                    <Row className="form-group">
+                                        <Form.Group as={Col} controlId="startDate">
+                                            <Form.Label>Ngày bắt đầu</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                name="startDate"
+                                                onChange={handleChange}
+                                                style={{ width: "250px" }}
+                                                className="form-control"
+                                            />
+                                        </Form.Group>
 
-                                <Button variant="primary" type="submit" className="btn-submit">
-                                    GỬI DỰ ÁN
-                                </Button>
-                            </>
-                        )}
-                    </Form>
+                                        <Form.Group as={Col} controlId="endDate">
+                                            <Form.Label>Ngày kết thúc</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                name="endDate"
+                                                onChange={handleChange}
+                                                style={{ width: "250px" }}
+                                                className="form-control"
+                                            />
+                                        </Form.Group>
+                                    </Row>
+
+                                    <Button variant="primary" type="submit" className="btn-submit">
+                                        GỬI DỰ ÁN
+                                    </Button>
+                                </>
+                            )}
+                        </Form>
+                    </div>
+
                 )}
             </div>
         </>

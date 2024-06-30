@@ -86,10 +86,6 @@ const LoginPage = () => {
           <div className="forms-container">
             <div className="signin-signup">
               <Form onSubmit={login} className="sign-in-form">
-                {/* <Form.Group
-                  className="mb-3"
-                  controlId="exampleForm.ControlInput1"
-                > */}
                 <div className="title-signin">Đăng Nhập</div>
                 {error && <div className="error-message">{error}</div>}{" "}
                 <div className="input-field">

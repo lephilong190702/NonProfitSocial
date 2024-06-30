@@ -28,7 +28,7 @@
                             <td th:text="${p.id}"></td>
                             <td th:text="${p.title}"></td>
                             <td th:text="${p.contributedAmount}"></td>
-                            <td th:text="${p.totalAmount}"></td>
+                            <td th:text="${#numbers.formatDecimal(p.totalAmount, 0, 'COMMA', 0, 'POINT')}"></td>
                             <td>
                                 <a class="btn btn-primary" th:href="@{/admin/pending-project/{id}(id=${p.id})}">XỬ LÝ</a>
                             </td>

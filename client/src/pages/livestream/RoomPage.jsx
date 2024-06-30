@@ -83,13 +83,16 @@ const RoomPage = () => {
   return (
     <div className="room-page" style={{ width: '100vw', height: '100vh' }}>
       {user === null ? (
-        <p>
-          Vui lòng{" "}
-          <Link to={url} className="login-link">
-            đăng nhập
-          </Link>{" "}
-          để xem trực tuyến các hoạt động tình nguyện{" "}
-        </p>
+        <div className="form-heading">
+          <h1 className="">Live Stream</h1>
+          <p>
+            Vui lòng{" "}
+            <Link to={url} className="login-link">
+              đăng nhập
+            </Link>{" "}
+            để xem trực tuyến các hoạt động tình nguyện{" "}
+          </p>
+        </div>
       ) : (
         <>
           <div ref={meetingRef} />

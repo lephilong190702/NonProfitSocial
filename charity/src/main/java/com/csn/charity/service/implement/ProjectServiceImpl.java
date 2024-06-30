@@ -188,6 +188,7 @@ public class ProjectServiceImpl implements ProjectService {
         project.setTitle(projectDTO.getTitle());
         project.setContent(projectDTO.getContent());
         project.setAddress(projectDTO.getAddress());
+        project.setContributedAmount(projectDTO.getContributedAmount());
         project.setTotalAmount(projectDTO.getTotalAmount());
         project.setStartDate(projectDTO.getStartDate());
         project.setEndDate(projectDTO.getEndDate());

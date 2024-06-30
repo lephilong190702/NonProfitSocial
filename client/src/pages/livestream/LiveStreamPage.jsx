@@ -4,6 +4,7 @@ import { authApi, endpoints } from "../../configs/ApiConfig";
 import { Input } from "@material-ui/core";
 import "./liveStream.css";
 import { UserContext } from "../../App";
+import { Button, Form } from "react-bootstrap";
 
 const LiveStreamPage = () => {
   const [roomName, setRoomName] = useState("");
@@ -79,49 +80,68 @@ const LiveStreamPage = () => {
         </div>
       ) : (
         <>
-          {isAdmin && ( // render the create room button only if the user is an admin
-            <form onSubmit={handleFormSubmit} className="live-form">
-              <div>
-                <label>NHẬP TÊN PHÒNG</label>
-                <Input
-                  value={roomName}
-                  onChange={handleRoomNameChange}
-                  type="text"
-                  required
-                  placeholder="Nhập tên phòng"
-                />
+          <div className="container">
+            <div className="forms-container1">
+              <div className="signin-signup">
+                {isAdmin && (
+                  <Form onSubmit={handleFormSubmit} className="sign-in-form">
+                    <div className="input-field">
+                      <input
+                        className="loginInput"
+                        type="text"
+                        value={roomName}
+                        onChange={handleRoomNameChange}
+                        style={{ width: "100%" }}
+                        required
+                        placeholder="Nhập tên phòng"
+                      />
+                    </div>
+                    <Form.Group className="mb-3">
+                      <Button type="submit" className="btn solid">
+                        Tạo phòng livestream
+                      </Button>
+                    </Form.Group>
+                  </Form>
+                )}
+
+                {!isAdmin && (
+                  <Form onSubmit={handleFormSubmit} className="sign-in-form">
+                    <div className="input-field">
+                      <input
+                        className="loginInput"
+                        type="text"
+                        value={roomName}
+                        onChange={(event) => setRoomCode(event.target.value)}
+                        style={{ width: "100%" }}
+                        required
+                        placeholder="Nhập mã phòng"
+                      />
+                    </div>
+                    <Form.Group className="mb-3">
+                      <Button onClick={() => handleJoinRoom(roomCode)} className="btn solid">
+                        Tham gia
+                      </Button>
+                    </Form.Group>
+                  </Form>
+                )}
               </div>
-              <hr />
-              <button
-                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-                type="submit"
-              >
-                Tạo phòng
-              </button>
-            </form>
-          )}
-          {!isAdmin && (
-            <div style={{ marginLeft: "100px" }}>
-              <label
-                style={{ fontWeight: "bold", fontSize: "13px", margin: "10px" }}
-              >
-                NHẬP MÃ PHÒNG
-              </label>
-              <Input
-                value={roomCode}
-                onChange={(event) => setRoomCode(event.target.value)}
-                type="text"
-                required
-                placeholder="Nhập mã phòng"
-              />
-              <button
-                className="custom-card-link font-semibold text-[#fff] bg-[#38b6ff]  shadow-md shadow-[#38b6ff] text-[13px] border-2 px-6 py-2  hover:bg-[#059df4] hover:text-[#fff] hover:shadow-md hover:shadow-[#059df4]"
-                onClick={() => handleJoinRoom(roomCode)}
-              >
-                Tham gia
-              </button>
             </div>
-          )}
+
+
+            <div className="panels-container">
+              <div className="panel left-panel">
+                <div className="content">
+                  <h3>Bạn muốn xem trực tiếp từ thiện?</h3>
+                  <p>
+                    Nhấn tham gia phòng để có thể xem phát sóng trực tiếp quá trình từ thiện của chúng tôi.
+                  </p>
+                </div>
+                <img src="./src/assets/livestream.png" className="image" alt="" />
+              </div>
+            </div>
+          </div>
+
+
         </>
       )}
     </div>

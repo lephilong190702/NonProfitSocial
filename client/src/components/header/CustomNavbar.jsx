@@ -328,12 +328,29 @@ const CustomNavbar = () => {
                   </div>
 
                   <div>
-                    <li className="top-menu-item group">
-                      <Link to="/registerVol" className="nav-link">
-                        LIÊN HỆ
-                      </Link>
-                    </li>
+                    <div className="group">
+                      <li className="top-menu-item group">
+                        <Link to="" className="nav-link">
+                          LIÊN HỆ
+                        </Link>
+                      </li>
+                      <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
+                      <div
+                        className={`group ${!user ? "top-[145px]" : "top-[138px]"
+                          }  duration-500 h-0 overflow-hidden group-hover:h-[80px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
+                      >
+                        <div className="border-b-[1px] border-b-[#e6e1e1]">
+                          <div className="mx-1  pt-1">
+                            <div className="flex flex-col top-menu-text">
+                              <Link to="/registerVol" className="news-link">Đăng ký tình nguyện</Link>
+                              <Link to="/upload-project" className="news-link">Gửi dự án từ thiện</Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
+
                   {employee && (
                     <div>
                       <li className="top-menu-item group">
@@ -352,11 +369,10 @@ const CustomNavbar = () => {
                       </li>
                     </div>
                   )}
-
                   <div>
                     <li className="top-menu-item group">
-                      <Link to="/upload-project" className="nav-link">
-                        GỬI DỰ ÁN
+                      <Link to="/guide" className="nav-link">
+                        HƯỚNG DẪN SỬ DỤNG
                       </Link>
                     </li>
                   </div>
@@ -417,6 +433,9 @@ const CustomNavbar = () => {
                     </li>
                     {/* </div> */}
                   </div>
+
+                  
+
                   {user === null ? (
                     <>
                       <div className="hidden md:flex items-center font-bold w-auto md:order-1">

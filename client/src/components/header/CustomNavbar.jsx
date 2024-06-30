@@ -337,7 +337,7 @@ const CustomNavbar = () => {
                       <div className="hidden group-hover:flex flex-col absolute left-0 p-10  w-full bg-transparent z-20 text-black duration-300"></div>
                       <div
                         className={`group ${!user ? "top-[145px]" : "top-[138px]"
-                          }  duration-500 h-0 overflow-hidden group-hover:h-[80px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
+                          }  duration-500 h-0 overflow-hidden group-hover:h-[60px] absolute bg-[#2D2D2D] z-20 text-black duration-800`}
                       >
                         <div className="border-b-[1px] border-b-[#e6e1e1]">
                           <div className="mx-1  pt-1">

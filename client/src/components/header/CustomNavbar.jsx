@@ -208,7 +208,7 @@ const CustomNavbar = () => {
                   <div>
                     <li className="top-menu-item">
                       <Link to="/" className="nav-link top-menu-item">
-                        TRANG CHỦ
+                        TRAN CHỦ
                       </Link>
                     </li>
                   </div>

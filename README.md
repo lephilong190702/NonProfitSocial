@@ -40,7 +40,3 @@ A full-stack charity platform where users can **donate to charity projects**, **
 - ☸️ **Kubernetes** – Deployed on Azure Kubernetes Service (AKS).
 - ⚙️ **Jenkins** – Automated CI/CD pipeline with environment configuration.
 
----
-
-## 📁 Project Structure
-
